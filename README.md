@@ -3,9 +3,9 @@
 [![Downloads Count](https://img.shields.io/puppetforge/dt/shinesolutions/aem_curator.svg)](http://forge.puppet.com/shinesolutions/aem_curator)
 
 Puppet AEM Curator
---------------------
+------------------
 
-A Puppet module for provisioning [Adobe Experience Manager (AEM)](http://www.adobe.com/au/marketing-cloud/enterprise-content-management.html) curator.
+A Puppet module for installing and configuring a curated set of Adobe Experience Manager (AEM) components.
 
 Install
 -------
