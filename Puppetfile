@@ -1,3 +1,3 @@
-mod 'shinesolutions/aem_curator',
-    :git => 'https://github.com/shinesolutions/puppet-aem-curator',
-    :ref => 'master'
+mod 'shinesolutions/aem_resources',
+    :git => 'https://github.com/shinesolutions/puppet-aem-resources',
+    :ref => 'dev'
