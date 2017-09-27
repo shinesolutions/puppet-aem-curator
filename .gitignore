@@ -1,0 +1,7 @@
+.DS_Store
+Gemfile.lock
+pkg
+test/integration/.librarian
+test/integration/.tmp
+test/integration/modules
+.idea/
