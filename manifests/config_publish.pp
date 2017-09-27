@@ -31,7 +31,7 @@ class aem_curator::config_publish (
     if $delete_repository_index {
       $attach_volume_before = File["${crx_quickstart_dir}/repository/index/"]
     } else {
-      $attach_volume_before = Service['aem-aem']
+      $attach_volume_before = Service['aem-publish']
     }
     exec { "Attach volume from snapshot ID ${snapshotid}":
       command => "/opt/shinesolutions/aws-tools/snapshot_attach.py --device /dev/sdb --device-alias /dev/xvdb --volume-type ${vol_type} --snapshot-id ${snapshotid} -vvvv",
@@ -46,7 +46,7 @@ class aem_curator::config_publish (
       recurse => true,
       purge   => true,
       force   => true,
-      before  => Service['aem-aem'],
+      before  => Service['aem-publish'],
     }
   }
 
@@ -64,7 +64,7 @@ class aem_curator::config_publish (
     host     => 'localhost',
     port     => "${publish_port}",
     debug    => false,
-  } -> service { 'aem-aem':
+  } -> service { 'aem-publish':
     ensure => 'running',
     enable => true,
   } -> aem_aem { 'Wait until login page is ready':
