@@ -1,0 +1,3 @@
+class aem_curator(
+) {
+}
