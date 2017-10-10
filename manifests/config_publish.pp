@@ -56,53 +56,44 @@ class aem_curator::config_publish (
     mode   => '0775',
     owner  => 'aem',
     group  => 'aem',
-  }
-  -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
+  } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
     ensure => present,
     source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
-  }
-  -> class { 'aem_resources::puppet_aem_resources_set_config':
+  } -> class { 'aem_resources::puppet_aem_resources_set_config':
     conf_dir => $puppet_conf_dir,
     protocol => $publish_protocol,
     host     => 'localhost',
     port     => $publish_port,
     debug    => false,
     aem_id   => $aem_id,
-  }
-  -> service { 'aem-publish':
+  } -> service { 'aem-publish':
     ensure => 'running',
     enable => true,
-  }
-  -> aem_aem { "${aem_id}: Wait until login page is ready":
+  } -> aem_aem { "${aem_id}: Wait until login page is ready":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
-  }
-  -> aem_bundle { "${aem_id}: Stop webdav bundle":
+  } -> aem_bundle { "${aem_id}: Stop webdav bundle":
     ensure => stopped,
     name   => 'org.apache.sling.jcr.webdav',
     aem_id => $aem_id,
-  }
-  -> aem_bundle { "${aem_id}: Stop davex bundle":
+  } -> aem_bundle { "${aem_id}: Stop davex bundle":
     ensure => stopped,
     name   => 'org.apache.sling.jcr.davex',
     aem_id => $aem_id,
-  }
-  -> aem_aem { "${aem_id}: Remove all agents":
+  } -> aem_aem { "${aem_id}: Remove all agents":
     ensure   => all_agents_removed,
     run_mode => 'publish',
     aem_id   => $aem_id,
-  }
-  -> aem_package { "${aem_id}: Remove password reset package":
+  } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',
     group   => 'shinesolutions',
     version => $::aem_password_reset_version,
     aem_id  => $aem_id,
-  }
-  -> aem_flush_agent { "${aem_id}: Create flush agent":
+  } -> aem_flush_agent { "${aem_id}: Create flush agent":
     ensure        => present,
     name          => "flushAgent-${::pairinstanceid}",
     run_mode      => 'publish',
@@ -113,8 +104,7 @@ class aem_curator::config_publish (
     retry_delay   => 60000,
     force         => true,
     aem_id        => $aem_id,
-  }
-  -> aem_outbox_replication_agent { "${aem_id}: Create outbox replication agent":
+  } -> aem_outbox_replication_agent { "${aem_id}: Create outbox replication agent":
     ensure      => present,
     name        => 'outbox',
     run_mode    => 'publish',
@@ -124,24 +114,21 @@ class aem_curator::config_publish (
     log_level   => 'info',
     force       => true,
     aem_id      => $aem_id,
-  }
-  -> class { 'aem_resources::change_system_users_password':
+  } -> class { 'aem_resources::change_system_users_password':
     orchestrator_new_password => $credentials_hash['orchestrator'],
     replicator_new_password   => $credentials_hash['replicator'],
     deployer_new_password     => $credentials_hash['deployer'],
     exporter_new_password     => $credentials_hash['exporter'],
     importer_new_password     => $credentials_hash['importer'],
     aem_id                    => $aem_id,
-  }
-  -> aem_user { "${aem_id}: Set admin password for current stack":
+  } -> aem_user { "${aem_id}: Set admin password for current stack":
     ensure       => password_changed,
     name         => 'admin',
     path         => '/home/users/d',
     old_password => 'admin',
     new_password => $credentials_hash['admin'],
     aem_id       => $aem_id,
-  }
-  -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
+  } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
     ensure => absent,
   }
 

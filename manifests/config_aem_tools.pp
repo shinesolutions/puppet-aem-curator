@@ -15,57 +15,49 @@ class aem_curator::config_aem_tools (
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
-  }
-  -> file { "${base_dir}/aem-tools/deploy-artifact.sh":
+  } -> file { "${base_dir}/aem-tools/deploy-artifact.sh":
     ensure  => present,
     content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifact.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
-  }
-  -> file { "${base_dir}/aem-tools/deploy-artifacts.sh":
+  } -> file { "${base_dir}/aem-tools/deploy-artifacts.sh":
     ensure  => present,
     content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifacts.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
-  }
-  -> file { "${base_dir}/aem-tools/export-backup.sh":
+  } -> file { "${base_dir}/aem-tools/export-backup.sh":
     ensure  => present,
     content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backup.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
-  }
-  -> file { "${base_dir}/aem-tools/import-backup.sh":
+  } -> file { "${base_dir}/aem-tools/import-backup.sh":
     ensure  => present,
     content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/import-backup.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
-  }
-  -> file { "${base_dir}/aem-tools/enable-crxde.sh":
+  } -> file { "${base_dir}/aem-tools/enable-crxde.sh":
     ensure  => present,
     content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/enable-crxde.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
-  }
-  -> file {"${base_dir}/aem-tools/crx-process-quited.sh":
+  } -> file {"${base_dir}/aem-tools/crx-process-quited.sh":
     ensure => present,
     source => "file://${base_dir}/aem-aws-stack-provisioner/files/aem-tools/crx-process-quited.sh",
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
-  }
-  -> file {"${base_dir}/aem-tools/oak-run-process-quited.sh":
+  } -> file {"${base_dir}/aem-tools/oak-run-process-quited.sh":
     ensure => present,
     source => "file://${base_dir}/aem-aws-stack-provisioner/files/aem-tools/oak-run-process-quited.sh",
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
-  }
-  -> file {"${base_dir}/aem-tools/wait-until-ready.sh":
+  } -> file {"${base_dir}/aem-tools/wait-until-ready.sh":
     ensure  => present,
     content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/wait-until-ready.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
@@ -76,8 +68,7 @@ class aem_curator::config_aem_tools (
   archive { "${base_dir}/aem-tools/oak-run-${::oak_run_version}.jar":
     ensure => present,
     source => "s3://${::data_bucket}/${::stackprefix}/oak-run-${::oak_run_version}.jar",
-  }
-  -> file { "${base_dir}/aem-tools/offline-compaction.sh":
+  } -> file { "${base_dir}/aem-tools/offline-compaction.sh":
     ensure  => present,
     mode    => '0775',
     owner   => 'root',
