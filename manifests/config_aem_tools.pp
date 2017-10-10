@@ -18,35 +18,35 @@ class aem_curator::config_aem_tools (
   }
   -> file { "${base_dir}/aem-tools/deploy-artifact.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifact.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifact.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   }
   -> file { "${base_dir}/aem-tools/deploy-artifacts.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifacts.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifacts.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   }
   -> file { "${base_dir}/aem-tools/export-backup.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backup.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backup.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   }
   -> file { "${base_dir}/aem-tools/import-backup.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/import-backup.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/import-backup.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   }
   -> file { "${base_dir}/aem-tools/enable-crxde.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/enable-crxde.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/enable-crxde.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
@@ -67,7 +67,7 @@ class aem_curator::config_aem_tools (
   }
   -> file {"${base_dir}/aem-tools/wait-until-ready.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/wait-until-ready.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/wait-until-ready.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
@@ -85,8 +85,8 @@ class aem_curator::config_aem_tools (
     content => epp(
       "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/offline-compaction.sh.epp",
       {
-        'base_dir'           => "${base_dir}",
-        'oak_run_version'    => "${::oak_run_version}",
+        'base_dir'           => $base_dir,
+        'oak_run_version'    => $::oak_run_version,
         'crx_quickstart_dir' => $crx_quickstart_dir,
       }
     ),
@@ -104,7 +104,7 @@ class aem_curator::config_aem_tools (
 
   file { "${base_dir}/aem-tools/export-backups.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backups.sh.epp", { 'base_dir' => "${base_dir}" }),
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backups.sh.epp", { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
@@ -129,10 +129,10 @@ class aem_curator::config_aem_tools (
     content => epp(
       "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/live-snapshot-backup.sh.epp",
       {
-        'base_dir'        => "${base_dir}",
-        'aem_repo_device' => "${aem_repo_device}",
-        'component'       => "${::component}",
-        'stack_prefix'    => "${::stackprefix}",
+        'base_dir'        => $base_dir,
+        'aem_repo_device' => $aem_repo_device,
+        'component'       => $::component,
+        'stack_prefix'    => $::stackprefix,
       }
     ),
   }
@@ -155,10 +155,10 @@ class aem_curator::config_aem_tools (
     content => epp(
       "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/offline-snapshot-backup.sh.epp",
       {
-        'base_dir'        => "${base_dir}",
-        'aem_repo_device' => "${aem_repo_device}",
-        'component'       => "${::component}",
-        'stack_prefix'    => "${::stackprefix}",
+        'base_dir'        => $base_dir,
+        'aem_repo_device' => $aem_repo_device,
+        'component'       => $::component,
+        'stack_prefix'    => $::stackprefix,
       }
     ),
   }

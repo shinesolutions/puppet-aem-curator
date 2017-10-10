@@ -62,10 +62,10 @@ class aem_curator::config_publish (
     source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
   }
   -> class { 'aem_resources::puppet_aem_resources_set_config':
-    conf_dir => "${puppet_conf_dir}",
-    protocol => "${publish_protocol}",
+    conf_dir => $puppet_conf_dir,
+    protocol => $publish_protocol,
     host     => 'localhost',
-    port     => "${publish_port}",
+    port     => $publish_port,
     debug    => false,
     aem_id   => $aem_id,
   }

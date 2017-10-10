@@ -45,15 +45,15 @@ class aem_curator::config_author_primary (
     source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
   }
   -> class { 'aem_resources::puppet_aem_resources_set_config':
-    conf_dir => "${puppet_conf_dir}",
-    protocol => "${author_protocol}",
+    conf_dir => $puppet_conf_dir,
+    protocol => $author_protocol,
     host     => 'localhost',
-    port     => "${author_port}",
+    port     => $author_port,
     debug    => false,
     aem_id   => $aem_id,
   }
   -> class { 'aem_resources::author_primary_set_config':
-    crx_quickstart_dir => "${crx_quickstart_dir}",
+    crx_quickstart_dir => $crx_quickstart_dir,
   }
   -> service { 'aem-author':
     ensure => 'running',
