@@ -1,10 +1,7 @@
 ci: tools deps clean lint
 
 deps:
-	gem install bundler
-	rm -rf .bundle
-	bundle install
-	cd test/integration/ && r10k puppetfile install --moduledir modules
+	r10k puppetfile install --moduledir modules
 
 clean:
 	rm -rf pkg
@@ -18,8 +15,7 @@ lint:
 		--no-140chars-check \
 		--no-autoloader_layout-check \
 		--no-documentation-check \
-		manifests/*.pp
-	rubocop
+		./manifests/*.pp
 
 package:
 	puppet module build .
