@@ -21,6 +21,9 @@ class aem_curator::config_publish (
   $login_ready_base_sleep_seconds,
   $login_ready_max_sleep_seconds,
 
+  $publishdispatcherhost,
+  $pairinstanceid,
+
   $snapshotid = $::snapshotid,
   $delete_repository_index = false,
   $aem_id = 'publish',
@@ -59,7 +62,7 @@ class aem_curator::config_publish (
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
     ensure => present,
     source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
-  } -> class { 'aem_resources::puppet_aem_resources_set_config':
+  } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for publish':
     conf_dir => $puppet_conf_dir,
     protocol => $publish_protocol,
     host     => 'localhost',
@@ -95,11 +98,11 @@ class aem_curator::config_publish (
     aem_id  => $aem_id,
   } -> aem_flush_agent { "${aem_id}: Create flush agent":
     ensure        => present,
-    name          => "flushAgent-${::pairinstanceid}",
+    name          => "flushAgent-${pairinstanceid}",
     run_mode      => 'publish',
-    title         => "Flush agent for publish-dispatcher ${::pairinstanceid}",
-    description   => "Flush agent for publish-dispatcher ${::pairinstanceid}",
-    dest_base_url => "https://${::publishdispatcherhost}:443",
+    title         => "Flush agent for publish-dispatcher ${pairinstanceid}",
+    description   => "Flush agent for publish-dispatcher ${pairinstanceid}",
+    dest_base_url => "https://${publishdispatcherhost}:443",
     log_level     => 'info',
     retry_delay   => 60000,
     force         => true,
@@ -108,13 +111,13 @@ class aem_curator::config_publish (
     ensure      => present,
     name        => 'outbox',
     run_mode    => 'publish',
-    title       => "Outbox replication agent for publish-dispatcher ${::pairinstanceid}",
-    description => "Outbox replication agent for publish-dispatcher ${::pairinstanceid}",
+    title       => "Outbox replication agent for publish-dispatcher ${pairinstanceid}",
+    description => "Outbox replication agent for publish-dispatcher ${pairinstanceid}",
     user_id     => 'replicator',
     log_level   => 'info',
     force       => true,
     aem_id      => $aem_id,
-  } -> class { 'aem_resources::change_system_users_password':
+  } -> aem_resources::change_system_users_password { 'Change system users password for publish':
     orchestrator_new_password => $credentials_hash['orchestrator'],
     replicator_new_password   => $credentials_hash['replicator'],
     deployer_new_password     => $credentials_hash['deployer'],

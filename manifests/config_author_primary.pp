@@ -42,14 +42,14 @@ class aem_curator::config_author_primary (
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
     ensure => present,
     source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
-  } -> class { 'aem_resources::puppet_aem_resources_set_config':
+  } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for author-primary':
     conf_dir => $puppet_conf_dir,
     protocol => $author_protocol,
     host     => 'localhost',
     port     => $author_port,
     debug    => false,
     aem_id   => $aem_id,
-  } -> class { 'aem_resources::author_primary_set_config':
+  } -> aem_resources::author_primary_set_config { 'Set author-primary config':
     crx_quickstart_dir => $crx_quickstart_dir,
   } -> service { 'aem-author':
     ensure => 'running',
@@ -78,7 +78,7 @@ class aem_curator::config_author_primary (
     group   => 'shinesolutions',
     version => $::aem_password_reset_version,
     aem_id  => $aem_id,
-  } -> class { 'aem_resources::change_system_users_password':
+  } -> aem_resources::change_system_users_password { 'Change system users password for author-primary':
     orchestrator_new_password => $credentials_hash['orchestrator'],
     replicator_new_password   => $credentials_hash['replicator'],
     deployer_new_password     => $credentials_hash['deployer'],
