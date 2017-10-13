@@ -1,5 +1,6 @@
 class aem_curator::config_aem_tools (
   $base_dir,
+  $tmp_dir,
   $crx_quickstart_dir,
   $aem_repo_device,
 
@@ -152,6 +153,47 @@ class aem_curator::config_aem_tools (
         'stack_prefix'    => $::stackprefix,
       }
     ),
+  }
+
+  # publish-dispatcher related AEM Tools
+  file { "${base_dir}/aem-tools/generate-artifacts-json.py":
+    ensure  => present,
+    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/generate-artifacts-json.py.epp", { 'tmp_dir' => $tmp_dir }),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+  } -> file { "${base_dir}/aem-tools/enter-standby.sh":
+    ensure => present,
+    source => "${base_dir}/aem-aws-stack-provisioner/files/aem-tools/enter-standby.sh",
+    mode   => '0775',
+    owner  => 'root',
+    group  => 'root',
+  } -> file { "${base_dir}/aem-tools/exit-standby.sh":
+    ensure => present,
+    source => "${base_dir}/aem-aws-stack-provisioner/files/aem-tools/exit-standby.sh",
+    mode   => '0775',
+    owner  => 'root',
+    group  => 'root',
+  }
+
+  file { "${base_dir}/aem-tools/content-healthcheck.py":
+    ensure  => present,
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+    content => epp(
+      "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/content-healthcheck.py.epp",
+      {
+        'tmp_dir'      => $tmp_dir,
+        'stack_prefix' => $::stackprefix,
+        'data_bucket'  => $::data_bucket,
+      }
+    ),
+  } -> cron { 'every-minute-content-healthcheck':
+    command     => "${base_dir}/aem-tools/content-healthcheck.py",
+    user        => 'root',
+    minute      => '*',
+    environment => ["PATH=${::cron_env_path}", "https_proxy=\"${::cron_https_proxy}\""],
   }
 
 }
