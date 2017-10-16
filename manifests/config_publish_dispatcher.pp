@@ -9,6 +9,7 @@ class aem_curator::config_publish_dispatcher (
   $httpd_conf_dir,
   $docroot_dir,
   $ssl_cert,
+  $publish_host,
   $publish_port,
   $publish_secure,
   $exec_path,
@@ -22,7 +23,7 @@ class aem_curator::config_publish_dispatcher (
     docroot_dir         => $docroot_dir,
     ssl_cert            => $ssl_cert,
     allowed_client      => $::publish_dispatcher_allowed_client,
-    publish_host        => $::publishhost,
+    publish_host        => $publish_host,
     publish_port        => $publish_port,
   } -> exec { 'httpd -k graceful':
     cwd  => $tmp_dir,
