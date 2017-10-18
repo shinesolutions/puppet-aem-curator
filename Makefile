@@ -1,4 +1,4 @@
-ci: tools deps clean lint
+ci: clean tools deps lint
 
 deps:
 	r10k puppetfile install --moduledir modules
