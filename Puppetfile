@@ -1,1 +1,1 @@
-mod 'shinesolutions/aem_resources', :git => 'https://github.com/shinesolutions/puppet-aem-resources'
+mod 'shinesolutions/aem_resources', '2.0.0'
