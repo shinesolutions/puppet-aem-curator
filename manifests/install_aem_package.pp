@@ -13,7 +13,7 @@
 #   The base URL for downloading the artifact.
 #
 # [*file_name*]
-#   The file name of the artifact zip. Default is ${title}-${version}.zip
+#   The file name of the artifact zip. Default is ${package_name}-${version}.zip
 #
 # [*version*]
 #   The AEM package version. Used to generate *file_name* and passed to
@@ -55,8 +55,8 @@
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
 define aem_curator::install_aem_package (
-  $aem_role,
   $group,
+  $package_name,
   $version,
   $artifacts_base,
 
@@ -66,20 +66,21 @@ define aem_curator::install_aem_package (
   $force     = true,
   $restart   = false,
 
-  $tmp_dir = '/tmp/aem_install_tmp',
+  $tmp_dir = '/tmp/shinesolutions/puppet-aem-curator',
 
   $post_install_sleep_secs     = 120,
   $post_restart_sleep_secs     = 120,
   $post_login_page_ready_sleep = 0,
 
   $retries_max_tries          = 120,
-  $retries_base_sleep_seconds = 5,
-  $retries_max_sleep_seconds  = 5,
+  $retries_base_sleep_seconds = 10,
+  $retries_max_sleep_seconds  = 10,
 
   $aem_id = 'aem',
 ) {
+
   Exec {
-    cwd     => '/tmp',
+    cwd     => $tmp_dir,
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
     timeout => 0,
   }
@@ -90,72 +91,66 @@ define aem_curator::install_aem_package (
     retries_max_sleep_seconds  => $retries_max_sleep_seconds,
   }
 
-  if !defined(File[$tmp_dir]) {
-    file { $tmp_dir:
-      ensure => directory,
-    }
-  }
-
-  $local_file_name = "${title}-${version}.zip"
+  $local_file_name = "${package_name}-${version}.zip"
   $url_file_name = pick($file_name, $local_file_name)
 
-  $local_file_path = "${tmp_dir}/${local_file_name}"
+  $local_file_path = "${tmp_dir}/${aem_id}/${local_file_name}"
 
   archive { $local_file_path:
     ensure  => present,
     source  => "${artifacts_base}/${url_file_name}",
     cleanup => false,
-    require => File[$tmp_dir],
-  } -> aem_package { "${aem_id}: Install ${title}":
+    require => File["${tmp_dir}/${aem_id}"],
+  } -> aem_package { "${aem_id}: Install ${package_name}":
     ensure    => present,
-    name      => $title,
+    name      => $package_name,
     group     => $group,
     version   => $version,
-    path      => $tmp_dir,
+    path      => "${tmp_dir}/${aem_id}",
     replicate => $replicate,
     activate  => $activate,
     force     => $force,
     aem_id    => $aem_id,
-  } -> exec { "${aem_id}: Wait post install of ${title}":
+  } -> exec { "${aem_id}: Wait post install of ${package_name}":
     command => "sleep ${post_install_sleep_secs}",
   }
 
   if $restart {
-    exec { "${aem_id}: Wait pre stop with ${title}":
+    exec { "${aem_id}: Wait pre stop with ${package_name}":
       command => 'sleep 120',
-    } -> aem_aem { "${aem_id}: Wait for login page before restart ${title}":
+    } -> aem_aem { "${aem_id}: Wait for login page before restart ${package_name}":
       ensure  => login_page_is_ready,
-      require => Exec["${aem_id}: Wait post install of ${title}"],
+      require => Exec["${aem_id}: Wait post install of ${package_name}"],
       aem_id  => $aem_id,
-    } -> exec { "Wait post login page before restart for ${title}":
+    } -> exec { "${aem_id}: Wait post login page before restart for ${package_name}":
       command => "sleep ${post_login_page_ready_sleep}",
-    } -> aem_aem { "Wait until aem health check is ok before restart ${title}":
+    } -> aem_aem { "${aem_id}: Wait until aem health check is ok before restart ${package_name}":
       ensure => aem_health_check_is_ok,
       tags   => 'deep',
       aem_id => $aem_id,
-    } -> exec { "${aem_id}: Stop post install of ${title}":
-      command => "service aem-${aem_role} stop",
-    } -> exec { "${aem_id}: Wait post stop with ${title}":
+    } -> exec { "${aem_id}: Stop post install of ${package_name}":
+      command => "service aem-${aem_id} stop",
+    } -> exec { "${aem_id}: Wait post stop with ${package_name}":
       command => 'sleep 120',
-    } -> exec { "${aem_id}: Start post install of ${title}":
-      command => "service aem-${aem_role} start",
-    } -> exec { "${aem_id}: Wait post start with ${title}":
+    } -> exec { "${aem_id}: Start post install of ${package_name}":
+      command => "service aem-${aem_id} start",
+    } -> exec { "${aem_id}: Wait post start with ${package_name}":
       command => "sleep ${post_restart_sleep_secs}",
     }
-    $restart_exec = [Exec["${aem_id}: Wait post start with ${title}"]]
+    $restart_exec = [Exec["${aem_id}: Wait post start with ${package_name}"]]
   } else {
     $restart_exec = []
   }
 
-  aem_aem { "${aem_id}: Wait for login page post ${title}":
+  aem_aem { "${aem_id}: Wait for login page post ${package_name}":
     ensure  => login_page_is_ready,
-    require => [Exec["${aem_id}: Wait post install of ${title}"]] + $restart_exec,
+    require => [Exec["${aem_id}: Wait post install of ${package_name}"]] + $restart_exec,
     aem_id  => $aem_id,
-  } -> aem_aem { "${aem_id}: Wait until aem health check is ok post ${title}":
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok post ${package_name}":
     ensure => aem_health_check_is_ok,
     tags   => 'deep',
     aem_id => $aem_id,
-  } -> exec { "${aem_id}: Wait post login page for ${title}":
+  } -> exec { "${aem_id}: Wait post login page for ${package_name}":
     command => "sleep ${post_login_page_ready_sleep}",
   }
 }

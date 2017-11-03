@@ -10,7 +10,7 @@
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
-class aem_curator::install_collectd (
+class aem_curator::config_collectd (
 ) {
 
   $collectd_jmx_types_path = '/usr/share/collectd/jmx.db'

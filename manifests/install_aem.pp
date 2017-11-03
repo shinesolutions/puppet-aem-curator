@@ -7,7 +7,7 @@
 # [*tmp_dir*]
 #   A temporary directory used for staging
 #
-# [*aem_role*]
+# [*run_mode*]
 #   The AEM role to install. Should be 'publish' or 'author'.
 #
 # [*aem_port*]
@@ -55,7 +55,7 @@
 #   Base URL (supported by the puppet-archive module) to download the X.509
 #   certificate and private key to be used with Apache.
 #
-# [*cert_temp_dir*]
+# [*tmp_dir*]
 #   A temporary directory used to store the X.509 certificate and private key
 #   while building the PEM file for Apache.
 #
@@ -78,10 +78,10 @@
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
 
-class aem_curator::install_aem (
+define aem_curator::install_aem (
   $tmp_dir,
 
-  $aem_role,
+  $run_mode,
   $aem_host,
   $aem_port,
   $aem_ssl_port,
@@ -89,6 +89,7 @@ class aem_curator::install_aem (
   $aem_license_source,
   $aem_artifacts_base,
   $aem_healthcheck_version,
+
   $aem_base           = '/opt',
   $aem_sample_content = false,
   $aem_jvm_mem_opts   = '-Xss4m -Xmx8192m',
@@ -97,12 +98,15 @@ class aem_curator::install_aem (
   $repository_volume_device      = '/dev/xvdb',
   $repository_volume_mount_point = '/mnt/ebs1',
 
-  $aem_keystore_path = undef,
+  $aem_keystore_path     = undef,
   $aem_keystore_password = undef,
-  $cert_base_url = undef,
-  $cert_temp_dir = undef,
+  $cert_base_url         = undef,
 
   $sleep_secs = 120,
+
+  $retries_max_tries          = 120,
+  $retries_base_sleep_seconds = 10,
+  $retries_max_sleep_seconds  = 10,
 
   $jvm_opts = [
     '-XX:+PrintGCDetails',
@@ -113,30 +117,22 @@ class aem_curator::install_aem (
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
 
-  $aem_cfp_class = 'aem_curator::install_aem62_cfp3',
-  $aem_debug = false,
-  $aem_id = 'aem',
-  $puppet_conf_dir = '/etc/puppetlabs/puppet/',
+  $aem_cfp_definition = 'aem_curator::install_aem62_sp1_cfp3',
+  $aem_debug          = false,
+  $aem_id             = 'aem',
+  $puppet_conf_dir    = '/etc/puppetlabs/puppet/',
 ) {
 
   Exec {
-    cwd  => '/tmp',
-    path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
-  }
-
-  Aem_curator::Install_aem_package {
-    aem_role                   => $aem_role,
-    artifacts_base             => $aem_artifacts_base,
-    retries_max_tries          => 120,
-    retries_base_sleep_seconds => 10,
-    retries_max_sleep_seconds  => 10,
-    aem_id                     => $aem_id,
+    cwd     => $tmp_dir,
+    path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    timeout => 0,
   }
 
   Aem_aem {
-    retries_max_tries          => 60,
-    retries_base_sleep_seconds => 5,
-    retries_max_sleep_seconds  => 5,
+    retries_max_tries          => $retries_max_tries,
+    retries_base_sleep_seconds => $retries_base_sleep_seconds,
+    retries_max_sleep_seconds  => $retries_max_sleep_seconds,
   }
 
   if $setup_repository_volume {
@@ -154,30 +150,38 @@ class aem_curator::install_aem (
       atboot   => false,
     } -> exec { "${aem_id}: Fix repository mount permissions":
       command => "chown aem:aem ${repository_volume_mount_point}",
-      require => User['aem'],
+      require => User["aem-${aem_id}"],
     }
   }
 
-  file { [ "${aem_base}/aem", "${aem_base}/aem/${aem_role}"]:
+  if !defined(File["${aem_base}/aem"]) {
+    file { "${aem_base}/aem":
+      ensure => directory,
+      mode   => '0775',
+      owner  => "aem-${aem_id}",
+      group  => "aem-${aem_id}",
+    }
+  }
+
+  file { "${aem_base}/aem/${aem_id}":
     ensure => directory,
     mode   => '0775',
-    owner  => 'aem',
-    group  => 'aem',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   }
 
   # Retrieve the cq-quickstart jar
-  archive { "${aem_base}/aem/${aem_role}/aem-${aem_role}-${aem_port}.jar":
+  archive { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
     ensure  => present,
     source  => $aem_quickstart_source,
     cleanup => false,
-    require => File["${aem_base}/aem/${aem_role}"],
-  }
-  -> file { "${aem_base}/aem/${aem_role}/aem-${aem_role}-${aem_port}.jar":
+    require => File["${aem_base}/aem/${aem_id}"],
+  } -> file { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
     ensure  => file,
     mode    => '0775',
-    owner   => 'aem',
-    group   => 'aem',
-    require => File["${aem_base}/aem/${aem_role}"],
+    owner   => "aem-${aem_id}",
+    group   => "aem-${aem_id}",
+    require => File["${aem_base}/aem/${aem_id}"],
   }
 
   aem_resources::puppet_aem_resources_set_config { "${aem_id}: Set puppet-aem-resources config file":
@@ -190,38 +194,40 @@ class aem_curator::install_aem (
   }
 
   # Retrieve the license file
-  archive { "${aem_base}/aem/${aem_role}/license.properties":
+  archive { "${aem_base}/aem/${aem_id}/license.properties":
     ensure  => present,
     source  => $aem_license_source,
     cleanup => false,
-    require => File["${aem_base}/aem/${aem_role}"],
-  } -> file { "${aem_base}/aem/${aem_role}/license.properties":
+    require => File["${aem_base}/aem/${aem_id}"],
+  } -> file { "${aem_base}/aem/${aem_id}/license.properties":
     ensure => file,
     mode   => '0440',
-    owner  => 'aem',
-    group  => 'aem',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   }
 
 
   # Install AEM Health Check using aem::crx::package file type which will place
   # the artifact in AEM install directory and it will be installed when AEM
   # starts up.
-  archive { "${tmp_dir}/aem-healthcheck-content-${aem_healthcheck_version}.zip":
+  archive { "${tmp_dir}/${aem_id}/aem-healthcheck-content-${aem_healthcheck_version}.zip":
     ensure => present,
     source => "http://central.maven.org/maven2/com/shinesolutions/aem-healthcheck-content/${aem_healthcheck_version}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
-  } -> aem::crx::package { 'aem-healthcheck' :
+  } -> aem::crx::package { "${aem_id}: aem-healthcheck" :
     ensure => present,
     type   => 'file',
-    home   => "${aem_base}/aem/${aem_role}",
-    source => "${tmp_dir}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
-    user   => 'aem',
-    group  => 'aem',
+    home   => "${aem_base}/aem/${aem_id}",
+    source => "${tmp_dir}/${aem_id}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
+    user   => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   }
 
-  aem::instance { $aem_role:
-    source         => "${aem_base}/aem/${aem_role}/aem-${aem_role}-${aem_port}.jar",
-    home           => "${aem_base}/aem/${aem_role}",
-    type           => $aem_role,
+  aem::instance { $aem_id:
+    source         => "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar",
+    home           => "${aem_base}/aem/${aem_id}",
+    user           => "aem-${aem_id}",
+    group          => "aem-${aem_id}",
+    type           => $run_mode,
     port           => $aem_port,
     sample_content => $aem_sample_content,
     jvm_mem_opts   => $aem_jvm_mem_opts,
@@ -230,13 +236,16 @@ class aem_curator::install_aem (
   } -> exec { "${aem_id}: Manual delay to let AEM become ready":
     command => "sleep ${sleep_secs}",
   } -> aem_aem { "${aem_id}: Wait until login page is ready":
-    ensure  => login_page_is_ready,
+    ensure => login_page_is_ready,
+    aem_id => $aem_id,
   } -> aem_aem { "${aem_id}: Wait until aem health check is ok":
     ensure => aem_health_check_is_ok,
     tags   => 'deep',
     aem_id => $aem_id,
-  } -> class { $aem_cfp_class:
-    aem_id => $aem_id,
+  } -> aem_curator::install_aem62_sp1_cfp3 { "${aem_id}: Install AEM CFP":
+    tmp_dir            => $tmp_dir,
+    aem_artifacts_base => $aem_artifacts_base,
+    aem_id             => $aem_id,
   }
 
   # Create system users and configure their usernames for password reset during provisioning
@@ -247,11 +256,11 @@ class aem_curator::install_aem (
     exporter_password     => 'exporter',
     importer_password     => 'importer',
     aem_id                => $aem_id,
-    require               => Class[$aem_cfp_class],
+    require               => Aem_curator::Install_aem62_sp1_cfp3["${aem_id}: Install AEM CFP"],
   } -> aem_node { "${aem_id}: Create AEM Password Reset Activator config node":
     ensure => present,
     name   => 'com.shinesolutions.aem.passwordreset.Activator',
-    path   => "/apps/system/config.${aem_role}",
+    path   => "/apps/system/config.${run_mode}",
     type   => 'sling:OsgiConfig',
     aem_id => $aem_id,
   } -> aem_config_property { "${aem_id}: Configure system usernames for AEM Password Reset Activator to process":
@@ -259,7 +268,7 @@ class aem_curator::install_aem (
     name             => 'pwdreset.authorizables',
     type             => 'String[]',
     value            => ['admin', 'orchestrator', 'replicator', 'deployer', 'exporter', 'importer'],
-    run_mode         => $aem_role,
+    run_mode         => $run_mode,
     config_node_name => 'com.shinesolutions.aem.passwordreset.Activator',
     aem_id           => $aem_id,
   } -> aem_user { "${aem_id}: Update replication-service user permission":
@@ -277,15 +286,15 @@ class aem_curator::install_aem (
   aem_node { "${aem_id}: Create AEM Health Check Servlet config node":
     ensure  => present,
     name    => 'com.shinesolutions.healthcheck.hc.impl.ActiveBundleHealthCheck',
-    path    => "/apps/system/config.${aem_role}",
+    path    => "/apps/system/config.${run_mode}",
     type    => 'sling:OsgiConfig',
     aem_id  => $aem_id,
-    require => Class[$aem_cfp_class],
+    require => Aem_curator::Install_aem62_sp1_cfp3["${aem_id}: Install AEM CFP"],
   } -> aem_config_property { "${aem_id}: Configure AEM Health Check Servlet ignored bundles":
     ensure           => present,
     name             => 'bundles.ignored',
     type             => 'String[]',
-    run_mode         => $aem_role,
+    run_mode         => $run_mode,
     config_node_name => 'com.shinesolutions.healthcheck.hc.impl.ActiveBundleHealthCheck',
     value            => [
       'org.apache.sling.jcr.webdav',
@@ -300,17 +309,24 @@ class aem_curator::install_aem (
     Aem_user["${aem_id}: Update replication-service user permission"],
   ]
 
-  if $aem_role == 'author' {
+  if $run_mode == 'author' {
     aem_resources::author_remove_default_agents { "${aem_id}: Remove default author agents":
       aem_id  => $aem_id,
-      require => Class[$aem_cfp_class]
+      require => Aem_aem["${aem_id}: Wait until aem health check is ok"]
     }
     $all_provisioning_steps = concat(
       $provisioning_steps,
       Aem_resources::Author_remove_default_agents["${aem_id}: Remove default author agents"],
     )
   } else {
-    $all_provisioning_steps = $provisioning_steps
+    aem_resources::publish_remove_default_agents { "${aem_id}: Remove default publish agents":
+      aem_id  => $aem_id,
+      require => Aem_aem["${aem_id}: Wait until aem health check is ok"]
+    }
+    $all_provisioning_steps = concat(
+      $provisioning_steps,
+      Aem_resources::Publish_remove_default_agents["${aem_id}: Remove default publish agents"],
+    )
   }
 
   # Ensure login page is still ready after all provisioning steps and before stopping AEM.
@@ -322,24 +338,36 @@ class aem_curator::install_aem (
 
   $keystore_path = pick(
     $aem_keystore_path,
-    "${aem_base}/aem/${aem_role}/crx-quickstart/ssl/aem.ks",
+    "${aem_base}/aem/${aem_id}/crx-quickstart/ssl/aem.ks",
   )
 
   file { dirname($keystore_path):
     ensure  => directory,
     mode    => '0770',
-    owner   => 'aem',
-    group   => 'aem',
+    owner   => "aem-${aem_id}",
+    group   => "aem-${aem_id}",
     require => [
       Aem_aem["${aem_id}: Ensure login page is ready"],
     ],
+  }
+
+  if !defined(File[$tmp_dir]) {
+    file { $tmp_dir:
+      ensure => directory,
+    }
+  }
+  if !defined(File["${tmp_dir}/${aem_id}"]) {
+    file { "${tmp_dir}/${aem_id}":
+      ensure => directory,
+      mode   => '0700',
+    }
   }
 
   $x509_parts = [ 'key', 'cert' ]
   $x509_parts.each |$idx, $part| {
     ensure_resource(
       'archive',
-      "${cert_temp_dir}/aem.${part}",
+      "${tmp_dir}/${aem_id}/aem.${part}",
       {
         'ensure' => 'present',
         'source' => "${cert_base_url}/aem.${part}",
@@ -347,37 +375,37 @@ class aem_curator::install_aem (
     )
   }
   $java_ks_require = $x509_parts.map |$part| {
-    Archive["${cert_temp_dir}/aem.${part}"]
+    Archive["${tmp_dir}/${aem_id}/aem.${part}"]
   }
 
   java_ks { "cqse:${keystore_path}":
     ensure       => latest,
-    certificate  => "${cert_temp_dir}/aem.cert",
-    private_key  => "${cert_temp_dir}/aem.key",
+    certificate  => "${tmp_dir}/${aem_id}/aem.cert",
+    private_key  => "${tmp_dir}/${aem_id}/aem.key",
     password     => $aem_keystore_password,
     trustcacerts => true,
     require      => $java_ks_require,
   } -> aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
-    run_mode            => $aem_role,
+    run_mode            => $run_mode,
     port                => $aem_ssl_port,
     keystore            => $keystore_path,
     keystore_password   => $aem_keystore_password,
     keystore_key_alias  => 'cqse',
     truststore          => '/usr/java/default/jre/lib/security/cacerts',
     truststore_password => 'changeit',
-  } -> class { '::config::aem_cleanup':
-    aem_base => $aem_base,
+    aem_id              => $aem_id,
+  } -> exec { "rm -f ${aem_base}/aem/${aem_id}/aem-healthcheck-content-*.zip":
   }
 
   if $setup_repository_volume {
-    exec { "service aem-${aem_role} stop":
+    exec { "service aem-${aem_id} stop":
       require => [
         Class['::config::aem_cleanup'],
         Mount[$repository_volume_mount_point],
       ],
     } -> exec { 'sleep 120':
-    } -> exec { "mv ${aem_base}/aem/${aem_role}/crx-quickstart/repository/* ${repository_volume_mount_point}/":
-    } -> file { "${aem_base}/aem/${aem_role}/crx-quickstart/repository/":
+    } -> exec { "mv ${aem_base}/aem/${aem_id}/crx-quickstart/repository/* ${repository_volume_mount_point}/":
+    } -> file { "${aem_base}/aem/${aem_id}/crx-quickstart/repository/":
       ensure => 'link',
       owner  => 'aem',
       group  => 'aem',

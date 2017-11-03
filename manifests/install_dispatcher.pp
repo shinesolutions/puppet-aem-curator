@@ -12,7 +12,7 @@
 #   The local path and filename to save the X.509 certificate and private key
 #   to be used with Apache.
 #
-# [*cert_temp_dir*]
+# [*tmp_dir*]
 #   A temporary directory used to store the X.509 certificate and private key
 #   while building the PEM file for Apache.
 #
@@ -43,12 +43,13 @@
 class aem_curator::install_dispatcher (
   $cert_base_url,
   $cert_filename,
-  $cert_temp_dir,
+  $tmp_dir,
 
   $apache_module_base_url,
   $apache_module_tarball,
   $apache_module_filename,
   $apache_module_temp_dir,
+  $aem_id = 'dispatcher',
 ) {
   include ::config::base
 
@@ -58,19 +59,19 @@ class aem_curator::install_dispatcher (
     order => 'numeric',
   }
 
-  file { $cert_temp_dir:
+  file { "${tmp_dir}/${aem_id}":
     ensure => directory,
     mode   => '0700',
   }
 
   [ 'key', 'cert' ].each |$idx, $part| {
-    archive { "${cert_temp_dir}/aem.${part}":
+    archive { "${tmp_dir}/${aem_id}/aem.${part}":
       ensure  => present,
       source  => "${cert_base_url}/aem.${part}",
-      require => File[$cert_temp_dir],
+      require => File["${tmp_dir}/${aem_id}"],
     } -> concat::fragment { "${cert_filename}:${part}":
       target => $cert_filename,
-      source => "${cert_temp_dir}/aem.${part}",
+      source => "${tmp_dir}/${aem_id}/aem.${part}",
       order  => $idx,
     }
   }
