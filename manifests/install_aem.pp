@@ -158,8 +158,6 @@ define aem_curator::install_aem (
     file { "${aem_base}/aem":
       ensure => directory,
       mode   => '0775',
-      owner  => "aem-${aem_id}",
-      group  => "aem-${aem_id}",
     }
   }
 

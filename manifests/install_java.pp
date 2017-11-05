@@ -25,7 +25,7 @@ class aem_curator::install_java (
   $cert_base_url,
 ) {
 
-  class { '::oracle_java':
+  class { 'oracle_java':
     version => '8u151',
     type    => 'jdk',
   }

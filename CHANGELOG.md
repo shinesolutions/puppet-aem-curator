@@ -6,3 +6,4 @@
 * Migrate AEM installation manifests from packer-aem
 * Add multi AEM instances support at manifests level by replacing classes with definitions and by introducing aem_id attributes
 * Move collectd into its own manifest config_collectd.pp
+* Each AEM installation has its own user and group named aem-<aem_id>
