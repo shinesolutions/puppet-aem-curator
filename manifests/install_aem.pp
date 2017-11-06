@@ -59,7 +59,7 @@
 #   A temporary directory used to store the X.509 certificate and private key
 #   while building the PEM file for Apache.
 #
-# [*sleep_secs*]
+# [*post_install_sleep_secs*]
 #   Number of seconds to sleep to allow AEM to settle. If installation fails,
 #   try turning this up.
 #
@@ -102,7 +102,8 @@ define aem_curator::install_aem (
   $aem_keystore_password = undef,
   $cert_base_url         = undef,
 
-  $sleep_secs = 120,
+  $post_install_sleep_secs = 120,
+  $post_stop_sleep_secs    = 120,
 
   $retries_max_tries          = 120,
   $retries_base_sleep_seconds = 10,
@@ -149,7 +150,7 @@ define aem_curator::install_aem (
       remounts => false,
       atboot   => false,
     } -> exec { "${aem_id}: Fix repository mount permissions":
-      command => "chown aem:aem ${repository_volume_mount_point}",
+      command => "chown aem-${aem_id}:aem-${aem_id} ${repository_volume_mount_point}",
       require => User["aem-${aem_id}"],
     }
   }
@@ -232,7 +233,7 @@ define aem_curator::install_aem (
     jvm_opts       => $jvm_opts.join(' '),
     status         => 'running',
   } -> exec { "${aem_id}: Manual delay to let AEM become ready":
-    command => "sleep ${sleep_secs}",
+    command => "sleep ${post_install_sleep_secs}",
   } -> aem_aem { "${aem_id}: Wait until login page is ready":
     ensure => login_page_is_ready,
     aem_id => $aem_id,
@@ -398,15 +399,16 @@ define aem_curator::install_aem (
   if $setup_repository_volume {
     exec { "service aem-${aem_id} stop":
       require => [
-        Class['::config::aem_cleanup'],
+        Exec["rm -f ${aem_base}/aem/${aem_id}/aem-healthcheck-content-*.zip"],
         Mount[$repository_volume_mount_point],
       ],
-    } -> exec { 'sleep 120':
+    } -> exec { "${aem_id}: Wait post AEM stop":
+      command => "sleep ${post_stop_sleep_secs}",
     } -> exec { "mv ${aem_base}/aem/${aem_id}/crx-quickstart/repository/* ${repository_volume_mount_point}/":
     } -> file { "${aem_base}/aem/${aem_id}/crx-quickstart/repository/":
       ensure => 'link',
-      owner  => 'aem',
-      group  => 'aem',
+      owner  => "aem-${aem_id}",
+      group  => "aem-${aem_id}",
       force  => true,
       target => $repository_volume_mount_point,
     }
