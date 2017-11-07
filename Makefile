@@ -1,7 +1,7 @@
 ci: clean tools deps lint
 
 deps:
-	r10k puppetfile install --moduledir modules
+	r10k puppetfile install --verbose --moduledir modules
 
 clean:
 	rm -rf pkg
