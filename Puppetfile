@@ -1,4 +1,4 @@
-mod 'aco-oracle_java', '2.9.1'
+mod 'aco-oracle_java', '2.8.3'
 mod 'bstopp/aem', '2.5.0'
 mod 'puppetlabs/apache', '2.3.0'
 mod 'puppetlabs/concat', '4.1.0'

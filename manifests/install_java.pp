@@ -25,8 +25,9 @@ class aem_curator::install_java (
   $cert_base_url,
 ) {
 
+  # TODO: will upgrade to >= 8u151 after https://github.com/antoineco/aco-oracle_java/issues/40 is solved
   class { 'oracle_java':
-    version => '8u151',
+    version => '8u141',
     type    => 'jdk',
   }
 
