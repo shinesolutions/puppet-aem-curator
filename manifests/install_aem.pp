@@ -118,7 +118,9 @@ define aem_curator::install_aem (
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
 
-  $aem_cfp_definition = 'aem_curator::install_aem62_sp1_cfp3',
+  $aem_version = '6.2',
+  $aem_extras  = 'sp1_cfp3',
+
   $aem_debug          = false,
   $aem_id             = 'aem',
   $puppet_conf_dir    = '/etc/puppetlabs/puppet/',
@@ -169,20 +171,6 @@ define aem_curator::install_aem (
     group  => "aem-${aem_id}",
   }
 
-  # Retrieve the cq-quickstart jar
-  archive { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
-    ensure  => present,
-    source  => $aem_quickstart_source,
-    cleanup => false,
-    require => File["${aem_base}/aem/${aem_id}"],
-  } -> file { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
-    ensure  => file,
-    mode    => '0775',
-    owner   => "aem-${aem_id}",
-    group   => "aem-${aem_id}",
-    require => File["${aem_base}/aem/${aem_id}"],
-  }
-
   aem_resources::puppet_aem_resources_set_config { "${aem_id}: Set puppet-aem-resources config file":
     conf_dir => $puppet_conf_dir,
     protocol => 'http',
@@ -192,70 +180,32 @@ define aem_curator::install_aem (
     aem_id   => $aem_id,
   }
 
-  # Retrieve the license file
-  archive { "${aem_base}/aem/${aem_id}/license.properties":
-    ensure  => present,
-    source  => $aem_license_source,
-    cleanup => false,
-    require => File["${aem_base}/aem/${aem_id}"],
-  } -> file { "${aem_base}/aem/${aem_id}/license.properties":
-    ensure => file,
-    mode   => '0440',
-    owner  => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  }
-
-
-  # Install AEM Health Check using aem::crx::package file type which will place
-  # the artifact in AEM install directory and it will be installed when AEM
-  # starts up.
-  archive { "${tmp_dir}/${aem_id}/aem-healthcheck-content-${aem_healthcheck_version}.zip":
-    ensure => present,
-    source => "http://central.maven.org/maven2/com/shinesolutions/aem-healthcheck-content/${aem_healthcheck_version}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
-  } -> aem::crx::package { "${aem_id}: aem-healthcheck" :
-    ensure => present,
-    type   => 'file',
-    home   => "${aem_base}/aem/${aem_id}",
-    source => "${tmp_dir}/${aem_id}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
-    user   => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  }
-
-  aem::instance { $aem_id:
-    source         => "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar",
-    home           => "${aem_base}/aem/${aem_id}",
-    user           => "aem-${aem_id}",
-    group          => "aem-${aem_id}",
-    type           => $run_mode,
-    port           => $aem_port,
-    sample_content => $aem_sample_content,
-    jvm_mem_opts   => $aem_jvm_mem_opts,
-    jvm_opts       => $jvm_opts.join(' '),
-    status         => 'running',
-  } -> exec { "${aem_id}: Manual delay to let AEM become ready":
-    command => "sleep ${post_install_sleep_secs}",
-  } -> aem_aem { "${aem_id}: Wait until login page is ready":
-    ensure => login_page_is_ready,
-    aem_id => $aem_id,
-  } -> aem_aem { "${aem_id}: Wait until aem health check is ok":
-    ensure => aem_health_check_is_ok,
-    tags   => 'deep',
-    aem_id => $aem_id,
-  } -> aem_curator::install_aem62_sp1_cfp3 { "${aem_id}: Install AEM CFP":
+  aem_curator::install_aem62 { "${aem_id}: Install AEM":
+    tmp_dir                 => $tmp_dir,
+    run_mode                => $run_mode,
+    aem_port                => $aem_port,
+    aem_quickstart_source   => $aem_quickstart_source,
+    aem_license_source      => $aem_license_source,
+    aem_artifacts_base      => $aem_artifacts_base,
+    aem_healthcheck_version => $aem_healthcheck_version,
+    aem_base                => $aem_base,
+    aem_sample_content      => $aem_sample_content,
+    aem_jvm_mem_opts        => $aem_jvm_mem_opts,
+    jvm_opts                => $jvm_opts,
+    post_install_sleep_secs => $post_install_sleep_secs,
+    aem_id                  => $aem_id,
+  } -> aem_curator::install_aem62_sp1_cfp3 { "${aem_id}: Install extra AEM packages":
     tmp_dir            => $tmp_dir,
     aem_artifacts_base => $aem_artifacts_base,
     aem_id             => $aem_id,
-  }
-
-  # Create system users and configure their usernames for password reset during provisioning
-  aem_resources::create_system_users { "${aem_id}: Create system users":
+  } -> aem_resources::create_system_users { "${aem_id}: Create system users":
+    # Create system users and configure their usernames for password reset during provisioning
     orchestrator_password => 'orchestrator',
     replicator_password   => 'replicator',
     deployer_password     => 'deployer',
     exporter_password     => 'exporter',
     importer_password     => 'importer',
     aem_id                => $aem_id,
-    require               => Aem_curator::Install_aem62_sp1_cfp3["${aem_id}: Install AEM CFP"],
   } -> aem_node { "${aem_id}: Create AEM Password Reset Activator config node":
     ensure => present,
     name   => 'com.shinesolutions.aem.passwordreset.Activator',
@@ -280,15 +230,12 @@ define aem_curator::install_aem (
       '/etc/replication/agents.publish' => ['replicate:false'],
     },
     aem_id     => $aem_id,
-  }
-
-  aem_node { "${aem_id}: Create AEM Health Check Servlet config node":
+  } -> aem_node { "${aem_id}: Create AEM Health Check Servlet config node":
     ensure  => present,
     name    => 'com.shinesolutions.healthcheck.hc.impl.ActiveBundleHealthCheck',
     path    => "/apps/system/config.${run_mode}",
     type    => 'sling:OsgiConfig',
     aem_id  => $aem_id,
-    require => Aem_curator::Install_aem62_sp1_cfp3["${aem_id}: Install AEM CFP"],
   } -> aem_config_property { "${aem_id}: Configure AEM Health Check Servlet ignored bundles":
     ensure           => present,
     name             => 'bundles.ignored',
