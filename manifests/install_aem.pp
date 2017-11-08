@@ -231,11 +231,11 @@ define aem_curator::install_aem (
     },
     aem_id     => $aem_id,
   } -> aem_node { "${aem_id}: Create AEM Health Check Servlet config node":
-    ensure  => present,
-    name    => 'com.shinesolutions.healthcheck.hc.impl.ActiveBundleHealthCheck',
-    path    => "/apps/system/config.${run_mode}",
-    type    => 'sling:OsgiConfig',
-    aem_id  => $aem_id,
+    ensure => present,
+    name   => 'com.shinesolutions.healthcheck.hc.impl.ActiveBundleHealthCheck',
+    path   => "/apps/system/config.${run_mode}",
+    type   => 'sling:OsgiConfig',
+    aem_id => $aem_id,
   } -> aem_config_property { "${aem_id}: Configure AEM Health Check Servlet ignored bundles":
     ensure           => present,
     name             => 'bundles.ignored',
