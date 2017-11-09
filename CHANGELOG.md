@@ -1,3 +1,6 @@
+### 0.9.1
+*
+
 ### 0.9.0
 * Initial version
 * config_publish_dispatcher: Publisher Host definitions replaced: $publish_host class variable replaced $::publishhost
