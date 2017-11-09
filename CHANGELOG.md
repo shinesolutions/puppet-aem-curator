@@ -1,5 +1,5 @@
 ### 0.9.1
-*
+* Add dependencies to metadata
 
 ### 0.9.0
 * Initial version
