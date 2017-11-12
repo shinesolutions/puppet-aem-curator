@@ -22,6 +22,7 @@
 class aem_curator::install_author (
   $tmp_dir,
   $aem_host,
+  $aem_profile,
   $aem_quickstart_source,
   $aem_license_source,
   $aem_artifacts_base,
@@ -55,6 +56,7 @@ class aem_curator::install_author (
 ) {
   aem_curator::install_aem { "${aem_id}: Install AEM Author":
     tmp_dir                       => $tmp_dir,
+    aem_profile                   => $aem_profile,
     aem_host                      => $aem_host,
     aem_quickstart_source         => $aem_quickstart_source,
     aem_license_source            => $aem_license_source,

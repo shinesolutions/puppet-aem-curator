@@ -1,5 +1,5 @@
 ### 0.9.2
-*
+* Introduce AEM profile concept which determines base AEM instance along with extra packages
 
 ### 0.9.1
 * Add dependencies to metadata

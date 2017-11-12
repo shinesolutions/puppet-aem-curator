@@ -22,6 +22,7 @@
 class aem_curator::install_publish (
   $tmp_dir,
   $aem_host,
+  $aem_profile,
   $aem_quickstart_source,
   $aem_license_source,
   $aem_artifacts_base,
@@ -56,6 +57,7 @@ class aem_curator::install_publish (
   aem_curator::install_aem { "${aem_id}: Install AEM Publish":
     tmp_dir                       => $tmp_dir,
     aem_host                      => $aem_host,
+    aem_profile                   => $aem_profile,
     aem_quickstart_source         => $aem_quickstart_source,
     aem_license_source            => $aem_license_source,
     aem_artifacts_base            => $aem_artifacts_base,

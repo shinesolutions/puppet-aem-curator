@@ -1,10 +1,47 @@
 define aem_curator::install_aem62_sp1_cfp3(
   $tmp_dir,
+
+  $run_mode,
+  $aem_port,
+  $aem_quickstart_source,
+  $aem_license_source,
   $aem_artifacts_base,
+  $aem_healthcheck_version,
+
+  $post_install_sleep_secs = 120,
+
+  $aem_base           = '/opt',
+  $aem_sample_content = false,
+  $aem_jvm_mem_opts   = '-Xss4m -Xmx8192m',
+
+  $jvm_opts = [
+    '-XX:+PrintGCDetails',
+    '-XX:+PrintGCTimeStamps',
+    '-XX:+PrintGCDateStamps',
+    '-XX:+PrintTenuringDistribution',
+    '-XX:+PrintGCApplicationStoppedTime',
+    '-XX:+HeapDumpOnOutOfMemoryError',
+  ],
+
   $aem_id = 'aem',
+
 ) {
 
-  aem_curator::install_aem_package { "${aem_id}: Install hotfix 11490":
+  aem_curator::install_aem62 { "${aem_id}: Install AEM":
+    tmp_dir                 => $tmp_dir,
+    run_mode                => $run_mode,
+    aem_port                => $aem_port,
+    aem_quickstart_source   => $aem_quickstart_source,
+    aem_license_source      => $aem_license_source,
+    aem_artifacts_base      => $aem_artifacts_base,
+    aem_healthcheck_version => $aem_healthcheck_version,
+    aem_base                => $aem_base,
+    aem_sample_content      => $aem_sample_content,
+    aem_jvm_mem_opts        => $aem_jvm_mem_opts,
+    jvm_opts                => $jvm_opts,
+    post_install_sleep_secs => $post_install_sleep_secs,
+    aem_id                  => $aem_id,
+  } -> aem_curator::install_aem_package { "${aem_id}: Install hotfix 11490":
     tmp_dir        => $tmp_dir,
     group          => 'adobe/cq620/hotfix',
     package_name   => 'cq-6.2.0-hotfix-11490',
