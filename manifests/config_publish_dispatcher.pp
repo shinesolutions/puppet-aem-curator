@@ -4,16 +4,15 @@ File {
 
 class aem_curator::config_publish_dispatcher (
   $base_dir,
-  $tmp_dir,
   $dispatcher_conf_dir,
-  $httpd_conf_dir,
   $docroot_dir,
-  $ssl_cert,
+  $exec_path,
+  $httpd_conf_dir,
   $publish_host,
   $publish_port,
   $publish_secure,
-  $exec_path,
-
+  $ssl_cert,
+  $tmp_dir,
   $aem_id = 'publish-dispatcher',
 ) {
 

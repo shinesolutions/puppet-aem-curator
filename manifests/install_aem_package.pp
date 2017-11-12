@@ -55,28 +55,23 @@
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
 define aem_curator::install_aem_package (
-  $group,
-  $package_name,
-  $version,
   $artifacts_base,
-
-  $file_name = '',
-  $replicate = false,
+  $package_group,
+  $package_name,
+  $package_version,
   $activate  = false,
+  $aem_id = 'aem',
+  $file_name = '',
   $force     = true,
-  $restart   = false,
-
-  $tmp_dir = '/tmp/shinesolutions/puppet-aem-curator',
-
   $post_install_sleep_secs     = 120,
-  $post_restart_sleep_secs     = 120,
   $post_login_page_ready_sleep = 0,
-
-  $retries_max_tries          = 120,
+  $post_restart_sleep_secs     = 120,
+  $replicate = false,
+  $restart   = false,
   $retries_base_sleep_seconds = 10,
   $retries_max_sleep_seconds  = 10,
-
-  $aem_id = 'aem',
+  $retries_max_tries          = 120,
+  $tmp_dir = '/tmp/shinesolutions/puppet-aem-curator',
 ) {
 
   Exec {
@@ -91,7 +86,7 @@ define aem_curator::install_aem_package (
     retries_max_sleep_seconds  => $retries_max_sleep_seconds,
   }
 
-  $local_file_name = "${package_name}-${version}.zip"
+  $local_file_name = "${package_name}-${package_version}.zip"
   $url_file_name = pick($file_name, $local_file_name)
 
   $local_file_path = "${tmp_dir}/${aem_id}/${local_file_name}"
@@ -104,8 +99,8 @@ define aem_curator::install_aem_package (
   } -> aem_package { "${aem_id}: Install ${package_name}":
     ensure    => present,
     name      => $package_name,
-    group     => $group,
-    version   => $version,
+    group     => $package_group,
+    version   => $package_version,
     path      => "${tmp_dir}/${aem_id}",
     replicate => $replicate,
     activate  => $activate,

@@ -3,21 +3,19 @@ File {
 }
 
 class aem_curator::config_author_primary (
-  $base_dir,
-  $tmp_dir,
-  $puppet_conf_dir,
-  $crx_quickstart_dir,
-  $author_protocol,
-  $author_port,
   $aem_repo_device,
+  $author_port,
+  $author_protocol,
+  $base_dir,
   $credentials_file,
-
-  $enable_offline_compaction_cron,
+  $crx_quickstart_dir,
   $enable_daily_export_cron,
   $enable_hourly_live_snapshot_cron,
-
-  $delete_repository_index = false,
+  $enable_offline_compaction_cron,
+  $puppet_conf_dir,
+  $tmp_dir,
   $aem_id = 'author-primary',
+  $delete_repository_index = false,
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")

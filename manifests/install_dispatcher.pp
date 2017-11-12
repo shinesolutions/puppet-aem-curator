@@ -41,14 +41,13 @@
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
 class aem_curator::install_dispatcher (
+  $apache_module_base_url,
+  $apache_module_filename,
+  $apache_module_tarball,
+  $apache_module_temp_dir,
   $cert_base_url,
   $cert_filename,
   $tmp_dir,
-
-  $apache_module_base_url,
-  $apache_module_tarball,
-  $apache_module_filename,
-  $apache_module_temp_dir,
   $aem_id = 'dispatcher',
 ) {
   include ::config::base

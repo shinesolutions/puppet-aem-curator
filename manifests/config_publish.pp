@@ -3,30 +3,27 @@ File {
 }
 
 class aem_curator::config_publish (
-  $base_dir,
-  $tmp_dir,
-  $puppet_conf_dir,
-  $crx_quickstart_dir,
-  $publish_protocol,
-  $publish_port,
   $aem_repo_device,
-  $vol_type,
+  $base_dir,
   $credentials_file,
-  $exec_path,
-  $enable_offline_compaction_cron,
+  $crx_quickstart_dir,
   $enable_daily_export_cron,
   $enable_hourly_live_snapshot_cron,
-
-  $login_ready_max_tries,
+  $enable_offline_compaction_cron,
+  $exec_path,
   $login_ready_base_sleep_seconds,
   $login_ready_max_sleep_seconds,
-
-  $publishdispatcherhost,
+  $login_ready_max_tries,
   $pairinstanceid,
-
-  $snapshotid = $::snapshotid,
-  $delete_repository_index = false,
+  $publish_port,
+  $publish_protocol,
+  $publishdispatcherhost,
+  $puppet_conf_dir,
+  $tmp_dir,
+  $vol_type,
   $aem_id = 'publish',
+  $delete_repository_index = false,
+  $snapshotid = $::snapshotid,
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")

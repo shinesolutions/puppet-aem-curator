@@ -21,8 +21,8 @@
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
 class aem_curator::install_java (
-  $tmp_dir,
   $cert_base_url,
+  $tmp_dir,
 ) {
 
   # TODO: will upgrade to >= 8u151 after https://github.com/antoineco/aco-oracle_java/issues/40 is solved

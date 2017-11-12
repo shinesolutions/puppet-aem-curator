@@ -79,38 +79,24 @@
 #
 
 define aem_curator::install_aem (
-  $tmp_dir,
-
-  $run_mode,
-  $aem_host,
-  $aem_port,
-  $aem_ssl_port,
-  $aem_quickstart_source,
-  $aem_license_source,
   $aem_artifacts_base,
   $aem_healthcheck_version,
-
-  $aem_profile = 'aem62_sp1_cfp3',
-
+  $aem_host,
+  $aem_license_source,
+  $aem_port,
+  $aem_quickstart_source,
+  $aem_ssl_port,
+  $run_mode,
+  $tmp_dir,
   $aem_base           = '/opt',
-  $aem_sample_content = false,
+  $aem_debug          = false,
+  $aem_id             = 'aem',
   $aem_jvm_mem_opts   = '-Xss4m -Xmx8192m',
-
-  $setup_repository_volume       = false,
-  $repository_volume_device      = '/dev/xvdb',
-  $repository_volume_mount_point = '/mnt/ebs1',
-
-  $aem_keystore_path     = undef,
   $aem_keystore_password = undef,
+  $aem_keystore_path     = undef,
+  $aem_profile = 'aem62_sp1_cfp3',
+  $aem_sample_content = false,
   $cert_base_url         = undef,
-
-  $post_install_sleep_secs = 120,
-  $post_stop_sleep_secs    = 120,
-
-  $retries_max_tries          = 120,
-  $retries_base_sleep_seconds = 10,
-  $retries_max_sleep_seconds  = 10,
-
   $jvm_opts = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
@@ -119,10 +105,15 @@ define aem_curator::install_aem (
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
-
-  $aem_debug          = false,
-  $aem_id             = 'aem',
+  $post_install_sleep_secs = 120,
+  $post_stop_sleep_secs    = 120,
   $puppet_conf_dir    = '/etc/puppetlabs/puppet/',
+  $repository_volume_device      = '/dev/xvdb',
+  $repository_volume_mount_point = '/mnt/ebs1',
+  $retries_base_sleep_seconds = 10,
+  $retries_max_sleep_seconds  = 10,
+  $retries_max_tries          = 120,
+  $setup_repository_volume       = false,
 ) {
 
   Exec {
@@ -180,22 +171,22 @@ define aem_curator::install_aem (
   }
 
   aem_curator::install_aem_profile { "${aem_id}: Install AEM profile ${aem_profile}":
-    tmp_dir                 => $tmp_dir,
-    run_mode                => $run_mode,
-    aem_profile             => $aem_profile,
-    aem_host                => $aem_host,
-    aem_port                => $aem_port,
-    aem_ssl_port            => $aem_ssl_port,
-    aem_quickstart_source   => $aem_quickstart_source,
-    aem_license_source      => $aem_license_source,
     aem_artifacts_base      => $aem_artifacts_base,
-    aem_healthcheck_version => $aem_healthcheck_version,
     aem_base                => $aem_base,
-    aem_sample_content      => $aem_sample_content,
+    aem_healthcheck_version => $aem_healthcheck_version,
+    aem_host                => $aem_host,
+    aem_id                  => $aem_id,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
+    aem_license_source      => $aem_license_source,
+    aem_port                => $aem_port,
+    aem_profile             => $aem_profile,
+    aem_quickstart_source   => $aem_quickstart_source,
+    aem_sample_content      => $aem_sample_content,
+    aem_ssl_port            => $aem_ssl_port,
     jvm_opts                => $jvm_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
-    aem_id                  => $aem_id,
+    run_mode                => $run_mode,
+    tmp_dir                 => $tmp_dir,
   } -> aem_resources::create_system_users { "${aem_id}: Create system users":
     # Create system users and configure their usernames for password reset during provisioning
     orchestrator_password => 'orchestrator',

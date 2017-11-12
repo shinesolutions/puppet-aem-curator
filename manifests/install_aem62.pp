@@ -1,19 +1,15 @@
 define aem_curator::install_aem62(
-  $tmp_dir,
-
-  $run_mode,
-  $aem_port,
-  $aem_quickstart_source,
-  $aem_license_source,
   $aem_artifacts_base,
   $aem_healthcheck_version,
-
-  $post_install_sleep_secs = 120,
-
+  $aem_license_source,
+  $aem_port,
+  $aem_quickstart_source,
+  $run_mode,
+  $tmp_dir,
   $aem_base           = '/opt',
-  $aem_sample_content = false,
+  $aem_id = 'aem',
   $aem_jvm_mem_opts   = '-Xss4m -Xmx8192m',
-
+  $aem_sample_content = false,
   $jvm_opts = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
@@ -22,9 +18,7 @@ define aem_curator::install_aem62(
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
-
-  $aem_id = 'aem',
-
+  $post_install_sleep_secs = 120,
 ) {
 
   # Retrieve the license file

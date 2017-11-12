@@ -1,13 +1,11 @@
 class aem_curator::config_aem_tools (
-  $base_dir,
-  $tmp_dir,
-  $crx_quickstart_dir,
   $aem_repo_device,
-
-  $enable_offline_compaction_cron,
+  $base_dir,
+  $crx_quickstart_dir,
   $enable_daily_export_cron,
   $enable_hourly_live_snapshot_cron,
-
+  $enable_offline_compaction_cron,
+  $tmp_dir,
 ) {
 
   # Set up AEM tools
