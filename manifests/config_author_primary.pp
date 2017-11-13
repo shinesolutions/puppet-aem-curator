@@ -14,7 +14,7 @@ class aem_curator::config_author_primary (
   $enable_offline_compaction_cron,
   $puppet_conf_dir,
   $tmp_dir,
-  $aem_id = 'author',
+  $aem_id                  = 'author',
   $delete_repository_index = false,
 ) {
 

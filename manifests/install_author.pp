@@ -33,12 +33,12 @@ class aem_curator::install_author (
   $repository_volume_mount_point,
   $aem_keystore_password,
   $cert_base_url,
-  $aem_debug         = false,
-  $aem_id            = 'author',
-  $aem_keystore_path = undef,
-  $aem_port          = '4502',
-  $aem_ssl_port      = '5432',
-  $jvm_opts = [
+  $aem_debug              = false,
+  $aem_id                 = 'author',
+  $aem_keystore_path      = undef,
+  $aem_port               = '4502',
+  $aem_ssl_port           = '5432',
+  $jvm_opts               = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -48,8 +48,8 @@ class aem_curator::install_author (
   ],
   $post_install_sleep_secs = 120,
   $post_stop_sleep_secs    = 120,
-  $puppet_conf_dir   = '/etc/puppetlabs/puppet/',
-  $run_mode          = 'author',
+  $puppet_conf_dir         = '/etc/puppetlabs/puppet/',
+  $run_mode                = 'author',
 ) {
   aem_curator::install_aem { "${aem_id}: Install AEM Author":
     aem_artifacts_base            => $aem_artifacts_base,

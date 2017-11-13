@@ -21,9 +21,9 @@ class aem_curator::config_publish (
   $puppet_conf_dir,
   $tmp_dir,
   $vol_type,
-  $aem_id = 'publish',
+  $aem_id                  = 'publish',
   $delete_repository_index = false,
-  $snapshotid = $::snapshotid,
+  $snapshotid              = $::snapshotid,
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")

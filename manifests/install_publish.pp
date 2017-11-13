@@ -33,12 +33,12 @@ class aem_curator::install_publish (
   $repository_volume_mount_point,
   $setup_repository_volume,
   $tmp_dir,
-  $aem_debug         = false,
-  $aem_id            = 'publish',
-  $aem_keystore_path = undef,
-  $aem_port          = '4503',
-  $aem_ssl_port      = '5433',
-  $jvm_opts = [
+  $aem_debug               = false,
+  $aem_id                  = 'publish',
+  $aem_keystore_path       = undef,
+  $aem_port                = '4503',
+  $aem_ssl_port            = '5433',
+  $jvm_opts                = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -48,8 +48,8 @@ class aem_curator::install_publish (
   ],
   $post_install_sleep_secs = 120,
   $post_stop_sleep_secs    = 120,
-  $puppet_conf_dir   = '/etc/puppetlabs/puppet/',
-  $run_mode          = 'publish',
+  $puppet_conf_dir         = '/etc/puppetlabs/puppet/',
+  $run_mode                = 'publish',
 ) {
   aem_curator::install_aem { "${aem_id}: Install AEM Publish":
     aem_artifacts_base            => $aem_artifacts_base,

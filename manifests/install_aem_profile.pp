@@ -10,11 +10,11 @@ define aem_curator::install_aem_profile (
   $aem_ssl_port,
   $run_mode,
   $tmp_dir,
-  $aem_base           = '/opt',
-  $aem_id             = 'aem',
-  $aem_jvm_mem_opts   = '-Xss4m -Xmx8192m',
-  $aem_sample_content = false,
-  $jvm_opts = [
+  $aem_base                = '/opt',
+  $aem_id                  = 'aem',
+  $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
+  $aem_sample_content      = false,
+  $jvm_opts                = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
