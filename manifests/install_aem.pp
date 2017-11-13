@@ -137,9 +137,6 @@ define aem_curator::install_aem (
       options  => 'nofail,defaults,noatime',
       remounts => false,
       atboot   => false,
-    } -> exec { "${aem_id}: Fix repository mount permissions":
-      command => "chown aem-${aem_id}:aem-${aem_id} ${repository_volume_mount_point}",
-      require => User["aem-${aem_id}"],
     }
   }
 
@@ -334,6 +331,8 @@ define aem_curator::install_aem (
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
       command => "sleep ${post_stop_sleep_secs}",
+    } -> exec { "${aem_id}: Fix repository mount permissions":
+      command => "chown aem-${aem_id}:aem-${aem_id} ${repository_volume_mount_point}",
     } -> exec { "mv ${aem_base}/aem/${aem_id}/crx-quickstart/repository/* ${repository_volume_mount_point}/":
     } -> file { "${aem_base}/aem/${aem_id}/crx-quickstart/repository/":
       ensure => 'link',
