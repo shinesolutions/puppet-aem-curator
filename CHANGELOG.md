@@ -1,3 +1,6 @@
+### 0.9.3
+*
+
 ### 0.9.2
 * Introduce AEM profile concept which defines AEM base installation along with extra packages (hotfixes, service packs, cumulative fix packs)
 * AEM and license files now have predetermined names, consistent with extra packages
