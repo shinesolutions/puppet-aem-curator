@@ -16,8 +16,6 @@
 # [*aem_ssl_port*]
 #   SSL port AEM will listen on.
 #
-# [*aem_quickstart_source*]
-# [*aem_license_source*]
 # [*aem_artifacts_base*]
 #   URLs (s3://, http:// or file://) for the AEM jar, license and package
 #   files.
@@ -82,9 +80,7 @@ define aem_curator::install_aem (
   $aem_artifacts_base,
   $aem_healthcheck_version,
   $aem_host,
-  $aem_license_source,
   $aem_port,
-  $aem_quickstart_source,
   $aem_ssl_port,
   $run_mode,
   $tmp_dir,
@@ -177,10 +173,8 @@ define aem_curator::install_aem (
     aem_host                => $aem_host,
     aem_id                  => $aem_id,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
-    aem_license_source      => $aem_license_source,
     aem_port                => $aem_port,
     aem_profile             => $aem_profile,
-    aem_quickstart_source   => $aem_quickstart_source,
     aem_sample_content      => $aem_sample_content,
     aem_ssl_port            => $aem_ssl_port,
     jvm_opts                => $jvm_opts,

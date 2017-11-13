@@ -1,9 +1,7 @@
 define aem_curator::install_aem62_sp1_cfp5(
   $aem_artifacts_base,
   $aem_healthcheck_version,
-  $aem_license_source,
   $aem_port,
-  $aem_quickstart_source,
   $run_mode,
   $tmp_dir,
   $aem_base           = '/opt',
@@ -25,8 +23,6 @@ define aem_curator::install_aem62_sp1_cfp5(
     tmp_dir                 => $tmp_dir,
     run_mode                => $run_mode,
     aem_port                => $aem_port,
-    aem_quickstart_source   => $aem_quickstart_source,
-    aem_license_source      => $aem_license_source,
     aem_artifacts_base      => $aem_artifacts_base,
     aem_healthcheck_version => $aem_healthcheck_version,
     aem_base                => $aem_base,

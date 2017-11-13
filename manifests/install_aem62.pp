@@ -1,9 +1,7 @@
 define aem_curator::install_aem62(
   $aem_artifacts_base,
   $aem_healthcheck_version,
-  $aem_license_source,
   $aem_port,
-  $aem_quickstart_source,
   $run_mode,
   $tmp_dir,
   $aem_base           = '/opt',
@@ -24,7 +22,7 @@ define aem_curator::install_aem62(
   # Retrieve the license file
   archive { "${aem_base}/aem/${aem_id}/license.properties":
     ensure  => present,
-    source  => $aem_license_source,
+    source  => "${aem_artifacts_base}/license-6.2.properties",
     cleanup => false,
     require => File["${aem_base}/aem/${aem_id}"],
   } -> file { "${aem_base}/aem/${aem_id}/license.properties":
@@ -37,7 +35,7 @@ define aem_curator::install_aem62(
   # Retrieve the cq-quickstart jar
   archive { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
     ensure  => present,
-    source  => $aem_quickstart_source,
+    source  => "${aem_artifacts_base}/AEM_6.2_Quickstart.jar",
     cleanup => false,
     require => File["${aem_base}/aem/${aem_id}"],
   } -> file { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":

@@ -1,5 +1,6 @@
 ### 0.9.2
-* Introduce AEM profile concept which determines base AEM instance along with extra packages
+* Introduce AEM profile concept which defines AEM base installation along with extra packages (hotfixes, service packs, cumulative fix packs)
+* AEM and license files now have predetermined names, consistent with extra packages
 
 ### 0.9.1
 * Add dependencies to metadata
