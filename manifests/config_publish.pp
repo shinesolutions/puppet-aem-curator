@@ -54,8 +54,8 @@ class aem_curator::config_publish (
   file { "${crx_quickstart_dir}/install/":
     ensure => directory,
     mode   => '0775',
-    owner  => 'aem',
-    group  => 'aem',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
     ensure => present,
     source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
