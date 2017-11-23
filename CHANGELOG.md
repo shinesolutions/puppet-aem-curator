@@ -1,5 +1,6 @@
 ### 0.9.3
 * Add new AEM profiles: aem62_sp1_cfp9, aem63_sp1
+* Rename jvm_opts param to aem_jvm_opts
 
 ### 0.9.2
 * Introduce AEM profile concept which defines AEM base installation along with extra packages (hotfixes, service packs, cumulative fix packs)

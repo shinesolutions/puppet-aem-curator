@@ -8,7 +8,7 @@ define aem_curator::install_aem63(
   $aem_id                  = 'aem',
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
   $aem_sample_content      = false,
-  $jvm_opts                = [
+  $aem_jvm_opts                = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -70,7 +70,7 @@ define aem_curator::install_aem63(
     port           => $aem_port,
     sample_content => $aem_sample_content,
     jvm_mem_opts   => $aem_jvm_mem_opts,
-    jvm_opts       => $jvm_opts.join(' '),
+    jvm_opts       => $aem_jvm_opts.join(' '),
     status         => 'running',
   } -> exec { "${aem_id}: Manual delay to let AEM become ready":
     command => "sleep ${post_install_sleep_secs}",

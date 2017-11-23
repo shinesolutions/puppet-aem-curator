@@ -61,7 +61,7 @@
 #   Number of seconds to sleep to allow AEM to settle. If installation fails,
 #   try turning this up.
 #
-# [*jvm_opts*]
+# [*aem_jvm_opts*]
 #   An array of command line options to pass to the JVM when starting AEM.
 #
 # [*aem_cfp_class*]
@@ -93,7 +93,7 @@ define aem_curator::install_aem (
   $aem_profile                   = 'aem62_sp1_cfp3',
   $aem_sample_content            = false,
   $cert_base_url                 = undef,
-  $jvm_opts                      = [
+  $aem_jvm_opts                      = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -174,7 +174,7 @@ define aem_curator::install_aem (
     aem_profile             => $aem_profile,
     aem_sample_content      => $aem_sample_content,
     aem_ssl_port            => $aem_ssl_port,
-    jvm_opts                => $jvm_opts,
+    aem_jvm_opts            => $aem_jvm_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
     run_mode                => $run_mode,
     tmp_dir                 => $tmp_dir,

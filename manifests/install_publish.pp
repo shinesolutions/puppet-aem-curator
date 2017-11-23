@@ -38,7 +38,7 @@ class aem_curator::install_publish (
   $aem_keystore_path       = undef,
   $aem_port                = '4503',
   $aem_ssl_port            = '5433',
-  $jvm_opts                = [
+  $aem_jvm_opts                = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -66,7 +66,7 @@ class aem_curator::install_publish (
     aem_sample_content            => $aem_sample_content,
     aem_ssl_port                  => $aem_ssl_port,
     cert_base_url                 => $cert_base_url,
-    jvm_opts                      => $jvm_opts,
+    aem_jvm_opts                  => $aem_jvm_opts,
     post_install_sleep_secs       => $post_install_sleep_secs,
     post_stop_sleep_secs          => $post_stop_sleep_secs,
     puppet_conf_dir               => '/etc/puppetlabs/puppet/',

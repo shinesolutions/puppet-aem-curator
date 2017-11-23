@@ -8,7 +8,7 @@ define aem_curator::install_aem62_sp1_cfp3(
   $aem_id                  = 'aem',
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
   $aem_sample_content      = false,
-  $jvm_opts                = [
+  $aem_jvm_opts                = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -28,7 +28,7 @@ define aem_curator::install_aem62_sp1_cfp3(
     aem_base                => $aem_base,
     aem_sample_content      => $aem_sample_content,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
-    jvm_opts                => $jvm_opts,
+    aem_jvm_opts            => $aem_jvm_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
   } -> aem_curator::install_aem_package { "${aem_id}: Install hotfix 11490":
