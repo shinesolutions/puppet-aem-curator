@@ -1,3 +1,6 @@
+### 0.9.4
+*
+
 ### 0.9.3
 * Add new AEM profiles: aem62_sp1_cfp2, aem62_sp1_cfp9, aem63_sp1
 * Rename jvm_opts param to aem_jvm_opts
