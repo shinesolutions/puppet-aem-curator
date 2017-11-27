@@ -41,6 +41,22 @@ define aem_curator::install_aem_profile (
       tmp_dir                 => $tmp_dir,
     }
 
+  } elsif $aem_profile == 'aem62_sp1_cfp2' {
+
+    aem_curator::install_aem62_sp1_cfp2 { "${aem_id}: Install AEM profile ${aem_profile}":
+      aem_artifacts_base      => $aem_artifacts_base,
+      aem_base                => $aem_base,
+      aem_healthcheck_version => $aem_healthcheck_version,
+      aem_id                  => $aem_id,
+      aem_jvm_mem_opts        => $aem_jvm_mem_opts,
+      aem_port                => $aem_port,
+      aem_sample_content      => $aem_sample_content,
+      aem_jvm_opts            => $aem_jvm_opts,
+      post_install_sleep_secs => $post_install_sleep_secs,
+      run_mode                => $run_mode,
+      tmp_dir                 => $tmp_dir,
+    }
+
   } elsif $aem_profile == 'aem62_sp1_cfp3' {
 
     aem_curator::install_aem62_sp1_cfp3 { "${aem_id}: Install AEM profile ${aem_profile}":
