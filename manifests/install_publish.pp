@@ -38,7 +38,7 @@ class aem_curator::install_publish (
   $aem_keystore_path       = undef,
   $aem_port                = '4503',
   $aem_ssl_port            = '5433',
-  $aem_jvm_opts                = [
+  $aem_jvm_opts            = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
