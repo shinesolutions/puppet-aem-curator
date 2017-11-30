@@ -1,5 +1,5 @@
 ### 0.9.4
-*
+* Add enable_default_password flag for creating system users password with default value (i.e. same as username)
 
 ### 0.9.3
 * Add new AEM profiles: aem62_sp1_cfp2, aem62_sp1_cfp9, aem63_sp1
