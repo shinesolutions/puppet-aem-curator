@@ -25,6 +25,7 @@ class aem_curator::config_publish (
   $vol_type,
   $aem_id                  = 'publish',
   $delete_repository_index = false,
+  $run_mode                = 'publish',
   $snapshotid              = $::snapshotid,
 ) {
 
@@ -85,6 +86,10 @@ class aem_curator::config_publish (
     ensure => stopped,
     name   => 'org.apache.sling.jcr.davex',
     aem_id => $aem_id,
+  } -> aem_curator::config_aem_crxde { "${aem_id}: Configure CRXDE":
+    aem_id       => $aem_id,
+    enable_crxde => $enable_crxde,
+    run_mode     => $run_mode,
   } -> aem_aem { "${aem_id}: Remove all agents":
     ensure   => all_agents_removed,
     run_mode => 'publish',

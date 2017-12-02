@@ -18,6 +18,7 @@ class aem_curator::config_author_primary (
   $tmp_dir,
   $aem_id                  = 'author',
   $delete_repository_index = false,
+  $run_mode                = 'author',
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
@@ -68,6 +69,10 @@ class aem_curator::config_author_primary (
     ensure => stopped,
     name   => 'org.apache.sling.jcr.davex',
     aem_id => $aem_id,
+  } -> aem_curator::config_aem_crxde { "${aem_id}: Configure CRXDE":
+    aem_id       => $aem_id,
+    enable_crxde => $enable_crxde,
+    run_mode     => $run_mode,
   } -> aem_aem { "${aem_id}: Remove all agents":
     ensure   => all_agents_removed,
     run_mode => 'author',
