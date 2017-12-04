@@ -5,7 +5,7 @@ define aem_curator::config_aem_system_users (
 ) {
 
   if $enable_default_passwords == false {
-    aem_resources::change_system_users_password { 'Change system users password for author-primary':
+    aem_resources::change_system_users_password { "${aem_id}: Change system users password":
       orchestrator_new_password => $credentials_hash['orchestrator'],
       replicator_new_password   => $credentials_hash['replicator'],
       deployer_new_password     => $credentials_hash['deployer'],
