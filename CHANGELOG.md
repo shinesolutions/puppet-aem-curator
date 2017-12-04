@@ -1,3 +1,6 @@
+### 0.9.5
+*
+
 ### 0.9.4
 * Add enable_default_password flag for creating system users password with default value (i.e. same as username)
 * Add enable_crxde flag for enabling CRXDE access
