@@ -1,5 +1,5 @@
 ### 0.9.5
-*
+* config_publish_dispatcher no longer deploys artifacts (moved to aem-aws-stack-provisioner) due to AWS-specific check
 
 ### 0.9.4
 * Add enable_default_password flag for creating system users password with default value (i.e. same as username)
