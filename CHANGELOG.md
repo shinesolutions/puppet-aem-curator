@@ -1,3 +1,6 @@
+### 0.9.6
+*
+
 ### 0.9.5
 * config_publish_dispatcher no longer deploys artifacts (moved to aem-aws-stack-provisioner) due to AWS-specific check
 * Fix Dispatcher artifacts descriptor generator script name
