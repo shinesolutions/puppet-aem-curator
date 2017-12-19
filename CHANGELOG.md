@@ -1,5 +1,5 @@
 ### 0.9.6
-*
+* Added variable jvm_mem_opts to configure JVM Memory for AEM Author and Publisher
 
 ### 0.9.5
 * config_publish_dispatcher no longer deploys artifacts (moved to aem-aws-stack-provisioner) due to AWS-specific check
