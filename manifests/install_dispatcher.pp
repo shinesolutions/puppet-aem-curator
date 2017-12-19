@@ -48,7 +48,9 @@ class aem_curator::install_dispatcher (
   $cert_base_url,
   $cert_filename,
   $tmp_dir,
-  $aem_id = 'dispatcher',
+  $apache_http_port  = '80',
+  $apache_https_port = '443',
+  $aem_id            = 'dispatcher',
 ) {
   include ::config::base
 
@@ -75,6 +77,9 @@ class aem_curator::install_dispatcher (
     }
   }
 
+  apache::listen { $apache_http_port: }
+  apache::listen { $apache_https_port: }
+
   $apache_classes = [
     '::apache',
     '::apache::mod::ssl',
@@ -97,5 +102,15 @@ class aem_curator::install_dispatcher (
     ensure => directory,
     owner  => 'apache',
     group  => 'apache',
+  } -> tcp_conn_validator { "Ensure dispatcher is listening on http port ${apache_http_port}" :
+    host      => 'localhost',
+    port      => $apache_http_port,
+    try_sleep => 5,
+    timeout   => 60,
+  } -> tcp_conn_validator { "Ensure dispatcher is listening on https port ${apache_https_port}" :
+    host      => 'localhost',
+    port      => $apache_https_port,
+    try_sleep => 5,
+    timeout   => 60,
   }
 }

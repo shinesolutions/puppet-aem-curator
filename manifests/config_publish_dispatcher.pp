@@ -13,7 +13,9 @@ class aem_curator::config_publish_dispatcher (
   $publish_secure,
   $ssl_cert,
   $tmp_dir,
-  $aem_id = 'publish-dispatcher',
+  $apache_http_port  = '80',
+  $apache_https_port = '443',
+  $aem_id            = 'publish-dispatcher',
 ) {
 
   aem_resources::publish_dispatcher_set_config { 'Set puppet-aem-resources config file for publish-dispatcher':
@@ -27,6 +29,16 @@ class aem_curator::config_publish_dispatcher (
   } -> exec { 'httpd -k graceful':
     cwd  => $tmp_dir,
     path => $exec_path,
+  } -> tcp_conn_validator { "Ensure publish-dispatcher is listening on http port ${apache_http_port}" :
+    host      => 'localhost',
+    port      => $apache_http_port,
+    try_sleep => 5,
+    timeout   => 60,
+  } -> tcp_conn_validator { "Ensure publish-dispatcher is listening on https port ${apache_https_port}" :
+    host      => 'localhost',
+    port      => $apache_https_port,
+    try_sleep => 5,
+    timeout   => 60,
   }
 
 }
