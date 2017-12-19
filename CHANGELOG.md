@@ -1,5 +1,5 @@
 ### 0.9.6
-*
+* Add readiness checks during installation and configuration of AEM Dispatcher
 
 ### 0.9.5
 * config_publish_dispatcher no longer deploys artifacts (moved to aem-aws-stack-provisioner) due to AWS-specific check
