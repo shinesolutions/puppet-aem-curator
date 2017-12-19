@@ -1,3 +1,15 @@
+#== Class: aem_curator::config_author_primary
+# Configuration AEM Author
+#
+# === Parameters
+# [*jvm_mem_opts*]
+#   User defined JVM Memory options to be passed to the AEM Author
+#
+# === Copyright
+#
+# Copyright © 2017 Shine Solutions Group, unless otherwise noted.
+#
+
 File {
   backup => false,
 }
@@ -14,7 +26,6 @@ class aem_curator::config_author_primary (
   $enable_default_passwords,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
-  # Load variable to set user defined Memory option for JVM
   $jvm_mem_opts,
   $puppet_conf_dir,
   $tmp_dir,
@@ -37,7 +48,6 @@ class aem_curator::config_author_primary (
 
   }
 
-  # When variable jvm_mem_opts, Set JVM option in start-env AEM script
   if $jvm_mem_opts {
     file_line { 'jvm memory option author':
       ensure => present,
