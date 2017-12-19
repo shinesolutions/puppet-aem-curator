@@ -1,3 +1,16 @@
+#== Class: aem_curator::config_publish
+# Configuration AEM Publisher
+#
+# === Parameters
+# [*jvm_mem_opts*]
+#   User defined JVM Memory options to be passed to AEM Publisher
+#
+# === Copyright
+#
+# Copyright © 2017 Shine Solutions Group, unless otherwise noted.
+#
+
+
 File {
   backup => false,
 }
@@ -13,6 +26,7 @@ class aem_curator::config_publish (
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
   $exec_path,
+  $jvm_mem_opts,
   $login_ready_base_sleep_seconds,
   $login_ready_max_sleep_seconds,
   $login_ready_max_tries,
@@ -54,6 +68,15 @@ class aem_curator::config_publish (
     }
   }
 
+  if $jvm_mem_opts {
+    file_line { 'jvm memory option publisher':
+      ensure => present,
+      path => "${crx_quickstart_dir}/bin/start-env",
+      line => "JVM_MEM_OPTS='${jvm_mem_opts}'",
+      match => "^JVM_MEM_OPTS",
+    }
+  }
+  
   file { "${crx_quickstart_dir}/install/":
     ensure => directory,
     mode   => '0775',

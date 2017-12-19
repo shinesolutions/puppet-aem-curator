@@ -1,3 +1,15 @@
+#== Class: aem_curator::config_author_primary
+# Configuration AEM Author
+#
+# === Parameters
+# [*jvm_mem_opts*]
+#   User defined JVM Memory options to be passed to the AEM Author
+#
+# === Copyright
+#
+# Copyright © 2017 Shine Solutions Group, unless otherwise noted.
+#
+
 File {
   backup => false,
 }
@@ -14,6 +26,7 @@ class aem_curator::config_author_primary (
   $enable_default_passwords,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
+  $jvm_mem_opts,
   $puppet_conf_dir,
   $tmp_dir,
   $aem_id                  = 'author',
@@ -33,6 +46,15 @@ class aem_curator::config_author_primary (
       before  => Service['aem-author'],
     }
 
+  }
+
+  if $jvm_mem_opts {
+    file_line { 'jvm memory option author':
+      ensure => present,
+      path => "${crx_quickstart_dir}/bin/start-env",
+      line => "JVM_MEM_OPTS='${jvm_mem_opts}'",
+      match => "^JVM_MEM_OPTS",
+    }
   }
 
   file { "${crx_quickstart_dir}/install/":
