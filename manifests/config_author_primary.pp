@@ -14,6 +14,8 @@ class aem_curator::config_author_primary (
   $enable_default_passwords,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
+  # Load variable to set user defined Memory option for JVM
+  $jvm_mem_opts,
   $puppet_conf_dir,
   $tmp_dir,
   $aem_id                  = 'author',
@@ -33,6 +35,16 @@ class aem_curator::config_author_primary (
       before  => Service['aem-author'],
     }
 
+  }
+
+  # When variable jvm_mem_opts, Set JVM option in start-env AEM script
+  if $jvm_mem_opts {
+    file_line { 'jvm memory option author':
+      ensure => present,
+      path => "${crx_quickstart_dir}/bin/start-env",
+      line => "JVM_MEM_OPTS='${jvm_mem_opts}'",
+      match => "^JVM_MEM_OPTS",
+    }
   }
 
   file { "${crx_quickstart_dir}/install/":
