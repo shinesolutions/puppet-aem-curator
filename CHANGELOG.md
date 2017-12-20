@@ -1,3 +1,6 @@
+### 0.9.7
+*
+
 ### 0.9.6
 * Add readiness checks during installation and configuration of AEM Dispatcher
 * Added variable jvm_mem_opts to configure JVM Memory for AEM Author and Publisher
