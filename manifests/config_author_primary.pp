@@ -51,9 +51,9 @@ class aem_curator::config_author_primary (
   if $jvm_mem_opts {
     file_line { 'jvm memory option author':
       ensure => present,
-      path => "${crx_quickstart_dir}/bin/start-env",
-      line => "JVM_MEM_OPTS='${jvm_mem_opts}'",
-      match => "^JVM_MEM_OPTS",
+      path   => "${crx_quickstart_dir}/bin/start-env",
+      line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
+      match  => '^JVM_MEM_OPTS',
     }
   }
 
