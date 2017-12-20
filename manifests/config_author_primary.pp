@@ -26,11 +26,11 @@ class aem_curator::config_author_primary (
   $enable_default_passwords,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
-  $jvm_mem_opts,
   $puppet_conf_dir,
   $tmp_dir,
   $aem_id                  = 'author',
   $delete_repository_index = false,
+  $jvm_mem_opts            = undef,
   $run_mode                = 'author',
 ) {
 
