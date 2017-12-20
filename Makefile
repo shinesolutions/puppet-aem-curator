@@ -17,7 +17,7 @@ lint:
 		--no-documentation-check \
 		./manifests/*.pp
 
-package:
+package: deps
 	puppet module build .
 
 tools:
