@@ -26,7 +26,6 @@ class aem_curator::config_publish (
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
   $exec_path,
-  $jvm_mem_opts,
   $login_ready_base_sleep_seconds,
   $login_ready_max_sleep_seconds,
   $login_ready_max_tries,
@@ -39,6 +38,7 @@ class aem_curator::config_publish (
   $vol_type,
   $aem_id                  = 'publish',
   $delete_repository_index = false,
+  $jvm_mem_opts            = undef,
   $run_mode                = 'publish',
   $snapshotid              = $::snapshotid,
 ) {
