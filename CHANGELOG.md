@@ -1,5 +1,5 @@
 ### 0.9.7
-*
+* Remove publish_dispatcher_allowed_client, pairinstanceid, and publishdispatcherhost global facts
 
 ### 0.9.6
 * Add readiness checks during installation and configuration of AEM Dispatcher

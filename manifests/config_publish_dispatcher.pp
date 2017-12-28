@@ -13,6 +13,7 @@ class aem_curator::config_publish_dispatcher (
   $publish_secure,
   $ssl_cert,
   $tmp_dir,
+  $allowed_client    = undef,
   $apache_http_port  = '80',
   $apache_https_port = '443',
   $aem_id            = 'publish-dispatcher',
@@ -23,7 +24,7 @@ class aem_curator::config_publish_dispatcher (
     httpd_conf_dir      => $httpd_conf_dir,
     docroot_dir         => $docroot_dir,
     ssl_cert            => $ssl_cert,
-    allowed_client      => $::publish_dispatcher_allowed_client,
+    allowed_client      => $allowed_client,
     publish_host        => $publish_host,
     publish_port        => $publish_port,
   } -> exec { 'httpd -k graceful':
