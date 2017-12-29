@@ -69,7 +69,7 @@ class aem_curator::config_publish (
   }
 
   if $jvm_mem_opts {
-    file_line { 'jvm memory option publisher':
+    file_line { "${aem_id}: Set JVM memory opts":
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
