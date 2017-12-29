@@ -1,6 +1,7 @@
 ### 0.9.7
 * Remove publish_dispatcher_allowed_client, pairinstanceid, and publishdispatcherhost global facts
-* Add config_author_dispatcher manifest
+* Add config_author_dispatcher class
+* Add config_author_standby class
 
 ### 0.9.6
 * Add readiness checks during installation and configuration of AEM Dispatcher
