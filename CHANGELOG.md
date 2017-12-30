@@ -1,3 +1,6 @@
+### 0.9.8
+*
+
 ### 0.9.7
 * Remove publish_dispatcher_allowed_client, pairinstanceid, and publishdispatcherhost global facts
 * Add config_author_dispatcher class
