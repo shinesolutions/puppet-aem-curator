@@ -28,10 +28,11 @@ class aem_curator::config_author_primary (
   $enable_offline_compaction_cron,
   $puppet_conf_dir,
   $tmp_dir,
-  $aem_id                  = 'author',
-  $delete_repository_index = false,
-  $jvm_mem_opts            = undef,
-  $run_mode                = 'author',
+  $aem_id                     = 'author',
+  $aem_password_reset_version = '1.0.2',
+  $delete_repository_index    = false,
+  $jvm_mem_opts               = undef,
+  $run_mode                   = 'author',
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
@@ -103,7 +104,7 @@ class aem_curator::config_author_primary (
     ensure  => absent,
     name    => 'aem-password-reset-content',
     group   => 'shinesolutions',
-    version => $::aem_password_reset_version,
+    version => $aem_password_reset_version,
     aem_id  => $aem_id,
   } -> aem_curator::config_aem_system_users { "${aem_id}: Configure system users":
     aem_id                   => $aem_id,

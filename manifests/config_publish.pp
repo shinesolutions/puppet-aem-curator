@@ -36,11 +36,12 @@ class aem_curator::config_publish (
   $puppet_conf_dir,
   $tmp_dir,
   $vol_type,
-  $aem_id                  = 'publish',
-  $delete_repository_index = false,
-  $jvm_mem_opts            = undef,
-  $run_mode                = 'publish',
-  $snapshotid              = $::snapshotid,
+  $aem_id                     = 'publish',
+  $aem_password_reset_version = '1.0.2',
+  $delete_repository_index    = false,
+  $jvm_mem_opts               = undef,
+  $run_mode                   = 'publish',
+  $snapshotid                 = $::snapshotid,
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
@@ -121,7 +122,7 @@ class aem_curator::config_publish (
     ensure  => absent,
     name    => 'aem-password-reset-content',
     group   => 'shinesolutions',
-    version => $::aem_password_reset_version,
+    version => $aem_password_reset_version,
     aem_id  => $aem_id,
   } -> aem_flush_agent { "${aem_id}: Create flush agent":
     ensure        => present,
