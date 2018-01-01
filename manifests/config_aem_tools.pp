@@ -6,6 +6,7 @@ class aem_curator::config_aem_tools (
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
   $tmp_dir,
+  $oak_run_version = '1.4.15',
 ) {
 
   # Set up AEM tools
@@ -64,9 +65,9 @@ class aem_curator::config_aem_tools (
     group   => 'root',
   }
 
-  archive { "${base_dir}/aem-tools/oak-run-${::oak_run_version}.jar":
+  archive { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":
     ensure => present,
-    source => "s3://${::data_bucket}/${::stackprefix}/oak-run-${::oak_run_version}.jar",
+    source => "s3://${::data_bucket}/${::stackprefix}/oak-run-${oak_run_version}.jar",
   } -> file { "${base_dir}/aem-tools/offline-compaction.sh":
     ensure  => present,
     mode    => '0775',
@@ -76,7 +77,7 @@ class aem_curator::config_aem_tools (
       "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/offline-compaction.sh.epp",
       {
         'base_dir'           => $base_dir,
-        'oak_run_version'    => $::oak_run_version,
+        'oak_run_version'    => $oak_run_version,
         'crx_quickstart_dir' => $crx_quickstart_dir,
       }
     ),

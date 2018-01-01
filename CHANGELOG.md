@@ -1,5 +1,5 @@
 ### 0.9.8
-* Localise global fact aem_password_reset_version
+* Localise global facts aem_password_reset_version, oak_run_version
 
 ### 0.9.7
 * Remove publish_dispatcher_allowed_client, pairinstanceid, and publishdispatcherhost global facts
