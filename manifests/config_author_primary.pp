@@ -63,9 +63,9 @@ class aem_curator::config_author_primary (
     mode   => '0775',
     owner  => "aem-${aem_id}",
     group  => "aem-${aem_id}",
-  } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
+  } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
-    source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${::aem_password_reset_version}.zip",
+    source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${aem_password_reset_version}.zip",
   } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for author-primary':
     conf_dir => $puppet_conf_dir,
     protocol => $author_protocol,
@@ -110,7 +110,7 @@ class aem_curator::config_author_primary (
     aem_id                   => $aem_id,
     credentials_hash         => $credentials_hash,
     enable_default_passwords => $enable_default_passwords,
-  } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${::aem_password_reset_version}.zip":
+  } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => absent,
   }
 
