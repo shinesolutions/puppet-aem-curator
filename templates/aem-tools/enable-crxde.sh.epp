@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+data_bucket=$(/opt/puppetlabs/bin/facter data_bucket)
+stack_prefix=$(/opt/puppetlabs/bin/facter stackprefix)
+aem_username=admin
+aem_password=$(aws s3 cp s3://$data_bucket/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
+event="enable-crxde"
+
+# translate puppet exit code to follow convention
+translate_exit_code() {
+
+  exit_code="$1"
+  if [ "$exit_code" -eq 0 ] || [ "$exit_code" -eq 2 ]; then
+    exit_code=0
+  else
+    exit "$exit_code"
+  fi
+
+  return "$exit_code"
+}
+
+set +o errexit
+
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+
+export FACTER_event="${event}"
+
+aem_username="${aem_username}" \
+  aem_password="${aem_password}" \
+  /opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  "manifests/${event}.pp"
+
+translate_exit_code "$?"

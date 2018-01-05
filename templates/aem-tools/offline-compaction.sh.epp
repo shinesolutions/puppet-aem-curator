@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+if [ "$#" -ne 0 ]; then
+  echo 'Usage: ./offline-compaction.sh'
+  exit 1
+fi
+
+if (( $(ps -ef | grep -v grep | grep jar | grep crx-quickstart | wc -l) > 0 )); then
+
+  echo “AEM is running!!! Compaction hangs when AEM is running. Exiting”
+  exit 1
+
+else
+
+  echo "Compaction Started: $(date)"
+
+  sudo -H -u aem bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $crx_quickstart_dir %>/repository/segmentstore"'
+  sleep 2
+  sudo -H -u aem bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $crx_quickstart_dir %>/repository/segmentstore" rm-unreferenced'
+  sleep 2
+  sudo -H -u aem bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar compact "<%= $crx_quickstart_dir %>/repository/segmentstore"'
+
+  echo "Compaction Ended: $(date)"
+
+fi

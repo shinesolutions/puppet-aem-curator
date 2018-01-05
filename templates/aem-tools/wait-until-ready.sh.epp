@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+puppet apply \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  "manifests/wait-until-ready.pp"

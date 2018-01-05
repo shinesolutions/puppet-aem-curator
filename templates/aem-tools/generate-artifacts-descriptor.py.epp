@@ -1,0 +1,20 @@
+import os
+import json
+
+# Generate a JSON file which contains a dictionary of the Dispatcher artifact
+# content (directories and files).
+# This file is needed due to the lack of support in Puppet to traverse dynamic
+# directories.
+
+def path_to_dict(path):
+    d = {'name': os.path.basename(path)}
+    if os.path.isdir(path):
+        d['type'] = "directory"
+        d['children'] = [path_to_dict(os.path.join(path,x)) for x in os.listdir\
+(path)]
+    else:
+        d['type'] = "file"
+    return d
+
+with open('<%= $tmp_dir %>/artifacts/artifacts-descriptor.json', 'w') as outfile:
+    json.dump(path_to_dict('<%= $tmp_dir %>/artifacts'), outfile)
