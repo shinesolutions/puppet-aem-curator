@@ -17,49 +17,49 @@ class aem_curator::config_aem_tools (
     group  => 'root',
   } -> file { "${base_dir}/aem-tools/deploy-artifact.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifact.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/deploy-artifact.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/deploy-artifacts.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/deploy-artifacts.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/deploy-artifacts.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/export-backup.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backup.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/export-backup.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/import-backup.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/import-backup.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/import-backup.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/enable-crxde.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/enable-crxde.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/enable-crxde.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file {"${base_dir}/aem-tools/crx-process-quited.sh":
     ensure => present,
-    source => "file://${base_dir}/aem-aws-stack-provisioner/files/aem-tools/crx-process-quited.sh",
+    source => 'puppet:///modules/aem_curator/aem-tools/crx-process-quited.sh',
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
   } -> file {"${base_dir}/aem-tools/oak-run-process-quited.sh":
     ensure => present,
-    source => "file://${base_dir}/aem-aws-stack-provisioner/files/aem-tools/oak-run-process-quited.sh",
+    source => 'puppet:///modules/aem_curator/aem-tools/oak-run-process-quited.sh',
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
   } -> file {"${base_dir}/aem-tools/wait-until-ready.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/wait-until-ready.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/wait-until-ready.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
@@ -74,7 +74,7 @@ class aem_curator::config_aem_tools (
     owner   => 'root',
     group   => 'root',
     content => epp(
-      "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/offline-compaction.sh.epp",
+      'aem_curator/aem-tools/offline-compaction.sh.epp',
       {
         'base_dir'           => $base_dir,
         'oak_run_version'    => $oak_run_version,
@@ -95,7 +95,7 @@ class aem_curator::config_aem_tools (
 
   file { "${base_dir}/aem-tools/export-backups.sh":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/export-backups.sh.epp", { 'base_dir' => $base_dir }),
+    content => epp('aem_curator/aem-tools/export-backups.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
@@ -118,7 +118,7 @@ class aem_curator::config_aem_tools (
     owner   => 'root',
     group   => 'root',
     content => epp(
-      "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/live-snapshot-backup.sh.epp",
+      'aem_curator/aem-tools/live-snapshot-backup.sh.epp',
       {
         'base_dir'        => $base_dir,
         'aem_repo_device' => $aem_repo_device,
@@ -144,7 +144,7 @@ class aem_curator::config_aem_tools (
     owner   => 'root',
     group   => 'root',
     content => epp(
-      "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/offline-snapshot-backup.sh.epp",
+      'aem_curator/aem-tools/offline-snapshot-backup.sh.epp',
       {
         'base_dir'        => $base_dir,
         'aem_repo_device' => $aem_repo_device,
@@ -157,19 +157,19 @@ class aem_curator::config_aem_tools (
   # publish-dispatcher related AEM Tools
   file { "${base_dir}/aem-tools/generate-artifacts-descriptor.py":
     ensure  => present,
-    content => epp("${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/generate-artifacts-descriptor.py.epp", { 'tmp_dir' => $tmp_dir }),
+    content => epp('aem_curator/aem-tools/generate-artifacts-descriptor.py.epp', { 'tmp_dir' => $tmp_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/enter-standby.sh":
     ensure => present,
-    source => "${base_dir}/aem-aws-stack-provisioner/files/aem-tools/enter-standby.sh",
+    source => 'puppet:///modules/aem_curator/aem-tools/enter-standby.sh',
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
   } -> file { "${base_dir}/aem-tools/exit-standby.sh":
     ensure => present,
-    source => "${base_dir}/aem-aws-stack-provisioner/files/aem-tools/exit-standby.sh",
+    source => 'puppet:///modules/aem_curator/aem-tools/exit-standby.sh',
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
@@ -181,7 +181,7 @@ class aem_curator::config_aem_tools (
     owner   => 'root',
     group   => 'root',
     content => epp(
-      "${base_dir}/aem-aws-stack-provisioner/templates/aem-tools/content-healthcheck.py.epp",
+      'aem_curator/aem-tools/content-healthcheck.py.epp',
       {
         'tmp_dir'      => $tmp_dir,
         'stack_prefix' => $::stackprefix,
@@ -195,4 +195,81 @@ class aem_curator::config_aem_tools (
     environment => ["PATH=${::cron_env_path}", "https_proxy=\"${::cron_https_proxy}\""],
   }
 
+
+  # orchestrator-related AEM Tools
+  file { "${base_dir}/aem-tools/stack-offline-snapshot-message.json":
+    ensure  => present,
+    content => epp('aem_curator/aem-tools/stack-offline-snapshot-message.json.epp', { 'stack_prefix' => "${::stackprefix}"}),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+    require => File["${base_dir}/aem-tools/"],
+  } -> file { "${base_dir}/aem-tools/stack-offline-snapshot.sh":
+    ensure  => present,
+    content => epp('aem_curator/aem-tools/stack-offline-snapshot.sh.epp', { 'sns_topic_arn' => "${::stack_manager_sns_topic_arn}",}),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+  }
+
+  if $enable_weekly_offline_compaction_snapshot {
+
+    # Tuesday to Sunday
+    cron { 'nightly-stack-offline-snapshot':
+      command     => "cd ${base_dir}/aem-tools && ./stack-offline-snapshot.sh >/var/log/stack-offline-snapshot.log 2>&1",
+      user        => 'root',
+      hour        => $offline_snapshot_hour,
+      minute      => $offline_snapshot_minute,
+      weekday     => '2-7',
+      environment => ["PATH=${::cron_env_path}", "https_proxy=\"${::cron_https_proxy}\""],
+      require     => File["${base_dir}/aem-tools/stack-offline-snapshot.sh"],
+    }
+
+  }
+  else {
+
+    # Monday to Sunday
+    cron { 'nightly-stack-offline-snapshot':
+      command     => "cd ${base_dir}/aem-tools && ./stack-offline-snapshot.sh >/var/log/stack-offline-snapshot.log 2>&1",
+      user        => 'root',
+      hour        => $offline_snapshot_hour,
+      minute      => $offline_snapshot_minute,
+      weekday     => '1-7',
+      environment => ["PATH=${::cron_env_path}", "https_proxy=\"${::cron_https_proxy}\""],
+      require     => File["${base_dir}/aem-tools/stack-offline-snapshot.sh"],
+    }
+
+  }
+
+  # stack offline-compaction-snapshot
+  file { "${base_dir}/aem-tools/stack-offline-compaction-snapshot-message.json":
+    ensure  => present,
+    content => epp('aem_curator/aem-tools/stack-offline-compaction-snapshot-message.json.epp', { 'stack_prefix' => "${::stackprefix}"}),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+    require => File["${base_dir}/aem-tools/"],
+  } -> file { "${base_dir}/aem-tools/stack-offline-compaction-snapshot.sh":
+    ensure  => present,
+    content => epp('aem_curator/aem-tools/stack-offline-compaction-snapshot.sh.epp', { 'sns_topic_arn' => "${::stack_manager_sns_topic_arn}",}),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
+  }
+
+  if $enable_weekly_offline_compaction_snapshot {
+
+    # Monday only
+
+    cron { 'weekly-stack-offline-compaction-snapshot':
+      command     => "cd ${base_dir}/aem-tools && ./stack-offline-compaction-snapshot.sh >/var/log/stack-offline-compaction-snapshot.log 2>&1",
+      user        => 'root',
+      hour        => $offline_snapshot_hour,
+      minute      => $offline_snapshot_minute,
+      weekday     => 1,
+      environment => ["PATH=${::cron_env_path}", "https_proxy=\"${::cron_https_proxy}\""],
+      require     => File["${base_dir}/aem-tools/stack-offline-compaction-snapshot.sh"],
+    }
+
+  }
 }
