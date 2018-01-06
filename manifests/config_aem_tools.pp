@@ -1,16 +1,16 @@
 class aem_curator::config_aem_tools (
   $aem_repo_device,
+  $aem_password_retrieval_command,
   $base_dir,
   $crx_quickstart_dir,
   $enable_daily_export_cron,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
+  $oak_run_source,
+  $oak_run_version,
   $tmp_dir,
-  $data_bucket_name = $::data_bucket_name,
-  $stack_prefix     = $::stack_prefix,
   $env_path         = $::cron_env_path,
   $https_proxy      = $::cron_https_proxy,
-  $oak_run_version  = '1.4.15',
 ) {
 
   # Set up AEM tools
@@ -21,31 +21,56 @@ class aem_curator::config_aem_tools (
     group  => 'root',
   } -> file { "${base_dir}/aem-tools/deploy-artifact.sh":
     ensure  => present,
-    content => epp('aem_curator/aem-tools/deploy-artifact.sh.epp', { 'base_dir' => $base_dir }),
+    content => epp(
+      'aem_curator/aem-tools/deploy-artifact.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/deploy-artifacts.sh":
     ensure  => present,
-    content => epp('aem_curator/aem-tools/deploy-artifacts.sh.epp', { 'base_dir' => $base_dir }),
+    content => epp(
+      'aem_curator/aem-tools/deploy-artifacts.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/export-backup.sh":
     ensure  => present,
-    content => epp('aem_curator/aem-tools/export-backup.sh.epp', { 'base_dir' => $base_dir }),
+    content => epp(
+      'aem_curator/aem-tools/export-backup.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/import-backup.sh":
     ensure  => present,
-    content => epp('aem_curator/aem-tools/import-backup.sh.epp', { 'base_dir' => $base_dir }),
+    content => epp(
+      'aem_curator/aem-tools/import-backup.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
   } -> file { "${base_dir}/aem-tools/enable-crxde.sh":
     ensure  => present,
-    content => epp('aem_curator/aem-tools/enable-crxde.sh.epp', { 'base_dir' => $base_dir }),
+    content => epp(
+      'aem_curator/aem-tools/enable-crxde.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
@@ -71,7 +96,7 @@ class aem_curator::config_aem_tools (
 
   archive { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":
     ensure => present,
-    source => "s3://${data_bucket_name}/${stack_prefix}/oak-run-${oak_run_version}.jar",
+    source => $oak_run_source,
   } -> file { "${base_dir}/aem-tools/offline-compaction.sh":
     ensure  => present,
     mode    => '0775',
@@ -99,7 +124,12 @@ class aem_curator::config_aem_tools (
 
   file { "${base_dir}/aem-tools/export-backups.sh":
     ensure  => present,
-    content => epp('aem_curator/aem-tools/export-backups.sh.epp', { 'base_dir' => $base_dir }),
+    content => epp(
+      'aem_curator/aem-tools/export-backups.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',

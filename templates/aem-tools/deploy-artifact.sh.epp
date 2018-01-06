@@ -14,10 +14,8 @@ package_version=$4
 package_replicate=$5
 package_activate=$6
 package_force=$7
-data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
-stack_prefix=$(/opt/puppetlabs/bin/facter stackprefix)
 aem_username=deployer
-aem_password=$(aws s3 cp s3://$data_bucket_name/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
+aem_password=$(<%= aem_password_retrieval_command %>)
 event=deploy-artifact
 
 # translate puppet exit code to follow convention
