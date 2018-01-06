@@ -12,10 +12,10 @@ package_name=$2
 shift 2
 package_filter="$*"
 component=$(/opt/puppetlabs/bin/facter component)
-data_bucket=$(/opt/puppetlabs/bin/facter data_bucket)
+data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
 stack_prefix=$(/opt/puppetlabs/bin/facter stackprefix)
 aem_username=exporter
-aem_password=$(aws s3 cp s3://$data_bucket/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
+aem_password=$(aws s3 cp s3://$data_bucket_name/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
 # backup export timeout is set to 15 minutes in order to handle large AEM packages
 # 2-3Gb packages tend to take 5 minutes to build within AEM
 aem_timeout=900

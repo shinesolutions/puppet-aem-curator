@@ -15,10 +15,8 @@ File {
 }
 
 class aem_curator::config_author_primary (
-  $aem_repo_device,
   $author_port,
   $author_protocol,
-  $base_dir,
   $credentials_file,
   $crx_quickstart_dir,
   $enable_crxde,
@@ -65,7 +63,7 @@ class aem_curator::config_author_primary (
     group  => "aem-${aem_id}",
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
-    source => "s3://${::data_bucket}/${::stackprefix}/aem-password-reset-content-${aem_password_reset_version}.zip",
+    source => "s3://${::data_bucket_name}/${::stack_prefix}/aem-password-reset-content-${aem_password_reset_version}.zip",
   } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for author-primary':
     conf_dir => $puppet_conf_dir,
     protocol => $author_protocol,

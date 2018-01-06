@@ -2,10 +2,10 @@
 set -o nounset
 set -o errexit
 
-data_bucket=$(/opt/puppetlabs/bin/facter data_bucket)
+data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
 stack_prefix=$(/opt/puppetlabs/bin/facter stackprefix)
 aem_username=admin
-aem_password=$(aws s3 cp s3://$data_bucket/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
+aem_password=$(aws s3 cp s3://$data_bucket_name/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
 event="enable-crxde"
 
 # translate puppet exit code to follow convention

@@ -12,10 +12,10 @@ package_group=$2
 package_name=$3
 package_datestamp=$4
 component=$(/opt/puppetlabs/bin/facter component)
-data_bucket=$(/opt/puppetlabs/bin/facter data_bucket)
+data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
 stack_prefix=$(/opt/puppetlabs/bin/facter stackprefix)
 aem_username=importer
-aem_password=$(aws s3 cp s3://$data_bucket/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
+aem_password=$(aws s3 cp s3://$data_bucket_name/$stack_prefix/system-users-credentials.json - | jq --raw-output .$aem_username)
 event=import-backup
 
 len=${#package_datestamp}

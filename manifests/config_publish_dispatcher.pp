@@ -3,7 +3,6 @@ File {
 }
 
 class aem_curator::config_publish_dispatcher (
-  $base_dir,
   $dispatcher_conf_dir,
   $docroot_dir,
   $exec_path,

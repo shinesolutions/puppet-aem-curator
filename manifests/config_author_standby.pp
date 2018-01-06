@@ -15,11 +15,9 @@ File {
 }
 
 class aem_curator::config_author_standby (
-  $aem_repo_device,
   $author_port,
   $author_protocol,
   $author_primary_host,
-  $base_dir,
   $credentials_file,
   $crx_quickstart_dir,
   $enable_crxde,
@@ -137,7 +135,7 @@ class aem_curator::config_author_standby (
       ];
     'standby-status':
       object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
-      instance_prefix => "${::stackprefix}-standby-status",
+      instance_prefix => "${::stack_prefix}-standby-status",
       values          => [
         {
           instance_prefix => 'seconds_since_last_success',
@@ -150,7 +148,7 @@ class aem_curator::config_author_standby (
 
   file_line { 'seconds_since_last_success standby status':
     ensure => present,
-    line   => "GenericJMX-${::stackprefix}-standby-status-delay-seconds_since_last_success",
+    line   => "GenericJMX-${::stack_prefix}-standby-status-delay-seconds_since_last_success",
     path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/whitelist.conf',
   }
 
