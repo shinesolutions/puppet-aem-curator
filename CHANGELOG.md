@@ -1,5 +1,5 @@
 ### 0.9.9
-* Migrated all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
+* Migrate all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
 
 ### 0.9.8
 * Localise global facts aem_password_reset_version, oak_run_version
