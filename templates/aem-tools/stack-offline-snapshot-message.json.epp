@@ -1,4 +1,0 @@
-{
-  "task": "offline-snapshot",
-  "stack_prefix": "<%= $stack_prefix %>"
-}

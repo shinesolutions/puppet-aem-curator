@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -o nounset
-set -o errexit
-
-message=$(cat stack-offline-compaction-snapshot-message.json)
-aws sns publish --topic-arn "<%= $sns_topic_arn %>" --message "${message}"
