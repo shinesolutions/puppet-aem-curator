@@ -29,6 +29,6 @@ aem_username="${aem_username}" \
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
-  --execute "include aem_curator::enable_crxde"
+  --execute "include aem_curator::event_enable_crxde"
 
 translate_exit_code "$?"

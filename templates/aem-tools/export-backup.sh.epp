@@ -13,7 +13,7 @@ shift 2
 package_filter="$*"
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=exporter
-aem_password=$(<%= aem_password_retrieval_command %>)
+aem_password=$(<%= $aem_password_retrieval_command %>)
 # backup export timeout is set to 15 minutes in order to handle large AEM packages
 # 2-3Gb packages tend to take 5 minutes to build within AEM
 aem_timeout=900

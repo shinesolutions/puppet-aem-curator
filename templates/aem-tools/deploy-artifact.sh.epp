@@ -15,7 +15,7 @@ package_replicate=$5
 package_activate=$6
 package_force=$7
 aem_username=deployer
-aem_password=$(<%= aem_password_retrieval_command %>)
+aem_password=$(<%= $aem_password_retrieval_command %>)
 event=deploy-artifact
 
 # translate puppet exit code to follow convention

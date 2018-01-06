@@ -13,7 +13,7 @@ package_name=$3
 package_datestamp=$4
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=importer
-aem_password=$(<%= aem_password_retrieval_command %>)
+aem_password=$(<%= $aem_password_retrieval_command %>)
 event=import-backup
 
 len=${#package_datestamp}
