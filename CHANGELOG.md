@@ -2,6 +2,7 @@
 * Migrate all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
 * Migrate AWS-related scripts from aem_curator to aem-aws-stack-provisioner
 * Parameterise all references to AWS S3
+* Add multi AEM instances support to CRXDE enable event
 
 ### 0.9.8
 * Localise global facts aem_password_reset_version, oak_run_version
