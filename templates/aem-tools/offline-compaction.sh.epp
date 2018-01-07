@@ -14,17 +14,17 @@ if (( $(ps -ef | grep -v grep | grep jar | grep crx-quickstart | wc -l) > 0 )); 
 
 else
 
-  <% $crx_quickstart_dirs.each | $crx_quickstart_dir | { -%>
+  <% $aem_instances.each | $aem_instance | { -%>
 
-    echo "<%= $crx_quickstart_dir %> Compaction Started: $(date)"
+    echo "<%= $aem_instance['crx_quickstart_dir'] %> Compaction Started: $(date)"
 
-    sudo -H -u aem bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $crx_quickstart_dir %>/repository/segmentstore"'
+    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
     sleep 2
-    sudo -H -u aem bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $crx_quickstart_dir %>/repository/segmentstore" rm-unreferenced'
+    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore" rm-unreferenced'
     sleep 2
-    sudo -H -u aem bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar compact "<%= $crx_quickstart_dir %>/repository/segmentstore"'
+    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar compact "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
 
-    echo "<%= $crx_quickstart_dir %> Compaction Ended: $(date)"
+    echo "<%= $aem_instance['crx_quickstart_dir'] %> Compaction Ended: $(date)"
 
   <% } -%>
 

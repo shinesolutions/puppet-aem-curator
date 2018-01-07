@@ -2,7 +2,7 @@ class aem_curator::config_aem_tools (
   $aem_repo_device,
   $aem_password_retrieval_command,
   $base_dir,
-  $crx_quickstart_dirs,
+  $aem_instances,
   $enable_daily_export_cron,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
@@ -82,9 +82,9 @@ class aem_curator::config_aem_tools (
     content => epp(
       'aem_curator/aem-tools/offline-compaction.sh.epp',
       {
-        'base_dir'            => $base_dir,
-        'oak_run_version'     => $oak_run_version,
-        'crx_quickstart_dirs' => $crx_quickstart_dirs,
+        'base_dir'        => $base_dir,
+        'oak_run_version' => $oak_run_version,
+        'aem_instances'   => $aem_instances,
       }
     ),
   }
