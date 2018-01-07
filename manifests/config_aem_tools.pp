@@ -2,7 +2,7 @@ class aem_curator::config_aem_tools (
   $aem_repo_device,
   $aem_password_retrieval_command,
   $base_dir,
-  $crx_quickstart_dir,
+  $crx_quickstart_dirs,
   $enable_daily_export_cron,
   $enable_hourly_live_snapshot_cron,
   $enable_offline_compaction_cron,
@@ -13,34 +13,11 @@ class aem_curator::config_aem_tools (
   $https_proxy      = $::cron_https_proxy,
 ) {
 
-  # Set up AEM tools
   file { "${base_dir}/aem-tools/":
     ensure => directory,
     mode   => '0775',
     owner  => 'root',
     group  => 'root',
-  } -> file { "${base_dir}/aem-tools/deploy-artifact.sh":
-    ensure  => present,
-    content => epp(
-      'aem_curator/aem-tools/deploy-artifact.sh.epp', {
-        'base_dir'                       => $base_dir,
-        'aem_password_retrieval_command' => $aem_password_retrieval_command,
-      }
-    ),
-    mode    => '0775',
-    owner   => 'root',
-    group   => 'root',
-  } -> file { "${base_dir}/aem-tools/deploy-artifacts.sh":
-    ensure  => present,
-    content => epp(
-      'aem_curator/aem-tools/deploy-artifacts.sh.epp', {
-        'base_dir'                       => $base_dir,
-        'aem_password_retrieval_command' => $aem_password_retrieval_command,
-      }
-    ),
-    mode    => '0775',
-    owner   => 'root',
-    group   => 'root',
   } -> file { "${base_dir}/aem-tools/export-backup.sh":
     ensure  => present,
     content => epp(
@@ -105,9 +82,9 @@ class aem_curator::config_aem_tools (
     content => epp(
       'aem_curator/aem-tools/offline-compaction.sh.epp',
       {
-        'base_dir'           => $base_dir,
-        'oak_run_version'    => $oak_run_version,
-        'crx_quickstart_dir' => $crx_quickstart_dir,
+        'base_dir'            => $base_dir,
+        'oak_run_version'     => $oak_run_version,
+        'crx_quickstart_dirs' => $crx_quickstart_dirs,
       }
     ),
   }
@@ -144,16 +121,6 @@ class aem_curator::config_aem_tools (
       environment => ["PATH=${env_path}", "https_proxy=\"${https_proxy}\""],
       require     => File["${base_dir}/aem-tools/export-backups.sh"],
     }
-  }
-
-  # generate-artifacts-descriptor is needed by components that have
-  # AEM Dispatcher deployment feature
-  file { "${base_dir}/aem-tools/generate-artifacts-descriptor.py":
-    ensure  => present,
-    content => epp('aem_curator/aem-tools/generate-artifacts-descriptor.py.epp', { 'tmp_dir' => $tmp_dir }),
-    mode    => '0775',
-    owner   => 'root',
-    group   => 'root',
   }
 
 }
