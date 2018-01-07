@@ -1,3 +1,6 @@
+### 0.9.10
+*
+
 ### 0.9.9
 * Migrate all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
 * Migrate AWS-related scripts from aem_curator to aem-aws-stack-provisioner
