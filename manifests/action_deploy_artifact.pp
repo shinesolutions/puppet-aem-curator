@@ -18,7 +18,7 @@ class aem_curator::action_deploy_artifact (
     ensure => absent,
   } -> archive { "${path}/${package_aem_id}/${package_group}/${package_name}-${package_version}.zip":
     ensure => present,
-    source => "${package_source}",
+    source => $package_source,
   } -> aem_package { "Deploy package ${package_group}/${package_name}-${package_version}":
     ensure    => present,
     name      => $package_name,
