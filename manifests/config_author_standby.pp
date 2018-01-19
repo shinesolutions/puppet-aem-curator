@@ -70,7 +70,7 @@ class aem_curator::config_author_standby (
     ensure => 'running',
     enable => true,
   }
-  
+
   if $proxy_host != '' {
     file_line { 'Set the collectd cloudwatch proxy_server_name':
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
