@@ -70,19 +70,23 @@ class aem_curator::config_author_standby (
     ensure => 'running',
     enable => true,
   }
-
-  file_line { 'Set the collectd cloudwatch proxy_server_name':
-    path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-    line   => "proxy_server_name = \"${::proxy_protocol}://${::proxy_host}\"",
-    match  => '^#proxy_server_name =.*$',
-    notify => Service['collectd'],
+  
+  if $proxy_host != '' {
+    file_line { 'Set the collectd cloudwatch proxy_server_name':
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "proxy_server_name = \"${::proxy_protocol}://${::proxy_host}\"",
+      match  => '^#proxy_server_name =.*$',
+      notify => Service['collectd'],
+    }
   }
 
-  file_line { 'Set the collectd cloudwatch proxy_server_port':
-    path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-    line   => "proxy_server_port = \"${::proxy_port}\"",
-    match  => '^#proxy_server_port =.*$',
-    notify => Service['collectd'],
+  if $proxy_host != '' {
+    file_line { 'Set the collectd cloudwatch proxy_server_port':
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "proxy_server_port = \"${::proxy_port}\"",
+      match  => '^#proxy_server_port =.*$',
+      notify => Service['collectd'],
+    }
   }
 
   collectd::plugin::genericjmx::mbean {
