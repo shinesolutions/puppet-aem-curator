@@ -30,6 +30,7 @@ class aem_curator::config_author_primary (
   $tmp_dir,
   $aem_id                  = 'author',
   $delete_repository_index = false,
+  $jmxremote_port          = '59185',
   $jvm_mem_opts            = undef,
   $run_mode                = 'author',
 ) {
@@ -54,6 +55,16 @@ class aem_curator::config_author_primary (
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
       match  => '^JVM_MEM_OPTS',
+    }
+  }
+
+  if $jmxremote_port {
+    file_line { "${aem_id}: enable JMXRemote":
+      ensure => present,
+      path   => "${crx_quickstart_dir}/bin/start-env",
+      line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
+      after  => '^JVM_OPTS'
+      notify => Service['aem-author'],
     }
   }
 
