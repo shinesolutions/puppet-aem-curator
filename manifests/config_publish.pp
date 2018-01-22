@@ -86,8 +86,8 @@ class aem_curator::config_publish (
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
-      after  => '^JVM_OPTS'
-      notify => Service['aem-author'],
+      after  => '^JVM_OPTS',
+      notify => Service['aem-publish'],
     }
   }
 
@@ -164,6 +164,19 @@ class aem_curator::config_publish (
     enable_default_passwords => $enable_default_passwords,
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => absent,
+  }
+
+  class { 'aem_curator::config_collectd':}
+
+  collectd::plugin::genericjmx::connection { 'aem':
+    host        => $::fqdn,
+    service_url => "service:jmx:rmi:///jndi/rmi://localhost:${jmxremote_port}/jmxrmi",
+    collect     => [ 'standby-status' ],
+  }
+
+  class { '::collectd':
+    service_ensure => running,
+    service_enable => true,
   }
 
 }
