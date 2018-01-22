@@ -5,6 +5,9 @@
 # [*jvm_mem_opts*]
 #   User defined JVM Memory options to be passed to AEM Publisher
 #
+# [*jmxremote_port*]
+#   User defined Port on which JMXRemote is listening
+#
 # === Copyright
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
@@ -38,6 +41,7 @@ class aem_curator::config_publish (
   $vol_type,
   $aem_id                  = 'publish',
   $delete_repository_index = false,
+  $jmxremote_port          = '59183',
   $jvm_mem_opts            = undef,
   $run_mode                = 'publish',
   $snapshotid              = $::snapshotid,
@@ -74,6 +78,16 @@ class aem_curator::config_publish (
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
       match  => '^JVM_MEM_OPTS',
+    }
+  }
+
+  if $jmxremote_port {
+    file_line { "${aem_id}: enable JMXRemote":
+      ensure => present,
+      path   => "${crx_quickstart_dir}/bin/start-env",
+      line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
+      after  => '^JVM_OPTS',
+      notify => Service['aem-publish'],
     }
   }
 
@@ -150,6 +164,19 @@ class aem_curator::config_publish (
     enable_default_passwords => $enable_default_passwords,
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => absent,
+  }
+
+  class { 'aem_curator::config_collectd':}
+
+  collectd::plugin::genericjmx::connection { 'aem':
+    host        => $::fqdn,
+    service_url => "service:jmx:rmi:///jndi/rmi://localhost:${jmxremote_port}/jmxrmi",
+    collect     => [ 'standby-status' ],
+  }
+
+  class { '::collectd':
+    service_ensure => running,
+    service_enable => true,
   }
 
 }
