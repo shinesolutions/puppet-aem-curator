@@ -5,6 +5,9 @@
 # [*jvm_mem_opts*]
 #   User defined JVM Memory options to be passed to the AEM Author
 #
+# [*jmxremote_port*]
+#   User defined Port on which JMXRemote is listening
+#
 # === Copyright
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
