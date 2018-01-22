@@ -71,7 +71,7 @@ class aem_curator::config_author_standby (
     enable => true,
   }
 
-  if $proxy_host != '' {
+  if $::proxy_host != '' {
     file_line { 'Set the collectd cloudwatch proxy_server_name':
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
       line   => "proxy_server_name = \"${::proxy_protocol}://${::proxy_host}\"",
@@ -80,7 +80,7 @@ class aem_curator::config_author_standby (
     }
   }
 
-  if $proxy_host != '' {
+  if $::proxy_host != '' {
     file_line { 'Set the collectd cloudwatch proxy_server_port':
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
       line   => "proxy_server_port = \"${::proxy_port}\"",
