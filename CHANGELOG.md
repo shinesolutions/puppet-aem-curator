@@ -1,7 +1,6 @@
 ### 0.9.10
 * Migrate artifacts deployment tools from aem-aws-stack-provisioner to aem_curator
-* Added Condition to check exisiting of configured proxy env variables bug#28
-  https://github.com/shinesolutions/aem-aws-stack-provisioner/issues/28
+* Configure CloudWatch collectd plugin's proxy support only if proxy fact is set
 
 ### 0.9.9
 * Migrate all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
