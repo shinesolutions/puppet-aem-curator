@@ -21,7 +21,7 @@ class aem_curator::config_collectd (
       instance_from   => 'name',
       values          => [
         {
-          mbean_typee => 'invocations',
+          mbean_type  => 'invocations',
           table       => false,
           attribute   => 'CollectionCount',
         },
