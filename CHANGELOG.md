@@ -1,5 +1,6 @@
 ### 0.9.10
 * Migrate artifacts deployment tools from aem-aws-stack-provisioner to aem_curator
+* Configure CloudWatch collectd plugin's proxy support only if proxy fact is set
 
 ### 0.9.9
 * Migrate all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
