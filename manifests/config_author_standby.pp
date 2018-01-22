@@ -65,7 +65,7 @@ class aem_curator::config_author_standby (
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
-      after  => '^JVM_OPTS'
+      after  => '^JVM_OPTS',
       notify => Service['aem-author'],
     }
   }
