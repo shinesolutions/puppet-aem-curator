@@ -41,7 +41,7 @@ class aem_curator::config_publish (
   $vol_type,
   $aem_id                  = 'publish',
   $delete_repository_index = false,
-  $jmxremote_port          = '59185',
+  $jmxremote_port          = '59183',
   $jvm_mem_opts            = undef,
   $run_mode                = 'publish',
   $snapshotid              = $::snapshotid,

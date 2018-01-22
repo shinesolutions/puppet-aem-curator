@@ -33,7 +33,7 @@ class aem_curator::config_author_primary (
   $tmp_dir,
   $aem_id                  = 'author',
   $delete_repository_index = false,
-  $jmxremote_port          = '59185',
+  $jmxremote_port          = '59182',
   $jvm_mem_opts            = undef,
   $run_mode                = 'author',
 ) {
