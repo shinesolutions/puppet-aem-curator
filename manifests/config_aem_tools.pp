@@ -51,6 +51,17 @@ class aem_curator::config_aem_tools (
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
+  } -> file { "${base_dir}/aem-tools/disable-crxde.sh":
+    ensure  => present,
+    content => epp(
+      'aem_curator/aem-tools/disable-crxde.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+      }
+    ),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
   } -> file {"${base_dir}/aem-tools/crx-process-quited.sh":
     ensure => present,
     source => 'puppet:///modules/aem_curator/aem-tools/crx-process-quited.sh',
