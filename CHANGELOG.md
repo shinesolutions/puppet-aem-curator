@@ -1,3 +1,6 @@
+### 0.9.11
+*
+
 ### 0.9.10
 * Migrate artifacts deployment tools from aem-aws-stack-provisioner to aem_curator
 * Add feature enable jmxremote at AEM Author and Publish java instances
