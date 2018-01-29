@@ -21,9 +21,9 @@ class aem_curator::config_collectd (
       instance_from   => 'name',
       values          => [
         {
-          mbean_type  => 'invocations',
-          table       => false,
-          attribute   => 'CollectionCount',
+          mbean_type => 'invocations',
+          table      => false,
+          attribute  => 'CollectionCount',
         },
         {
           mbean_type      => 'total_time_in_ms',
@@ -37,9 +37,9 @@ class aem_curator::config_collectd (
       instance_prefix => 'memory-heap',
       values          => [
         {
-          mbean_type  => 'jmx_memory',
-          table       => true,
-          attribute   => 'HeapMemoryUsage',
+          mbean_type => 'jmx_memory',
+          table      => true,
+          attribute  => 'HeapMemoryUsage',
         },
       ];
     'memory-nonheap':
@@ -47,9 +47,9 @@ class aem_curator::config_collectd (
       instance_prefix => 'memory-nonheap',
       values          => [
         {
-          mbean_type  => 'jmx_memory',
-          table       => true,
-          attribute   => 'NonHeapMemoryUsage',
+          mbean_type => 'jmx_memory',
+          table      => true,
+          attribute  => 'NonHeapMemoryUsage',
         },
       ];
     'memory-permgen':
@@ -57,9 +57,9 @@ class aem_curator::config_collectd (
       instance_prefix => 'memory-permgen',
       values          => [
         {
-          mbean_type  => 'jmx_memory',
-          table       => true,
-          attribute   => 'Usage',
+          mbean_type => 'jmx_memory',
+          table      => true,
+          attribute  => 'Usage',
         },
       ];
   }
