@@ -1,5 +1,5 @@
 ### 0.9.11
-*
+* Add new AEM profile: aem63_sp1_cfp2 #6
 
 ### 0.9.10
 * Migrate artifacts deployment tools from aem-aws-stack-provisioner to aem_curator
