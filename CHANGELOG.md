@@ -1,3 +1,6 @@
+### 0.9.12
+*
+
 ### 0.9.11
 * Add new AEM profile: aem63_sp1_cfp2 #6
 * Add aem_version to Author Standby and Author Primary OSGI configuration
