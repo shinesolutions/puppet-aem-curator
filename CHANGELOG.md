@@ -1,5 +1,6 @@
 ### 0.9.11
 * Add new AEM profile: aem63_sp1_cfp2 #6
+* Add aem_version to Author Standby and Author Primary OSGI configuration
 
 ### 0.9.10
 * Migrate artifacts deployment tools from aem-aws-stack-provisioner to aem_curator

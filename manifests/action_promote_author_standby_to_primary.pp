@@ -5,6 +5,7 @@ File {
 class aem_curator::action_promote_author_standby_to_primary (
   $base_dir,
   $tmp_dir,
+  $aem_version = '6.2',
 ) {
   $enable_offline_compaction_cron = lookup('::author_primary::enable_offline_compaction_cron')
   $enable_daily_export_cron = lookup('::author_primary::enable_daily_export_cron')
@@ -21,6 +22,7 @@ class aem_curator::action_promote_author_standby_to_primary (
     path => ["${base_dir}/aws-tools", '/usr/bin', '/opt/puppetlabs/bin/', '/bin'],
   } -> class { 'aem_resources::author_primary_set_config':
     crx_quickstart_dir => '/opt/aem/author/crx-quickstart',
+    aem_version        => $aem_version,
   } -> service { 'aem-aem':
     ensure => 'running',
     enable => true,

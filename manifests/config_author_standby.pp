@@ -31,6 +31,7 @@ class aem_curator::config_author_standby (
   $puppet_conf_dir,
   $tmp_dir,
   $aem_id                  = 'author',
+  $aem_version             = '6.2',
   $delete_repository_index = false,
   $jmxremote_port          = '59182',
   $jvm_mem_opts            = undef,
@@ -80,6 +81,7 @@ class aem_curator::config_author_standby (
   } -> aem_resources::author_standby_set_config { 'Set author-standby config':
     crx_quickstart_dir => $crx_quickstart_dir,
     primary_host       => $author_primary_host,
+    aem_version        => $aem_version,
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,
