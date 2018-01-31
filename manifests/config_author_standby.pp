@@ -170,6 +170,7 @@ class aem_curator::config_author_standby (
     host        => $::fqdn,
     service_url => "service:jmx:rmi:///jndi/rmi://localhost:${jmxremote_port}/jmxrmi",
     collect     => [ 'standby-status' ],
+    notify      => Service['collectd']
   }
 
   class { '::collectd':
