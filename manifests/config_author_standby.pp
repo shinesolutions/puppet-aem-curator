@@ -31,6 +31,7 @@ class aem_curator::config_author_standby (
   $puppet_conf_dir,
   $tmp_dir,
   $aem_id                  = 'author',
+  $aem_version             = '6.2',
   $delete_repository_index = false,
   $jmxremote_port          = '59182',
   $jvm_mem_opts            = undef,
@@ -80,23 +81,28 @@ class aem_curator::config_author_standby (
   } -> aem_resources::author_standby_set_config { 'Set author-standby config':
     crx_quickstart_dir => $crx_quickstart_dir,
     primary_host       => $author_primary_host,
+    aem_version        => $aem_version,
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,
   }
 
-  file_line { 'Set the collectd cloudwatch proxy_server_name':
-    path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-    line   => "proxy_server_name = \"${::proxy_protocol}://${::proxy_host}\"",
-    match  => '^#proxy_server_name =.*$',
-    notify => Service['collectd'],
+  if $::proxy_host != '' {
+    file_line { 'Set the collectd cloudwatch proxy_server_name':
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "proxy_server_name = \"${::proxy_protocol}://${::proxy_host}\"",
+      match  => '^#proxy_server_name =.*$',
+      notify => Service['collectd'],
+    }
   }
 
-  file_line { 'Set the collectd cloudwatch proxy_server_port':
-    path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-    line   => "proxy_server_port = \"${::proxy_port}\"",
-    match  => '^#proxy_server_port =.*$',
-    notify => Service['collectd'],
+  if $::proxy_host != '' {
+    file_line { 'Set the collectd cloudwatch proxy_server_port':
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "proxy_server_port = \"${::proxy_port}\"",
+      match  => '^#proxy_server_port =.*$',
+      notify => Service['collectd'],
+    }
   }
 
   collectd::plugin::genericjmx::mbean {

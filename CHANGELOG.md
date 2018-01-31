@@ -1,6 +1,16 @@
+### 0.9.12
+*
+
+### 0.9.11
+* Add new AEM profile: aem63_sp1_cfp2 #6
+* Add aem_version to Author Standby and Author Primary OSGI configuration
+
 ### 0.9.10
 * Migrate artifacts deployment tools from aem-aws-stack-provisioner to aem_curator
 * Add feature enable jmxremote at AEM Author and Publish java instances
+* Configure CloudWatch collectd plugin's proxy support only if proxy fact is set
+* Add disable-crxde to aem-tools
+* Drop Ruby 2.0 support
 
 ### 0.9.9
 * Migrate all AEM Tools files and templates from aem-aws-stack-provisioner to aem_curator
