@@ -152,7 +152,7 @@ class aem_curator::config_author_primary (
   collectd::plugin::genericjmx::connection { 'aem':
     host        => $::fqdn,
     service_url => "service:jmx:rmi:///jndi/rmi://localhost:${jmxremote_port}/jmxrmi",
-    collect     => [ 'standby-status' ],
+    collect     => [ 'memory-heap' ],
     notify      => Service['collectd']
   }
 
