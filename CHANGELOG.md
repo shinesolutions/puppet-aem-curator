@@ -1,5 +1,5 @@
 ### 0.9.12
-*
+* Add multi AEM instances support to collectd config
 
 ### 0.9.11
 * Add new AEM profile: aem63_sp1_cfp2 #6

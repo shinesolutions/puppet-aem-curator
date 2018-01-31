@@ -129,36 +129,4 @@ class aem_curator::config_author_primary (
     ensure => absent,
   }
 
-  if $::proxy_host != '' {
-    file_line { 'Set the collectd cloudwatch proxy_server_name':
-      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "proxy_server_name = \"${::proxy_protocol}://${::proxy_host}\"",
-      match  => '^#proxy_server_name =.*$',
-      notify => Service['collectd'],
-    }
-  }
-
-  if $::proxy_host != '' {
-    file_line { 'Set the collectd cloudwatch proxy_server_port':
-      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "proxy_server_port = \"${::proxy_port}\"",
-      match  => '^#proxy_server_port =.*$',
-      notify => Service['collectd'],
-    }
-  }
-
-  class { 'aem_curator::config_collectd':}
-
-  collectd::plugin::genericjmx::connection { 'aem':
-    host        => $::fqdn,
-    service_url => "service:jmx:rmi:///jndi/rmi://localhost:${jmxremote_port}/jmxrmi",
-    collect     => [ 'memory-heap' ],
-    notify      => Service['collectd']
-  }
-
-  class { '::collectd':
-    service_ensure => running,
-    service_enable => true,
-  }
-
 }

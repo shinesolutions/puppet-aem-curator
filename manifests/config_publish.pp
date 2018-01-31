@@ -166,18 +166,4 @@ class aem_curator::config_publish (
     ensure => absent,
   }
 
-  class { 'aem_curator::config_collectd':}
-
-  collectd::plugin::genericjmx::connection { 'aem':
-    host        => $::fqdn,
-    service_url => "service:jmx:rmi:///jndi/rmi://localhost:${jmxremote_port}/jmxrmi",
-    collect     => [ 'memory-heap' ],
-    notify      => Service['collectd']
-  }
-
-  class { '::collectd':
-    service_ensure => running,
-    service_enable => true,
-  }
-
 }

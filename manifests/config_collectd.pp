@@ -11,7 +11,26 @@
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
 class aem_curator::config_collectd (
+  $proxy_protocol,
+  $proxy_host,
+  $proxy_port,
+  $aem_instances,
 ) {
+
+  if $proxy_host != '' {
+    file_line { 'Set the collectd cloudwatch proxy_server_name':
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "proxy_server_name = \"${proxy_protocol}://${proxy_host}\"",
+      match  => '^#proxy_server_name =.*$',
+      notify => Service['collectd'],
+    }
+    file_line { 'Set the collectd cloudwatch proxy_server_port':
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "proxy_server_port = \"${proxy_port}\"",
+      match  => '^#proxy_server_port =.*$',
+      notify => Service['collectd'],
+    }
+  }
 
   $collectd_jmx_types_path = '/usr/share/collectd/jmx.db'
   collectd::plugin::genericjmx::mbean {
@@ -62,5 +81,30 @@ class aem_curator::config_collectd (
           attribute  => 'Usage',
         },
       ];
+    'standby-status':
+      object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
+      instance_prefix => 'standby-status',
+      values          => [
+        {
+          instance_prefix => 'seconds_since_last_success',
+          mbean_type      => 'delay',
+          table           => false,
+          attribute       => 'SecondsSinceLastSuccess',
+        },
+      ];
   }
+
+  $aem_instances.each | Integer $index, Hash $aem_instance | {
+    collectd::plugin::genericjmx::connection { "aem-${aem_instance['aem_id']}":
+      host        => "aem-${aem_instance['aem_id']}",
+      service_url => "service:jmx:rmi:///jndi/rmi://localhost:${aem_instance['jmxremote_port']}/jmxrmi",
+      collect     => $aem_instance['instance_prefixes'],
+    }
+  }
+
+  class { 'collectd':
+    service_ensure => running,
+    service_enable => true,
+  }
+
 }
