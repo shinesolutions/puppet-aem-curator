@@ -16,6 +16,7 @@ class aem_curator::config_collectd (
   $proxy_port,
   $component,
   $aem_instances,
+  $collectd_prefix,
 ) {
 
   if $proxy_host != '' {
