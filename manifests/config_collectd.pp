@@ -81,17 +81,6 @@ class aem_curator::config_collectd (
           attribute  => 'Usage',
         },
       ];
-    'standby-status':
-      object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
-      instance_prefix => 'standby-status',
-      values          => [
-        {
-          instance_prefix => 'seconds_since_last_success',
-          mbean_type      => 'delay',
-          table           => false,
-          attribute       => 'SecondsSinceLastSuccess',
-        },
-      ];
   }
 
   $aem_instances.each | Integer $index, Hash $aem_instance | {
@@ -102,9 +91,31 @@ class aem_curator::config_collectd (
     }
   }
 
+  file_line {
+    'seconds_since_last_success standby status':
+      ensure => present,
+      line   => "GenericJMX-standby-status-delay-seconds_since_last_success",
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/whitelist.conf',
+  }
+
+  if $component == 'author-standby' {
+    collectd::plugin::genericjmx::mbean {
+      'standby-status':
+        object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
+        instance_prefix => 'standby-status',
+        values          => [
+          {
+            instance_prefix => 'seconds_since_last_success',
+            mbean_type      => 'delay',
+            table           => false,
+            attribute       => 'SecondsSinceLastSuccess',
+          },
+        ];
+    }
+  }
+
   class { 'collectd':
     service_ensure => running,
     service_enable => true,
   }
-
 }
