@@ -1,6 +1,7 @@
 ### 0.9.12
 * Add multi AEM instances support to collectd config
 * Fix aem63_sp1_cfp2 artifact file name and package name #6
+* Add Author Standby component bean whitelisting
 
 ### 0.9.11
 * Add new AEM profile: aem63_sp1_cfp2 #6
