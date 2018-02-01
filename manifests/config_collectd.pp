@@ -118,7 +118,7 @@ class aem_curator::config_collectd (
   file_line { 'Set Hostname for CW':
       ensure => present,
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "host = \"$collectd_prefix\"",
+      line   => "host = \"${$collectd_prefix}\"",
       match  => '^#host',
       notify => Service['collectd'],
   }
