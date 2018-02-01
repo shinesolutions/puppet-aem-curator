@@ -14,7 +14,9 @@ class aem_curator::config_collectd (
   $proxy_protocol,
   $proxy_host,
   $proxy_port,
+  $component,
   $aem_instances,
+  $collectd_prefix,
 ) {
 
   if $proxy_host != '' {
@@ -81,17 +83,6 @@ class aem_curator::config_collectd (
           attribute  => 'Usage',
         },
       ];
-    'standby-status':
-      object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
-      instance_prefix => 'standby-status',
-      values          => [
-        {
-          instance_prefix => 'seconds_since_last_success',
-          mbean_type      => 'delay',
-          table           => false,
-          attribute       => 'SecondsSinceLastSuccess',
-        },
-      ];
   }
 
   $aem_instances.each | Integer $index, Hash $aem_instance | {
@@ -102,9 +93,39 @@ class aem_curator::config_collectd (
     }
   }
 
+  file_line {
+    'seconds_since_last_success standby status':
+      ensure => present,
+      line   => 'GenericJMX-standby-status-delay-seconds_since_last_success',
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/whitelist.conf',
+  }
+
+  if $component == 'author-standby' {
+    collectd::plugin::genericjmx::mbean {
+      'standby-status':
+        object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
+        instance_prefix => 'standby-status',
+        values          => [
+          {
+            instance_prefix => 'seconds_since_last_success',
+            mbean_type      => 'delay',
+            table           => false,
+            attribute       => 'SecondsSinceLastSuccess',
+          },
+        ];
+    }
+  }
+
+  file_line { 'Set Hostname for CW':
+      ensure => present,
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "host = \"${$collectd_prefix}\"",
+      match  => '^#host',
+      notify => Service['collectd'],
+  }
+
   class { 'collectd':
     service_ensure => running,
     service_enable => true,
   }
-
 }
