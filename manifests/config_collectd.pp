@@ -14,6 +14,7 @@ class aem_curator::config_collectd (
   $proxy_protocol,
   $proxy_host,
   $proxy_port,
+  $component,
   $aem_instances,
 ) {
 
@@ -98,7 +99,7 @@ class aem_curator::config_collectd (
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/whitelist.conf',
   }
 
-  if $::component == 'author-standby' {
+  if $component == 'author-standby' {
     collectd::plugin::genericjmx::mbean {
       'standby-status':
         object_name     => 'org.apache.jackrabbit.oak:*,name=Status,type=*Standby*',
@@ -112,6 +113,14 @@ class aem_curator::config_collectd (
           },
         ];
     }
+  }
+
+  file_line { 'Set Hostname for CW':
+      ensure => present,
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "host = \"$collectd_prefix\"",
+      match  => '^#host',
+      notify => Service['collectd'],
   }
 
   class { 'collectd':
