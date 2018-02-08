@@ -16,7 +16,6 @@ package_activate=$6
 package_force=$7
 aem_username=deployer
 aem_password=$(<%= $aem_password_retrieval_command %>)
-event=deploy-artifact
 
 # translate puppet exit code to follow convention
 translate_exit_code() {
@@ -38,7 +37,6 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 aem_username="${aem_username}" \
   aem_password="${aem_password}" \
-  FACTER_event="${event}" \
   FACTER_package_source="${package_source}" \
   FACTER_package_group="${package_group}" \
   FACTER_package_name="${package_name}" \
@@ -51,6 +49,6 @@ aem_username="${aem_username}" \
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
-  "manifests/${event}.pp"
+  --execute "include aem_curator::action_deploy_artifact"
 
 translate_exit_code "$?"
