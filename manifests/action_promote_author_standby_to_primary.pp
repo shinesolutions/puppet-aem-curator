@@ -5,13 +5,13 @@ File {
 class aem_curator::action_promote_author_standby_to_primary (
   $base_dir,
   $tmp_dir,
+  $enable_offline_compaction_cron,
+  $enable_daily_export_cron,
+  $enable_hourly_live_snapshot_cron,
   $aem_version = '6.2',
 ) {
-  $enable_offline_compaction_cron = lookup('::author_primary::enable_offline_compaction_cron')
-  $enable_daily_export_cron = lookup('::author_primary::enable_daily_export_cron')
-  $enable_hourly_live_snapshot_cron = lookup('::author_primary::enable_hourly_live_snapshot_cron')
 
-  exec { 'service aem-aem stop':
+  exec { 'service aem-author stop':
     cwd  => $tmp_dir,
     path => ['/usr/bin', '/usr/sbin', '/sbin'],
   } -> exec { 'crx-process-quited.sh 24 5':
@@ -20,10 +20,10 @@ class aem_curator::action_promote_author_standby_to_primary (
   } -> exec { 'set-component.sh author-primary':
     cwd  => $tmp_dir,
     path => ["${base_dir}/aws-tools", '/usr/bin', '/opt/puppetlabs/bin/', '/bin'],
-  } -> class { 'aem_resources::author_primary_set_config':
+  } -> aem_resources::author_primary_set_config {"Promote author-primary":
     crx_quickstart_dir => '/opt/aem/author/crx-quickstart',
     aem_version        => $aem_version,
-  } -> service { 'aem-aem':
+  } -> service { 'aem-author':
     ensure => 'running',
     enable => true,
   } -> aem_aem { 'Wait until login page is ready':

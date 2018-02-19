@@ -1,5 +1,6 @@
 ### 0.9.13
 * Fix incorrect manifest for deploy-artifact aem-tools script
+* Add integrated export-package,export-packages and import-packages from aem-aws-stack-provisioner to aem-curator
 
 ### 0.9.12
 * Add multi AEM instances support to collectd config
