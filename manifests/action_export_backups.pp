@@ -43,9 +43,9 @@ class aem_curator::action_export_backups (
 
     if $packages {
 
-      class { 'export_backup_packages':
+      class { 'aem_curator::export_backup_packages':
         tmp_dir         => $tmp_dir,
-        backup_path     => $backup_path,
+        backup_path     => $::backup_path,
         packages        => $packages,
         package_version => $package_version,
       }
@@ -86,10 +86,10 @@ class aem_curator::export_backup_packages (
 
     aem_package { "Create and download backup file for package: ${package[name]}":
       ensure  => archived,
-      name    => "${package[name]}",
-      version => "${package_version}",
-      group   => "${package[group]}",
-      path    => "${tmp_dir}/${package[group]}",
+      name    => $package[name],
+      version => $package_version,
+      group   => $package[group],
+      path    => "${tmp_dir}/${package['group']}",
       filter  => $package[filter],
       require => File["${tmp_dir}/${package['group']}"],
     } -> exec { "aws s3 cp ${tmp_dir}/${package[group]}/${package[name]}-${package_version}.zip s3://${data_bucket_name}/backup/${stack_prefix}/${package[group]}/${backup_path}/${package[name]}-${package_version}.zip":

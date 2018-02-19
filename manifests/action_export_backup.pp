@@ -21,7 +21,7 @@ class aem_curator::action_export_backup (
   } -> aem_package { 'Create and download backup file':
     ensure  => archived,
     name    => $package_name,
-    version => "${package_version}",
+    version => $package_version,
     group   => $package_group,
     path    => "${tmp_dir}/${package_group}",
     filter  => $package_filter,
