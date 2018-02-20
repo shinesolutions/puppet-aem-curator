@@ -66,6 +66,6 @@ aem_username="${aem_username}" \
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
-  --execute "include aem_curator::action_import_backups"
+  --execute "include aem_curator::action_import_backup"
 
 translate_exit_code "$?"
