@@ -10,7 +10,6 @@ class aem_curator::action_deploy_artifact (
   $package_replicate = $::package_replicate,
   $package_activate  = $::package_activate,
   $package_force     = $::package_force,
-  $package_aem_id    = $::package_aem_id,
   $path              = '/tmp/shinesolutions/aem-aws-stack-provisioner/',
 ) {
 
@@ -28,7 +27,6 @@ class aem_curator::action_deploy_artifact (
     replicate => $package_replicate,
     activate  => $package_activate,
     force     => $package_force,
-    aem_id    => $package_aem_id,
   }
 
 }
