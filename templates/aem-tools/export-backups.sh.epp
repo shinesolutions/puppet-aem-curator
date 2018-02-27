@@ -37,24 +37,16 @@ set +o errexit
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
-aem_username="${aem_username}" \
-  aem_password="${aem_password}" \
-  FACTER_event="${event}" \
-  FACTER_descriptor_file="${descriptor_file}" \
-  /opt/puppetlabs/bin/puppet apply \
+export FACTER_descriptor_file="${descriptor_file}"
+
+/opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
-  "manifests/download-descriptor.pp"
+  --execute "include aem_curator::action_download_descriptor"
 
 translate_exit_code "$?"
-
-export aem_username="${aem_username}"
-export aem_password="${aem_password}"
-export aem_timeout="${aem_timeout}"
-export FACTER_event="${event}"
-export FACTER_descriptor_file="${descriptor_file}"
 
 FACTER_package_version="${year}${month}${date}-${component}" \
   FACTER_backup_path="${year}/${month}" \
@@ -63,6 +55,30 @@ FACTER_package_version="${year}${month}${date}-${component}" \
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
-  "manifests/${event}.pp"
+  --execute "include aem_curator::action_export_backups"
+
+translate_exit_code "$?"
+
+# backup latest package for the month
+FACTER_package_version="${year}${month}-${component}-latest" \
+  FACTER_backup_path="${year}/${month}" \
+  /opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  --execute "include aem_curator::action_export_backups"
+
+translate_exit_code "$?"
+
+# backup latest package for the year
+FACTER_package_version="${year}-${component}-latest" \
+  FACTER_backup_path="${year}" \
+  /opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  --execute "include aem_curator::action_export_backups"
 
 translate_exit_code "$?"
