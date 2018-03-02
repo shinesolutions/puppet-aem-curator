@@ -2,13 +2,6 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 1 ]; then
-  echo 'Usage: ./flush-dispatcher-cache.sh <docroot>'
-  exit 1
-fi
-
-docroot=$1
-
 # translate puppet exit code to follow convention
 translate_exit_code() {
 
@@ -26,7 +19,7 @@ set +o errexit
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
-FACTER_docroot="${docroot}" \
+FACTER_docroot=<%= $docroot_dir %>
   /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
