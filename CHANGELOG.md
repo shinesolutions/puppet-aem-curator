@@ -1,5 +1,8 @@
 ### 0.9.13
 * Fix incorrect manifest for deploy-artifact aem-tools script
+* Add new manifest for Dispatcher aem-tools
+* Add new aem-tool flush-dispatcher-cache
+
 
 ### 0.9.12
 * Add multi AEM instances support to collectd config
