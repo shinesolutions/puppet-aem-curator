@@ -11,4 +11,4 @@ The file names _must_ be identical to what's listed here. There is no obvious fi
 | `aem62_sp1_cfp9` | `aem62_sp1` artifacts + AEM-6.2-SP1-CFP9-9.0.zip |
 | `aem63` | license-6.3.properties, AEM_6.3_Quickstart.jar |
 | `aem63_sp1` | `aem63` artifacts + AEM-6.3-Service-Pack-1-6.3.SP1.zip |
-| `aem63_sp1_cfp1` | `aem63_sp1` artifacts + AEM-6.3-Service-Pack-1-6.3.SP1.zip |
+| `aem63_sp1_cfp2` | `aem63_sp1` artifacts + AEM-CFP-6.3.1.2-2.0.zip |
