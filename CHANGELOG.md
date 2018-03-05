@@ -1,8 +1,15 @@
+### 0.9.14
+*
+
 ### 0.9.13
 * Fix incorrect manifest for deploy-artifact aem-tools script
+<<<<<<< HEAD
 * Add new manifest for Dispatcher aem-tools
 * Add new aem-tool flush-dispatcher-cache
 
+=======
+* Add integrated export-package,export-packages and import-packages from aem-aws-stack-provisioner to aem-curator
+>>>>>>> d545556fdde70915ec048f57120c16d7956583f1
 
 ### 0.9.12
 * Add multi AEM instances support to collectd config

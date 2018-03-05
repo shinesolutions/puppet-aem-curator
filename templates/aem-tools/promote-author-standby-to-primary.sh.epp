@@ -29,6 +29,6 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
-  "include aem_curator::action_promote_author_standby_to_primary"
+  --execute "include aem_curator::action_promote_author_standby_to_primary"
 
 translate_exit_code "$?"
