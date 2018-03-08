@@ -1,6 +1,5 @@
 class aem_curator::config_aem_tools_dispatcher (
   $base_dir,
-  $docroot_dir,
 ) {
 
   file { "${base_dir}/aem-tools/":
@@ -12,7 +11,6 @@ class aem_curator::config_aem_tools_dispatcher (
     ensure  => present,
     content => epp('aem_curator/aem-tools/flush-dispatcher-cache.sh.epp', {
       'base_dir'    => $base_dir,
-      'docroot_dir' => $docroot_dir
       }
     ),
     mode    => '0775',

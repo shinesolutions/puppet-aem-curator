@@ -5,7 +5,6 @@ File {
 class aem_curator::config_author_dispatcher (
   $base_dir,
   $dispatcher_conf_dir,
-  $docroot_dir,
   $exec_path,
   $httpd_conf_dir,
   $author_host,
@@ -16,6 +15,7 @@ class aem_curator::config_author_dispatcher (
   $apache_http_port  = '80',
   $apache_https_port = '443',
   $aem_id            = 'author-dispatcher',
+  $docroot_dir       = lookup('common::docroot_dir'),
 ) {
 
   aem_resources::author_dispatcher_set_config { 'Set puppet-aem-resources config file for author-dispatcher':

@@ -19,8 +19,7 @@ set +o errexit
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
-FACTER_docroot_dir="<%= $docroot_dir %>" \
-  /opt/puppetlabs/bin/puppet apply \
+/opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
   --modulepath modules \
