@@ -4,6 +4,7 @@ File {
 
 class aem_curator::config_publish_dispatcher (
   $dispatcher_conf_dir,
+  $docroot_dir,
   $exec_path,
   $httpd_conf_dir,
   $publish_host,
@@ -15,7 +16,6 @@ class aem_curator::config_publish_dispatcher (
   $apache_http_port  = '80',
   $apache_https_port = '443',
   $aem_id            = 'publish-dispatcher',
-  $docroot_dir       = lookup('common::docroot_dir'),
 ) {
 
   aem_resources::publish_dispatcher_set_config { 'Set puppet-aem-resources config file for publish-dispatcher':

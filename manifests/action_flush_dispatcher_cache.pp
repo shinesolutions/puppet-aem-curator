@@ -1,5 +1,5 @@
 class aem_curator::action_flush_dispatcher_cache (
-  $docroot_dir = lookup('common::docroot_dir'),
+  $docroot_dir,
 ) {
   file { "${docroot_dir}/*":
   ensure  => directory,
