@@ -1,3 +1,6 @@
+### 0.9.16
+*
+
 ### 0.9.15
 * Move AEM Tools directory ensure to aem-aws-stack-provisioner
 * Remove flush dispatcher cache script from config_aem_tools
