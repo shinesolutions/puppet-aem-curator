@@ -1,5 +1,5 @@
 ### 0.9.15
-*
+* Move AEM Tools directory ensure to aem-aws-stack-provisioner
 
 ### 0.9.14
 * Add new manifest for Dispatcher aem-tools
