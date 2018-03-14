@@ -2,6 +2,8 @@
 set -o nounset
 set -o errexit
 
+PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH
+
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
 
@@ -30,5 +32,12 @@ aem_username="${aem_username}" \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_enable_crxde"
+
+echo "Testing enable crxde using InSpec..."
+cd "/opt/shinesolutions/aem-tools/test/inspec"
+HOME=/root \
+aem_username="${aem_username}" \
+aem_password="${aem_password}" \
+inspec exec enable-crxde.rb
 
 translate_exit_code "$?"
