@@ -43,8 +43,20 @@ class aem_curator::action_deploy_artifacts (
     if $artifacts {
       notify { "AEM Dispatcher artifacts to deploy: ${artifacts}": }
       class { 'deploy_dispatcher_artifacts':
-        artifacts => $artifacts,
-        path      => "${tmp_dir}/artifacts",
+        artifacts           => $artifacts,
+        path                => "${tmp_dir}/artifacts",
+        apache_conf_dir     => $apache_conf_dir,
+        author_port         => $author_port,
+        author_secure       => $author_secure,
+        author_host         => $author_host,
+        dispatcher_conf_dir => $dispatcher_conf_dir,
+        docroot_dir         => $docroot_dir,
+        httpd_conf_dir      => $httpd_conf_dir,
+        publish_host        => $publish_host,
+        publish_port        => $publish_port,
+        publish_secure      => $publish_secure,
+        static_assets_dir   => $static_assets_dir,
+        virtual_hosts_dir   => $virtual_hosts_dir,
       }
     } else {
       notify { "No artifacts defined for component: ${component} in descriptor file: ${descriptor_file}. No Dispatcher artifacts to deploy": }
@@ -71,7 +83,15 @@ class deploy_dispatcher_artifacts (
   $artifacts,
   $path,
   $apache_conf_dir,
+  $author_port,
+  $author_secure,
+  $author_host,
   $dispatcher_conf_dir,
+  $docroot_dir,
+  $httpd_conf_dir,
+  $publish_host,
+  $publish_port,
+  $publish_secure,
   $static_assets_dir,
   $virtual_hosts_dir,
 ) {
