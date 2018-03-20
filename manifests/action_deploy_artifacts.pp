@@ -119,7 +119,15 @@ class deploy_dispatcher_artifacts (
               file { regsubst("${apache_conf_dir}/${apache_conf_template[name]}", '.epp', '', 'G'):
                 ensure  => file,
                 content => epp("${path}/${artifact[name]}/apache-conf-templates/${apache_conf_template[name]}", {
-                  dispatcher_conf_dir => $dispatcher_conf_dir
+                  apache_conf_dir     => $apache_conf_dir,
+                  author_host         => $author_host,
+                  author_port         => $author_port,
+                  author_secure       => $author_secure,
+                  dispatcher_conf_dir => $dispatcher_conf_dir,
+                  docroot_dir         => $docroot_dir,
+                  publish_host        => $publish_host,
+                  publish_port        => $publish_port,
+                  publish_secure      => $publish_secure
                     }),
                 owner   => 'root',
                 group   => 'root',
@@ -178,7 +186,15 @@ class deploy_dispatcher_artifacts (
                 file { regsubst("${virtual_hosts_dir}/${virtual_host_template[name]}", '.epp', '', 'G'):
                   ensure  => file,
                   content => epp("${path}/${artifact[name]}/virtual-hosts-templates/${virtual_host_template[name]}", {
-                    docroot_dir => $docroot_dir,
+                    apache_conf_dir     => $apache_conf_dir,
+                    author_host         => $author_host,
+                    author_port         => $author_port,
+                    author_secure       => $author_secure,
+                    dispatcher_conf_dir => $dispatcher_conf_dir,
+                    docroot_dir         => $docroot_dir,
+                    publish_host        => $publish_host,
+                    publish_port        => $publish_port,
+                    publish_secure      => $publish_secure
                       }),
                   owner   => 'root',
                   group   => 'root',
@@ -196,12 +212,12 @@ class deploy_dispatcher_artifacts (
               file { regsubst("${dispatcher_conf_dir}/${dispatcher_conf_template[name]}", '.epp', '', 'G'):
                 ensure  => file,
                 content => epp("${path}/${artifact[name]}/dispatcher-conf-templates/${dispatcher_conf_template[name]}", {
-                  dispatcher_conf_dir => $dispatcher_conf_dir,
                   apache_conf_dir     => $apache_conf_dir,
-                  docroot_dir         => $docroot_dir,
                   author_host         => $author_host,
                   author_port         => $author_port,
                   author_secure       => $author_secure,
+                  dispatcher_conf_dir => $dispatcher_conf_dir,
+                  docroot_dir         => $docroot_dir,
                   publish_host        => $publish_host,
                   publish_port        => $publish_port,
                   publish_secure      => $publish_secure
