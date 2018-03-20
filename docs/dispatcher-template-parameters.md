@@ -7,11 +7,11 @@ Check out some example templates at [aem-helloworld-publish-dispatcher](https://
 
 | Name | Description | Example |
 |------|-------------|---------|
-| docroot_dir | Apache httpd [DocumentRoot](https://httpd.apache.org/docs/2.4/urlmapping.html#documentroot), directory where AEM cached pages and static assets will be served from | `/var/www/html` |
-| apache_conf_dir | Directory where [Apache httpd configuration files](https://httpd.apache.org/docs/2.4/configuring.html) live | `/etc/httpd/conf` |
+| docroot_dir | Apache httpd [DocumentRoot](https://httpd.apache.org/docs/2.4/urlmapping.html#documentroot), directory where AEM cached pages and static assets will be served from | `/var/www/html/` |
+| apache_conf_dir | Directory where [Apache httpd configuration files](https://httpd.apache.org/docs/2.4/configuring.html) live | `/etc/httpd/conf/` |
 | dispatcher_conf_dir | Directory where [AEM Dispatcher configuration files](https://docs.adobe.com/docs/en/dispatcher/disp-config.html) live | `/etc/httpd/conf.d/` |
-| static_assets_dir | An alias for `docroot_dir` | `/var/www/html` |
-| virtual_hosts_dir | Directory where [Virtual Host configuration files](https://httpd.apache.org/docs/2.4/vhosts/) and [Apache RewriteMap configuration files](https://httpd.apache.org/docs/current/rewrite/rewritemap.html) live | `/etc/httpd/conf.d` |
+| static_assets_dir | An alias for `docroot_dir` | `/var/www/html/` |
+| virtual_hosts_dir | Directory where [Virtual Host configuration files](https://httpd.apache.org/docs/2.4/vhosts/) and [Apache RewriteMap configuration files](https://httpd.apache.org/docs/current/rewrite/rewritemap.html) live | `/etc/httpd/conf.d/` |
 | author_host | AEM Author host name, only applicable in AEM Author-Dispatcher templates | `localhost`, value will differ depending on environment |
 | author_port | AEM Author port number | `4502`, `5432` |
 | author_secure | True if AEM Author instance is listening on https | `true`, `false` |
