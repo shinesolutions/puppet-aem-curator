@@ -2,10 +2,10 @@
 set -o nounset
 set -o errexit
 
+PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH
+
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
-
-PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH
 
 # translate puppet exit code to follow convention
 translate_exit_code() {
@@ -38,6 +38,6 @@ cd "/opt/shinesolutions/aem-tools/test/inspec"
 HOME=/root \
 aem_username="${aem_username}" \
 aem_password="${aem_password}" \
-inspec exec disable-crxde.rb
+inspec exec modules/aem_curator/inspec/profiles/inspec-aem --controls aem-crxde-disabled
 
 translate_exit_code "$?"
