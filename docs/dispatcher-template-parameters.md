@@ -2,6 +2,7 @@ Dispatcher Template Parameters
 ------------------------------
 
 The following parameters are available to be used from Dispatcher EPP template files.
+
 Check out some example templates at [aem-helloworld-publish-dispatcher](https://github.com/shinesolutions/aem-helloworld-publish-dispatcher) and [aem-helloworld-author-dispatcher](https://github.com/shinesolutions/aem-helloworld-author-dispatcher).
 
 | Name | Description | Example |
@@ -11,13 +12,15 @@ Check out some example templates at [aem-helloworld-publish-dispatcher](https://
 | dispatcher_conf_dir | Directory where [AEM Dispatcher configuration files](https://docs.adobe.com/docs/en/dispatcher/disp-config.html) live | `/etc/httpd/conf.d/` |
 | static_assets_dir | An alias for `docroot_dir` | `/var/www/html` |
 | virtual_hosts_dir | Directory where [Virtual Host configuration files](https://httpd.apache.org/docs/2.4/vhosts/) and [Apache RewriteMap configuration files](https://httpd.apache.org/docs/current/rewrite/rewritemap.html) live | `/etc/httpd/conf.d` |
-| author_host | AEM Author host name, only applicable in AEM Author-Dispatcher templates | |
+| author_host | AEM Author host name, only applicable in AEM Author-Dispatcher templates | `localhost`, value will differ depending on environment |
 | author_port | AEM Author port number | `4502`, `5432` |
 | author_secure | True if AEM Author instance is listening on https | `true`, `false` |
-| publish_host | AEM Publish host name, only applicable in AEM Publish-Dispatcher template | |
+| publish_host | AEM Publish host name, only applicable in AEM Publish-Dispatcher template | `localhost`, value will differ depending on environment |
 | publish_port | AEM Publish port number | `4503`, `5433` |
 | publish_secure | True if AEM Publish instance is listening on https | `true`, `false` |
 
-Blah
+There are also a number of global facts which are supplied by the server and can be retrieved via `$facts[some-name]` parameter, e.g. `$facts[fqdn]`.
 
 | Name | Description |
+| `fqdn` | Fully qualified domain name for the instance, used as a unique instance identifier |
+| `component` | AEM component name, used to identify the component type which the instance is part of. There could be multiple instances with the same component |
