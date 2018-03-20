@@ -22,5 +22,6 @@ Check out some example templates at [aem-helloworld-publish-dispatcher](https://
 There are also a number of global facts which are supplied by the server and can be retrieved via `$facts[some-name]` parameter, e.g. `$facts[fqdn]`.
 
 | Name | Description |
+|------|-------------|
 | `fqdn` | Fully qualified domain name for the instance, used as a unique instance identifier |
 | `component` | AEM component name, used to identify the component type which the instance is part of. There could be multiple instances with the same component |
