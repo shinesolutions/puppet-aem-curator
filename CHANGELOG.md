@@ -1,5 +1,5 @@
 ### 0.9.16
-*
+* Add complete dispatcher template parameters to all dispatcher template processing #19
 
 ### 0.9.15
 * Move AEM Tools directory ensure to aem-aws-stack-provisioner
