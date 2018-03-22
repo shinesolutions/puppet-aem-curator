@@ -7,7 +7,7 @@ class aem_curator::config_author_dispatcher (
   $dispatcher_conf_dir,
   $docroot_dir,
   $exec_path,
-  $apache_conf_dir,
+  $virtual_hosts_dir,
   $author_host,
   $author_port,
   $author_secure,
@@ -20,7 +20,7 @@ class aem_curator::config_author_dispatcher (
 
   aem_resources::author_dispatcher_set_config { 'Set puppet-aem-resources config file for author-dispatcher':
     dispatcher_conf_dir => $dispatcher_conf_dir,
-    apache_conf_dir     => $apache_conf_dir,
+    virtual_hosts_dir   => $virtual_hosts_dir,
     docroot_dir         => $docroot_dir,
     ssl_cert            => $ssl_cert,
     author_host         => $author_host,

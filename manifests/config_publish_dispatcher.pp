@@ -6,7 +6,7 @@ class aem_curator::config_publish_dispatcher (
   $dispatcher_conf_dir,
   $docroot_dir,
   $exec_path,
-  $apache_conf_dir,
+  $virtual_hosts_dir,
   $publish_host,
   $publish_port,
   $publish_secure,
@@ -20,7 +20,7 @@ class aem_curator::config_publish_dispatcher (
 
   aem_resources::publish_dispatcher_set_config { 'Set puppet-aem-resources config file for publish-dispatcher':
     dispatcher_conf_dir => $dispatcher_conf_dir,
-    apache_conf_dir     => $apache_conf_dir,
+    virtual_hosts_dir   => $virtual_hosts_dir,
     docroot_dir         => $docroot_dir,
     ssl_cert            => $ssl_cert,
     allowed_client      => $allowed_client,
