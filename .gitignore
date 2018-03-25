@@ -6,3 +6,4 @@ test/integration/.librarian
 test/integration/.tmp
 test/integration/modules
 .idea/
+stage/

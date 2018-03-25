@@ -34,10 +34,10 @@ aem_username="${aem_username}" \
   --execute "include aem_curator::action_enable_crxde"
 
 echo "Testing if crxde is enabled using InSpec..."
-cd "/opt/shinesolutions/aem-tools/test/inspec"
+cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem"
 HOME=/root \
-aem_username="${aem_username}" \
-aem_password="${aem_password}" \
-inspec exec modules/aem_curator/inspec/profiles/inspec-aem --controls aem-crxde-enabled
+  aem_username="${aem_username}" \
+  aem_password="${aem_password}" \
+  inspec exec . --controls aem-crxde-enabled
 
 translate_exit_code "$?"
