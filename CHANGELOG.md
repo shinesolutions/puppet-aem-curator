@@ -1,5 +1,5 @@
 ### 0.9.16
-*
+* Update action manifests to use aem_id for aem_package
 
 ### 0.9.15
 * Move AEM Tools directory ensure to aem-aws-stack-provisioner
