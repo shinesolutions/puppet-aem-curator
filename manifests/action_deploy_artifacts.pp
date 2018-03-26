@@ -14,6 +14,7 @@ class aem_curator::action_deploy_artifacts (
   $publish_port,
   $publish_secure,
   $static_assets_dir,
+  $ssl_cert,
   $virtual_hosts_dir,
   $descriptor_file     = $::descriptor_file,
   $component           = $::component,
@@ -54,6 +55,7 @@ class aem_curator::action_deploy_artifacts (
         publish_port        => $publish_port,
         publish_secure      => $publish_secure,
         static_assets_dir   => $static_assets_dir,
+        ssl_cert            => $ssl_cert,
         virtual_hosts_dir   => $virtual_hosts_dir,
       }
     } else {
@@ -90,6 +92,7 @@ class deploy_dispatcher_artifacts (
   $publish_port,
   $publish_secure,
   $static_assets_dir,
+  $ssl_cert,
   $virtual_hosts_dir,
 ) {
 
@@ -127,7 +130,10 @@ class deploy_dispatcher_artifacts (
                   docroot_dir         => $docroot_dir,
                   publish_host        => $publish_host,
                   publish_port        => $publish_port,
-                  publish_secure      => $publish_secure
+                  publish_secure      => $publish_secure,
+                  static_assets_dir   => $static_assets_dir,
+                  ssl_cert            => $ssl_cert,
+                  virtual_hosts_dir   => $virtual_hosts_dir
                     }),
                 owner   => 'root',
                 group   => 'root',
@@ -142,8 +148,8 @@ class deploy_dispatcher_artifacts (
 
             # Ensure default files from OS and created AMI are cleaned up
             $default_files = [
-              "${dispatcher_conf_dir}/15-default.conf",
-              "${dispatcher_conf_dir}/1-puppet-aem-resources.conf"
+              "${virtual_hosts_dir}/15-default.conf",
+              "${virtual_hosts_dir}/1-puppet-aem-resources.conf"
             ]
             $default_files.each |Integer $index, String $default_file | {
               file { $default_file:
@@ -194,7 +200,10 @@ class deploy_dispatcher_artifacts (
                     docroot_dir         => $docroot_dir,
                     publish_host        => $publish_host,
                     publish_port        => $publish_port,
-                    publish_secure      => $publish_secure
+                    publish_secure      => $publish_secure,
+                    static_assets_dir   => $static_assets_dir,
+                    ssl_cert            => $ssl_cert,
+                    virtual_hosts_dir   => $virtual_hosts_dir
                       }),
                   owner   => 'root',
                   group   => 'root',
@@ -220,7 +229,10 @@ class deploy_dispatcher_artifacts (
                   docroot_dir         => $docroot_dir,
                   publish_host        => $publish_host,
                   publish_port        => $publish_port,
-                  publish_secure      => $publish_secure
+                  publish_secure      => $publish_secure,
+                  static_assets_dir   => $static_assets_dir,
+                  ssl_cert            => $ssl_cert,
+                  virtual_hosts_dir   => $virtual_hosts_dir
                   }),
                 owner   => 'root',
                 group   => 'root',
