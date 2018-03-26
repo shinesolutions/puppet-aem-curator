@@ -12,6 +12,7 @@ Check out some example templates at [aem-helloworld-publish-dispatcher](https://
 | dispatcher_conf_dir | Directory where [AEM Dispatcher configuration files](https://docs.adobe.com/docs/en/dispatcher/disp-config.html) will be copied to | `/etc/httpd/conf.modules.d/` |
 | static_assets_dir | An alias for `docroot_dir` | `/var/www/html/` |
 | virtual_hosts_dir | Directory where [Virtual Host configuration files](https://httpd.apache.org/docs/2.4/vhosts/) and [Apache RewriteMap configuration files](https://httpd.apache.org/docs/current/rewrite/rewritemap.html) will be copied to | `/etc/httpd/conf.d/` |
+| ssl_cert | Location of the [Dispatcher Unified Certificate](https://helpx.adobe.com/experience-manager/dispatcher/using/dispatcher-ssl.html) | `/etc/ssl/aem.unified-dispatcher.cert` |
 | author_host | AEM Author host name, only applicable in AEM Author-Dispatcher templates | `localhost`, value will differ depending on environment |
 | author_port | AEM Author port number | `4502`, `5432` |
 | author_secure | True if AEM Author instance is listening on https | `true`, `false` |
