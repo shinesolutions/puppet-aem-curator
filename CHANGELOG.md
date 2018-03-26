@@ -1,5 +1,7 @@
 ### 0.9.17
 * Add new AEM profile: aem63_sp1_cfp13 #21
+* Add ssl_cert parameter t dispatcher templates
+* Move aem_resources-generated virtual hosts config to virtual hosts directory
 
 ### 0.9.16
 * Add complete dispatcher template parameters to all dispatcher template processing #19
