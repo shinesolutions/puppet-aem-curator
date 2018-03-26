@@ -1,5 +1,5 @@
 ### 0.9.17
-*
+* Add new AEM profile: aem63_sp1_cfp13 #21
 
 ### 0.9.16
 * Add complete dispatcher template parameters to all dispatcher template processing #19
