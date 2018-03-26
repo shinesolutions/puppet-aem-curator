@@ -4,6 +4,7 @@ File {
 
 class aem_curator::action_export_backup (
   $tmp_dir,
+  $aem_id           = undef,
   $backup_path      = $::backup_path,
   $package_group    = $::package_group,
   $package_name     = $::package_name,
@@ -13,6 +14,12 @@ class aem_curator::action_export_backup (
   $data_bucket_name = $::data_bucket_name,
 ) {
 
+  $aem_id = $aem_id ? {
+      'author'  => 'author',
+      'publish' => 'publish',
+      default   => 'author',
+  }
+
   file { "${tmp_dir}/${package_group}":
     ensure => directory,
     mode   => '0775',
@@ -20,6 +27,7 @@ class aem_curator::action_export_backup (
     group  => 'root',
   } -> aem_package { 'Create and download backup file':
     ensure  => archived,
+    aem_id  => $aem_id,
     name    => $package_name,
     version => $package_version,
     group   => $package_group,

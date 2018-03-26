@@ -4,6 +4,7 @@ File {
 
 class aem_curator::action_export_backups (
   $tmp_dir,
+  $aem_id           = undef,
   $descriptor_file  = $::descriptor_file,
   $component        = $::component,
   $package_version  = $::package_version,
@@ -45,6 +46,7 @@ class aem_curator::action_export_backups (
 
       class { 'aem_curator::export_backup_packages':
         tmp_dir         => $tmp_dir,
+        aem_id          => $aem_id,
         backup_path     => $::backup_path,
         packages        => $packages,
         package_version => $package_version,
@@ -63,12 +65,23 @@ class aem_curator::action_export_backups (
 
 class aem_curator::export_backup_packages (
   $tmp_dir,
+  $aem_id,
   $backup_path,
   $packages,
   $package_version,
 ) {
 
   $packages.each | Integer $index, Hash $package| {
+
+    if $package[aem_id] {
+      $aem_id = $package[aem_id]
+    }
+
+    $aem_id = $aem_id ? {
+        'author'  => 'author',
+        'publish' => 'publish',
+        default   => 'author',
+    }
 
     if !defined(File["${tmp_dir}/${package[group]}"]) {
 
@@ -91,6 +104,7 @@ class aem_curator::export_backup_packages (
       group   => $package[group],
       path    => "${tmp_dir}/${package['group']}",
       filter  => $package[filter],
+      aem_id  => $aem_id,
       require => File["${tmp_dir}/${package['group']}"],
     } -> exec { "aws s3 cp ${tmp_dir}/${package[group]}/${package[name]}-${package_version}.zip s3://${data_bucket_name}/backup/${stack_prefix}/${package[group]}/${backup_path}/${package[name]}-${package_version}.zip":
       cwd  => $tmp_dir,
