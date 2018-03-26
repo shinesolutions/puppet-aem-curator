@@ -1,3 +1,6 @@
+### 0.9.18
+*
+
 ### 0.9.17
 * Add new AEM profile: aem63_sp1_cfp13 #21
 * Add ssl_cert parameter to dispatcher templates
