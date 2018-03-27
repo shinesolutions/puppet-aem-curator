@@ -1,5 +1,5 @@
 ### 0.9.18
-*
+* Improved aem_id handling for action manifests
 
 ### 0.9.17
 * Add new AEM profile: aem63_sp1_cfp13 #21
