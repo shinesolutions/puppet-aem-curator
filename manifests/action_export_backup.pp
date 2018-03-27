@@ -27,7 +27,7 @@ class aem_curator::action_export_backup (
     owner  => 'root',
     group  => 'root',
   } -> aem_package { 'Create and download backup file':
-    ensure      => archived,
+    ensure       => archived,
     aem_id       => $_aem_id,
     aem_username => $aem_username,
     aem_password => $aem_password,
