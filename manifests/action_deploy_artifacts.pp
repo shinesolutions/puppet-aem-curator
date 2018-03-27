@@ -15,6 +15,8 @@ class aem_curator::action_deploy_artifacts (
   $ssl_cert,
   $virtual_hosts_dir,
   $aem_id                     = undef,
+  $aem_username               = $::aem_username,
+  $aem_password               = $::aem_password,
   $author_host                = $::authorhost,
   $descriptor_file            = $::descriptor_file,
   $component                  = $::component,
@@ -68,9 +70,11 @@ class aem_curator::action_deploy_artifacts (
     if $packages {
       notify { "AEM packages to deploy: ${packages}": }
       aem_resources::deploy_packages { 'Deploy packages':
-        packages => $packages,
-        path     => "${tmp_dir}/packages",
-        aem_id   => $aem_id,
+        packages     => $packages,
+        path         => "${tmp_dir}/packages",
+        aem_id       => $aem_id,
+        aem_username => $aem_username,
+        aem_password => $aem_password,
       }
     } else {
       notify { "No packages defined for component: ${component} in descriptor file: ${descriptor_file}. No AEM package to deploy": }

@@ -48,7 +48,9 @@ export FACTER_descriptor_file="${descriptor_file}"
 
 translate_exit_code "$?"
 
-FACTER_package_version="${year}${month}${date}-${component}" \
+FACTER_aem_username="${aem_username}" \
+  FACTER_aem_password="${aem_password}" \
+  FACTER_package_version="${year}${month}${date}-${component}" \
   FACTER_backup_path="${year}/${month}" \
   /opt/puppetlabs/bin/puppet apply \
   --debug \
@@ -60,7 +62,9 @@ FACTER_package_version="${year}${month}${date}-${component}" \
 translate_exit_code "$?"
 
 # backup latest package for the month
-FACTER_package_version="${year}${month}-${component}-latest" \
+FACTER_aem_username="${aem_username}" \
+  FACTER_aem_password="${aem_password}" \
+  FACTER_package_version="${year}${month}-${component}-latest" \
   FACTER_backup_path="${year}/${month}" \
   /opt/puppetlabs/bin/puppet apply \
   --debug \
@@ -72,7 +76,9 @@ FACTER_package_version="${year}${month}-${component}-latest" \
 translate_exit_code "$?"
 
 # backup latest package for the year
-FACTER_package_version="${year}-${component}-latest" \
+FACTER_aem_username="${aem_username}" \
+  FACTER_aem_password="${aem_password}" \
+  FACTER_package_version="${year}-${component}-latest" \
   FACTER_backup_path="${year}" \
   /opt/puppetlabs/bin/puppet apply \
   --debug \
