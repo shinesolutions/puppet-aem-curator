@@ -14,11 +14,10 @@ class aem_curator::action_deploy_artifact (
   $path              = '/tmp/shinesolutions/aem-aws-stack-provisioner',
 ) {
 
-  $_aem_id = $aem_id ? {
-      'author'  => 'author',
-      'publish' => 'publish',
-      default   => 'author',
-  }
+  $_aem_id = pick(
+    $aem_id,
+    'author'
+    )
 
   file { "${path}/${package_group}/${package_name}-${package_version}.zip":
     ensure => absent,

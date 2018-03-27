@@ -122,15 +122,11 @@ class download_packages (
 
   $packages.each | Integer $index, Hash $package| {
 
-    if $package[aem_id] {
-      $aem_id = $package[aem_id]
-    }
-
-    $_aem_id = $aem_id ? {
-        'author'  => 'author',
-        'publish' => 'publish',
-        default   => 'author',
-    }
+    $_aem_id = pick(
+      $package[aem_id],
+      $aem_id,
+      'author'
+      )
 
     # TODO: validate the package values exist and populated
     if !defined(File["${path}/${_aem_id}/${package['group']}"]) {

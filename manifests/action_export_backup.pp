@@ -14,11 +14,10 @@ class aem_curator::action_export_backup (
   $data_bucket_name = $::data_bucket_name,
 ) {
 
-  $_aem_id = $aem_id ? {
-      'author'  => 'author',
-      'publish' => 'publish',
-      default   => 'author',
-  }
+  $_aem_id = pick(
+    $aem_id,
+    'author'
+    )
 
   file { "${tmp_dir}/${_aem_id}/${package_group}":
     ensure => directory,

@@ -73,15 +73,11 @@ class aem_curator::export_backup_packages (
 
   $packages.each | Integer $index, Hash $package| {
 
-    if $package[aem_id] {
-      $aem_id = $package[aem_id]
-    }
-
-    $_aem_id = $aem_id ? {
-        'author'  => 'author',
-        'publish' => 'publish',
-        default   => 'author',
-    }
+    $_aem_id = pick(
+      $package[aem_id],
+      $aem_id,
+      'author'
+      )
 
     if !defined(File["${tmp_dir}/${_aem_id}/${package[group]}"]) {
 

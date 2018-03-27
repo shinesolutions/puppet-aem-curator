@@ -13,11 +13,10 @@ class aem_curator::action_import_backup (
   $data_bucket_name    = $::data_bucket_name,
 ) {
 
-  $_aem_id = $aem_id ? {
-      'author'  => 'author',
-      'publish' => 'publish',
-      default   => 'author',
-  }
+  $_aem_id = pick(
+    $aem_id,
+    'author'
+    )
 
   archive { "${tmp_dir}/${package_group}/${package_name}-${package_version}.zip":
     ensure => present,
