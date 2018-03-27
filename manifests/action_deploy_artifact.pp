@@ -14,7 +14,7 @@ class aem_curator::action_deploy_artifact (
   $path              = '/tmp/shinesolutions/aem-aws-stack-provisioner',
 ) {
 
-  $aem_id = $aem_id ? {
+  $_aem_id = $aem_id ? {
       'author'  => 'author',
       'publish' => 'publish',
       default   => 'author',
@@ -27,7 +27,7 @@ class aem_curator::action_deploy_artifact (
     source => $package_source,
   } -> aem_package { "Deploy package ${package_group}/${package_name}-${package_version}":
     ensure    => present,
-    aem_id    => $aem_id,
+    aem_id    => $_aem_id,
     name      => $package_name,
     group     => $package_group,
     version   => $package_version,

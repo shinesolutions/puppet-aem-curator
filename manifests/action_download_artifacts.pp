@@ -126,21 +126,21 @@ class download_packages (
       $aem_id = $package[aem_id]
     }
 
-    $aem_id = $aem_id ? {
+    $_aem_id = $aem_id ? {
         'author'  => 'author',
         'publish' => 'publish',
         default   => 'author',
     }
 
     # TODO: validate the package values exist and populated
-    if !defined(File["${path}/${aem_id}/${package['group']}"]) {
-      exec { "Create ${path}/${aem_id}/${package['group']}":
-        creates => "${path}/${aem_id}/${package['group']}",
-        command => "mkdir -p ${path}/${aem_id}/${package['group']}",
+    if !defined(File["${path}/${_aem_id}/${package['group']}"]) {
+      exec { "Create ${path}/${_aem_id}/${package['group']}":
+        creates => "${path}/${_aem_id}/${package['group']}",
+        command => "mkdir -p ${path}/${_aem_id}/${package['group']}",
         cwd     => $path,
         path    => ['/usr/bin', '/usr/sbin', '/bin/'],
         require => File[$path],
-      } -> file { "${path}/${aem_id}/${package['group']}":
+      } -> file { "${path}/${_aem_id}/${package['group']}":
         ensure => directory,
         mode   => '0775',
       }
@@ -165,13 +165,13 @@ class download_packages (
       $checksum_verify = true
     }
 
-    archive { "${path}/${aem_id}/${package['group']}/${package['name']}-${package['version']}.zip":
+    archive { "${path}/${_aem_id}/${package['group']}/${package['name']}-${package['version']}.zip":
       ensure          => present,
       source          => $package[source],
       checksum        => $checksum,
       checksum_type   => $checksum_type,
       checksum_verify => $checksum_verify,
-      require         => File["${path}/${aem_id}/${package['group']}"],
+      require         => File["${path}/${_aem_id}/${package['group']}"],
     }
   }
 }

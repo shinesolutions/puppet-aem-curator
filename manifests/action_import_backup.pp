@@ -13,7 +13,7 @@ class aem_curator::action_import_backup (
   $data_bucket_name    = $::data_bucket_name,
 ) {
 
-  $aem_id = $aem_id ? {
+  $_aem_id = $aem_id ? {
       'author'  => 'author',
       'publish' => 'publish',
       default   => 'author',
@@ -24,7 +24,7 @@ class aem_curator::action_import_backup (
     source => "s3://${data_bucket_name}/backup/${source_stack_prefix}/${package_group}/${backup_path}/${package_name}-${package_version}.zip",
   } -> aem_package { 'Upload and install backup file':
     ensure  => present,
-    aem_id  => $aem_id,
+    aem_id  => $_aem_id,
     name    => $package_name,
     version => $package_version,
     group   => $package_group,
