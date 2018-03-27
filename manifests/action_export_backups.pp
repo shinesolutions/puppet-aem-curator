@@ -70,6 +70,8 @@ class aem_curator::action_export_backups (
 class aem_curator::export_backup_packages (
   $tmp_dir,
   $aem_id,
+  $aem_username,
+  $aem_password,
   $backup_path,
   $packages,
   $package_version,
