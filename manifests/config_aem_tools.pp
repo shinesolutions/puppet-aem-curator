@@ -139,29 +139,4 @@ class aem_curator::config_aem_tools (
       require     => File["${base_dir}/aem-tools/export-backups.sh"],
     }
   }
-  
-  file { "${base_dir}/aem-tools/test":
-    ensure => directory,
-    mode   => '0775',
-    owner  => 'root',
-    group  => 'root',
-  } -> file { "${base_dir}/aem-tools/test/inspec":
-    ensure => directory,
-    mode   => '0775',
-    owner  => 'root',
-    group  => 'root',
-  } -> file {"${base_dir}/aem-tools/test/inspec/disable-crxde.rb":
-    ensure => present,
-    source => 'puppet:///modules/aem_curator/aem-tools/test/inspec/disable-crxde.rb',
-    mode   => '0775',
-    owner  => 'root',
-    group  => 'root',
-  } -> file {"${base_dir}/aem-tools/test/inspec/enable-crxde.rb":
-    ensure => present,
-    source => 'puppet:///modules/aem_curator/aem-tools/test/inspec/enable-crxde.rb',
-    mode   => '0775',
-    owner  => 'root',
-    group  => 'root',
-  }
-
 }
