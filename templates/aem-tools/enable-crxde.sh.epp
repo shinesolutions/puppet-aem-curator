@@ -24,8 +24,8 @@ set +o errexit
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
-aem_username="${aem_username}" \
-  aem_password="${aem_password}" \
+FACTER_aem_username="${aem_username}" \
+  FACTER_aem_password="${aem_password}" \
   /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \

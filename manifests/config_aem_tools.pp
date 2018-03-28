@@ -13,12 +13,7 @@ class aem_curator::config_aem_tools (
   $https_proxy      = $::cron_https_proxy,
 ) {
 
-  file { "${base_dir}/aem-tools/":
-    ensure => directory,
-    mode   => '0775',
-    owner  => 'root',
-    group  => 'root',
-  } -> file { "${base_dir}/aem-tools/export-backup.sh":
+  file { "${base_dir}/aem-tools/export-backup.sh":
     ensure  => present,
     content => epp(
       'aem_curator/aem-tools/export-backup.sh.epp', {
@@ -88,12 +83,6 @@ class aem_curator::config_aem_tools (
   } -> file {"${base_dir}/aem-tools/wait-until-ready.sh":
     ensure  => present,
     content => epp('aem_curator/aem-tools/wait-until-ready.sh.epp', { 'base_dir' => $base_dir }),
-    mode    => '0775',
-    owner   => 'root',
-    group   => 'root',
-  } -> file {"${base_dir}/aem-tools/flush-dispatcher-cache.sh":
-    ensure  => present,
-    content => epp('aem_curator/aem-tools/flush-dispatcher-cache.sh.epp', { 'base_dir' => $base_dir }),
     mode    => '0775',
     owner   => 'root',
     group   => 'root',

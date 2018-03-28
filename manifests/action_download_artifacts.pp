@@ -5,6 +5,7 @@ File {
 class aem_curator::action_download_artifacts (
   $tmp_dir,
   $base_dir,
+  $aem_id          = undef,
   $descriptor_file = $::descriptor_file,
   $component       = $::component
 ) {
@@ -50,6 +51,7 @@ class aem_curator::action_download_artifacts (
     if $packages {
 
       class { 'download_packages':
+        aem_id   => $aem_id,
         packages => $packages,
         path     => "${tmp_dir}/packages",
       }
@@ -109,6 +111,7 @@ class download_dispatcher_artifacts (
 
 class download_packages (
   $packages,
+  $aem_id,
   $path
 ) {
   # prepare the packages
@@ -118,15 +121,22 @@ class download_packages (
   }
 
   $packages.each | Integer $index, Hash $package| {
+
+    $_aem_id = pick(
+      $package[aem_id],
+      $aem_id,
+      'author'
+      )
+
     # TODO: validate the package values exist and populated
-    if !defined(File["${path}/${package['group']}"]) {
-      exec { "Create ${path}/${package['group']}":
-        creates => "${path}/${package['group']}",
-        command => "mkdir -p ${path}/${package['group']}",
+    if !defined(File["${path}/${_aem_id}/${package['group']}"]) {
+      exec { "Create ${path}/${_aem_id}/${package['group']}":
+        creates => "${path}/${_aem_id}/${package['group']}",
+        command => "mkdir -p ${path}/${_aem_id}/${package['group']}",
         cwd     => $path,
         path    => ['/usr/bin', '/usr/sbin', '/bin/'],
         require => File[$path],
-      } -> file { "${path}/${package['group']}":
+      } -> file { "${path}/${_aem_id}/${package['group']}":
         ensure => directory,
         mode   => '0775',
       }
@@ -151,13 +161,13 @@ class download_packages (
       $checksum_verify = true
     }
 
-    archive { "${path}/${package['aem_id']}/${package['group']}/${package['name']}-${package['version']}.zip":
+    archive { "${path}/${_aem_id}/${package['group']}/${package['name']}-${package['version']}.zip":
       ensure          => present,
       source          => $package[source],
       checksum        => $checksum,
       checksum_type   => $checksum_type,
       checksum_verify => $checksum_verify,
-      require         => File["${path}/${package['group']}"],
+      require         => File["${path}/${_aem_id}/${package['group']}"],
     }
   }
 }

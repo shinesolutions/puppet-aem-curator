@@ -3,6 +3,9 @@ File {
 }
 
 class aem_curator::action_deploy_artifact (
+  $aem_id            = undef,
+  $aem_username      = $::aem_username,
+  $aem_password      = $::aem_password,
   $package_source    = $::package_source,
   $package_group     = $::package_group,
   $package_name      = $::package_name,
@@ -13,20 +16,28 @@ class aem_curator::action_deploy_artifact (
   $path              = '/tmp/shinesolutions/aem-aws-stack-provisioner',
 ) {
 
+  $_aem_id = pick(
+    $aem_id,
+    'author'
+    )
+
   file { "${path}/${package_group}/${package_name}-${package_version}.zip":
     ensure => absent,
   } -> archive { "${path}/${package_group}/${package_name}-${package_version}.zip":
     ensure => present,
     source => $package_source,
   } -> aem_package { "Deploy package ${package_group}/${package_name}-${package_version}":
-    ensure    => present,
-    name      => $package_name,
-    group     => $package_group,
-    version   => $package_version,
-    path      => "${path}/${package_group}",
-    replicate => $package_replicate,
-    activate  => $package_activate,
-    force     => $package_force,
+    ensure       => present,
+    aem_id       => $_aem_id,
+    aem_username => $aem_username
+    aem_password => $aem_password
+    name         => $package_name,
+    group        => $package_group,
+    version      => $package_version,
+    path         => "${path}/${package_group}",
+    replicate    => $package_replicate,
+    activate     => $package_activate,
+    force        => $package_force,
   }
 
 }

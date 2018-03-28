@@ -1,5 +1,20 @@
+### 0.9.19
+* Fix injection of aem_username & aem_password to action manifests #26
+
+### 0.9.18
+* Allow default aem_id via Hiera configuration for action manifests
+
+### 0.9.17
+* Add new AEM profile: aem63_sp1_cfp13 #21
+* Add ssl_cert parameter to dispatcher templates
+* Move aem_resources-generated virtual hosts config to virtual hosts directory
+
+### 0.9.16
+* Add complete dispatcher template parameters to all dispatcher template processing #19
+
 ### 0.9.15
-*
+* Move AEM Tools directory ensure to aem-aws-stack-provisioner
+* Remove flush dispatcher cache script from config_aem_tools
 
 ### 0.9.14
 * Add new manifest for Dispatcher aem-tools
