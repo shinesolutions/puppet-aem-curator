@@ -5,6 +5,8 @@ File {
 class aem_curator::action_export_backups (
   $tmp_dir,
   $aem_id           = undef,
+  $aem_username     = $::aem_username,
+  $aem_password     = $::aem_password,
   $descriptor_file  = $::descriptor_file,
   $component        = $::component,
   $package_version  = $::package_version,
@@ -47,6 +49,8 @@ class aem_curator::action_export_backups (
       class { 'aem_curator::export_backup_packages':
         tmp_dir         => $tmp_dir,
         aem_id          => $aem_id,
+        aem_username    => $aem_username,
+        aem_password    => $aem_password,
         backup_path     => $::backup_path,
         packages        => $packages,
         package_version => $package_version,
@@ -66,6 +70,8 @@ class aem_curator::action_export_backups (
 class aem_curator::export_backup_packages (
   $tmp_dir,
   $aem_id,
+  $aem_username,
+  $aem_password,
   $backup_path,
   $packages,
   $package_version,
@@ -94,14 +100,16 @@ class aem_curator::export_backup_packages (
     }
 
     aem_package { "Create and download backup file for package: ${package[name]}":
-      ensure  => archived,
-      name    => $package[name],
-      version => $package_version,
-      group   => $package[group],
-      path    => "${tmp_dir}/${_aem_id}/${package['group']}",
-      filter  => $package[filter],
-      aem_id  => $_aem_id,
-      require => File["${tmp_dir}/${_aem_id}/${package['group']}"],
+      ensure       => archived,
+      name         => $package[name],
+      version      => $package_version,
+      group        => $package[group],
+      path         => "${tmp_dir}/${_aem_id}/${package['group']}",
+      filter       => $package[filter],
+      aem_id       => $_aem_id,
+      aem_username => $aem_username,
+      aem_password => $aem_password,
+      require      => File["${tmp_dir}/${_aem_id}/${package['group']}"],
     } -> exec { "aws s3 cp ${tmp_dir}/${_aem_id}/${package[group]}/${package[name]}-${package_version}.zip s3://${data_bucket_name}/backup/${stack_prefix}/${package[group]}/${backup_path}/${package[name]}-${package_version}.zip":
       cwd  => $tmp_dir,
       path => ['/bin'],
