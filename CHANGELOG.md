@@ -1,3 +1,6 @@
+### 0.9.19
+* Fix injection of aem_username & aem_password to action manifests #26
+
 ### 0.9.18
 * Allow default aem_id via Hiera configuration for action manifests
 * Fix injection of aem_username & aem_password to action manifests #26
