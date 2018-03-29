@@ -68,4 +68,15 @@ FACTER_aem_username="${aem_username}" \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_import_backup"
 
+  echo "Testing if package is imported using InSpec..."
+   cd "/opt/shinesolutions/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem"
+   HOME=/root \
+   aem_username="${aem_username}" \
+     aem_password="${aem_password}" \
+     package_group="${package_group}" \
+     package_name="${package_name}" \
+     package_version="${package_version}" \
+     inspec exec . --controls aem-package-imported
+
+
 translate_exit_code "$?"
