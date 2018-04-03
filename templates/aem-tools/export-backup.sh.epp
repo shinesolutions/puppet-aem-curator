@@ -14,6 +14,7 @@ package_name=$2
 shift 2
 package_filter="$*"
 component=$(/opt/puppetlabs/bin/facter component)
+stack_prefix=$(/opt/puppetlabs/bin/facter stack_prefix)
 aem_username=exporter
 aem_password=$(<%= $aem_password_retrieval_command %>)
 # backup export timeout is set to 15 minutes in order to handle large AEM packages
@@ -67,6 +68,7 @@ FACTER_aem_username="${aem_username}" \
   cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem-aws"
   HOME=/root \
     aem_component=${component} \
+    aem_stack_prefix="${stack_prefix}" \
     package_group="${package_group}" \
     package_name="${package_name}" \
     package_version="${year}${month}${date}-${component}" \
@@ -93,6 +95,7 @@ FACTER_aem_username="${aem_username}" \
   cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem-aws"
   HOME=/root \
     aem_component=${component} \
+    aem_stack_prefix="${stack_prefix}" \
     package_group="${package_group}" \
     package_name="${package_name}" \
     package_version="${year}${month}-${component}-latest" \
@@ -119,6 +122,7 @@ FACTER_aem_username="${aem_username}" \
   cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem-aws"
   HOME=/root \
     aem_component="${component}" \
+    aem_stack_prefix="${stack_prefix}" \
     package_group="${package_group}" \
     package_name="${package_name}" \
     package_version="${year}-${component}-latest" \
