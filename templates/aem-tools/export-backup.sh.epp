@@ -7,6 +7,8 @@ if [ "$#" -lt 3 ]; then
   exit 1
 fi
 
+PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH
+
 package_group=$1
 package_name=$2
 shift 2
@@ -39,7 +41,7 @@ translate_exit_code() {
 set +o errexit
 
 
-cd <%= $base_dir %>/aem-aws-stack-provisioner/
+cd "<%= $base_dir %>/aem-aws-stack-provisioner/"
 
 # backup latest package for the day
 export aem_username="${aem_username}"
@@ -61,7 +63,19 @@ FACTER_aem_username="${aem_username}" \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_export_backup"
 
+  echo "Testing package was exported using InSpec..."
+  cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem-aws"
+  HOME=/root \
+    aem_component=${component} \
+    package_group="${package_group}" \
+    package_name="${package_name}" \
+    package_version="${year}${month}${date}-${component}" \
+    backup_path="${year}/${month}" \
+    inspec exec . --controls aws-export-package-available
+
 translate_exit_code "$?"
+
+cd "<%= $base_dir %>/aem-aws-stack-provisioner/"
 
 # backup latest package for the month
 FACTER_aem_username="${aem_username}" \
@@ -75,7 +89,19 @@ FACTER_aem_username="${aem_username}" \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_export_backup"
 
+  echo "Testing package was exported using InSpec..."
+  cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem-aws"
+  HOME=/root \
+    aem_component=${component} \
+    package_group="${package_group}" \
+    package_name="${package_name}" \
+    package_version="${year}${month}-${component}-latest" \
+    backup_path="${year}/${month}" \
+    inspec exec . --controls aws-export-package-available
+
 translate_exit_code "$?"
+
+cd "<%= $base_dir %>/aem-aws-stack-provisioner/"
 
 # backup latest package for the year
 FACTER_aem_username="${aem_username}" \
@@ -88,5 +114,15 @@ FACTER_aem_username="${aem_username}" \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_export_backup"
+
+  echo "Testing package was exported using InSpec..."
+  cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem-aws"
+  HOME=/root \
+    aem_component="${component}" \
+    package_group="${package_group}" \
+    package_name="${package_name}" \
+    package_version="${year}-${component}-latest" \
+    backup_path="${year}" \
+    inspec exec . --controls aws-export-package-available
 
 translate_exit_code "$?"
