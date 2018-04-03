@@ -3,10 +3,13 @@ ci: clean tools deps lint
 deps:
 	r10k puppetfile install --verbose --moduledir modules
 	mkdir -p inspec/profiles/inspec-aem
+	mkdir -p inspec/profiles/inspec-aem-aws
 	mkdir stage
 	cd stage
 	wget https://github.com/shinesolutions/inspec-aem/archive/master.tar.gz
 	tar -xzf master.tar.gz ../inspec/profiles/inspec-aem/
+	wget https://github.com/shinesolutions/inspec-aem-aws/archive/master.tar.gz
+	tar -xzf master.tar.gz ../inspec/profiles/inspec-aem-aws/
 
 clean:
 	rm -rf pkg
