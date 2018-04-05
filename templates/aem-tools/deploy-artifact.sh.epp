@@ -7,7 +7,7 @@ if [ "$#" -ne 7 ]; then
   exit 1
 fi
 
-PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH
+PATH=<%= $aem_tools_env_path %>
 
 package_source=$1
 package_group=$2
@@ -54,7 +54,7 @@ FACTER_aem_username="${aem_username}" \
   --execute "include aem_curator::action_deploy_artifact"
 
   echo "Testing if package is installed using InSpec..."
-  cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem"
+  cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
   HOME=/root \
   aem_username="${aem_username}" \
     aem_password="${aem_password}" \

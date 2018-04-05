@@ -2,22 +2,16 @@ ci: clean tools deps lint
 
 deps:
 	r10k puppetfile install --verbose --moduledir modules
-	mkdir -p inspec/profiles/inspec-aem
-	mkdir -p inspec/profiles/inspec-aem-aws
-	mkdir stage
-	cd stage
-	wget https://github.com/shinesolutions/inspec-aem/archive/master.tar.gz
-	tar -xzf master.tar.gz ../inspec/profiles/inspec-aem/
-	wget https://github.com/shinesolutions/inspec-aem-aws/archive/master.tar.gz
-	tar -xzf master.tar.gz ../inspec/profiles/inspec-aem-aws/
+	inspec vendor --overwrite
+	mkdir -p files/test/inspec &&	mv vendor/*.tar.gz files/test/inspec/ && cd files/test/inspec && gunzip *.tar.gz && tar -xvf *.tar
 
 clean:
 	rm -rf pkg
-	rm -rf inspec/
-	rm -fr stage/
-	rm -rf test/integration/.tmp/
-	rm -rf test/integration/modules/
+	rm -rf stage/
+	rm -rf test/
 	rm -rf /tmp/shinesolutions/puppet-aem-curator/
+	rm -rf vendor/
+	rm -f inspec.lock
 
 lint:
 	puppet-lint \

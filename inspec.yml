@@ -1,0 +1,3 @@
+depends:
+  - name: aem
+    url: https://github.com/shinesolutions/inspec-aem/archive/master.tar.gz

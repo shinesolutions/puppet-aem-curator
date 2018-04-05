@@ -2,6 +2,8 @@
 set -o nounset
 set -o errexit
 
+PATH=<%= $aem_tools_env_path %>
+
 # translate puppet exit code to follow convention
 translate_exit_code() {
 

@@ -7,6 +7,8 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
+PATH=<%= $aem_tools_env_path %>
+
 descriptor_file=$1
 aem_username=deployer
 aem_password=$(<%= $aem_password_retrieval_command %>)

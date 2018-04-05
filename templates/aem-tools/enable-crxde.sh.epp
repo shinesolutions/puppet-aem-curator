@@ -2,7 +2,7 @@
 set -o nounset
 set -o errexit
 
-PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:$PATH
+PATH=<%= $aem_tools_env_path %>
 
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
@@ -34,7 +34,7 @@ FACTER_aem_username="${aem_username}" \
   --execute "include aem_curator::action_enable_crxde"
 
 echo "Testing if crxde is enabled using InSpec..."
-cd "<%= $base_dir %>/aem-aws-stack-provisioner/modules/aem_curator/inspec/profiles/inspec-aem"
+cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
 HOME=/root \
   aem_username="${aem_username}" \
   aem_password="${aem_password}" \
