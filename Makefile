@@ -20,6 +20,7 @@ lint:
 		--no-autoloader_layout-check \
 		--no-documentation-check \
 		./manifests/*.pp
+	puppet epp validate templates/*/*.epp
 
 package: deps
 	puppet module build .

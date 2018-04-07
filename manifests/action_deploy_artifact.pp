@@ -29,8 +29,8 @@ class aem_curator::action_deploy_artifact (
   } -> aem_package { "Deploy package ${package_group}/${package_name}-${package_version}":
     ensure       => present,
     aem_id       => $_aem_id,
-    aem_username => $aem_username
-    aem_password => $aem_password
+    aem_username => $aem_username,
+    aem_password => $aem_password,
     name         => $package_name,
     group        => $package_group,
     version      => $package_version,

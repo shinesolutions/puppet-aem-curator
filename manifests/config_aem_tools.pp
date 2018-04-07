@@ -79,12 +79,12 @@ class aem_curator::config_aem_tools (
     owner   => 'root',
     group   => 'root',
   } -> file {"${base_dir}/aem-tools/test":
-    ensure => directory,
-    source => 'puppet:///modules/aem_curator/test',
-    recurs => true,
-    mode   => '0775',
-    owner  => 'root',
-    group  => 'root',
+    ensure  => directory,
+    source  => 'puppet:///modules/aem_curator/test',
+    recurse => true,
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
   }
 
   archive { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":
