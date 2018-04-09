@@ -7,5 +7,7 @@
 Gemfile.lock
 Makefile
 pkg/
-test/
+test/integration/
+files/test/inspec/*.tar
 .idea/
+vendor/

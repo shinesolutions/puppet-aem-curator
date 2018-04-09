@@ -21,7 +21,17 @@ class aem_curator::action_export_backup (
     'author'
     )
 
-  file { "${tmp_dir}/${_aem_id}/${package_group}":
+    file { $tmp_dir:
+      ensure => directory,
+      mode   => '0775',
+      owner  => 'root',
+      group  => 'root',
+    } -> file { "${tmp_dir}/${_aem_id}":
+      ensure => directory,
+      mode   => '0775',
+      owner  => 'root',
+      group  => 'root',
+    } -> file { "${tmp_dir}/${_aem_id}/${package_group}":
     ensure => directory,
     mode   => '0775',
     owner  => 'root',

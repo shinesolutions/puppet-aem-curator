@@ -6,3 +6,7 @@ test/integration/.librarian
 test/integration/.tmp
 test/integration/modules
 .idea/
+stage/
+files/test/
+inspec.lock
+vendor/
