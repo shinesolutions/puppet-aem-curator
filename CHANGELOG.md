@@ -1,9 +1,11 @@
 ### 0.9.19
 * Fix injection of aem_username & aem_password to action manifests #26
+* Move export backup and import backup scripts provisioning to aem-aws-stack-provisioner
+* Move AEM Author standby promotion instance rename to aem-aws-stack-provisioner
+* Add InSpec testing for aem-tools actions
 
 ### 0.9.18
 * Allow default aem_id via Hiera configuration for action manifests
-* Fix injection of aem_username & aem_password to action manifests #26
 
 ### 0.9.17
 * Add new AEM profile: aem63_sp1_cfp13 #21
