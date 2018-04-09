@@ -1,8 +1,10 @@
-ci: clean tools deps lint
+ci: clean deps lint package
 
 deps:
-	r10k puppetfile install --verbose --moduledir modules
-	inspec vendor --overwrite
+	gem install bundler
+	bundle install --binstubs
+	bundle exec r10k puppetfile install --verbose --moduledir modules
+	bundle exec inspec vendor --overwrite
 	mkdir -p files/test/inspec &&	mv vendor/*.tar.gz files/test/inspec/ && cd files/test/inspec && gunzip *.tar.gz && tar -xvf *.tar
 
 clean:
@@ -14,18 +16,15 @@ clean:
 	rm -f inspec.lock
 
 lint:
-	puppet-lint \
+	bundle exec puppet-lint \
 		--fail-on-warnings \
 		--no-140chars-check \
 		--no-autoloader_layout-check \
 		--no-documentation-check \
 		./manifests/*.pp
-	puppet epp validate templates/*/*.epp
+	bundle exec puppet epp validate templates/*/*.epp
 
 package: deps
-	puppet module build .
+	bundle exec puppet module build .
 
-tools:
-	gem install puppet puppet-lint r10k
-
-.PHONY: ci clean deps lint package tools
+.PHONY: ci clean deps lint package
