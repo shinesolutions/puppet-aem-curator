@@ -22,9 +22,9 @@ lint:
 		--no-autoloader_layout-check \
 		--no-documentation-check \
 		./manifests/*.pp
-	bundle exec puppet epp validate templates/*/*.epp
+	puppet epp validate templates/*/*.epp
 
 package: deps
-	bundle exec puppet module build .
+	puppet module build .
 
 .PHONY: ci clean deps lint package
