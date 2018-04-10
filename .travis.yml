@@ -6,6 +6,8 @@ rvm:
   - "2.3"
   - "2.4"
 before_install:
-  - gem install puppet
+  - wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
+  - sudo dpkg -i puppetlabs-release-trusty.deb
+  - sudo apt-get update
 script:
   - make ci
