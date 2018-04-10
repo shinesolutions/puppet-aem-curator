@@ -3,6 +3,7 @@
 * Move export backup and import backup scripts provisioning to aem-aws-stack-provisioner
 * Move AEM Author standby promotion instance rename to aem-aws-stack-provisioner
 * Add InSpec testing for aem-tools actions
+* Fix incorrect artifact name for aem63_sp1_cfp13
 
 ### 0.9.18
 * Allow default aem_id via Hiera configuration for action manifests
