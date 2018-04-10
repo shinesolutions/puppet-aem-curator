@@ -9,6 +9,6 @@ before_install:
   - wget https://apt.puppetlabs.com/puppet5-release-trusty.deb
   - sudo dpkg -i puppet5-release-trusty.deb
   - sudo apt-get update
-  - sudo apt-get install puppet
+  - sudo apt-get install -y puppet-agent
 script:
-  - make ci
+  - PATH=/opt/puppetlabs/puppet/bin/:$PATH make ci
