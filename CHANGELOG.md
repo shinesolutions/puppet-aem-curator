@@ -1,3 +1,6 @@
+### 0.9.20
+*
+
 ### 0.9.19
 * Fix injection of aem_username & aem_password to action manifests #26
 * Move export backup and import backup scripts provisioning to aem-aws-stack-provisioner
