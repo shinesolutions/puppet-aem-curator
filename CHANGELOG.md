@@ -1,5 +1,5 @@
 ### 0.9.20
-*
+* Add aem_id parameter to actions with on-demand AEM target
 
 ### 0.9.19
 * Fix injection of aem_username & aem_password to action manifests #26
