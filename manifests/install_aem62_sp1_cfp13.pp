@@ -58,7 +58,7 @@ define aem_curator::install_aem62_sp1_cfp13(
     aem_id          => $aem_id,
   } -> aem_curator::install_aem_package { "${aem_id}: Install cumulative fix pack ":
     tmp_dir                 => $tmp_dir,
-    file_name               => 'AEM-6.2-SP1-cfp13-13.0.zip',
+    file_name               => 'AEM-6.2-SP1-CFP13-13.0.zip',
     package_name            => 'cq-6.2.0-sp1-cfp',
     package_group           => 'adobe/cq620/cumulativefixpack',
     post_install_sleep_secs => 900,
