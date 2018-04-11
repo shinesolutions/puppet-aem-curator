@@ -2,6 +2,7 @@ class aem_curator::config_aem_deployer (
   $aem_password_retrieval_command,
   $base_dir,
   $tmp_dir,
+  $confdir            = $settings::confdir,
   $aem_tools_env_path = '$PATH',
 ) {
 
@@ -11,6 +12,7 @@ class aem_curator::config_aem_deployer (
       'aem_curator/aem-tools/deploy-artifact.sh.epp',
       {
         'base_dir'                       => $base_dir,
+        'confdir'                        => $confdir,
         'aem_password_retrieval_command' => $aem_password_retrieval_command,
         'aem_tools_env_path'             => $aem_tools_env_path
       }
