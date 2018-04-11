@@ -2,23 +2,31 @@ class aem_curator::config_aem_tools (
   $aem_repo_device,
   $aem_password_retrieval_command,
   $base_dir,
-  $aem_instances,
   $enable_offline_compaction_cron,
   $oak_run_source,
   $oak_run_version,
   $tmp_dir,
+  $aem_instances      = undef,
   $aem_tools_env_path = '$PATH',
+  $confdir            = $settings::confdir,
   $env_path           = $::cron_env_path,
+
   $https_proxy        = $::cron_https_proxy,
 ) {
+
+$_aem_instances = pick(
+  $aem_instances,
+  [{'aem_id' => 'author'}]
+  )
 
   file { "${base_dir}/aem-tools/import-backup.sh":
     ensure  => present,
     content => epp(
       'aem_curator/aem-tools/import-backup.sh.epp', {
         'base_dir'                       => $base_dir,
+        'confdir'                        => $confdir,
         'aem_tools_env_path'             => $aem_tools_env_path,
-        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command
       }
     ),
     mode    => '0775',
@@ -29,8 +37,10 @@ class aem_curator::config_aem_tools (
     content => epp(
       'aem_curator/aem-tools/enable-crxde.sh.epp', {
         'base_dir'                       => $base_dir,
+        'confdir'                        => $confdir,
+        'aem_instances'                  => $_aem_instances,
         'aem_tools_env_path'             => $aem_tools_env_path,
-        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command
       }
     ),
     mode    => '0775',
@@ -41,8 +51,10 @@ class aem_curator::config_aem_tools (
     content => epp(
       'aem_curator/aem-tools/disable-crxde.sh.epp', {
         'base_dir'                       => $base_dir,
+        'confdir'                        => $confdir,
+        'aem_instances'                  => $_aem_instances,
         'aem_tools_env_path'             => $aem_tools_env_path,
-        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command
       }
     ),
     mode    => '0775',
@@ -54,7 +66,7 @@ class aem_curator::config_aem_tools (
       'aem_curator/aem-tools/promote-author-standby-to-primary.sh.epp', {
         'base_dir'                       => $base_dir,
         'aem_tools_env_path'             => $aem_tools_env_path,
-        'aem_password_retrieval_command' => $aem_password_retrieval_command,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command
       }
     ),
     mode    => '0775',
@@ -100,7 +112,7 @@ class aem_curator::config_aem_tools (
       {
         'base_dir'        => $base_dir,
         'oak_run_version' => $oak_run_version,
-        'aem_instances'   => $aem_instances,
+        'aem_instances'   => $aem_instances
       }
     ),
   }

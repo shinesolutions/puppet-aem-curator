@@ -2,20 +2,21 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 7 ]; then
-  echo 'Usage: ./deploy-artifact.sh <package_source> <package_group> <package_name> <package_version> <package_replicate> <package_activate> <package_force>'
+if [ "$#" -ne 8 ]; then
+  echo 'Usage: ./deploy-artifact.sh <aem_id> <package_source> <package_group> <package_name> <package_version> <package_replicate> <package_activate> <package_force>'
   exit 1
 fi
 
 PATH=<%= $aem_tools_env_path %>
 
-package_source=$1
-package_group=$2
-package_name=$3
-package_version=$4
-package_replicate=$5
-package_activate=$6
-package_force=$7
+aem_id=$1
+package_source=$2
+package_group=$3
+package_name=$4
+package_version=$5
+package_replicate=$6
+package_activate=$7
+package_force=$8
 aem_username=deployer
 aem_password=$(<%= $aem_password_retrieval_command %>)
 
@@ -39,6 +40,7 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 FACTER_aem_username="${aem_username}" \
   FACTER_aem_password="${aem_password}" \
+  FACTER_aem_id="${aem_id}"
   FACTER_package_source="${package_source}" \
   FACTER_package_group="${package_group}" \
   FACTER_package_name="${package_name}" \
@@ -58,9 +60,11 @@ FACTER_aem_username="${aem_username}" \
   HOME=/root \
   aem_username="${aem_username}" \
     aem_password="${aem_password}" \
+    aem_id="${aem_id}"
     package_group="${package_group}" \
     package_name="${package_name}" \
     package_version="${package_version}" \
+    INSPEC_AEM_CONF="<%= $confdir %>/<%= $aem_instance['aem_id'] %>.yaml" \
     inspec exec . --controls aem-package-installed
 
 translate_exit_code "$?"
