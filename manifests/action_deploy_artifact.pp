@@ -3,7 +3,7 @@ File {
 }
 
 class aem_curator::action_deploy_artifact (
-  $aem_id            = undef,
+  $aem_id            = $::aem_id,
   $aem_username      = $::aem_username,
   $aem_password      = $::aem_password,
   $package_source    = $::package_source,

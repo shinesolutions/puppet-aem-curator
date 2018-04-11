@@ -4,7 +4,7 @@ File {
 
 class aem_curator::action_import_backup (
   $tmp_dir,
-  $aem_id              = undef,
+  $aem_id              = $::aem_id,
   $aem_username        = $::aem_username,
   $aem_password        = $::aem_password,
   $source_stack_prefix = $::source_stack_prefix,

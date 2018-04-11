@@ -2,17 +2,18 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 4 ]; then
-  echo 'Usage: ./import-backup.sh <source_stack_prefix> <package_group> <package_name> <package_datestamp>'
+if [ "$#" -ne 5 ]; then
+  echo 'Usage: ./import-backup.sh <aem_id> <source_stack_prefix> <package_group> <package_name> <package_datestamp>'
   exit 1
 fi
 
 PATH=<%= $aem_tools_env_path %>
 
-source_stack_prefix=$1
-package_group=$2
-package_name=$3
-package_datestamp=$4
+aem_id=$1
+source_stack_prefix=$2
+package_group=$3
+package_name=$4
+package_datestamp=$5
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=importer
 aem_password=$(<%= $aem_password_retrieval_command %>)
@@ -57,6 +58,7 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 FACTER_aem_username="${aem_username}" \
   FACTER_aem_password="${aem_password}" \
+  FACTER_aem_id="${aem_id}"
   FACTER_event="${event}" \
   FACTER_source_stack_prefix="${source_stack_prefix}" \
   FACTER_backup_path="${backup_path}" \
@@ -78,6 +80,7 @@ FACTER_aem_username="${aem_username}" \
      package_group="${package_group}" \
      package_name="${package_name}" \
      package_version="${package_version}" \
+     INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
      inspec exec . --controls aem-package-imported
 
 
