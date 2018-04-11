@@ -4,7 +4,7 @@ File {
 
 class aem_curator::action_export_backup (
   $tmp_dir,
-  $aem_id           = undef,
+  $aem_id           = $::aem_id,
   $aem_username     = $::aem_username,
   $aem_password     = $::aem_password,
   $backup_path      = $::backup_path,
