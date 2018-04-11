@@ -8,12 +8,8 @@ deps:
 	mkdir -p files/test/inspec &&	mv vendor/*.tar.gz files/test/inspec/ && cd files/test/inspec && gunzip *.tar.gz && tar -xvf *.tar && rm -f *.tar
 
 clean:
-	rm -rf pkg
-	rm -rf stage/
-	rm -rf test/
+	rm -rf bin/ pkg/ stage/ test/ vendor/ *.lock
 	rm -rf /tmp/shinesolutions/puppet-aem-curator/
-	rm -rf vendor/
-	rm -f inspec.lock
 
 lint:
 	bundle exec puppet-lint \
