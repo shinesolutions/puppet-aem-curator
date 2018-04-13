@@ -128,7 +128,7 @@ class aem_curator::config_collectd (
   file_line { 'Push constant value to CW as a metric':
       ensure => present,
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "push_constant = True",
+      line   => 'push_constant = True',
       match  => '^#push_constant',
       notify => Service['collectd'],
   }
