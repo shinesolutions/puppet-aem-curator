@@ -1,5 +1,6 @@
 ### 0.9.21
 * Set retry settings to AEM package deployment actions
+* Add new AEM profile: aem64
 
 ### 0.9.20
 * Add aem_id parameter to actions with on-demand AEM target
