@@ -32,17 +32,7 @@ If you want to use the master version:
 
     mod 'shinesolutions/aem_curator', :git => 'https://github.com/shinesolutions/puppet-aem-curator'
 
-Configuration
--------------
-
-TODO
-
 Usage
 -----
 
 TODO
-
-AEM Profiles
-------------
-
-TODO - list down the artifacts required by each profile
