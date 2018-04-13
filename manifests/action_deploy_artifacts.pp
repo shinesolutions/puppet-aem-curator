@@ -32,6 +32,12 @@ class aem_curator::action_deploy_artifacts (
     retries_max_sleep_seconds  => $retries_max_sleep_seconds,
   }
 
+  Aem_package {
+    retries_max_tries          => $retries_max_tries,
+    retries_base_sleep_seconds => $retries_base_sleep_seconds,
+    retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+  }
+
   # Load descriptor file
   $descriptor_hash = loadjson("${tmp_dir}/${descriptor_file}")
 
