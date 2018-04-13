@@ -17,6 +17,7 @@ class aem_curator::config_collectd (
   $component,
   $aem_instances,
   $collectd_prefix,
+  $instance_id,
 ) {
 
   if $proxy_host != '' {
@@ -119,8 +120,24 @@ class aem_curator::config_collectd (
   file_line { 'Set Hostname for CW':
       ensure => present,
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "host = \"${$collectd_prefix}\"",
+      line   => "host = \"${$instance_id}\"",
       match  => '^#host',
+      notify => Service['collectd'],
+  }
+
+  file_line { 'Push constant value to CW as a metric':
+      ensure => present,
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "push_constant = True",
+      match  => '^#push_constant',
+      notify => Service['collectd'],
+  }
+
+  file_line { 'Push constant dimension value':
+      ensure => present,
+      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+      line   => "constant_dimension_value = \"${$collectd_prefix}\"",
+      match  => '^#constant_dimension_value',
       notify => Service['collectd'],
   }
 
