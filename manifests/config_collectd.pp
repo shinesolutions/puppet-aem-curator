@@ -129,7 +129,7 @@ class aem_curator::config_collectd (
       ensure => present,
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
       line   => 'push_constant = True',
-      match  => '^#push_constant',
+      match  => '^push_constant',
       notify => Service['collectd'],
   }
 
@@ -137,7 +137,7 @@ class aem_curator::config_collectd (
       ensure => present,
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
       line   => "constant_dimension_value = \"${$collectd_prefix}\"",
-      match  => '^#constant_dimension_value',
+      match  => '^constant_dimension_value',
       notify => Service['collectd'],
   }
 
