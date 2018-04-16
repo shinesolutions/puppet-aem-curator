@@ -1,3 +1,6 @@
+### 0.9.22
+*
+
 ### 0.9.21
 * Set retry settings to AEM package deployment actions #28
 * Add new AEM profile: aem64
