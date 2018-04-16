@@ -1,3 +1,6 @@
+### 0.9.23
+*
+
 ### 0.9.22
 * Fix incorrect match regex for Collectd CloudWatch config #25
 
