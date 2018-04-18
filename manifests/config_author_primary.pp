@@ -8,6 +8,9 @@
 # [*jmxremote_port*]
 #   User defined Port on which JMXRemote is listening
 #
+# [*jvm_opts_custom*]
+#   User defined additional JVM options
+
 # === Copyright
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
