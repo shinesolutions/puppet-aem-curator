@@ -8,6 +8,9 @@
 # [*jmxremote_port*]
 #   User defined Port on which JMXRemote is listening
 #
+# [*jvm_opts*]
+#   User defined additional JVM options
+
 # === Copyright
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
@@ -36,6 +39,7 @@ class aem_curator::config_author_primary (
   $delete_repository_index = false,
   $jmxremote_port          = '59182',
   $jvm_mem_opts            = undef,
+  $jvm_opts                = undef,
   $run_mode                = 'author',
 ) {
 
@@ -67,6 +71,16 @@ class aem_curator::config_author_primary (
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
+      after  => '^JVM_OPTS',
+      notify => Service['aem-author'],
+    }
+  }
+
+  if $jvm_opts {
+    file_line { "${aem_id}: Add custom JVM OPTS settings":
+      ensure => present,
+      path   => "${crx_quickstart_dir}/bin/start-env",
+      line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
       after  => '^JVM_OPTS',
       notify => Service['aem-author'],
     }
