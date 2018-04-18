@@ -43,6 +43,7 @@ class aem_curator::config_publish (
   $delete_repository_index = false,
   $jmxremote_port          = '59183',
   $jvm_mem_opts            = undef,
+  $jvm_opts_custom         = undef,
   $run_mode                = 'publish',
   $snapshotid              = $::snapshotid,
 ) {
@@ -88,6 +89,16 @@ class aem_curator::config_publish (
       line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
       after  => '^JVM_OPTS',
       notify => Service['aem-publish'],
+    }
+  }
+
+  if $jvm_opts_custom {
+    file_line { "${aem_id}: Add custom JVM OPTS settings":
+      ensure => present,
+      path   => "${crx_quickstart_dir}/bin/start-env",
+      line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts_custom} \"",
+      after  => '^JVM_OPTS',
+      notify => Service['aem-author'],
     }
   }
 
