@@ -8,7 +8,7 @@
 # [*jmxremote_port*]
 #   User defined Port on which JMXRemote is listening
 #
-# [*jvm_opts_custom*]
+# [*jvm_opts*]
 #   User defined additional JVM options
 #
 # === Copyright
@@ -46,7 +46,7 @@ class aem_curator::config_publish (
   $delete_repository_index = false,
   $jmxremote_port          = '59183',
   $jvm_mem_opts            = undef,
-  $jvm_opts_custom         = undef,
+  $jvm_opts                = undef,
   $run_mode                = 'publish',
   $snapshotid              = $::snapshotid,
 ) {
@@ -95,13 +95,13 @@ class aem_curator::config_publish (
     }
   }
 
-  if $jvm_opts_custom {
+  if $jvm_opts {
     file_line { "${aem_id}: Add custom JVM OPTS settings":
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts_custom} \"",
+      line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
       after  => '^JVM_OPTS',
-      notify => Service['aem-author'],
+      notify => Service['aem-publish'],
     }
   }
 
