@@ -1,5 +1,5 @@
 ### 0.9.23
-*
+* Add parameter allowing additional java_opts settings for author and publish
 
 ### 0.9.22
 * Fix incorrect match regex for Collectd CloudWatch config #25
