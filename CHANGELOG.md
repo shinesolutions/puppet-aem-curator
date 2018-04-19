@@ -1,6 +1,7 @@
 ### 0.9.23
 * Add parameter allowing additional java opts settings for author and publish
 * Add log_dir parameter to deploy artifact templates processing
+* Add list packages support to aem-tools
 
 ### 0.9.22
 * Fix incorrect match regex for Collectd CloudWatch config #25

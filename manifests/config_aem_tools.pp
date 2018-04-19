@@ -60,6 +60,18 @@ $_aem_instances = pick(
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
+  } -> file { "${base_dir}/aem-tools/list-packages.sh":
+    ensure  => present,
+    content => epp(
+      'aem_curator/aem-tools/list-packages.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_tools_env_path'             => $aem_tools_env_path,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command
+      }
+    ),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
   } -> file { "${base_dir}/aem-tools/promote-author-standby-to-primary.sh":
     ensure  => present,
     content => epp(
