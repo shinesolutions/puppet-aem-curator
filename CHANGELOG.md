@@ -1,5 +1,6 @@
 ### 0.9.24
-*
+* Fix parameter passing on deploy artifact and export backups
+* Clean up temp directory at the end of deploy artifact
 
 ### 0.9.23
 * Add parameter allowing additional java opts settings for author and publish

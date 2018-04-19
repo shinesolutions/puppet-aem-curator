@@ -13,6 +13,7 @@ class aem_curator::config_aem_deployer (
       {
         'base_dir'                       => $base_dir,
         'confdir'                        => $confdir,
+        'tmp_dir'                        => $tmp_dir,
         'aem_password_retrieval_command' => $aem_password_retrieval_command,
         'aem_tools_env_path'             => $aem_tools_env_path
       }

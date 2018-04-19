@@ -58,7 +58,7 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 FACTER_aem_username="${aem_username}" \
   FACTER_aem_password="${aem_password}" \
-  FACTER_aem_id="${aem_id}"
+  FACTER_aem_id="${aem_id}" \
   FACTER_event="${event}" \
   FACTER_source_stack_prefix="${source_stack_prefix}" \
   FACTER_backup_path="${backup_path}" \

@@ -19,6 +19,7 @@ package_activate=$7
 package_force=$8
 aem_username=deployer
 aem_password=$(<%= $aem_password_retrieval_command %>)
+tmp_dir=<%= $tmp_dir %>
 
 # translate puppet exit code to follow convention
 translate_exit_code() {
@@ -40,7 +41,7 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 FACTER_aem_username="${aem_username}" \
   FACTER_aem_password="${aem_password}" \
-  FACTER_aem_id="${aem_id}"
+  FACTER_aem_id="${aem_id}" \
   FACTER_package_source="${package_source}" \
   FACTER_package_group="${package_group}" \
   FACTER_package_name="${package_name}" \
@@ -55,15 +56,18 @@ FACTER_aem_username="${aem_username}" \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_deploy_artifact"
 
-  echo "Testing if package is installed using InSpec..."
-  cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
-  HOME=/root \
+echo "Testing if artifact is installed using InSpec..."
+cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
+HOME=/root \
   aem_username="${aem_username}" \
-    aem_password="${aem_password}" \
-    package_group="${package_group}" \
-    package_name="${package_name}" \
-    package_version="${package_version}" \
-    INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
-    inspec exec . --controls aem-package-installed
+  aem_password="${aem_password}" \
+  package_group="${package_group}" \
+  package_name="${package_name}" \
+  package_version="${package_version}" \
+  INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
+  inspec exec . --controls aem-package-installed
 
 translate_exit_code "$?"
+
+echo "Cleaning up provisioner temp directory..."
+rm -rf "${tmp_dir:?}/*"
