@@ -1,3 +1,6 @@
+### 0.9.24
+*
+
 ### 0.9.23
 * Add parameter allowing additional java opts settings for author and publish
 * Add log_dir parameter to deploy artifact templates processing
