@@ -100,7 +100,7 @@ class aem_curator::config_publish (
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
-      after  => '^JVM_OPTS',
+      after  => '^JVM_OPTS=\"\$JVM_OPTS',
       notify => Service['aem-publish'],
     }
   }
