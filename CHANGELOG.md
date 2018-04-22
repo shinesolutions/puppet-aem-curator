@@ -1,12 +1,11 @@
 ### 0.9.25
-*
+* Clean up temp directory at the end of deploy artifacts
+* Add parameter allowing additional java opts settings for author and publish
 
 ### 0.9.24
 * Fix parameter passing on deploy artifact and export backups
-* Clean up temp directory at the end of deploy artifact
 
 ### 0.9.23
-* Add parameter allowing additional java opts settings for author and publish
 * Add log_dir parameter to deploy artifact templates processing
 * Add list packages support to aem-tools
 

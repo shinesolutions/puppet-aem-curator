@@ -69,5 +69,5 @@ HOME=/root \
 
 translate_exit_code "$?"
 
-echo "Cleaning up provisioner temp directory..."
+echo "Cleaning up temp directory..."
 rm -rf "${tmp_dir:?}/*"

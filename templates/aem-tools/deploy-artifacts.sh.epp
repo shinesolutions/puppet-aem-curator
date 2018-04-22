@@ -12,6 +12,7 @@ PATH=<%= $aem_tools_env_path %>
 descriptor_file=$1
 aem_username=deployer
 aem_password=$(<%= $aem_password_retrieval_command %>)
+tmp_dir=<%= $tmp_dir %>
 
 # translate puppet exit code to follow convention
 translate_exit_code() {
@@ -60,3 +61,6 @@ FACTER_aem_username="${aem_username}" \
   --execute "include aem_curator::action_deploy_artifacts"
 
 translate_exit_code "$?"
+
+echo "Cleaning up temp directory..."
+rm -rf "${tmp_dir:?}/*"
