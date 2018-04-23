@@ -1,3 +1,6 @@
+### 0.9.26
+*
+
 ### 0.9.25
 * Clean up temp directory at the end of deploy artifacts
 * Add parameter allowing additional java opts settings for author and publish
