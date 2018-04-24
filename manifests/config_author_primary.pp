@@ -25,6 +25,7 @@ class aem_curator::config_author_primary (
   $aem_password_reset_version,
   $author_port,
   $author_protocol,
+  $author_timeout,
   $credentials_file,
   $crx_quickstart_dir,
   $enable_crxde,
@@ -96,6 +97,7 @@ class aem_curator::config_author_primary (
     source => $aem_password_reset_source,
   } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for author-primary':
     conf_dir => $puppet_conf_dir,
+    timeout  => $author_timeout,
     protocol => $author_protocol,
     host     => 'localhost',
     port     => $author_port,

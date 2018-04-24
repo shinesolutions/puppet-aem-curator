@@ -39,6 +39,7 @@ class aem_curator::config_publish (
   $publish_protocol,
   $publish_dispatcher_id,
   $publish_dispatcher_host,
+  $publish_timeout,
   $puppet_conf_dir,
   $tmp_dir,
   $vol_type,
@@ -115,6 +116,7 @@ class aem_curator::config_publish (
     source => $aem_password_reset_source,
   } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for publish':
     conf_dir => $puppet_conf_dir,
+    timeout  => $publish_timeout,
     protocol => $publish_protocol,
     host     => 'localhost',
     port     => $publish_port,
