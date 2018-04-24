@@ -1,3 +1,6 @@
+### 0.9.27
+*
+
 ### 0.9.26
 * Modify flush dispatcher cache action to remove only JCR sub-directories under docroot
 * Add timeout setting to author and publish configuration manifests
