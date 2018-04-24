@@ -1,5 +1,5 @@
 ### 0.9.26
-*
+* Modify flush dispatcher cache action to remove only JCR sub-directories under docroot
 
 ### 0.9.25
 * Clean up temp directory at the end of deploy artifacts
