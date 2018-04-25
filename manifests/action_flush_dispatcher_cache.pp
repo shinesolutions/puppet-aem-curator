@@ -16,7 +16,6 @@ class aem_curator::action_flush_dispatcher_cache (
   ensure  => directory,
   purge   => true,
   force   => true,
-  path    => $docroot_dir,
   recurse => true,
   }
 }
