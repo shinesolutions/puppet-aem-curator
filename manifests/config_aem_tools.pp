@@ -2,16 +2,12 @@ class aem_curator::config_aem_tools (
   $aem_repo_device,
   $aem_password_retrieval_command,
   $base_dir,
-  $enable_offline_compaction_cron,
   $oak_run_source,
   $oak_run_version,
   $tmp_dir,
-  $aem_instances      = undef,
-  $aem_tools_env_path = '$PATH',
-  $confdir            = $settings::confdir,
-  $env_path           = $::cron_env_path,
-
-  $https_proxy        = $::cron_https_proxy,
+  $aem_instances             = undef,
+  $aem_tools_env_path        = '$PATH',
+  $confdir                   = $settings::confdir,
 ) {
 
 $_aem_instances = pick(
@@ -126,16 +122,6 @@ $_aem_instances = pick(
         'oak_run_version' => $oak_run_version,
         'aem_instances'   => $aem_instances
       }
-    ),
-  }
-
-  if $enable_offline_compaction_cron {
-    cron { 'weekly-offline-compaction':
-      command => "${base_dir}/aem-tools/offline-compaction.sh >>/var/log/offline-compaction.log 2>&1",
-      user    => 'root',
-      weekday => 2,
-      hour    => 3,
-      minute  => 0,
-    }
+    )
   }
 }
