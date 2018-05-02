@@ -1,5 +1,5 @@
 ### 0.9.28
-*
+* Move snapshot attachment step to aem-aws-stack-provisioner
 
 ### 0.9.27
 * Fix path conflict on flush dispatcher cache action

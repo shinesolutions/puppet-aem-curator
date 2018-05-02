@@ -39,30 +39,15 @@ class aem_curator::config_publish (
   $publish_timeout,
   $puppet_conf_dir,
   $tmp_dir,
-  $vol_type,
   $aem_id                  = 'publish',
   $delete_repository_index = false,
   $jmxremote_port          = '59183',
   $jvm_mem_opts            = undef,
   $jvm_opts                = undef,
   $run_mode                = 'publish',
-  $snapshotid              = $::snapshotid,
 ) {
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
-
-  if $snapshotid != undef and $snapshotid != '' {
-    if $delete_repository_index {
-      $attach_volume_before = File["${crx_quickstart_dir}/repository/index/"]
-    } else {
-      $attach_volume_before = Service['aem-publish']
-    }
-    exec { "Attach volume from snapshot ID ${snapshotid}":
-      command => "/opt/shinesolutions/aws-tools/snapshot_attach.py --device /dev/sdb --device-alias /dev/xvdb --volume-type ${vol_type} --snapshot-id ${snapshotid} -vvvv",
-      path    => $exec_path,
-      before  => $attach_volume_before,
-    }
-  }
 
   if $delete_repository_index {
     file { "${crx_quickstart_dir}/repository/index/":
