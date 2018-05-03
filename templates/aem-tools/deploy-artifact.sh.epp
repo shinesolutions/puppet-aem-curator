@@ -56,6 +56,8 @@ FACTER_aem_username="${aem_username}" \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_deploy_artifact"
 
+translate_exit_code "$?"
+
 echo "Testing if artifact is installed using InSpec..."
 cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
 HOME=/root \

@@ -65,6 +65,8 @@ echo "Testing if package is not already imported using InSpec..."
    INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
    inspec exec . --controls aem-package-not-imported
 
+translate_exit_code "$?"
+
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 FACTER_aem_username="${aem_username}" \
@@ -82,6 +84,8 @@ FACTER_aem_username="${aem_username}" \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_import_backup"
+
+translate_exit_code "$?"
 
 echo "Testing if package is imported using InSpec..."
  cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
