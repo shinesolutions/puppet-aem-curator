@@ -1,5 +1,7 @@
 ### 0.9.28
 * Move snapshot attachment step to aem-aws-stack-provisioner
+* Extract all scheduled jobs provisioning to config_aem_scheduled_jobs
+* Fix missing Puppet exit code translation on all aem-tools
 
 ### 0.9.27
 * Fix path conflict on flush dispatcher cache action
