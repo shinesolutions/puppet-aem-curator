@@ -33,6 +33,8 @@ FACTER_aem_username="${aem_username}" \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_enable_crxde"
 
+translate_exit_code "$?"
+
 <% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
 
 echo "Testing if crxde is enabled for AEM <%= $aem_instance['aem_id'] %> using InSpec..."
@@ -43,6 +45,6 @@ HOME=/root \
   INSPEC_AEM_CONF="<%= $confdir %>/<%= $aem_instance['aem_id'] %>.yaml" \
   inspec exec . --controls aem-crxde-enabled
 
-<% } -%>
-
 translate_exit_code "$?"
+
+<% } -%>
