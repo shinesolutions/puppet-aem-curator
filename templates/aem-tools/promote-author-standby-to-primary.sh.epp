@@ -31,6 +31,8 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_promote_author_standby_to_primary"
 
+translate_exit_code "$?"
+
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 /opt/puppetlabs/bin/puppet apply \
   --debug \
