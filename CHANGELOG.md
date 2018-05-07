@@ -1,3 +1,6 @@
+### 0.9.29
+*
+
 ### 0.9.28
 * Move snapshot attachment step to aem-aws-stack-provisioner
 * Extract all scheduled jobs provisioning to config_aem_scheduled_jobs
