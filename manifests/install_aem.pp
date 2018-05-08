@@ -93,7 +93,7 @@ define aem_curator::install_aem (
   $aem_profile                   = 'aem62_sp1_cfp3',
   $aem_sample_content            = false,
   $cert_base_url                 = undef,
-  $aem_jvm_opts                      = [
+  $aem_jvm_opts                  = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -101,6 +101,7 @@ define aem_curator::install_aem (
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
+  $aem_start_opts                = '',
   $post_install_sleep_secs       = 120,
   $post_stop_sleep_secs          = 120,
   $puppet_conf_dir               = '/etc/puppetlabs/puppet/',
@@ -175,6 +176,7 @@ define aem_curator::install_aem (
     aem_sample_content      => $aem_sample_content,
     aem_ssl_port            => $aem_ssl_port,
     aem_jvm_opts            => $aem_jvm_opts,
+    aem_start_opts          => $aem_start_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
     run_mode                => $run_mode,
     tmp_dir                 => $tmp_dir,

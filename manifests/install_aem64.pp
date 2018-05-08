@@ -16,6 +16,7 @@ define aem_curator::install_aem64(
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
+  $aem_start_opts          = '',
   $post_install_sleep_secs = 120,
 ) {
 
@@ -71,6 +72,7 @@ define aem_curator::install_aem64(
     sample_content => $aem_sample_content,
     jvm_mem_opts   => $aem_jvm_mem_opts,
     jvm_opts       => $aem_jvm_opts.join(' '),
+    start_opts     => $aem_start_opts,
     status         => 'running',
   } -> exec { "${aem_id}: Manual delay to let AEM become ready":
     command => "sleep ${post_install_sleep_secs}",

@@ -1,5 +1,5 @@
 ### 0.9.29
-*
+* Add AEM start opts support to AEM instance installation
 
 ### 0.9.28
 * Move snapshot attachment step to aem-aws-stack-provisioner
