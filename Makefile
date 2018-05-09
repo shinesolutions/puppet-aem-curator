@@ -6,6 +6,9 @@ deps:
 	bundle exec r10k puppetfile install --verbose --moduledir modules
 	bundle exec inspec vendor --overwrite
 	mkdir -p files/test/inspec &&	mv vendor/*.tar.gz files/test/inspec/ && cd files/test/inspec && gunzip *.tar.gz && tar -xvf *.tar && rm -f *.tar
+	# only needed while using shinesolutions/puppet-aem fork
+	# TODO: remove when switching back to bstopp/puppet-aem
+	rm -rf modules/aem/.git
 
 clean:
 	rm -rf bin/ pkg/ stage/ test/ vendor/ *.lock
