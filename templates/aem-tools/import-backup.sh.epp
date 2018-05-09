@@ -54,19 +54,6 @@ translate_exit_code() {
 
 set +o errexit
 
-echo "Testing if package is not already imported using InSpec..."
- cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
- HOME=/root \
- aem_username="${aem_username}" \
-   aem_password="${aem_password}" \
-   package_group="${package_group}" \
-   package_name="${package_name}" \
-   package_version="${package_version}" \
-   INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
-   inspec exec . --controls aem-package-not-imported
-
-translate_exit_code "$?"
-
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 FACTER_aem_username="${aem_username}" \
