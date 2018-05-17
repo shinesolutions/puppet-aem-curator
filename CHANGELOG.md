@@ -1,5 +1,5 @@
 ### 0.9.30
-* Add retries setting for deploying a single artifact
+* Add retries setting for deploying a single artifact #28
 
 ### 0.9.29
 * Add AEM start opts support to AEM instance installation
