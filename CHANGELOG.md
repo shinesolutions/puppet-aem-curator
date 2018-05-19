@@ -1,3 +1,6 @@
+### 0.10.0
+*
+
 ### 0.9.30
 * Add retries setting for deploying a single artifact #28
 
