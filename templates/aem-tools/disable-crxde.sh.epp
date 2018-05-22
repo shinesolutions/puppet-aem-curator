@@ -38,7 +38,7 @@ translate_exit_code "$?"
 <% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
 
 echo "Testing if crxde is disabled for AEM <%= $aem_instance['aem_id'] %> using InSpec..."
-cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem-master"
+cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
 HOME=/root \
   aem_username="${aem_username}" \
   aem_password="${aem_password}" \

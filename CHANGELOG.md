@@ -1,5 +1,5 @@
 ### 0.10.0
-*
+* Switch InSpec deps to released versions
 
 ### 0.9.30
 * Add retries setting for deploying a single artifact #28
