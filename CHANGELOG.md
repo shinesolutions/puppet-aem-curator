@@ -1,6 +1,7 @@
 ### 0.10.0
 * Switch InSpec deps to released versions
 * Add manifest for logrotation configuration
+* Add AEM profiles: aem63_sp2, aem63_sp2_cfp1
 
 ### 0.9.30
 * Add retries setting for deploying a single artifact #28

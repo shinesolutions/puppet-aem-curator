@@ -13,4 +13,6 @@ The file names _must_ be identical to what's listed here. There is no obvious fi
 | `aem63` | license-6.3.properties, AEM_6.3_Quickstart.jar |
 | `aem63_sp1` | `aem63` artifacts + AEM-6.3-Service-Pack-1-6.3.SP1.zip |
 | `aem63_sp1_cfp2` | `aem63_sp1` artifacts + AEM-CFP-6.3.1.2-2.0.zip |
+| `aem63_sp2` | `aem63` artifacts + AEM-6.3-Service-Pack-2-6.3.SP2.zip |
+| `aem63_sp2_cfp1` | `aem63_sp1` artifacts + AEM-CFP-6.3.2.1-1.0.zip |
 | `aem64` | license-6.4.properties, AEM_6.4_Quickstart.jar |
