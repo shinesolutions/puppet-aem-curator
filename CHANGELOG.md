@@ -1,3 +1,6 @@
+### 0.10.1
+*
+
 ### 0.10.0
 * Switch InSpec deps to released versions
 * Add manifest for logrotation configuration
