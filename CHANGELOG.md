@@ -1,5 +1,6 @@
 ### 0.10.0
 * Switch InSpec deps to released versions
+* Add manifest for logrotation configuration
 
 ### 0.9.30
 * Add retries setting for deploying a single artifact #28

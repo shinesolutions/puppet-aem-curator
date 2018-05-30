@@ -14,18 +14,6 @@ class aem_curator::action_export_backups (
   $data_bucket_name = $::data_bucket_name,
 ) {
 
-  # configure logrotate for export-backups.log file see daily-export-backups cron job in author-primary and publish manifest
-  file { '/var/log/export-backups':
-    ensure => 'directory',
-  }  -> logrotate::rule { 'export-backups':
-    path         => '/var/log/export-backups.log',
-    rotate       => 5,
-    size         => '200M',
-    dateext      => true,
-    rotate_every => 'day',
-    olddir       => '/var/log/export-backups',
-  }
-
   # load descriptor file
   $descriptor_hash = loadjson("${tmp_dir}/${descriptor_file}")
   notify { "The descriptor_hash is: ${descriptor_hash}": }
