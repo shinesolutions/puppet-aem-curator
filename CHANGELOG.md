@@ -1,5 +1,5 @@
 ### 0.10.1
-*
+* Rename AEM 6.3 SP2 asset name to be identical to Adobe Package Share's
 
 ### 0.10.0
 * Switch InSpec deps to released versions

@@ -35,7 +35,7 @@ define aem_curator::install_aem63_sp2_cfp1(
     aem_id                  => $aem_id,
   } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 2":
     tmp_dir         => $tmp_dir,
-    file_name       => 'AEM-6.3-Service-Pack-2-6.3.SP2.zip',
+    file_name       => 'AEM-6.3.2.0-6.3.2.zip',
     package_name    => 'aem-service-pkg',
     package_group   => 'adobe/cq630/servicepack',
     package_version => '6.3.2',
