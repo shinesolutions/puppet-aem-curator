@@ -17,6 +17,7 @@ class aem_curator::action_promote_author_standby_to_primary (
   } -> aem_resources::author_primary_set_config {'Promote author-primary':
     crx_quickstart_dir => '/opt/aem/author/crx-quickstart',
     aem_version        => $aem_version,
+  } -> class { 'aem_curator::config_logrotate':
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,
