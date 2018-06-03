@@ -1,4 +1,7 @@
 ### 0.10.3
+*
+
+### 0.10.2
 * Add log rotation to author standby promotion
 
 ### 0.10.1
