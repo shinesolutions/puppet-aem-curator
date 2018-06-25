@@ -1,3 +1,6 @@
+### 1.0.1
+*
+
 ### 1.0.0
 * Modify config path to /apps/system/config for AEM 6.4 support
 
