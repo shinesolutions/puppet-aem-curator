@@ -1,5 +1,8 @@
-### 0.10.3
+### 1.0.1
 *
+
+### 1.0.0
+* Modify config path to /apps/system/config for AEM 6.4 support
 
 ### 0.10.2
 * Add log rotation to author standby promotion
