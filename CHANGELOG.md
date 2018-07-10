@@ -1,5 +1,5 @@
 ### 1.0.1
-*
+* Add 1.x.x AEM profiles: aem62_sp1_cfp15, aem63_sp2_cfp2, aem64_sp1
 
 ### 1.0.0
 * Modify config path to /apps/system/config for AEM 6.4 support
