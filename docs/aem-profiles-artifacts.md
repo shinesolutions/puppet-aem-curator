@@ -13,9 +13,12 @@ There is no obvious file name convention because Adobe has historically been pub
 | `aem62_sp1` | `aem62` artifacts + AEM-6.2-Service-Pack-1-6.2.SP1.zip |
 | `aem62_sp1_cfp9` | `aem62_sp1` artifacts + AEM-6.2-SP1-CFP9-9.0.zip |
 | `aem62_sp1_cfp13` | `aem62_sp1` artifacts + AEM-6.2-SP1-CFP13-13.0.zip |
+| `aem62_sp1_cfp15` | `aem62_sp1` artifacts + AEM-6.2-SP1-CFP15-15.0.zip |
 | `aem63` | license-6.3.properties, AEM_6.3_Quickstart.jar |
 | `aem63_sp1` | `aem63` artifacts + AEM-6.3-Service-Pack-1-6.3.SP1.zip |
 | `aem63_sp1_cfp2` | `aem63_sp1` artifacts + AEM-CFP-6.3.1.2-2.0.zip |
 | `aem63_sp2` | `aem63` artifacts + AEM-6.3.2.0-6.3.2.zip |
-| `aem63_sp2_cfp1` | `aem63_sp1` artifacts + AEM-CFP-6.3.2.1-1.0.zip |
+| `aem63_sp2_cfp1` | `aem63_sp2` artifacts + AEM-CFP-6.3.2.1-1.0.zip |
+| `aem63_sp2_cfp2` | `aem63_sp2` artifacts + AEM-CFP-6.3.2.2-2.0.zip |
 | `aem64` | license-6.4.properties, AEM_6.4_Quickstart.jar |
+| `aem64_sp1` | `aem64` artifacts + AEM-6.4.1.0-6.4.1.zip |

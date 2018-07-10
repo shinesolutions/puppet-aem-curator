@@ -1,3 +1,6 @@
+### 0.10.3
+* Add 0.10.x AEM profiles: aem62_sp1_cfp15, aem63_sp2_cfp2, aem64_sp1
+
 ### 0.10.2
 * Add log rotation to author standby promotion
 
