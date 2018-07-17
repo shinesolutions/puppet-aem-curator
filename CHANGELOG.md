@@ -1,5 +1,5 @@
 ### 1.0.2
-*
+* Set repository ownership when configuring AEM Author Primary, Author Standby, and Publish
 
 ### 1.0.1
 * Add 1.x.x AEM profiles: aem62_sp1_cfp15, aem63_sp2_cfp2, aem64_sp1

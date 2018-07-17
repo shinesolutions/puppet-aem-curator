@@ -49,6 +49,17 @@ class aem_curator::config_publish (
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
 
+  Exec {
+    cwd     => $tmp_dir,
+    path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    timeout => 0,
+  }
+
+  exec { "${aem_id}: Set repository ownership":
+    command => "chown -R aem-${aem_id}:aem-${aem_id} ${crx_quickstart_dir}/repository/",
+    before  => Service['aem-publish'],
+  }
+
   if $delete_repository_index {
     file { "${crx_quickstart_dir}/repository/index/":
       ensure  => absent,
