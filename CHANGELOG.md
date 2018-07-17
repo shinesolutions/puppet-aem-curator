@@ -1,4 +1,6 @@
-### 1.0.2
+### 1.0.3
+*
+
 * Set repository ownership when configuring AEM Author Primary, Author Standby, and Publish
 
 ### 1.0.1
