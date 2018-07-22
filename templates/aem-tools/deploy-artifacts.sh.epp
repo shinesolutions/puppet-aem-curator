@@ -63,4 +63,4 @@ FACTER_aem_username="${aem_username}" \
 translate_exit_code "$?"
 
 echo "Cleaning up temp directory..."
-rm -rf "${tmp_dir:?}/*"
+rm -rf "${tmp_dir:?}"/*
