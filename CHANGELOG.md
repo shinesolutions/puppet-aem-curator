@@ -1,3 +1,6 @@
+### 1.0.4
+*
+
 ### 1.0.3
 * Fix temp directory clean up at the end of artifacts deployment
 
