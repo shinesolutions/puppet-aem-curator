@@ -1,3 +1,6 @@
+### 0.10.5
+*
+
 ### 0.10.4
 * Set repository ownership when configuring AEM Author Primary, Author Standby, and Publish
 * Fix temp directory clean up at the end of artifacts deployment
