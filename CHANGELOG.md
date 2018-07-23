@@ -1,5 +1,6 @@
 ### 0.10.4
 * Set repository ownership when configuring AEM Author Primary, Author Standby, and Publish
+* Fix temp directory clean up at the end of artifacts deployment
 
 ### 0.10.3
 * Add 0.10.x AEM profiles: aem62_sp1_cfp15, aem63_sp2_cfp2, aem64_sp1
