@@ -49,6 +49,12 @@ class aem_curator::config_author_primary (
   $run_mode                = 'author',
 ) {
 
+  if !defined(File[$tmp_dir]) {
+    file { $tmp_dir:
+      ensure => directory,
+    }
+  }
+
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
 
   Exec {

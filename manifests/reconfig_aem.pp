@@ -22,30 +22,30 @@ define aem_curator::reconfig_aem (
   $run_mode                   = undef,
   $tmp_dir                    = undef,
 ) {
-
-  Aem_aem {
-    retries_max_tries          => $retries_max_tries,
-    retries_base_sleep_seconds => $retries_base_sleep_seconds,
-    retries_max_sleep_seconds  => $retries_max_sleep_seconds,
-  }
-
-  if !defined(File[$tmp_dir]) {
-    file { $tmp_dir:
-      ensure => directory,
-    }
-  }
-  if !defined(File["${tmp_dir}/${aem_id}"]) {
-    file { "${tmp_dir}/${aem_id}":
-      ensure => directory,
-      mode   => '0700',
-    }
-  }
-
-  exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/*":
-    before => Exec["service aem-${aem_id} stop"]
-  }
-
   if $aem_reconfiguration {
+
+    Aem_aem {
+      retries_max_tries          => $retries_max_tries,
+      retries_base_sleep_seconds => $retries_base_sleep_seconds,
+      retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+    }
+
+    if !defined(File[$tmp_dir]) {
+      file { $tmp_dir:
+        ensure => directory,
+      }
+    }
+    if !defined(File["${tmp_dir}/${aem_id}"]) {
+      file { "${tmp_dir}/${aem_id}":
+        ensure => directory,
+        mode   => '0700',
+      }
+    }
+
+    exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/*":
+      before => Exec["service aem-${aem_id} stop"]
+    }
+
     if $force {
       aem_path { "${aem_id}: Delete path /apps/system/config":
         ensure => absent,

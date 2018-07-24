@@ -55,6 +55,12 @@ class aem_curator::config_publish (
   $run_mode                = 'publish',
 ) {
 
+  if !defined(File[$tmp_dir]) {
+    file { $tmp_dir:
+      ensure => directory,
+    }
+  }
+
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
 
   Exec {
