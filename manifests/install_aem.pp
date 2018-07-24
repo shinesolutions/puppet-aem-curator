@@ -113,6 +113,18 @@ define aem_curator::install_aem (
   $setup_repository_volume       = false,
 ) {
 
+  if !defined(File[$tmp_dir]) {
+    file { $tmp_dir:
+      ensure => directory,
+    }
+  }
+  if !defined(File["${tmp_dir}/${aem_id}"]) {
+    file { "${tmp_dir}/${aem_id}":
+      ensure => directory,
+      mode   => '0700',
+    }
+  }
+
   Exec {
     cwd     => $tmp_dir,
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],

@@ -70,6 +70,7 @@ define aem_curator::reconfig_aem (
         name   => "config.${run_mode}",
         type   => 'sling:Folder',
         aem_id => $aem_id,
+        before => Exec["service aem-${aem_id} stop"]
       }
     }
 
