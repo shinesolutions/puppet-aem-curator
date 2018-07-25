@@ -114,6 +114,7 @@ class aem_curator::config_author_primary (
     mode   => '0775',
     owner  => "aem-${aem_id}",
     group  => "aem-${aem_id}",
+  } -> exec { "rm -f ${crx_quickstart_dir}/install/*":
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     source => $aem_password_reset_source,

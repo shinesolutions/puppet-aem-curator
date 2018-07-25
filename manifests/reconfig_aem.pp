@@ -42,35 +42,24 @@ define aem_curator::reconfig_aem (
       }
     }
 
-    exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/*":
-      before => Exec["service aem-${aem_id} stop"]
-    }
-
     if $force {
-      aem_path { "${aem_id}: Delete path /apps/system/config":
+      aem_node { "${aem_id}: Delete path /apps/system/config":
         ensure => absent,
         path   => '/apps/system',
         name   => 'config',
         aem_id => $aem_id,
         before => Exec["service aem-${aem_id} stop"]
-      } -> aem_path { "${aem_id}: Delete path /apps/system/config.${run_mode}":
+      } -> exec { "[${aem_id}] Wait after deletion of /apps/system/config":
+        command => 'sleep 15',
+        path    => ['/usr/bin', '/usr/sbin', '/bin'],
+      } -> aem_node { "${aem_id}: Delete path /apps/system/config.${run_mode}":
         ensure => absent,
         path   => '/apps/system',
         name   => "config.${run_mode}",
         aem_id => $aem_id,
-      } -> aem_node { "${aem_id}: Create node /apps/system/config":
-        ensure => present,
-        name   => 'config',
-        path   => '/apps/system',
-        aem_id => $aem_id,
-        type   => 'sling:Folder',
-      } -> aem_node { "${aem_id}: Create node /apps/system/config.${run_mode}":
-        ensure => present,
-        path   => '/apps/system',
-        name   => "config.${run_mode}",
-        type   => 'sling:Folder',
-        aem_id => $aem_id,
-        before => Exec["service aem-${aem_id} stop"]
+      } -> exec { "[${aem_id}] Wait after deletion of /apps/system/config.${run_mode}":
+        command => 'sleep 15',
+        path    => ['/usr/bin', '/usr/sbin', '/bin'],
       }
     }
 
