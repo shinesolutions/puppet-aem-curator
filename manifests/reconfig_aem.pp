@@ -13,7 +13,10 @@ define aem_curator::reconfig_aem (
   $aem_keystore_password      = undef,
   $aem_keystore_path          = undef,
   $aem_ssl_port               = undef,
+  $aem_system_users           = undef,
   $cert_base_url              = undef,
+  $enable_create_system_users = true,
+  $credentials_hash           = undef,
   $force                      = true,
   $post_install_sleep_secs    = 120,
   $retries_base_sleep_seconds = 10,
@@ -63,7 +66,8 @@ define aem_curator::reconfig_aem (
       }
     }
 
-    exec { "service aem-${aem_id} stop":
+    exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
+    } -> exec { "service aem-${aem_id} stop":
     } -> aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
       aem_base                => $aem_base,
       aem_healthcheck_source  => $aem_healthcheck_source,
@@ -83,15 +87,18 @@ define aem_curator::reconfig_aem (
     }
 
     aem_curator::config_aem { "Configure AEM ${aem_id}":
-        aem_base              => $aem_base,
-        aem_id                => $aem_id,
-        aem_keystore_password => $aem_keystore_password,
-        aem_keystore_path     => $aem_keystore_path,
-        aem_ssl_port          => $aem_ssl_port,
-        cert_base_url         => $cert_base_url,
-        run_mode              => $run_mode,
-        tmp_dir               => $tmp_dir,
-        require               => Aem_aem["${aem_id}: Wait until aem health check is ok"]
+        aem_base                   => $aem_base,
+        aem_id                     => $aem_id,
+        aem_keystore_password      => $aem_keystore_password,
+        aem_keystore_path          => $aem_keystore_path,
+        aem_ssl_port               => $aem_ssl_port,
+        aem_system_users           => $aem_system_users,
+        cert_base_url              => $cert_base_url,
+        enable_create_system_users => $enable_create_system_users,
+        credentials_hash           => $credentials_hash,
+        run_mode                   => $run_mode,
+        tmp_dir                    => $tmp_dir,
+        require                    => Aem_aem["${aem_id}: Wait until aem health check is ok"]
     } -> aem_aem { "${aem_id}: Wait until login page is ready after reconfiguration":
       ensure => login_page_is_ready,
       aem_id => $aem_id,

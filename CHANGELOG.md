@@ -2,7 +2,8 @@
 * Add support for reconfiguring existing AEM installations
 * Place AEM Healthcheck installation to own manifest
 * Place AEM Configuration to own manifest
-*
+* Add feature to change existing system users passwords
+* Improved credentials handling for system users
 
 ### 0.10.4
 * Set repository ownership when configuring AEM Author Primary, Author Standby, and Publish

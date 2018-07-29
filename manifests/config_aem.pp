@@ -2,11 +2,14 @@ define aem_curator::config_aem (
   $run_mode,
   $tmp_dir,
   $aem_ssl_port,
-  $aem_base              = '/opt',
-  $aem_id                = 'aem',
-  $aem_keystore_password = undef,
-  $aem_keystore_path     = undef,
-  $cert_base_url         = undef,
+  $aem_system_users           = undef,
+  $aem_base                   = '/opt',
+  $aem_id                     = 'aem',
+  $aem_keystore_password      = undef,
+  $aem_keystore_path          = undef,
+  $cert_base_url              = undef,
+  $enable_create_system_users = true,
+  $credentials_hash           = undef
 ) {
 
   Exec {
@@ -15,15 +18,29 @@ define aem_curator::config_aem (
     timeout => 0,
   }
 
-  aem_resources::create_system_users { "${aem_id}: Create system users":
-    # Create system users and configure their usernames for password reset during provisioning
-    orchestrator_password => 'orchestrator',
-    replicator_password   => 'replicator',
-    deployer_password     => 'deployer',
-    exporter_password     => 'exporter',
-    importer_password     => 'importer',
-    aem_id                => $aem_id,
-  } -> aem_node { "${aem_id}: Create AEM Password Reset Activator config node":
+  if $enable_create_system_users {
+    aem_resources::create_system_users { "${aem_id}: Create system users":
+      # Create system users and configure their usernames for password reset during provisioning
+      aem_system_users      => $aem_system_users,
+      orchestrator_password => 'orchestrator',
+      replicator_password   => 'replicator',
+      deployer_password     => 'deployer',
+      exporter_password     => 'exporter',
+      importer_password     => 'importer',
+      aem_id                => $aem_id,
+      before                => Aem_node["${aem_id}: Create AEM Password Reset Activator config node"],
+    }
+  } else {
+    # For configuration only default passwords are currently supported.
+    aem_curator::config_aem_system_users {"${aem_id}: Change System Users Passwords":
+      aem_id           => $aem_id,
+      aem_system_users => $aem_system_users,
+      credentials_hash => $credentials_hash,
+      before           => Aem_node["${aem_id}: Create AEM Password Reset Activator config node"],
+    }
+  }
+
+  aem_node { "${aem_id}: Create AEM Password Reset Activator config node":
     ensure => present,
     name   => 'com.shinesolutions.aem.passwordreset.Activator',
     path   => "/apps/system/config.${run_mode}",
