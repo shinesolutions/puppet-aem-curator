@@ -6,6 +6,7 @@ define aem_curator::install_aem62(
   $tmp_dir,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
+  $aem_healthcheck_source  = undef,
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
   $aem_sample_content      = false,
   $aem_jvm_opts            = [
@@ -47,19 +48,12 @@ define aem_curator::install_aem62(
     require => File["${aem_base}/aem/${aem_id}"],
   }
 
-  # Install AEM Health Check using aem::crx::package file type which will place
-  # the artifact in AEM install directory and it will be installed when AEM
-  # starts up.
-  archive { "${tmp_dir}/${aem_id}/aem-healthcheck-content-${aem_healthcheck_version}.zip":
-    ensure => present,
-    source => "http://central.maven.org/maven2/com/shinesolutions/aem-healthcheck-content/${aem_healthcheck_version}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
-  } -> aem::crx::package { "${aem_id}: aem-healthcheck" :
-    ensure => present,
-    type   => 'file',
-    home   => "${aem_base}/aem/${aem_id}",
-    source => "${tmp_dir}/${aem_id}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
-    user   => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
+  aem_curator::install_aem_healthcheck {"Install AEM Healthcheck for ${aem_id}":
+    aem_base                => $aem_base,
+    aem_healthcheck_source  => $aem_healthcheck_source,
+    aem_healthcheck_version => $aem_healthcheck_version,
+    aem_id                  => $aem_id,
+    tmp_dir                 => $tmp_dir,
   }
 
   aem::instance { $aem_id:

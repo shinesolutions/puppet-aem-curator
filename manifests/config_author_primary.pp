@@ -23,6 +23,7 @@ File {
 class aem_curator::config_author_primary (
   $aem_password_reset_source,
   $aem_password_reset_version,
+  $aem_system_users,
   $author_port,
   $author_protocol,
   $author_timeout,
@@ -32,14 +33,29 @@ class aem_curator::config_author_primary (
   $enable_default_passwords,
   $puppet_conf_dir,
   $tmp_dir,
-  $aem_id                  = 'author',
-  $aem_version             = '6.2',
-  $delete_repository_index = false,
-  $jmxremote_port          = '59182',
-  $jvm_mem_opts            = undef,
-  $jvm_opts                = undef,
-  $run_mode                = 'author',
+  $aem_base                   = undef,
+  $aem_healthcheck_source     = undef,
+  $aem_healthcheck_version    = undef,
+  $aem_id                     = 'author',
+  $aem_keystore_password      = undef,
+  $aem_keystore_path          = undef,
+  $aem_reconfiguration        = false,
+  $author_ssl_port            = undef,
+  $aem_version                = '6.2',
+  $cert_base_url              = undef,
+  $enable_create_system_users = undef,
+  $delete_repository_index    = false,
+  $jmxremote_port             = '59182',
+  $jvm_mem_opts               = undef,
+  $jvm_opts                   = undef,
+  $run_mode                   = 'author',
 ) {
+
+  if !defined(File[$tmp_dir]) {
+    file { $tmp_dir:
+      ensure => directory,
+    }
+  }
 
   $credentials_hash = loadjson("${tmp_dir}/${credentials_file}")
 
@@ -123,6 +139,21 @@ class aem_curator::config_author_primary (
     retries_base_sleep_seconds => 5,
     retries_max_sleep_seconds  => 5,
     aem_id                     => $aem_id,
+  } -> aem_curator::reconfig_aem{ "${aem_id}: Reconfigure AEM":
+    aem_base                   => $aem_base,
+    aem_id                     => $aem_id,
+    aem_healthcheck_source     => $aem_healthcheck_source,
+    aem_healthcheck_version    => $aem_healthcheck_version,
+    aem_keystore_password      => $aem_keystore_password,
+    aem_keystore_path          => $aem_keystore_path,
+    aem_reconfiguration        => $aem_reconfiguration,
+    aem_ssl_port               => $author_ssl_port,
+    aem_system_users           => $aem_system_users,
+    cert_base_url              => $cert_base_url,
+    enable_create_system_users => $enable_create_system_users,
+    credentials_hash           => $credentials_hash,
+    run_mode                   => $run_mode,
+    tmp_dir                    => $tmp_dir,
   } -> aem_bundle { "${aem_id}: Stop webdav bundle":
     ensure => stopped,
     name   => 'org.apache.sling.jcr.webdav',
@@ -147,6 +178,7 @@ class aem_curator::config_author_primary (
     aem_id  => $aem_id,
   } -> aem_curator::config_aem_system_users { "${aem_id}: Configure system users":
     aem_id                   => $aem_id,
+    aem_system_users         => $aem_system_users,
     credentials_hash         => $credentials_hash,
     enable_default_passwords => $enable_default_passwords,
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
