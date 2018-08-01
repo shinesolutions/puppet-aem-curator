@@ -17,8 +17,8 @@ class aem_curator::action_config_aem (
   $tmp_dir                    = $::tmp_dir
 ) {
 
-  # Action manifest does not support changing of existing
-  # system user password is not supported yet
+  # Action manifest currently does not support changing the existing
+  # system user password
   aem_curator::reconfig_aem{"${aem_id}: Configure AEM":
     aem_base                   => $aem_base,
     aem_healthcheck_source     => $aem_healthcheck_source,

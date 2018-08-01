@@ -6,7 +6,7 @@ define aem_curator::reconfig_aem (
   $aem_id                     = undef,
   $aem_username               = undef,
   $aem_password               = undef,
-  $aem_reconfiguration        = true,
+  $enable_aem_reconfiguration = true,
   $aem_base                   = '/opt',
   $aem_healthcheck_source     = undef,
   $aem_healthcheck_version    = undef,
@@ -25,7 +25,7 @@ define aem_curator::reconfig_aem (
   $run_mode                   = undef,
   $tmp_dir                    = undef,
 ) {
-  if $aem_reconfiguration {
+  if $enable_aem_reconfiguration {
 
     Aem_aem {
       retries_max_tries          => $retries_max_tries,
@@ -45,6 +45,8 @@ define aem_curator::reconfig_aem (
       }
     }
 
+    # When `force` is set to true, it blows up the configurations on the repository
+    # Otherwise, the configurations are kept and will be overwritten
     if $force {
       aem_node { "${aem_id}: Delete path /apps/system/config":
         ensure => absent,
@@ -87,18 +89,18 @@ define aem_curator::reconfig_aem (
     }
 
     aem_curator::config_aem { "Configure AEM ${aem_id}":
-        aem_base                   => $aem_base,
-        aem_id                     => $aem_id,
-        aem_keystore_password      => $aem_keystore_password,
-        aem_keystore_path          => $aem_keystore_path,
-        aem_ssl_port               => $aem_ssl_port,
-        aem_system_users           => $aem_system_users,
-        cert_base_url              => $cert_base_url,
-        enable_create_system_users => $enable_create_system_users,
-        credentials_hash           => $credentials_hash,
-        run_mode                   => $run_mode,
-        tmp_dir                    => $tmp_dir,
-        require                    => Aem_aem["${aem_id}: Wait until aem health check is ok"]
+      aem_base                   => $aem_base,
+      aem_id                     => $aem_id,
+      aem_keystore_password      => $aem_keystore_password,
+      aem_keystore_path          => $aem_keystore_path,
+      aem_ssl_port               => $aem_ssl_port,
+      aem_system_users           => $aem_system_users,
+      cert_base_url              => $cert_base_url,
+      enable_create_system_users => $enable_create_system_users,
+      credentials_hash           => $credentials_hash,
+      run_mode                   => $run_mode,
+      tmp_dir                    => $tmp_dir,
+      require                    => Aem_aem["${aem_id}: Wait until aem health check is ok"]
     } -> aem_aem { "${aem_id}: Wait until login page is ready after reconfiguration":
       ensure => login_page_is_ready,
       aem_id => $aem_id,

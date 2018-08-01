@@ -19,19 +19,13 @@ define aem_curator::config_aem (
   }
 
   if $enable_create_system_users {
+    # Create system users and configure their usernames for password reset during provisioning
     aem_resources::create_system_users { "${aem_id}: Create system users":
-      # Create system users and configure their usernames for password reset during provisioning
-      aem_system_users      => $aem_system_users,
-      orchestrator_password => 'orchestrator',
-      replicator_password   => 'replicator',
-      deployer_password     => 'deployer',
-      exporter_password     => 'exporter',
-      importer_password     => 'importer',
-      aem_id                => $aem_id,
-      before                => Aem_node["${aem_id}: Create AEM Password Reset Activator config node"],
+      aem_system_users => $aem_system_users,
+      aem_id           => $aem_id,
+      before           => Aem_node["${aem_id}: Create AEM Password Reset Activator config node"],
     }
   } else {
-    # For configuration only default passwords are currently supported.
     aem_curator::config_aem_system_users {"${aem_id}: Change System Users Passwords":
       aem_id           => $aem_id,
       aem_system_users => $aem_system_users,

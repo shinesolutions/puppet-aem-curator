@@ -192,15 +192,15 @@ define aem_curator::install_aem (
     post_install_sleep_secs => $post_install_sleep_secs,
     run_mode                => $run_mode,
     tmp_dir                 => $tmp_dir,
-  } -> aem_curator::config_aem { "${aem_id}: Reconfigure AEM":
-      aem_base              => $aem_base,
-      aem_id                => $aem_id,
-      aem_keystore_password => $aem_keystore_password,
-      aem_keystore_path     => $aem_keystore_path,
-      aem_ssl_port          => $aem_ssl_port,
-      cert_base_url         => $cert_base_url,
-      run_mode              => $run_mode,
-      tmp_dir               => $tmp_dir
+  } -> aem_curator::config_aem { "${aem_id}: Configure AEM":
+    aem_base              => $aem_base,
+    aem_id                => $aem_id,
+    aem_keystore_password => $aem_keystore_password,
+    aem_keystore_path     => $aem_keystore_path,
+    aem_ssl_port          => $aem_ssl_port,
+    cert_base_url         => $cert_base_url,
+    run_mode              => $run_mode,
+    tmp_dir               => $tmp_dir
   } -> exec { "rm -f ${aem_base}/aem/${aem_id}/aem-healthcheck-content-*.zip":
   }
 
