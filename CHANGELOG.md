@@ -1,5 +1,9 @@
 ### 1.0.4
-*
+* Add support for reconfiguring existing AEM installations
+* Place AEM Healthcheck installation to own manifest
+* Place AEM Configuration to own manifest
+* Add feature to change existing system users passwords
+* Improved credentials handling for system users
 
 ### 1.0.3
 * Fix temp directory clean up at the end of artifacts deployment
