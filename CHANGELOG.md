@@ -1,3 +1,6 @@
+### 1.1.1
+*
+
 ### 1.1.0
 * Add support for reconfiguring existing AEM installations
 * Place AEM Healthcheck installation to own manifest
