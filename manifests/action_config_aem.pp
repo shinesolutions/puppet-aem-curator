@@ -27,7 +27,7 @@ class aem_curator::action_config_aem (
     aem_keystore_password      => $aem_keystore_password,
     aem_keystore_path          => $aem_keystore_path,
     aem_ssl_port               => $aem_ssl_port,
-    cert_base_url              => $cert_base_url
+    cert_base_url              => $cert_base_url,
     enable_create_system_users => $enable_create_system_users,
     force                      => $force,
     run_mode                   => $run_mode,
