@@ -1,3 +1,6 @@
+### 1.1.2
+*
+
 ### 1.1.1
 * Fix pre-6.4 incorrect config path for AEM Password Reset and AEM Health Check
 
