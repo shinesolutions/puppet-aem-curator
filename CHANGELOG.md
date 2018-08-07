@@ -1,5 +1,5 @@
 ### 1.1.1
-*
+* Fix pre-6.4 incorrect config path for AEM Password Reset and AEM Health Check
 
 ### 1.1.0
 * Add support for reconfiguring existing AEM installations

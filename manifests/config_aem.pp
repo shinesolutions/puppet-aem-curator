@@ -37,7 +37,7 @@ define aem_curator::config_aem (
   aem_node { "${aem_id}: Create AEM Password Reset Activator config node":
     ensure => present,
     name   => 'com.shinesolutions.aem.passwordreset.Activator',
-    path   => "/apps/system/config.${run_mode}",
+    path   => '/apps/system/config',
     type   => 'sling:OsgiConfig',
     aem_id => $aem_id,
   } -> aem_config_property { "${aem_id}: Configure system usernames for AEM Password Reset Activator to process":
@@ -61,7 +61,7 @@ define aem_curator::config_aem (
   } -> aem_node { "${aem_id}: Create AEM Health Check Servlet config node":
     ensure => present,
     name   => 'com.shinesolutions.healthcheck.hc.impl.ActiveBundleHealthCheck',
-    path   => "/apps/system/config.${run_mode}",
+    path   => '/apps/system/config',
     type   => 'sling:OsgiConfig',
     aem_id => $aem_id,
   } -> aem_config_property { "${aem_id}: Configure AEM Health Check Servlet ignored bundles":
