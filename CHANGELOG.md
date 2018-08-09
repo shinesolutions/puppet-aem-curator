@@ -1,3 +1,6 @@
+### 1.1.3
+*
+
 ### 1.1.2
 * Upgrade aem_resources to 3.1.1 for aem_user_alias support
 
