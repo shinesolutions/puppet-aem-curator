@@ -1,5 +1,5 @@
 ### 1.1.2
-*
+* Upgrade aem_resources to 3.1.1 for aem_user_alias support
 
 ### 1.1.1
 * Fix pre-6.4 incorrect config path for AEM Password Reset and AEM Health Check
