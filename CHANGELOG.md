@@ -1,5 +1,5 @@
 ### 1.1.3
-*
+* Add new AEM tool to install AEM security patches on demand
 
 ### 1.1.2
 * Upgrade aem_resources to 3.1.1 for aem_user_alias support
