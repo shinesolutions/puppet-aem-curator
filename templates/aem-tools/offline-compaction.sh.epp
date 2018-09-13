@@ -2,6 +2,11 @@
 set -o nounset
 set -o errexit
 
+PATH=<%= $aem_tools_env_path %>
+
+remove_bak_files=<%= $enable_compaction_remove_bak_files %>
+bak_file_age=<%= $compaction_remove_bak_files_older_than_in_days %>
+
 if [ "$#" -ne 0 ]; then
   echo 'Usage: ./offline-compaction.sh'
   exit 1
@@ -13,8 +18,19 @@ if (( $(ps -ef | grep -v grep | grep jar | grep crx-quickstart | wc -l) > 0 )); 
   exit 1
 
 else
-
   <% $aem_instances.each | $aem_instance | { -%>
+
+  if [ $remove_bak_files == 'True' ] || [ $remove_bak_files == 'true' ] ; then
+    echo "<%= $aem_instance['crx_quickstart_dir'] %>/repository/ Start removing .bak files older than $bak_file_age days: $(date)"
+
+    find <%= $aem_instance['crx_quickstart_dir'] %>/repository/ \
+      -name '*.bak' \
+      -type f \
+      -mtime +$bak_file_age \
+      -exec rm -fv '{}' \;
+
+    echo "<%= $aem_instance['crx_quickstart_dir'] %>/repository/ Finish removing .bak files older than $bak_file_age days: $(date)"
+  fi
 
     echo "<%= $aem_instance['crx_quickstart_dir'] %> Compaction Started: $(date)"
 
