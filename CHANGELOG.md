@@ -1,5 +1,6 @@
 ### 0.10.7
-*
+* Add feature to delete old bak files from the repository during offline-compaction
+* 
 
 ### 0.10.6
 * Upgrade aem_resources to 2.3.1 for aem_user_alias support
