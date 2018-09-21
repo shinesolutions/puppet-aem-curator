@@ -1,5 +1,6 @@
 ### 0.10.7
-*
+* Add parameter deployment_sleep_seconds for resource deploy_packages
+* 
 
 ### 0.10.6
 * Upgrade aem_resources to 2.3.1 for aem_user_alias support
