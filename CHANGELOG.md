@@ -1,4 +1,6 @@
 ### 1.1.3
+* Lock inspec version to 2.2.78 #60
+* Remove support for Ruby 2.1 & 2.2 due to dependency issues
 *
 
 ### 1.1.2
