@@ -1,5 +1,5 @@
 ### 1.1.3
-*
+* Updated parameters for "Wait until login page is ready" to consume parameters form shinesolutions/aem-aws-stack-provisioner during stack creation shinesolutions/aem-aws-stack-builder#184
 
 ### 1.1.2
 * Upgrade aem_resources to 3.1.1 for aem_user_alias support
