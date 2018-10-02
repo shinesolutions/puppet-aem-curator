@@ -1,4 +1,5 @@
 ### 1.1.3
+* Add additional checks during configuring AEM Author & AEM Publisher #63
 *
 
 ### 1.1.2
