@@ -14,14 +14,17 @@ fi
 
 if (( $(ps -ef | grep -v grep | grep jar | grep crx-quickstart | wc -l) > 0 )); then
 
-  echo “AEM is running!!! Compaction hangs when AEM is running. Exiting”
+  # Exit compaction when AEM is currently running because compaction hangs when executed against a running AEM
+  echo “$(date) - Refusing to start repository compaction because AEM is currently running”
+  echo “$(date) - Please ensure AEM is stopped when attempting to compact the repository”
+  echo "$(date) - Exiting..."
   exit 1
 
 else
   <% $aem_instances.each | $aem_instance | { -%>
 
   if [ $remove_bak_files == 'True' ] || [ $remove_bak_files == 'true' ] ; then
-    echo "<%= $aem_instance['crx_quickstart_dir'] %>/repository/ Start removing .bak files older than $bak_file_age days: $(date)"
+    echo "$(date) - Removing .bak files older than $bak_file_age days on repository <%= $aem_instance['crx_quickstart_dir'] %>/repository/ ..."
 
     find <%= $aem_instance['crx_quickstart_dir'] %>/repository/ \
       -name '*.bak' \
@@ -29,10 +32,10 @@ else
       -mtime +$bak_file_age \
       -exec rm -fv '{}' \;
 
-    echo "<%= $aem_instance['crx_quickstart_dir'] %>/repository/ Finish removing .bak files older than $bak_file_age days: $(date)"
+    echo "$(date) - Finished removing .bak files older than $bak_file_age days on repository <%= $aem_instance['crx_quickstart_dir'] %>/repository/"
   fi
 
-    echo "<%= $aem_instance['crx_quickstart_dir'] %> Compaction Started: $(date)"
+    echo "$(date) - Compacting repository <%= $aem_instance['crx_quickstart_dir'] %>/repository ..."
 
     sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
     sleep 2
@@ -40,7 +43,7 @@ else
     sleep 2
     sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar compact "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
 
-    echo "<%= $aem_instance['crx_quickstart_dir'] %> Compaction Ended: $(date)"
+    echo "$(date) - Finished repository compaction on <%= $aem_instance['crx_quickstart_dir'] %>/repository"
 
   <% } -%>
 
