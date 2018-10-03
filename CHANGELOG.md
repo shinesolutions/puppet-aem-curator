@@ -1,5 +1,6 @@
 ### 0.10.7
 * Add parameter deployment_sleep_seconds for resource deploy_packages
+* Add feature to delete old bak files from the repository during offline-compaction
 * 
 
 ### 0.10.6
