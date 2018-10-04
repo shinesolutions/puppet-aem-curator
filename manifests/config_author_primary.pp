@@ -31,6 +31,9 @@ class aem_curator::config_author_primary (
   $crx_quickstart_dir,
   $enable_crxde,
   $enable_default_passwords,
+  $login_ready_base_sleep_seconds,
+  $login_ready_max_sleep_seconds,
+  $login_ready_max_tries,
   $puppet_conf_dir,
   $tmp_dir,
   $aem_base                   = undef,
@@ -135,9 +138,9 @@ class aem_curator::config_author_primary (
     enable => true,
   } -> aem_aem { "${aem_id}: Wait until login page is ready":
     ensure                     => login_page_is_ready,
-    retries_max_tries          => 120,
-    retries_base_sleep_seconds => 5,
-    retries_max_sleep_seconds  => 5,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
   } -> aem_curator::reconfig_aem{ "${aem_id}: Reconfigure AEM":
     aem_base                   => $aem_base,
