@@ -4,10 +4,11 @@ deps:
 	gem install bundler
 	bundle install --binstubs
 	bundle exec r10k puppetfile install --verbose --moduledir modules
-	bundle exec inspec vendor --overwrite
-	cd vendor && find . -name "*.tar.gz" -exec tar -xzvf '{}' \; -exec rm '{}' \;
-	cd vendor && mv inspec-aem-*.*.* inspec-aem
-	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/ && cp -R vendor/* files/test/inspec/
+	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
+	bundle exec inspec vendor --overwrite vendor/inspec
+	cd vendor/inspec/vendor && find . -name "*.tar.gz" -exec tar -xzvf '{}' \; -exec rm '{}' \;
+	cd vendor/inspec/vendor && mv inspec-aem-*.*.* inspec-aem
+	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/ && cp -R vendor/inspec/vendor/* files/test/inspec/
 	# only needed while using shinesolutions/puppet-aem fork
 	# TODO: remove when switching back to bstopp/puppet-aem
 	rm -rf modules/aem/.git
