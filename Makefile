@@ -13,7 +13,7 @@ deps:
 	rm -rf modules/aem/.git
 
 clean:
-	rm -rf bin/ pkg/ stage/ test/ vendor/ *.lock
+	rm -rf bin/ pkg/ stage/ test/ vendor/
 	rm -rf /tmp/shinesolutions/puppet-aem-curator/
 
 lint:
