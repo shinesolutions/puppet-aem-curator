@@ -7,6 +7,8 @@
 * Add feature to delete old bak files from the repository during offline-compaction
 * Add install AEM profile action
 * Simplify AEM profile installation logic #7
+* Introduce pdk as Puppet module build
+* Drop Puppet 4 support, add Puppet 6 support
 
 ### 1.1.2
 * Upgrade aem_resources to 3.1.1 for aem_user_alias support
