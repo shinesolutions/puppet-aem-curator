@@ -1,4 +1,5 @@
 ### 0.10.7
+* Add additional checks during configuring AEM Author & AEM Publisher #63
 * Add parameter deployment_sleep_seconds for resource deploy_packages
 * Lock inspec version to 2.2.78 #60
 * Remove support for Ruby 2.1 & 2.2 due to dependency issues
