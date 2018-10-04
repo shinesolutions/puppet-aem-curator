@@ -158,9 +158,23 @@ class aem_curator::config_author_primary (
     ensure => stopped,
     name   => 'org.apache.sling.jcr.webdav',
     aem_id => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after stopping webdav bundle":
+    ensure => login_page_is_ready,
+    aem_id => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after stopping webdav bundle":
+    ensure => aem_health_check_is_ok,
+    tags   => 'deep',
+    aem_id => $aem_id,
   } -> aem_bundle { "${aem_id}: Stop davex bundle":
     ensure => stopped,
     name   => 'org.apache.sling.jcr.davex',
+    aem_id => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after stopping davex bundle":
+    ensure => login_page_is_ready,
+    aem_id => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after stopping davex bundle":
+    ensure => aem_health_check_is_ok,
+    tags   => 'deep',
     aem_id => $aem_id,
   } -> aem_curator::config_aem_crxde { "${aem_id}: Configure CRXDE":
     aem_id       => $aem_id,
@@ -170,6 +184,13 @@ class aem_curator::config_author_primary (
     ensure   => all_agents_removed,
     run_mode => 'author',
     aem_id   => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after removing all agents":
+    ensure => login_page_is_ready,
+    aem_id => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after removing all agents":
+    ensure => aem_health_check_is_ok,
+    tags   => 'deep',
+    aem_id => $aem_id,
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',
