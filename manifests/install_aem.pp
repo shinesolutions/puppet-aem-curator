@@ -180,7 +180,6 @@ define aem_curator::install_aem (
     aem_artifacts_base      => $aem_artifacts_base,
     aem_base                => $aem_base,
     aem_healthcheck_version => $aem_healthcheck_version,
-    aem_host                => $aem_host,
     aem_id                  => $aem_id,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_port                => $aem_port,
