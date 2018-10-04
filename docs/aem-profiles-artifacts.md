@@ -22,3 +22,4 @@ There is no obvious file name convention because Adobe has historically been pub
 | `aem63_sp2_cfp2` | `aem63_sp2` artifacts + AEM-CFP-6.3.2.2-2.0.zip |
 | `aem64` | license-6.4.properties, AEM_6.4_Quickstart.jar |
 | `aem64_sp1` | `aem64` artifacts + AEM-6.4.1.0-6.4.1.zip |
+| `aem64_sp2` | `aem64` artifacts + AEM-6.4.2.0-6.4.2.zip |
