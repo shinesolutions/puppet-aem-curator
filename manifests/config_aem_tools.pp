@@ -107,6 +107,18 @@ class aem_curator::config_aem_tools (
     mode    => '0775',
     owner   => 'root',
     group   => 'root',
+  } -> file { "${base_dir}/aem-tools/install-aem-profile.sh":
+    ensure  => present,
+    content => epp(
+      'aem_curator/aem-tools/install-aem-profile.sh.epp', {
+        'base_dir'           => $base_dir,
+        'tmp_dir'            => $tmp_dir,
+        'aem_tools_env_path' => $aem_tools_env_path
+      }
+    ),
+    mode    => '0775',
+    owner   => 'root',
+    group   => 'root',
   }
 
   archive { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":

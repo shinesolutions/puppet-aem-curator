@@ -71,8 +71,11 @@ define aem_curator::install_aem64(
   } -> exec { "${aem_id}: Manual delay to let AEM become ready":
     command => "sleep ${post_install_sleep_secs}",
   } -> aem_aem { "${aem_id}: Wait until login page is ready":
-    ensure => login_page_is_ready,
-    aem_id => $aem_id,
+    ensure                     => login_page_is_ready,
+    aem_id                     => $aem_id,
+    retries_max_tries          => 120,
+    retries_base_sleep_seconds => 5,
+    retries_max_sleep_seconds  => 5,
   } -> aem_aem { "${aem_id}: Wait until aem health check is ok":
     ensure => aem_health_check_is_ok,
     tags   => 'deep',
