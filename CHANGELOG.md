@@ -1,7 +1,7 @@
 ### 0.10.7
 * Lock inspec version to 2.2.78 #60
 * Remove support for Ruby 2.1 & 2.2 due to dependency issues
-* 
+* Add feature to delete old bak files from the repository during offline-compaction
 
 ### 0.10.6
 * Upgrade aem_resources to 2.3.1 for aem_user_alias support
