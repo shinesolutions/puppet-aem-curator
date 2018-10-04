@@ -9,6 +9,7 @@
 * Simplify AEM profile installation logic #7
 * Introduce pdk as Puppet module build
 * Drop Puppet 4 support, add Puppet 6 support
+* Upgrade aem_resources to 2.4.0
 
 ### 0.10.6
 * Upgrade aem_resources to 2.3.1 for aem_user_alias support
