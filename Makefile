@@ -24,8 +24,10 @@ lint:
 		--no-documentation-check \
 		./manifests/*.pp
 	puppet epp validate templates/*/*.epp
+	bundle exec rubocop Gemfile
+	pdk validate metadata
 
 package: deps
-	puppet module build .
+	pdk build --force
 
 .PHONY: ci clean deps lint package
