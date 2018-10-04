@@ -5,14 +5,16 @@ class aem_curator::config_aem_tools (
   $oak_run_source,
   $oak_run_version,
   $tmp_dir,
-  $aem_instances             = undef,
-  $aem_tools_env_path        = '$PATH',
-  $confdir                   = $settings::confdir,
+  $aem_instances                                  = undef,
+  $aem_tools_env_path                             = '$PATH',
+  $confdir                                        = $settings::confdir,
+  $enable_compaction_remove_bak_files             = false,
+  $compaction_remove_bak_files_older_than_in_days = 30,
 ) {
 
-$_aem_instances = pick(
-  $aem_instances,
-  [{'aem_id' => 'author'}]
+  $_aem_instances = pick(
+    $aem_instances,
+    [{'aem_id' => 'author'}]
   )
 
   file { "${base_dir}/aem-tools/import-backup.sh":
@@ -130,10 +132,13 @@ $_aem_instances = pick(
     content => epp(
       'aem_curator/aem-tools/offline-compaction.sh.epp',
       {
-        'base_dir'        => $base_dir,
-        'oak_run_version' => $oak_run_version,
-        'aem_instances'   => $aem_instances
+        'base_dir'                                       => $base_dir,
+        'oak_run_version'                                => $oak_run_version,
+        'aem_instances'                                  => $aem_instances,
+        'aem_tools_env_path'                             => $aem_tools_env_path,
+        'enable_compaction_remove_bak_files'             => $enable_compaction_remove_bak_files,
+        'compaction_remove_bak_files_older_than_in_days' => $compaction_remove_bak_files_older_than_in_days
       }
-    )
+    ),
   }
 }
