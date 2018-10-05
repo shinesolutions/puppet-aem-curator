@@ -1,5 +1,5 @@
 ### 0.11.1
-*
+* Add step to install collectd after installation of AEM for Author & Publish #71
 
 ### 0.11.0
 * Updated parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner
