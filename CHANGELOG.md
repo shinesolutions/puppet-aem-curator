@@ -1,4 +1,5 @@
 ### 0.11.1
+* Add parameter to enable/disable installation of collectd #68
 * Add step to install collectd after installation of AEM for Author & Publish #71
 * Upgrade InSpec to 2.3.10 with new vendoring structure #60
 
