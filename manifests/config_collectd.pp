@@ -18,7 +18,7 @@ class aem_curator::config_collectd (
   $aem_instances,
   $collectd_prefix,
   $ec2_id,
-  $install = false
+  $install = false,
 ) {
 
   if $proxy_host != '' {
