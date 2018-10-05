@@ -77,5 +77,8 @@ class aem_curator::install_publish (
     run_mode                      => $run_mode,
     setup_repository_volume       => $setup_repository_volume,
     tmp_dir                       => $tmp_dir,
+  } -> class { 'collectd':
+    manage_package => true,
+    manage_service => false,
   }
 }
