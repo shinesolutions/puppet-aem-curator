@@ -18,6 +18,7 @@ class aem_curator::config_collectd (
   $aem_instances,
   $collectd_prefix,
   $ec2_id,
+  $install = false
 ) {
 
   if $proxy_host != '' {
@@ -142,6 +143,7 @@ class aem_curator::config_collectd (
   }
 
   class { 'collectd':
+    manage_package => $install,
     service_ensure => running,
     service_enable => true,
   }
