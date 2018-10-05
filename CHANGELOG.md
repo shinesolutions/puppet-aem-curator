@@ -1,5 +1,5 @@
 ### 0.11.1
-*
+* Add parameter to enable/disable installation of collectd #68
 
 ### 0.11.0
 * Updated parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner
