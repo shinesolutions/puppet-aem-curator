@@ -1,5 +1,5 @@
 ### 0.11.2
-*
+* Remove collectd installation due to collectd provisioning already exists on Packer AEM #71
 
 ### 0.11.1
 * Add parameter to enable/disable installation of collectd #68
