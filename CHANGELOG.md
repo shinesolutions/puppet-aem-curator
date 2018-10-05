@@ -1,3 +1,6 @@
+### 1.2.2
+*
+
 ### 1.2.1
 * Add parameter to enable/disable installation of collectd #68
 * Add step to install collectd after installation of AEM for Author & Publish #71
