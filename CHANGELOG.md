@@ -1,3 +1,6 @@
+### 1.2.1
+*
+
 ### 1.2.0
 * Updated parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner
 * Add additional checks during configuring AEM Author & AEM Publisher #63
