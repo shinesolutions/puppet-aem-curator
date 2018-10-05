@@ -1,5 +1,5 @@
 ### 1.2.1
-*
+* Upgrade InSpec to 2.3.10 with new vendoring structure #60
 
 ### 1.2.0
 * Updated parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner
