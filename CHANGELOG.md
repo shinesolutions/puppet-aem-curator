@@ -1,3 +1,6 @@
+### 1.2.3
+*
+
 ### 1.2.2
 * Remove collectd installation due to collectd provisioning already exists on Packer AEM #71
 
