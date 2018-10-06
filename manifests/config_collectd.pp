@@ -18,7 +18,6 @@ class aem_curator::config_collectd (
   $aem_instances,
   $collectd_prefix,
   $ec2_id,
-  $install = false,
 ) {
 
   if $proxy_host != '' {
@@ -142,8 +141,13 @@ class aem_curator::config_collectd (
       notify => Service['collectd'],
   }
 
+  # collectd class is used here to process the genericjmx plugin
+  # the package and repo managements are disabled in order to avoid provisioning
+  # steps that require outbound connection
+  # collectd package itself is expected to have been installed at this stage
   class { 'collectd':
-    manage_package => $install,
+    manage_package => false,
+    manage_repo    => false,
     service_ensure => running,
     service_enable => true,
   }
