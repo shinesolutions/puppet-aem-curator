@@ -1,3 +1,6 @@
+### 0.11.4
+*
+
 ### 0.11.3
 * Disable collectd repo management to avoid any outbound connection #71
 
