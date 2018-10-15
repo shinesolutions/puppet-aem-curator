@@ -1,3 +1,6 @@
+### 0.11.5
+*
+
 ### 0.11.4
 * Add Puppet resource stopped status check for AEM services at the end of installation
 
