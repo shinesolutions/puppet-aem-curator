@@ -1,5 +1,5 @@
 ### 0.11.4
-*
+* Add Puppet resource stopped status check for AEM services at the end of installation
 
 ### 0.11.3
 * Disable collectd repo management to avoid any outbound connection #71
