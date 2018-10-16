@@ -33,7 +33,7 @@ class aem_curator::config_author_standby (
   $aem_id                  = 'author',
   $aem_version             = '6.2',
   $delete_repository_index = false,
-  $jmxremote_port          = '59182',
+  $jmxremote_port          = '5982',
   $jvm_mem_opts            = undef,
   $jvm_opts                = undef,
   $run_mode                = 'author',

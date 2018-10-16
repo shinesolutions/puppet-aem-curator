@@ -51,7 +51,7 @@ class aem_curator::config_publish (
   $enable_create_system_users = undef,
   $publish_ssl_port           = undef,
   $delete_repository_index    = false,
-  $jmxremote_port             = '59183',
+  $jmxremote_port             = '5983',
   $jvm_mem_opts               = undef,
   $jvm_opts                   = undef,
   $run_mode                   = 'publish',
