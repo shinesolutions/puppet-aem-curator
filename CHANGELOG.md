@@ -1,3 +1,6 @@
+### 0.11.6
+*
+
 ### 0.11.5
 * Add wait until AEM Author Standby port is listening #75
 
