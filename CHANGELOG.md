@@ -1,5 +1,5 @@
 ### 1.2.3
-*
+* Disable collectd repo management to avoid any outbound connection #71
 
 ### 1.2.2
 * Remove collectd installation due to collectd provisioning already exists on Packer AEM #71
