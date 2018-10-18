@@ -48,7 +48,7 @@ class aem_curator::config_author_primary (
   $cert_base_url              = undef,
   $enable_create_system_users = undef,
   $delete_repository_index    = false,
-  $jmxremote_port             = '59182',
+  $jmxremote_port             = '5982',
   $jvm_mem_opts               = undef,
   $jvm_opts                   = undef,
   $run_mode                   = 'author',
