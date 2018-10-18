@@ -113,6 +113,10 @@ class aem_curator::config_author_standby (
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,
+  } -> tcp_conn_validator { "${aem_id}: Wait until AEM Author Standby is listening on port ${author_port}":
+    host      => '127.0.0.1',
+    port      => $author_port,
+    try_sleep => 5,
+    timeout   => 300,
   }
-
 }

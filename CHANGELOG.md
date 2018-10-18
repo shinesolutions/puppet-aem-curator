@@ -1,4 +1,5 @@
 ### 1.2.3
+* Add wait until AEM Author Standby port is listening #75
 * Add Puppet resource stopped status check for AEM services at the end of installation
 * Disable collectd repo management to avoid any outbound connection #71
 
