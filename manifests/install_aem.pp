@@ -211,6 +211,8 @@ define aem_curator::install_aem (
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
       command => "sleep ${post_stop_sleep_secs}",
+    } -> exec { "${aem_id}: Ensure AEM resource is stopped":
+      command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=stopped",
     } -> exec { "${aem_id}: Fix repository mount permissions":
       command => "chown aem-${aem_id}:aem-${aem_id} ${repository_volume_mount_point}",
     } -> exec { "mv ${aem_base}/aem/${aem_id}/crx-quickstart/repository/* ${repository_volume_mount_point}/":
