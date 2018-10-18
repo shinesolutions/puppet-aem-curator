@@ -1,5 +1,6 @@
 ### 0.11.6
 * Change default JMX ports to 5982 for AEM Author and 5983 for AEM Publish
+* Upgrade aem_resources to 2.4.1
 
 ### 0.11.5
 * Add wait until AEM Author Standby port is listening #75
