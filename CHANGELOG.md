@@ -1,12 +1,12 @@
 ### 1.2.4
-*
+* Fix parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner for all checks #76
 
 ### 1.2.3
 * Change default JMX ports to 5982 for AEM Author and 5983 for AEM Publish
 * Add wait until AEM Author Standby port is listening #75
 * Add Puppet resource stopped status check for AEM services at the end of installation
 * Disable collectd repo management to avoid any outbound connection #71
-* Upgrade aem_resources to 3.2.1 
+* Upgrade aem_resources to 3.2.1
 
 ### 1.2.2
 * Remove collectd installation due to collectd provisioning already exists on Packer AEM #71
