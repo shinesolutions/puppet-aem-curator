@@ -1,5 +1,6 @@
 ### 1.2.4
 * Fix parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner for all checks #76
+* Add Amazon Linux 2 to supported OS list in Puppet metadata
 
 ### 1.2.3
 * Change default JMX ports to 5982 for AEM Author and 5983 for AEM Publish
