@@ -1,3 +1,6 @@
+### 1.2.5
+*
+
 ### 1.2.4
 * Fix parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner for all checks #76
 * Add Amazon Linux 2 to supported OS list in Puppet metadata
