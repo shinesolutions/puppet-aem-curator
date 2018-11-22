@@ -1,5 +1,10 @@
 ### 1.2.5
-*
+* Add feature to configure SAML
+* Add feature to configure AEM Trusttore
+* Add feature to configure AEM Authorizable Keystore
+* Add feature to manage AEM Truststore certificates
+* Add feature to manage AEM Authorizable Keystore certificates
+* Add action manifests for enabling/disabling SAML
 
 ### 1.2.4
 * Fix parameters for "Wait until login page is ready" to consume parameters from aem-aws-stack-provisioner for all checks #76
