@@ -1,10 +1,10 @@
 define aem_curator::config_truststore (
-  $tmp_dir,
   $aem_id                     = 'aem',
   $aem_username               = undef,
   $aem_password               = undef,
   $enable_truststore_creation = false,
   $file                       = undef,
+  $tmp_dir                    = '/tmp',
   $truststore_password        = undef,
 ) {
   if $enable_truststore_creation {

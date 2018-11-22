@@ -1,11 +1,11 @@
 define config_truststore_certificate (
-  $tmp_dir,
   $add_certificate = false,
   $aem_id          = 'aem',
   $force           = true,
   $aem_username    = undef,
   $aem_password    = undef,
   $file            = undef,
+  $tmp_dir         = '/tmp',
 ) {
   if $add_certificate {
     archive { "${tmp_dir}/certificate.crt":

@@ -216,6 +216,7 @@ class aem_curator::config_publish (
     aem_id                     => $aem_id,
     enable_truststore_creation => $enable_truststore_creation,
     truststore_password        => $truststore_password,
+    tmp_dir                    => $tmp_dir
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',

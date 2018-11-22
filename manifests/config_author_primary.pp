@@ -223,6 +223,7 @@ class aem_curator::config_author_primary (
     aem_id                     => $aem_id,
     enable_truststore_creation => $enable_truststore_creation,
     truststore_password        => $truststore_password,
+    tmp_dir                    => $tmp_dir
   } -> aem_curator::config_saml { "${aem_id}: Configure SAML authentication":
     aem_id                                                => $aem_id,
     aem_system_users                                      => $aem_system_users,

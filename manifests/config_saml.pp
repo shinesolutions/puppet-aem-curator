@@ -25,8 +25,8 @@ define aem_curator::config_saml (
         aem_id          => $aem_id,
         aem_username    => $aem_username,
         aem_password    => $aem_password,
-        file            => $saml_configuration['file']
-        force           => true
+        file            => $saml_configuration['file'],
+        force           => true,
         tmp_dir         => $tmp_dir
       }
     }
@@ -55,7 +55,7 @@ define aem_curator::config_saml (
         authorizable_id                                       => $aem_system_users[authentication-service][name],
         intermediate_path                                     => $aem_system_users[authentication-service][path],
         authorizable_keystore_password                        => $aem_system_users[authentication-service][authorizable_keystore][password],
-        private_key_alias                                     => $aem_system_users[authentication-service][authorizable_keystore][private_key_alias]
+        private_key_alias                                     => $aem_system_users[authentication-service][authorizable_keystore][private_key_alias],
         private_key_file_path                                 => $aem_system_users[authentication-service][authorizable_keystore][private_key],
         certificate_chain_file_path                           => $aem_system_users[authentication-service][authorizable_keystore][certificate],
         tmp_dir                                               => $tmp_dir
