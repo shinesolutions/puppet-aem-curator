@@ -27,14 +27,15 @@ define aem_curator::config_saml (
         aem_password    => $aem_password,
         file            => $saml_configuration['file'],
         force           => true,
-        tmp_dir         => $tmp_dir
+        tmp_dir         => $tmp_dir,
+        before          => Aem_saml[aem_saml]
       }
     }
 
-    # Add certificate chain to AEM Keystore for user authentication-service
     if $enable_authorizable_keystore_certificate_chain_upload {
-      # Create AEM Keystore for user authentication-service
+      # Add certificate chain to AEM Keystore for user authentication-service
       if $enable_authorizable_keystore_creation{
+        # Create AEM Keystore for user authentication-service
         aem_curator::config_authorizable_keystore { "${aem_id}: Create Keystore for user authentication-service":
           aem_id                                => $aem_id,
           aem_username                          => $aem_username,
@@ -43,11 +44,10 @@ define aem_curator::config_saml (
           authorizable_id                       => $aem_system_users[authentication-service][name],
           intermediate_path                     => $aem_system_users[authentication-service][path],
           authorizable_keystore_password        => $aem_system_users[authentication-service][authorizable_keystore][password],
+          before                                => Exec["${aem_id}: Clean SAML temp directory"]
         }
-      }
-
-      # Add certificate chain to AEM Keystore for user authentication-service
-      aem_curator::config_authorizable_keystore_certificate_chain { "${aem_id}: Add certificate chain to Keystore for user authentication-service":
+      } -> aem_curator::config_authorizable_keystore_certificate_chain { "${aem_id}: Add certificate chain to Keystore for user authentication-service":
+        # Add certificate chain to AEM Keystore for user authentication-service
         aem_id                                                => $aem_id,
         aem_username                                          => $aem_username,
         aem_password                                          => $aem_password,
@@ -57,11 +57,12 @@ define aem_curator::config_saml (
         authorizable_keystore_password                        => $aem_system_users[authentication-service][authorizable_keystore][password],
         private_key_alias                                     => $aem_system_users[authentication-service][authorizable_keystore][private_key_alias],
         private_key_file_path                                 => $aem_system_users[authentication-service][authorizable_keystore][private_key],
-        certificate_chain_file_path                           => $aem_system_users[authentication-service][authorizable_keystore][certificate],
+        certificate_chain_file_path                           => $aem_system_users[authentication-service][authorizable_keystore][certificate_chain],
         tmp_dir                                               => $tmp_dir
       }
     }
 
+    # Build SAML configuration parameters
     $params_enable_saml = {
       'aem_resources::enable_saml' =>
         $saml_configuration
@@ -71,7 +72,8 @@ define aem_curator::config_saml (
       aem_id       => $aem_id,
       aem_username => $aem_username,
       aem_password => $aem_password,
-      tmp_dir      => $tmp_dir
+      tmp_dir      => $tmp_dir,
+      require      => Aem_certificate[aem_certificate],
     }
 
     create_resources(
@@ -82,7 +84,8 @@ define aem_curator::config_saml (
 
     # Remove created temp directory
     exec { "${aem_id}: Clean SAML temp directory":
-      command => "rm -fr ${tmp_dir}/SAML"
+      command => "rm -fr ${tmp_dir}/SAML",
+      require => Aem_saml[aem_saml]
     }
   }
 }
