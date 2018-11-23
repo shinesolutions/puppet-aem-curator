@@ -41,6 +41,7 @@ class aem_curator::action_enable_saml (
     archive { "${tmp_dir}/SAML/saml_certificate.crt":
       ensure => present,
       source => $file,
+      before => Aem_saml[aem_saml]
     }
   }
 
@@ -79,7 +80,8 @@ class aem_curator::action_enable_saml (
 
   if $file {
     file { "${tmp_dir}/SAML/saml_certificate.crt":
-      ensure => absent
+      ensure => absent,
+      require => Aem_saml[aem_saml]
     }
   }
 }
