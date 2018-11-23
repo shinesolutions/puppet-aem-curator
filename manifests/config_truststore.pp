@@ -43,7 +43,7 @@ define aem_curator::config_truststore (
 
     if $file {
       file { "${tmp_dir}/truststore.p12":
-        ensure => absent,
+        ensure  => absent,
         require => Aem_truststore[aem_truststore]
       }
     }
