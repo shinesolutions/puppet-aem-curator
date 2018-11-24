@@ -44,17 +44,19 @@ class aem_curator::config_publish (
   $aem_healthcheck_source     = undef,
   $aem_healthcheck_version    = undef,
   $aem_id                     = 'publish',
-  $aem_keystore_password      = undef,
+  $aem_ssl_keystore_password  = undef,
   $aem_keystore_path          = undef,
-  $enable_aem_reconfiguration = false,
   $cert_base_url              = undef,
+  $delete_repository_index    = false,
+  $enable_aem_reconfiguration = false,
+  $enable_truststore_creation = false,
   $enable_create_system_users = undef,
   $publish_ssl_port           = undef,
-  $delete_repository_index    = false,
-  $jmxremote_port             = '5983',
+  $jmxremote_port             = '59183',
   $jvm_mem_opts               = undef,
   $jvm_opts                   = undef,
   $run_mode                   = 'publish',
+  $truststore_password        = undef,
 ) {
 
   if !defined(File[$tmp_dir]) {
@@ -145,7 +147,7 @@ class aem_curator::config_publish (
     aem_id                     => $aem_id,
     aem_healthcheck_source     => $aem_healthcheck_source,
     aem_healthcheck_version    => $aem_healthcheck_version,
-    aem_keystore_password      => $aem_keystore_password,
+    aem_ssl_keystore_password  => $aem_ssl_keystore_password,
     aem_keystore_path          => $aem_keystore_path,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
     aem_ssl_port               => $publish_ssl_port,
@@ -210,6 +212,11 @@ class aem_curator::config_publish (
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     tags                       => 'deep',
     aem_id                     => $aem_id,
+  } -> aem_curator::config_truststore { "${aem_id}: Configure AEM Truststore":
+    aem_id                     => $aem_id,
+    enable_truststore_creation => $enable_truststore_creation,
+    truststore_password        => $truststore_password,
+    tmp_dir                    => $tmp_dir
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',
