@@ -1,3 +1,6 @@
+### 1.3.1
+*
+
 ### 1.3.0
 * Add feature to configure SAML
 * Add feature to configure AEM Trusttore
