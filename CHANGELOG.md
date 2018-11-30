@@ -1,5 +1,5 @@
-### 1.3.1
-*
+### 1.4.0
+* Add new AEM profile: aem65
 
 ### 1.3.0
 * Add feature to configure SAML
