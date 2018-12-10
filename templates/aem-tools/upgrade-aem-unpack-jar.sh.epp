@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+if [ "$#" -ne 3 ]; then
+  echo 'Usage: ./unpack-aem-jar.sh <aem_artifacts_base> <aem_upgrade_version> <enable_backup>'
+  exit 1
+fi
+
+PATH=<%= $aem_tools_env_path %>
+
+# translate puppet exit code to follow convention
+translate_exit_code() {
+
+  exit_code="$1"
+  if [ "$exit_code" -eq 0 ] || [ "$exit_code" -eq 2 ]; then
+    exit_code=0
+  else
+    exit "$exit_code"
+  fi
+
+  return "$exit_code"
+}
+
+set +o errexit
+
+aem_artifacts_base=$1
+aem_upgrade_version=$2
+enable_backup=$3
+
+<% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
+
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+
+FACTER_aem_artifacts_base="${aem_artifacts_base}" \
+  FACTER_upgrade_version="${aem_upgrade_version}" \
+  FACTER_enable_backup="${enable_backup}" \
+  FACTER_aem_port=<%= $aem_instance['aem_port'] %> \
+  FACTER_aem_id=<%= $aem_instance['aem_id'] %> \
+  /opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  --execute "include aem_curator::action_upgrade_aem_unpack_jar"
+
+translate_exit_code "$?"
+
+echo "Testing if /opt/aem/publish/crx-quickstart/app/cq-quickstart-${aem_upgrade_version}.0-standalone-quickstart.jar exists for AEM <%= $aem_instance['aem_id'] %> using InSpec..."
+cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
+HOME=/root \
+  inspec exec . --controls <%= $aem_instance['aem_id'] %>-aem-${aem_upgrade_version}-standalone-quickstart-exist
+
+translate_exit_code "$?"
+
+<% } -%>

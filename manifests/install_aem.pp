@@ -1,4 +1,4 @@
-# == Class: config::aem
+# == Class: aem_curator::install_aem
 #
 #  Shared Resources used by other AEM modules
 #
