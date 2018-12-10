@@ -70,7 +70,7 @@ define aem_curator::upgrade_repo_migration (
 
   $home = "${aem_base}/${aem_id}"
   $crx_dir = "${home}/crx-quickstart"
-  $crx2oak_path = "$crx_dir/opt/extensions/crx2oak.jar"
+  $crx2oak_path = "${crx_dir}/opt/extensions/crx2oak.jar"
   $aem_jar_path = "${home}/aem-${aem_id}-${aem_port}.jar"
 
   service { "aem-${aem_id}":
@@ -94,7 +94,7 @@ define aem_curator::upgrade_repo_migration (
 
   exec { "${aem_id}: Executing repository migration":
     command => "java -Xmx4096m -jar ${aem_jar_path} -v -x crx2oak -xargs -- --load-profile segment-no-ds",
-    cwd     => "$home",
+    cwd     => $home,
     require => Exec["${aem_id}: Ensure AEM resource is stopped"]
   } -> exec { "${aem_id}: Fix ${$crx_dir}/repository/ permissions":
     command => "chown -R aem-${aem_id}:aem-${aem_id} ${$crx_dir}/repository/",

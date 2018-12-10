@@ -9,13 +9,13 @@ class aem_curator::action_upgrade_repo_migration (
   $source_crx2oak             = $::source_crx2oak,
 ) {
 
-  if $source_crx2oak == 'false' {
-    $_source_crx2oak = str2bool($source_crx2oak)
+  if $source_crx2oak == '' {
+    $_source_crx2oak = undef
   } else {
     $_source_crx2oak = $source_crx2oak
   }
 
-  aem_curator::upgrade_repo_migration { "${aem_id}: Unpacking AEM ${upgrade_version} jar file":
+  aem_curator::upgrade_repo_migration { "${aem_id}: Triggering AEM Repository migration":
     tmp_dir                    => $tmp_dir,
     aem_base                   => $aem_base,
     aem_id                     => $aem_id,

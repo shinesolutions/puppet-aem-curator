@@ -110,7 +110,7 @@ define aem_curator::upgrade_aem (
 
   exec { "${aem_id}: Ensure AEM resource is stopped":
     command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=stopped",
-    before => Exec["${aem_id}: Upgrade AEM ${aem_id} to version ${aem_upgrade_version}"]
+    before  => Exec["${aem_id}: Upgrade AEM ${aem_id} to version ${aem_upgrade_version}"]
   }
 
   exec { "${aem_id}: Upgrade AEM ${aem_id} to version ${aem_upgrade_version}":

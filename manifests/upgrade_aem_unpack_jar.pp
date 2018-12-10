@@ -100,7 +100,7 @@ define aem_curator::upgrade_aem_unpack_jar (
   }
 
   aem_aem { "${aem_id}: Remove all agents":
-    ensure   => all_agents_removed,
+    ensure => all_agents_removed,
     aem_id => $aem_id,
   } -> service { "aem-${aem_id}":
     ensure => 'stopped'
@@ -109,7 +109,7 @@ define aem_curator::upgrade_aem_unpack_jar (
   } -> exec { "${aem_id}: Ensure AEM resource is stopped":
     command => "${puppet_binary} resource service aem-${aem_id} ensure=stopped",
   } -> exec { "${aem_id}: remove old AEM JAR file":
-    command => "rm -f $aem_jar_path",
+    command => "rm -f ${aem_jar_path}",
   } -> exec { "${aem_id}: remove all old AEM Quickstart Standalone JAR files":
     command => "rm -f ${crx_dir}/app/cq-quickstart-*-standalone-quickstart.jar",
   } -> archive { $aem_jar_path:
