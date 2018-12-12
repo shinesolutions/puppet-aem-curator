@@ -1,3 +1,6 @@
+### 1.4.1
+* Fixed logic error in config_saml manifest
+
 ### 1.4.0
 * Add new AEM profile: aem65
 
