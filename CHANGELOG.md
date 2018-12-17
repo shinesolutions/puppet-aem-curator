@@ -1,5 +1,6 @@
 ### 1.5.0
 * Add feature for automating AEM Upgrade
+* Fixed logic error in config_saml manifest
 
 ### 1.4.0
 * Add new AEM profile: aem65

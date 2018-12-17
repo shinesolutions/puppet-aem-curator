@@ -73,7 +73,6 @@ define aem_curator::config_saml (
       aem_username => $aem_username,
       aem_password => $aem_password,
       tmp_dir      => $tmp_dir,
-      require      => Aem_certificate[aem_certificate],
     }
 
     create_resources(
