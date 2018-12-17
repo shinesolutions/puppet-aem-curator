@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+if [ "$#" -ne 5 ]; then
+  echo 'Usage: ./upgrade-aem-script.sh <aem_id> <aem_base> <aem_upgrade_version> <aem_port> <post_upgrade_sleep_secs>'
+  exit 1
+fi
+
+PATH=<%= $aem_tools_env_path %>
+
+# translate puppet exit code to follow convention
+translate_exit_code() {
+
+  exit_code="$1"
+  if [ "$exit_code" -eq 0 ]; then
+    exit_code=0
+  else
+    exit "$exit_code"
+  fi
+
+  return "$exit_code"
+}
+
+set +o errexit
+
+# Set variables for AEM Upgrade
+aem_id=$1
+aem_base=$2
+aem_upgrade_version=$3
+aem_port=$4
+post_upgrade_sleep_secs=$5
+
+home="${aem_base}/${aem_id}"
+crx_dir="${home}/crx-quickstart"
+java_run=true
+
+update_permission () {
+  echo "Update permissions to aem-${aem_id}:aem-${aem_id} in ${home}"
+  chown -R aem-${aem_id}:aem-${aem_id} ${home}
+  echo "Update permissions to aem-${aem_id}:aem-${aem_id} in ${crx_dir}/repository/"
+  chown -R aem-${aem_id}:aem-${aem_id} ${crx_dir}/repository/*
+}
+
+upgrade() {
+  echo "Upgrade AEM ${aem_id} to version ${aem_upgrade_version} "
+  java -server -Xmx4096m -Dcom.adobe.upgrade.forcemigration=true \
+  -Djava.awt.headless=true -Dsling.run.modes=${aem_id},crx3,crx3tar \
+  -jar ${crx_dir}/app/cq-quickstart-${aem_upgrade_version}.0-standalone-quickstart.jar start -c ${crx_dir} -i launchpad \
+  -p ${aem_port} -Dsling.properties=${crx_dir}/conf/sling.properties  > /dev/null 2>&1 &
+  echo $!
+}
+
+wait_stopped () {
+  while [ $java_run == 'true' ] || [ $java_run == 'True' ] ; do
+    if (( $(ps -ef | grep -v grep | grep java | grep ${aem_id} | wc -l) > 0 )); then
+      echo "Wait till ${aem_id} process is stopped"
+      sleep 10
+      java_run=true
+    else
+      echo "${aem_id} process is stopped"
+      java_run=false
+    fi
+  done
+}
+
+cd ${home}
+pid=$(upgrade)
+translate_exit_code "$?"
+echo "."
+echo "."
+echo "Sleep ${post_upgrade_sleep_secs} seconds."
+sleep ${post_upgrade_sleep_secs}
+
+translate_exit_code "$?"
+
+echo "Testing AEM  Upgrade for ${aem_id} was successful using InSpec..."
+cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
+HOME=/root \
+  inspec exec . --controls aem-${aem_id}-succesfully-upgraded
+
+translate_exit_code "$?"
+
+kill ${pid}
+translate_exit_code "$?"
+
+wait_stopped
+translate_exit_code "$?"
+
+update_permission
+translate_exit_code "$?"

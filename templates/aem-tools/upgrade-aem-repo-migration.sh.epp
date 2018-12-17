@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+PATH=<%= $aem_tools_env_path %>
+
+source_crx2oak=${1:-}
+
+# translate puppet exit code to follow convention
+translate_exit_code() {
+
+  exit_code="$1"
+  if [ "$exit_code" -eq 0 ] || [ "$exit_code" -eq 2 ]; then
+    exit_code=0
+  else
+    exit "$exit_code"
+  fi
+
+  return "$exit_code"
+}
+
+set +o errexit
+
+if [[ -z "${source_crx2oak}" ]]; then
+  source_crx2oak=false
+fi
+
+
+<% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
+
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+
+FACTER_source_crx2oak="${source_crx2oak}" \
+  FACTER_aem_port=<%= $aem_instance['aem_port'] %> \
+  FACTER_aem_id=<%= $aem_instance['aem_id'] %> \
+  /opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  --execute "include aem_curator::action_upgrade_repo_migration"
+
+translate_exit_code "$?"
+
+echo "Testing repository migratoin for  AEM <%= $aem_instance['aem_id'] %> was successful using InSpec..."
+cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
+HOME=/root \
+  inspec exec . --controls <%= $aem_instance['aem_id'] %>-repo-migration-upgrade-log
+
+translate_exit_code "$?"
+
+<% } -%>

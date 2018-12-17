@@ -1,4 +1,4 @@
-# == Class: config::aem_install_package
+# == Class: aem_curator::aem_install_package
 #
 #  Download and install an AEM package.
 #

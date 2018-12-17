@@ -1,3 +1,6 @@
+### 1.5.0
+* Add feature for automating AEM Upgrade
+
 ### 1.4.0
 * Add new AEM profile: aem65
 
