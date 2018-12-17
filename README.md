@@ -20,6 +20,7 @@ Other than AEM installation, it also supports some common AEM management events:
 * Export multiple AEM packages for backup, declared in a descriptor file
 * Import a single backup AEM package
 * List AEM packages
+* AEM Upgrade automation
 
 Install
 -------
