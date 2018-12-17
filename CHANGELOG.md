@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Add feature for AEM Global Truststore migration shinesolutions/aem-aws-stack-builder#229
-
 ### Added
+
+- Add feature for AEM Global Truststore migration shinesolutions/aem-aws-stack-builder#229
 
 ### Changed
 
