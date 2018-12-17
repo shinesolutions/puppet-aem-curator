@@ -22,8 +22,15 @@ Other than AEM installation, it also supports some common AEM management events:
 * List AEM packages
 * AEM Upgrade automation
 
-Install
--------
+Learn more about Puppet AEM Curator:
+
+* [Installation](https://github.com/shinesolutions/puppet-aem-curator#installation)
+* [Usage](https://github.com/shinesolutions/puppet-aem-curator#usage)
+
+Puppet AEM Curator is part of [AEM OpenCloud](https://aemopencloud.io) platform but it can be used as a stand-alone.
+
+Installation
+------------
 
     puppet module install shinesolutions-aem_curator
 
