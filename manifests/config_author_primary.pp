@@ -202,6 +202,19 @@ class aem_curator::config_author_primary (
     aem_id       => $aem_id,
     enable_crxde => $enable_crxde,
     run_mode     => $run_mode,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after configuring CRXDE":
+    ensure                     => login_page_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after configuring CRXDE":
+    ensure                     => aem_health_check_is_ok,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    tags                       => 'deep',
+    aem_id                     => $aem_id,
   } -> aem_aem { "${aem_id}: Remove all agents":
     ensure   => all_agents_removed,
     run_mode => 'author',
@@ -224,6 +237,19 @@ class aem_curator::config_author_primary (
     enable_truststore_creation => $enable_truststore_creation,
     truststore_password        => $truststore_password,
     tmp_dir                    => $tmp_dir
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after configuring AEM Truststore":
+    ensure                     => login_page_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after configuring AEM Truststore":
+    ensure                     => aem_health_check_is_ok,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    tags                       => 'deep',
+    aem_id                     => $aem_id,
   } -> aem_curator::config_saml { "${aem_id}: Configure SAML authentication":
     aem_id                                                => $aem_id,
     aem_system_users                                      => $aem_system_users,
@@ -233,17 +259,56 @@ class aem_curator::config_author_primary (
     enable_authorizable_keystore_certificate_chain_upload => $enable_authorizable_keystore_certificate_chain_upload,
     enable_saml_certificate_upload                        => $enable_saml_certificate_upload,
     tmp_dir                                               => $tmp_dir
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after configuring SAML authentication":
+    ensure                     => login_page_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after configuring SAML authentication":
+    ensure                     => aem_health_check_is_ok,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    tags                       => 'deep',
+    aem_id                     => $aem_id,
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',
     group   => 'shinesolutions',
     version => $aem_password_reset_version,
     aem_id  => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after removing password reset package":
+    ensure                     => login_page_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after removing password reset package":
+    ensure                     => aem_health_check_is_ok,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    tags                       => 'deep',
+    aem_id                     => $aem_id,
   } -> aem_curator::config_aem_system_users { "${aem_id}: Configure system users":
     aem_id                   => $aem_id,
     aem_system_users         => $aem_system_users,
     credentials_hash         => $credentials_hash,
     enable_default_passwords => $enable_default_passwords,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after configuring system users":
+    ensure                     => login_page_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after configuring system users":
+    ensure                     => aem_health_check_is_ok,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    tags                       => 'deep',
+    aem_id                     => $aem_id,
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => absent,
   }
