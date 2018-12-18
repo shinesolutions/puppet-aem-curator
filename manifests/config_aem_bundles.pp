@@ -57,15 +57,15 @@ define aem_curator::config_aem_bundles (
 
     if $apache_proxy_password != '' {
       aem_config_property { "${aem_id}: Configure Proxy password for Apache http proxy configuration":
-       ensure           => present,
-       name             => 'proxy.password',
-       type             => 'String',
-       value            => $apache_proxy_password,
-       config_node_name => 'org.apache.http.proxyconfigurator.config',
-       aem_id           => $aem_id,
-       require          => Aem_config_property["${aem_id}: Configure Proxy user for Apache http proxy configuration"],
-       before           => Aem_config_property["${aem_id}: Enable configuration for Apache http proxy configuration"]
-     }
+        ensure           => present,
+        name             => 'proxy.password',
+        type             => 'String',
+        value            => $apache_proxy_password,
+        config_node_name => 'org.apache.http.proxyconfigurator.config',
+        aem_id           => $aem_id,
+        require          => Aem_config_property["${aem_id}: Configure Proxy user for Apache http proxy configuration"],
+        before           => Aem_config_property["${aem_id}: Enable configuration for Apache http proxy configuration"]
+      }
     }
 
     aem_config_property { "${aem_id}: Enable configuration for Apache http proxy configuration":
