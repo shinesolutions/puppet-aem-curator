@@ -10,7 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New manifest for configuring AEM Bundles
 - New bundle configuration for Apache HTTP Components Proxy Configuration shinesolutions/aem-aws-stack-builder#235
 
+- Add feature for AEM Global Truststore migration shinesolutions/aem-aws-stack-builder#229
+
 ### Changed
+
+- Improved provisioning process for Author & Publish shinesolutions/aem-aws-stack-builder#214
 
 ### Removed
 
