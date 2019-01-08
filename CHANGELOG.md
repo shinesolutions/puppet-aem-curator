@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add feature for AEM Global Truststore migration shinesolutions/aem-aws-stack-builder#229
 
 ### Changed
-
+- Upgrade aem_resources to 3.5.0
 - Improved provisioning process for Author & Publish shinesolutions/aem-aws-stack-builder#214
 
 ### Removed
