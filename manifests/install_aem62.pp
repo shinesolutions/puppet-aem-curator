@@ -1,4 +1,5 @@
 define aem_curator::install_aem62(
+  $aem_license_base,
   $aem_artifacts_base,
   $aem_healthcheck_version,
   $aem_port,
@@ -24,7 +25,7 @@ define aem_curator::install_aem62(
   # Retrieve the license file
   archive { "${aem_base}/aem/${aem_id}/license.properties":
     ensure  => present,
-    source  => "${aem_artifacts_base}/license-6.2.properties",
+    source  => "${aem_license_base}/license-6.2.properties",
     cleanup => false,
     require => File["${aem_base}/aem/${aem_id}"],
   } -> file { "${aem_base}/aem/${aem_id}/license.properties":

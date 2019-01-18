@@ -21,6 +21,7 @@
 #
 class aem_curator::install_publish (
   $aem_artifacts_base,
+  $aem_license_base,
   $aem_base,
   $aem_healthcheck_version,
   $aem_host,
@@ -54,6 +55,7 @@ class aem_curator::install_publish (
 ) {
   aem_curator::install_aem { "${aem_id}: Install AEM Publish":
     aem_artifacts_base            => $aem_artifacts_base,
+    aem_license_base              => $aem_license_base,
     aem_base                      => $aem_base,
     aem_debug                     => false,
     aem_healthcheck_version       => $aem_healthcheck_version,

@@ -3,7 +3,7 @@ set -o nounset
 set -o errexit
 
 if [ "$#" -ne 7 ]; then
-  echo 'Usage: ./install-aem-profile.sh <aem_id> <aem_profile> <aem_artifacts_base> <aem_base> <aem_healthcheck_version> <aem_port> <aem_ssl_port>'
+  echo 'Usage: ./install-aem-profile.sh <aem_id> <aem_profile> <aem_artifacts_base> <aem_license_base> <aem_base> <aem_healthcheck_version> <aem_port> <aem_ssl_port>'
   exit 1
 fi
 
@@ -12,10 +12,11 @@ PATH=<%= $aem_tools_env_path %>
 aem_id=$1
 aem_profile=$2
 aem_artifacts_base=$3
-aem_base=$4
-aem_healthcheck_version=$5
-aem_port=$6
-aem_ssl_port=$7
+aem_license_base=$4
+aem_base=$5
+aem_healthcheck_version=$6
+aem_port=$7
+aem_ssl_port=$8
 tmp_dir=<%= $tmp_dir %>
 
 # translate puppet exit code to follow convention
@@ -38,6 +39,7 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 export FACTER_aem_id="${aem_id}"
 export FACTER_aem_profile="${aem_profile}"
 export FACTER_aem_artifacts_base="${aem_artifacts_base}"
+export FACTER_aem_license_base="${aem_license_base}"
 export FACTER_aem_base="${aem_base}"
 export FACTER_aem_healthcheck_version="${aem_healthcheck_version}"
 export FACTER_aem_port="${aem_port}"

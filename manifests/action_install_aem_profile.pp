@@ -1,5 +1,6 @@
 class aem_curator::action_install_aem_profile (
   $aem_artifacts_base         = $::aem_artifacts_base,
+  $aem_license_base           = $::aem_license_base,
   $aem_base                   = $::aem_base,
   $aem_healthcheck_version    = $::aem_healthcheck_version,
   $aem_id                     = $::aem_id,
@@ -29,6 +30,7 @@ class aem_curator::action_install_aem_profile (
 
   aem_curator::install_aem_profile { "${aem_id}: Install AEM profile ${aem_profile}":
     aem_artifacts_base      => $aem_artifacts_base,
+    aem_license_base        => $aem_license_base,
     aem_base                => $aem_base,
     aem_healthcheck_version => $aem_healthcheck_version,
     aem_id                  => $aem_id,
