@@ -123,7 +123,7 @@ class aem_curator::config_publish (
   if $enable_post_start_sleep {
     exec { "${aem_id}: Sleep ${post_start_sleep_seconds} seconds after starting AEM Service":
       command => "sleep ${post_start_sleep_seconds}",
-      after   => Service['aem-publish'],
+      require => Service['aem-publish'],
       before  => Aem_aem["${aem_id}: Wait until login page is ready"]
     }
   }
