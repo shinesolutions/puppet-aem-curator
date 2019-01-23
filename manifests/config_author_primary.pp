@@ -133,7 +133,7 @@ class aem_curator::config_author_primary (
   if $enable_post_start_sleep {
     exec { "${aem_id}: Sleep ${post_start_sleep_seconds} seconds after starting AEM Service":
       command => "sleep ${post_start_sleep_seconds}",
-      require   => Service['aem-author'],
+      require => Service['aem-author'],
       before  => Aem_aem["${aem_id}: Wait until login page is ready"]
     }
   }
