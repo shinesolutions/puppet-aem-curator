@@ -33,7 +33,6 @@ class aem_curator::config_publish (
   $login_ready_base_sleep_seconds,
   $login_ready_max_sleep_seconds,
   $login_ready_max_tries,
-
   $publish_port,
   $publish_protocol,
   $publish_dispatcher_id,
