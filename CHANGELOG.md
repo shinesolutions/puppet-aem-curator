@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Add 'aem_license_base' variable which specifies the location of the license file
+- Add `aem_license_base` variable which specifies the location of the license file
 
 ## [1.5.0] - 2019-01-08
 
