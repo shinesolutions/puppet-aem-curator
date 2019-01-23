@@ -1,4 +1,5 @@
 define aem_curator::install_aem_profile (
+  $aem_license_base,
   $aem_artifacts_base,
   $aem_healthcheck_version,
   $aem_port,
@@ -23,6 +24,7 @@ define aem_curator::install_aem_profile (
 ) {
 
   Resource["aem_curator::install_${aem_profile}"]  { "${aem_id}: Install AEM profile ${aem_profile}":
+    aem_license_base        => $aem_license_base,
     aem_artifacts_base      => $aem_artifacts_base,
     aem_base                => $aem_base,
     aem_healthcheck_version => $aem_healthcheck_version,

@@ -1,4 +1,5 @@
 define aem_curator::install_aem62_sp1_cfp2(
+  $aem_license_base,
   $aem_artifacts_base,
   $aem_healthcheck_version,
   $aem_port,
@@ -25,6 +26,7 @@ define aem_curator::install_aem62_sp1_cfp2(
     run_mode                => $run_mode,
     aem_port                => $aem_port,
     aem_artifacts_base      => $aem_artifacts_base,
+    aem_license_base        => $aem_license_base,
     aem_healthcheck_version => $aem_healthcheck_version,
     aem_base                => $aem_base,
     aem_sample_content      => $aem_sample_content,
