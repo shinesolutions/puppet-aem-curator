@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add `aem_license_base` variable which specifies the location of the license file
+- Add post start sleep timer to give the AEM service more time to start before configuring AEM shinesolutions/aem-aws-stack-builder#214
 
 ## [1.5.0] - 2019-01-08
 

@@ -45,6 +45,7 @@ class aem_curator::config_author_primary (
   $enable_aem_reconfiguration                            = false,
   $enable_truststore_migration                           = false,
   $enable_authorizable_keystore_creation                 = false,
+  $enable_post_start_sleep                               = false,
   $enable_saml                                           = false,
   $enable_truststore_creation                            = false,
   $author_ssl_port                                       = undef,
@@ -52,6 +53,7 @@ class aem_curator::config_author_primary (
   $cert_base_url                                         = undef,
   $enable_create_system_users                            = undef,
   $delete_repository_index                               = false,
+  $post_start_sleep_seconds                              = '120',
   $proxy_enabled                                         = false,
   $proxy_host                                            = undef,
   $proxy_port                                            = undef,
@@ -125,6 +127,14 @@ class aem_curator::config_author_primary (
       line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
       after  => '^JVM_OPTS=\"\$JVM_OPTS',
       notify => Service['aem-author'],
+    }
+  }
+
+  if $enable_post_start_sleep {
+    exec { "${aem_id}: Sleep ${post_start_sleep_seconds} seconds after starting AEM Service":
+      command => "sleep ${post_start_sleep_seconds}",
+      after   => Service['aem-author'],
+      before  => Aem_aem["${aem_id}: Wait until login page is ready"]
     }
   }
 
