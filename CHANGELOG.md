@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.0]
 
 ### Added
 - Add `aem_license_base` variable which specifies the location of the license file
@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New manifest for configuring AEM Bundles
 - New bundle configuration for Apache HTTP Components Proxy Configuration shinesolutions/aem-aws-stack-builder#235
-
 - Add feature for AEM Global Truststore migration shinesolutions/aem-aws-stack-builder#229
 
 ### Changed
