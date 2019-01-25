@@ -49,9 +49,11 @@ class aem_curator::config_publish (
   $cert_base_url               = undef,
   $delete_repository_index     = false,
   $enable_aem_reconfiguration  = false,
+  $enable_post_start_sleep     = false,
   $enable_truststore_creation  = false,
   $enable_truststore_migration = false,
   $enable_create_system_users  = undef,
+  $post_start_sleep_seconds    = '120',
   $publish_ssl_port            = undef,
   $jmxremote_port              = '59183',
   $jvm_mem_opts                = undef,
@@ -115,6 +117,14 @@ class aem_curator::config_publish (
       line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
       after  => '^JVM_OPTS=\"\$JVM_OPTS',
       notify => Service['aem-publish'],
+    }
+  }
+
+  if $enable_post_start_sleep {
+    exec { "${aem_id}: Sleep ${post_start_sleep_seconds} seconds after starting AEM Service":
+      command => "sleep ${post_start_sleep_seconds}",
+      require => Service['aem-publish'],
+      before  => Aem_aem["${aem_id}: Wait until login page is ready"]
     }
   }
 
