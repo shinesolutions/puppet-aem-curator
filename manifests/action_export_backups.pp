@@ -4,14 +4,17 @@ File {
 
 class aem_curator::action_export_backups (
   $tmp_dir,
-  $aem_id           = undef,
-  $aem_username     = $::aem_username,
-  $aem_password     = $::aem_password,
-  $descriptor_file  = $::descriptor_file,
-  $component        = $::component,
-  $package_version  = $::package_version,
-  $stack_prefix     = $::stack_prefix,
-  $data_bucket_name = $::data_bucket_name,
+  $aem_id                     = undef,
+  $aem_username               = $::aem_username,
+  $aem_password               = $::aem_password,
+  $descriptor_file            = $::descriptor_file,
+  $component                  = $::component,
+  $package_version            = $::package_version,
+  $stack_prefix               = $::stack_prefix,
+  $data_bucket_name           = $::data_bucket_name,
+  $retries_max_tries          = 60,
+  $retries_base_sleep_seconds = 5,
+  $retries_max_sleep_seconds  = 5,
 ) {
 
   # load descriptor file
@@ -87,7 +90,13 @@ class aem_curator::export_backup_packages (
 
     }
 
-    aem_package { "Create and download backup file for package: ${package[name]}":
+    aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before creating backup file for package: ${package[name]}":
+      ensure                     => aem_package_manager_is_ready,
+      retries_max_tries          => $retries_max_tries,
+      retries_base_sleep_seconds => $retries_base_sleep_seconds,
+      retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+      aem_id                     => $_aem_id,
+    } -> aem_package { "Create and download backup file for package: ${package[name]}":
       ensure       => archived,
       name         => $package[name],
       version      => $package_version,

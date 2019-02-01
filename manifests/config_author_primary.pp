@@ -166,6 +166,12 @@ class aem_curator::config_author_primary (
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready":
+    ensure                     => aem_package_manager_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
   } -> aem_curator::reconfig_aem{ "${aem_id}: Reconfigure AEM":
     aem_base                   => $aem_base,
     aem_id                     => $aem_id,
@@ -300,6 +306,12 @@ class aem_curator::config_author_primary (
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     tags                       => 'deep',
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before removing password reset package":
+    ensure                     => aem_package_manager_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,

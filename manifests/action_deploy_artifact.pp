@@ -41,6 +41,9 @@ class aem_curator::action_deploy_artifact (
   } -> archive { "${path}/${package_group}/${package_name}-${package_version}.zip":
     ensure => present,
     source => $package_source,
+  } -> aem_aem { "Wait until CRX Package Manager is ready before deploying package ${package_group}/${package_name}-${package_version}":
+    ensure => aem_package_manager_is_ready,
+    aem_id => $_aem_id,
   } -> aem_package { "Deploy package ${package_group}/${package_name}-${package_version}":
     ensure       => present,
     aem_id       => $_aem_id,

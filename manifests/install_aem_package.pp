@@ -96,6 +96,9 @@ define aem_curator::install_aem_package (
     source  => "${artifacts_base}/${url_file_name}",
     cleanup => false,
     require => File["${tmp_dir}/${aem_id}"],
+  } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before install ${package_name}":
+    ensure => aem_package_manager_is_ready,
+    aem_id => $aem_id,
   } -> aem_package { "${aem_id}: Install ${package_name}":
     ensure    => present,
     name      => $package_name,
