@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem62_sp1_cfp18
+
 ## [1.7.0] - 2019-01-28
 
 ### Added
