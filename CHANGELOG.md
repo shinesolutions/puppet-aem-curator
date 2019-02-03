@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix aem62_sp1_cfp18 package_version property
+
 ## [1.9.0] - 2019-02-03
 
 ### Added

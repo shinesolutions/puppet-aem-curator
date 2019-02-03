@@ -66,7 +66,7 @@ define aem_curator::install_aem62_sp1_cfp18(
     package_name            => 'cq-6.2.0-sp1-cfp',
     package_group           => 'adobe/cq620/cumulativefixpack',
     post_install_sleep_secs => 900,
-    package_version         => '15.0',
+    package_version         => '18.0',
     artifacts_base          => $aem_artifacts_base,
     aem_id                  => $aem_id,
   } -> aem_curator::install_aem_package { "${aem_id}: Install hotfix 15607":
