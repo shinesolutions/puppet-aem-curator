@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.1] - 2019-02-03
+## [1.10.0] - 2019-02-06
 
 ## Changed
 - Add parameter to force removal of the AEM Global Truststore for reconfiguration & truststore migration
@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 - Add AEM Package Manager readiness check for reconfiguration
 - Add new feature to remove AEM Global truststore during reconfiguration
+
+## [1.9.1] - 2019-02-03
 
 ### Fixed
 - Fix aem62_sp1_cfp18 package_version property
