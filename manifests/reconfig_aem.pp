@@ -10,7 +10,7 @@ define aem_curator::reconfig_aem (
   $aem_base                   = '/opt',
   $aem_healthcheck_source     = undef,
   $aem_healthcheck_version    = undef,
-  $aem_ssl_keystore_password      = undef,
+  $aem_ssl_keystore_password  = undef,
   $aem_keystore_path          = undef,
   $aem_ssl_port               = undef,
   $aem_system_users           = undef,
