@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+- Add AEM Package Manager readiness check for reconfiguration
+
 ## [1.9.0] - 2019-02-03
 
 ### Added

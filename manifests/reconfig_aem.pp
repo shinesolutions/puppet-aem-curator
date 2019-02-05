@@ -86,6 +86,12 @@ define aem_curator::reconfig_aem (
       ensure => aem_health_check_is_ok,
       tags   => 'shallow',
       aem_id => $aem_id,
+    } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before reconfiguration":
+      ensure                     => aem_package_manager_is_ready,
+      retries_max_tries          => $retries_max_tries,
+      retries_base_sleep_seconds => $retries_base_sleep_seconds,
+      retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+      aem_id                     => $aem_id,
     }
 
     aem_curator::config_aem { "Configure AEM ${aem_id}":
@@ -108,6 +114,12 @@ define aem_curator::reconfig_aem (
       ensure => aem_health_check_is_ok,
       tags   => 'deep',
       aem_id => $aem_id
+    } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready after reconfiguration":
+      ensure                     => aem_package_manager_is_ready,
+      retries_max_tries          => $retries_max_tries,
+      retries_base_sleep_seconds => $retries_base_sleep_seconds,
+      retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+      aem_id                     => $aem_id,
     }
   }
 }
