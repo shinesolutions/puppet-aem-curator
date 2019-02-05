@@ -106,7 +106,7 @@ define aem_curator::reconfig_aem (
       credentials_hash           => $credentials_hash,
       run_mode                   => $run_mode,
       tmp_dir                    => $tmp_dir,
-      require                    => Aem_aem["${aem_id}: Wait until aem health check is ok"]
+      require                    => Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
     } -> aem_aem { "${aem_id}: Wait until login page is ready after reconfiguration":
       ensure => login_page_is_ready,
       aem_id => $aem_id,
