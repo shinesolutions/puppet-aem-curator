@@ -289,7 +289,7 @@ class aem_curator::config_author_primary (
     apache_proxy_port              => $proxy_port,
     apache_proxy_user              => $proxy_user,
     apache_proxy_password          => $proxy_password,
-    apache_proxy_noproxy        => $proxy_noproxy,
+    apache_proxy_noproxy           => $proxy_noproxy,
     login_ready_max_tries          => $login_ready_max_tries,
     login_ready_base_sleep_seconds => $login_ready_base_sleep_seconds,
     login_ready_max_sleep_seconds  => $login_ready_max_sleep_seconds,
