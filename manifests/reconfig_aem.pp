@@ -10,7 +10,7 @@ define aem_curator::reconfig_aem (
   $aem_base                   = '/opt',
   $aem_healthcheck_source     = undef,
   $aem_healthcheck_version    = undef,
-  $aem_ssl_keystore_password      = undef,
+  $aem_ssl_keystore_password  = undef,
   $aem_keystore_path          = undef,
   $aem_ssl_port               = undef,
   $aem_system_users           = undef,
@@ -86,6 +86,12 @@ define aem_curator::reconfig_aem (
       ensure => aem_health_check_is_ok,
       tags   => 'shallow',
       aem_id => $aem_id,
+    } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before reconfiguration":
+      ensure                     => aem_package_manager_is_ready,
+      retries_max_tries          => $retries_max_tries,
+      retries_base_sleep_seconds => $retries_base_sleep_seconds,
+      retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+      aem_id                     => $aem_id,
     }
 
     aem_curator::config_aem { "Configure AEM ${aem_id}":
@@ -100,7 +106,7 @@ define aem_curator::reconfig_aem (
       credentials_hash           => $credentials_hash,
       run_mode                   => $run_mode,
       tmp_dir                    => $tmp_dir,
-      require                    => Aem_aem["${aem_id}: Wait until aem health check is ok"]
+      require                    => Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
     } -> aem_aem { "${aem_id}: Wait until login page is ready after reconfiguration":
       ensure => login_page_is_ready,
       aem_id => $aem_id,
@@ -108,6 +114,12 @@ define aem_curator::reconfig_aem (
       ensure => aem_health_check_is_ok,
       tags   => 'deep',
       aem_id => $aem_id
+    } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready after reconfiguration":
+      ensure                     => aem_package_manager_is_ready,
+      retries_max_tries          => $retries_max_tries,
+      retries_base_sleep_seconds => $retries_base_sleep_seconds,
+      retries_max_sleep_seconds  => $retries_max_sleep_seconds,
+      aem_id                     => $aem_id,
     }
   }
 }
