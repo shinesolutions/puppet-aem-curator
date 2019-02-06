@@ -4,7 +4,7 @@ define aem_curator::config_aem_bundles (
   $apache_proxy_port,
   $apache_proxy_user,
   $apache_proxy_password,
-  $apache_proxy_exceptions,
+  $apache_proxy_noproxy,
   $login_ready_max_tries,
   $login_ready_base_sleep_seconds,
   $login_ready_max_sleep_seconds,
@@ -36,7 +36,7 @@ define aem_curator::config_aem_bundles (
       ensure           => present,
       name             => 'proxy.exceptions',
       type             => 'String[]',
-      value            => $apache_proxy_exceptions,
+      value            => $apache_proxy_noproxy,
       config_node_name => 'org.apache.http.proxyconfigurator.config',
       aem_id           => $aem_id,
       before           => Aem_config_property["${aem_id}: Enable configuration for Apache http proxy configuration"]
