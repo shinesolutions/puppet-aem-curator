@@ -12,6 +12,7 @@ class aem_curator::action_config_aem (
   $aem_ssl_port               = $::aem_ssl_port,
   $cert_base_url              = $::cert_base_url,
   $enable_create_system_users = true,
+  $enable_truststore_removal  = true,
   $force                      = $::force,
   $run_mode                   = $::run_mode,
   $tmp_dir                    = $::tmp_dir
@@ -29,6 +30,7 @@ class aem_curator::action_config_aem (
     aem_ssl_port               => $aem_ssl_port,
     cert_base_url              => $cert_base_url,
     enable_create_system_users => $enable_create_system_users,
+    enable_truststore_removal  => $enable_truststore_removal,
     force                      => $force,
     run_mode                   => $run_mode,
     tmp_dir                    => $tmp_dir,

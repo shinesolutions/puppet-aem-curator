@@ -8,9 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 - Add AEM Package Manager readiness check for reconfiguration
-
-### Changed
-- Renamed proxy_exceptions parameter to proxy_noproxy
+- Add new feature to remove AEM Global truststore during reconfiguration
 
 ## [1.9.0] - 2019-02-03
 

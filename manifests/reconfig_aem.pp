@@ -7,6 +7,7 @@ define aem_curator::reconfig_aem (
   $aem_username               = undef,
   $aem_password               = undef,
   $enable_aem_reconfiguration = true,
+  $enable_truststore_removal  = true,
   $aem_base                   = '/opt',
   $aem_healthcheck_source     = undef,
   $aem_healthcheck_version    = undef,
@@ -65,6 +66,15 @@ define aem_curator::reconfig_aem (
       } -> exec { "[${aem_id}] Wait after deletion of /apps/system/config.${run_mode}":
         command => 'sleep 15',
         path    => ['/usr/bin', '/usr/sbin', '/bin'],
+      }
+    }
+
+    if $enable_truststore_removal {
+      aem_resources::remove_truststore { "${aem_id}: Delete AEM Global Truststore":
+        aem_id       => $aem_id,
+        aem_username => $aem_username,
+        aem_password => $aem_password,
+        before => Exec["service aem-${aem_id} stop"],
       }
     }
 
