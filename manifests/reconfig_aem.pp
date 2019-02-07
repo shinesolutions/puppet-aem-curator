@@ -74,7 +74,7 @@ define aem_curator::reconfig_aem (
         aem_id       => $aem_id,
         aem_username => $aem_username,
         aem_password => $aem_password,
-        force        => true,
+        force        => false,
         before       => Exec["service aem-${aem_id} stop"],
       }
     }
