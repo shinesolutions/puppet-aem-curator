@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+- Add parameter to force removal of the AEM Global Truststore for reconfiguration & truststore migration
+
 ## Added
 - Add AEM Package Manager readiness check for reconfiguration
 - Add new feature to remove AEM Global truststore during reconfiguration

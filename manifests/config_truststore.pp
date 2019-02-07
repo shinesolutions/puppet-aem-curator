@@ -59,6 +59,7 @@ define aem_curator::config_truststore (
       aem_id       => $aem_id,
       aem_username => $aem_username,
       aem_password => $aem_password,
+      force        => true,
     } -> aem_resources::create_truststore { "${aem_id}: Create new AEM Global Truststore":
       aem_id              => $aem_id,
       aem_username        => $aem_username,
