@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 - Add parameter to force removal of the AEM Global Truststore for reconfiguration & truststore migration
+- Add credentials to last aem_health_check
 
 ## Added
 - Add AEM Package Manager readiness check for reconfiguration
