@@ -353,6 +353,8 @@ class aem_curator::config_publish (
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     tags                       => 'deep',
     aem_id                     => $aem_id,
+    aem_username               => 'orchestrator',
+    aem_password               => $credentials_hash['orchestrator'],
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => absent,
   }
