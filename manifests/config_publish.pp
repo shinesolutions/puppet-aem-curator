@@ -160,6 +160,8 @@ class aem_curator::config_publish (
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
+    aem_username               => $aem_username,
+    aem_password               => $aem_password,
   } -> aem_curator::reconfig_aem{ "${aem_id}: Reconfigure AEM":
     aem_base                   => $aem_base,
     aem_id                     => $aem_id,
@@ -269,6 +271,8 @@ class aem_curator::config_publish (
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
+    aem_username               => $aem_username,
+    aem_password               => $aem_password,
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',

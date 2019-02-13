@@ -15,6 +15,8 @@ class aem_curator::action_list_packages (
       retries_base_sleep_seconds => $retries_base_sleep_seconds,
       retries_max_sleep_seconds  => $retries_max_sleep_seconds,
       aem_id                     => $aem_instance['aem_id'],
+      aem_username               => $aem_username,
+      aem_password               => $aem_password,
     } -> aem_aem { "${aem_instance['aem_id']}: List packages by groups":
       ensure         => packages_listed,
       package_groups => $package_groups,

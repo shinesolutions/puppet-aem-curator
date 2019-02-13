@@ -96,6 +96,8 @@ class aem_curator::export_backup_packages (
       retries_base_sleep_seconds => $retries_base_sleep_seconds,
       retries_max_sleep_seconds  => $retries_max_sleep_seconds,
       aem_id                     => $_aem_id,
+      aem_username               => $aem_username,
+      aem_password               => $aem_password,
     } -> aem_package { "Create and download backup file for package: ${package[name]}":
       ensure       => archived,
       name         => $package[name],

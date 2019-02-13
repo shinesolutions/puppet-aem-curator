@@ -45,6 +45,8 @@ class aem_curator::action_export_backup (
     retries_base_sleep_seconds => $retries_base_sleep_seconds,
     retries_max_sleep_seconds  => $retries_max_sleep_seconds,
     aem_id                     => $_aem_id,
+    aem_username               => $aem_username,
+    aem_password               => $aem_password,
   } -> aem_package { 'Create and download backup file':
     ensure       => archived,
     aem_id       => $_aem_id,
