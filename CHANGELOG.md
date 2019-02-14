@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Changed
+- Add fix to only download artifacts if package state in the deployment descriptor files are set to present
+
 ## [1.10.0] - 2019-02-06
 
 ## Changed
