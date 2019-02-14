@@ -128,7 +128,12 @@ class download_packages (
       'author'
       )
 
-    if $package['ensure'] == 'present' {
+    $_ensure = pick(
+      $package['ensure'],
+      'present',
+    )
+
+    if $_ensure == 'present' {
       # TODO: validate the package values exist and populated
       if !defined(File["${path}/${_aem_id}/${package['group']}"]) {
         exec { "Create ${path}/${_aem_id}/${package['group']}":
