@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+- Upgrade aem_resources to 3.8.0
+
 ## Changed
 - Add fix to only download artifacts if package state in the deployment descriptor files are set to present
 - Pass AEM Username & Password to checks if CRX Package Manager is ready while deploying packages
