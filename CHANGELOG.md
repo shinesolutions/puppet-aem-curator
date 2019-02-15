@@ -6,20 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Added
+### Added
 - Upgrade aem_resources to 3.8.0
 
-## Changed
+### Changed
 - Add fix to only download artifacts if package state in the deployment descriptor files are set to present
 - Pass AEM Username & Password to checks if CRX Package Manager is ready while deploying packages
 
 ## [1.10.0] - 2019-02-06
 
-## Changed
+### Changed
 - Add parameter to force removal of the AEM Global Truststore for reconfiguration & truststore migration
 - Add credentials to last aem_health_check
 
-## Added
+### Added
 - Add AEM Package Manager readiness check for reconfiguration
 - Add new feature to remove AEM Global truststore during reconfiguration
 
