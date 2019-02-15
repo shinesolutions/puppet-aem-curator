@@ -103,6 +103,8 @@ define aem_curator::reconfig_aem (
       retries_base_sleep_seconds => $retries_base_sleep_seconds,
       retries_max_sleep_seconds  => $retries_max_sleep_seconds,
       aem_id                     => $aem_id,
+      aem_username               => $aem_username,
+      aem_password               => $aem_password,
     }
 
     aem_curator::config_aem { "Configure AEM ${aem_id}":
@@ -131,6 +133,8 @@ define aem_curator::reconfig_aem (
       retries_base_sleep_seconds => $retries_base_sleep_seconds,
       retries_max_sleep_seconds  => $retries_max_sleep_seconds,
       aem_id                     => $aem_id,
+      aem_username               => $aem_username,
+      aem_password               => $aem_password,
     }
   }
 }
