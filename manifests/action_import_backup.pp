@@ -32,6 +32,8 @@ class aem_curator::action_import_backup (
     retries_base_sleep_seconds => $retries_base_sleep_seconds,
     retries_max_sleep_seconds  => $retries_max_sleep_seconds,
     aem_id                     => $_aem_id,
+    aem_username               => $aem_username,
+    aem_password               => $aem_password,
   } -> aem_package { 'Upload and install backup file':
     ensure       => present,
     aem_id       => $_aem_id,
