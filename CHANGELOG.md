@@ -327,7 +327,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move export backup and import backup scripts provisioning to aem-aws-stack-provisioner
 - Move AEM Author standby promotion instance rename to aem-aws-stack-provisioner
 
-## [0.9.18] - unknown
+## [0.9.18] - 2018-04-01
 
 ### Changed
 - Allow default aem_id via Hiera configuration for action manifests
