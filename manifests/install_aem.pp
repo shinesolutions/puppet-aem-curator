@@ -202,13 +202,13 @@ define aem_curator::install_aem (
     cert_base_url         => $cert_base_url,
     run_mode              => $run_mode,
     tmp_dir               => $tmp_dir
-  } -> exec { "rm -f ${aem_base}/aem/${aem_id}/aem-healthcheck-content-*.zip":
+  } -> exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
   }
 
   if $setup_repository_volume {
     exec { "service aem-${aem_id} stop":
       require => [
-        Exec["rm -f ${aem_base}/aem/${aem_id}/aem-healthcheck-content-*.zip"],
+        Exec["rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip"],
         Mount[$repository_volume_mount_point],
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
