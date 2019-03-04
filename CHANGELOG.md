@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add file copy to whitelist aem-password-bundle during AEM Startup shinesolutions/aem-aws-stack-builder#260
+
+
 ## [1.12.0] - 2019-02-28
 ### Fixed
 - Fix aem-healthcheck package clean up due to aem::crx::package installing via install dir and not package manager
