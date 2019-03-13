@@ -202,13 +202,12 @@ define aem_curator::install_aem (
     cert_base_url         => $cert_base_url,
     run_mode              => $run_mode,
     tmp_dir               => $tmp_dir
-  } -> exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
   }
 
   if $setup_repository_volume {
     exec { "service aem-${aem_id} stop":
       require => [
-        Exec["rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip"],
+        Aem_curator::config_aem["${aem_id}: Configure AEM"],
         Mount[$repository_volume_mount_point],
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
@@ -224,6 +223,18 @@ define aem_curator::install_aem (
       group  => "aem-${aem_id}",
       force  => true,
       target => $repository_volume_mount_point,
+    } -> exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
+    }
+  } else {
+    exec { "service aem-${aem_id} stop":
+      require => [
+        Aem_curator::config_aem["${aem_id}: Configure AEM"],
+      ],
+    } -> exec { "${aem_id}: Wait post AEM stop":
+      command => "sleep ${post_stop_sleep_secs}",
+    } -> exec { "${aem_id}: Ensure AEM resource is stopped":
+      command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=stopped",
+    } -> exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
     }
   }
 
