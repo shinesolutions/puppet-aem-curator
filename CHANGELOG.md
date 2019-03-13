@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Enforce AEM Health Check installation during AEM Author and Publish configuration
+
 ## [1.13.0] - 2019-03-11
 ### Added
 - Add file copy to whitelist aem-password-bundle during AEM Startup shinesolutions/aem-aws-stack-builder#260
