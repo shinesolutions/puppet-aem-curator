@@ -207,7 +207,7 @@ define aem_curator::install_aem (
   if $setup_repository_volume {
     exec { "service aem-${aem_id} stop":
       require => [
-        Aem_curator::config_aem["${aem_id}: Configure AEM"],
+        Aem_curator::Config_aem["${aem_id}: Configure AEM"],
         Mount[$repository_volume_mount_point],
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
@@ -228,7 +228,7 @@ define aem_curator::install_aem (
   } else {
     exec { "service aem-${aem_id} stop":
       require => [
-        Aem_curator::config_aem["${aem_id}: Configure AEM"],
+        Aem_curator::Config_aem["${aem_id}: Configure AEM"],
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
       command => "sleep ${post_stop_sleep_secs}",
