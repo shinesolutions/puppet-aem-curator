@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Ensure provisioned Java keystore is owned by the AEM service user shinesolutions/packer-aem#129
+
 ## [1.14.0] - 2019-03-14
 ### Added
 - Enforce AEM Health Check installation during AEM Author and Publish configuration
