@@ -159,11 +159,11 @@ define aem_curator::config_aem (
     password     => $aem_keystore_password,
     trustcacerts => true,
     require      => $java_ks_require,
-  } -> file { "${keystore_path}":
-    ensure  => file,
-    mode    => '640',
-    owner   => "aem-${aem_id}",
-    group   => "aem-${aem_id}",
+  } -> file { $keystore_path:
+    ensure => file,
+    mode   => '0640',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   } -> aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
     run_mode            => $run_mode,
     port                => $aem_ssl_port,
