@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [1.16.0] - 2019-03-18
 ### Changed
 - Set mode 0755 for Oak Run jar file shinesolutions/aem-aws-stack-builder#265
 - Remove group write permission from AEM Tools resources
@@ -417,7 +416,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#75]: https://github.com/shinesolutions/puppet-aem-curator/issues/75
 [#76]: https://github.com/shinesolutions/puppet-aem-curator/issues/76
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.15.0...HEAD
+[1.16.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.15.0...1.16.0
 [1.15.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.14.0...1.15.0
 [1.14.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.13.0...1.14.0
 [1.13.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.12.0...1.13.0
