@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Set mode 0755 for Oak Run jar file shinesolutions/aem-aws-stack-builder#265
+- Remove group write permission from AEM Tools resources
+
 ## [1.15.0] - 2019-03-16
 ### Changed
 - Ensure provisioned Java keystore is owned by the AEM service user shinesolutions/packer-aem#129
