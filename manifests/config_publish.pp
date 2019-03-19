@@ -40,27 +40,28 @@ class aem_curator::config_publish (
   $publish_timeout,
   $puppet_conf_dir,
   $tmp_dir,
-  $aem_base                    = undef,
-  $aem_healthcheck_source      = undef,
-  $aem_healthcheck_version     = undef,
-  $aem_id                      = 'publish',
-  $aem_ssl_keystore_password   = undef,
-  $aem_keystore_path           = undef,
-  $cert_base_url               = undef,
-  $delete_repository_index     = false,
-  $enable_aem_reconfiguration  = false,
-  $enable_post_start_sleep     = false,
-  $enable_truststore_creation  = false,
-  $enable_truststore_migration = false,
-  $enable_truststore_removal   = false,
-  $enable_create_system_users  = undef,
-  $post_start_sleep_seconds    = '120',
-  $publish_ssl_port            = undef,
-  $jmxremote_port              = '59183',
-  $jvm_mem_opts                = undef,
-  $jvm_opts                    = undef,
-  $run_mode                    = 'publish',
-  $truststore_password         = undef,
+  $aem_base                     = undef,
+  $aem_healthcheck_source       = undef,
+  $aem_healthcheck_version      = undef,
+  $aem_id                       = 'publish',
+  $aem_ssl_keystore_password    = undef,
+  $aem_keystore_path            = undef,
+  $cert_base_url                = undef,
+  $delete_repository_index      = false,
+  $enable_aem_reconfiguration   = false,
+  $enable_launchpad_dir_cleanup = false,
+  $enable_post_start_sleep      = false,
+  $enable_truststore_creation   = false,
+  $enable_truststore_migration  = false,
+  $enable_truststore_removal    = false,
+  $enable_create_system_users   = undef,
+  $post_start_sleep_seconds     = '120',
+  $publish_ssl_port             = undef,
+  $jmxremote_port               = '59183',
+  $jvm_mem_opts                 = undef,
+  $jvm_opts                     = undef,
+  $run_mode                     = 'publish',
+  $truststore_password          = undef,
 ) {
 
   if !defined(File[$tmp_dir]) {
@@ -84,6 +85,16 @@ class aem_curator::config_publish (
 
   if $delete_repository_index {
     file { "${crx_quickstart_dir}/repository/index/":
+      ensure  => absent,
+      recurse => true,
+      purge   => true,
+      force   => true,
+      before  => Service['aem-publish'],
+    }
+  }
+
+  if $enable_launchpad_dir_cleanup {
+    file { "${crx_quickstart_dir}/launchpad/":
       ensure  => absent,
       recurse => true,
       purge   => true,

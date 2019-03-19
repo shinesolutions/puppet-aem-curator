@@ -5,8 +5,19 @@ File {
 class aem_curator::action_promote_author_standby_to_primary (
   $base_dir,
   $tmp_dir,
-  $aem_version = '6.2',
+  $aem_version                  = '6.2',
+  $enable_launchpad_dir_cleanup = false,
 ) {
+
+  if $enable_launchpad_dir_cleanup {
+    file { "${crx_quickstart_dir}/launchpad/":
+      ensure  => absent,
+      recurse => true,
+      purge   => true,
+      force   => true,
+      before  => Service['aem-author'],
+    }
+  }
 
   exec { 'service aem-author stop':
     cwd  => $tmp_dir,

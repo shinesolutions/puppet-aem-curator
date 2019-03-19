@@ -43,6 +43,7 @@ class aem_curator::config_author_primary (
   $aem_ssl_keystore_password                             = undef,
   $aem_keystore_path                                     = undef,
   $enable_aem_reconfiguration                            = false,
+  $enable_launchpad_dir_cleanup                          = false,
   $enable_truststore_migration                           = false,
   $enable_truststore_removal                             = false,
   $enable_authorizable_keystore_creation                 = false,
@@ -100,6 +101,16 @@ class aem_curator::config_author_primary (
       before  => Service['aem-author'],
     }
 
+  }
+
+  if $enable_launchpad_dir_cleanup {
+    file { "${crx_quickstart_dir}/launchpad/":
+      ensure  => absent,
+      recurse => true,
+      purge   => true,
+      force   => true,
+      before  => Service['aem-publish'],
+    }
   }
 
   if $jvm_mem_opts {

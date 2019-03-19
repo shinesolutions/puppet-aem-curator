@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add removal of directory crx-quickstart/launchpad if option is enabled shinesolutions/packer-aem#270
+
 ## [1.16.0] - 2019-03-18
 ### Changed
 - Set mode 0755 for Oak Run jar file shinesolutions/aem-aws-stack-builder#265
