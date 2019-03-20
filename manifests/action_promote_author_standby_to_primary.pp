@@ -27,7 +27,7 @@ class aem_curator::action_promote_author_standby_to_primary (
     cwd  => $tmp_dir,
     path => ["${base_dir}/aem-tools", '/usr/bin', '/opt/puppetlabs/bin/', '/bin'],
   } -> aem_resources::author_primary_set_config {'Promote author-primary':
-    crx_quickstart_dir => "${crx_quickstart_dir}",
+    crx_quickstart_dir => $crx_quickstart_dir,
     aem_version        => $aem_version,
   } -> class { 'aem_curator::config_logrotate':
   } -> service { 'aem-author':
