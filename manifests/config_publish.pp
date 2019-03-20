@@ -137,9 +137,13 @@ class aem_curator::config_publish (
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     source => $aem_password_reset_source,
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   } -> archive { "${crx_quickstart_dir}/install/aem-healthcheck-content-${aem_healthcheck_version}.zip":
     ensure => present,
     source => $aem_healthcheck_source,
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   } -> file {"${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
     ensure => present,
     source => 'puppet:///modules/aem_curator/crx-quickstart/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config',

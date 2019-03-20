@@ -147,13 +147,11 @@ class aem_curator::config_author_primary (
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     source => $aem_password_reset_source,
-    mode   => '0644',
     owner  => "aem-${aem_id}",
     group  => "aem-${aem_id}",
   } -> archive { "${crx_quickstart_dir}/install/aem-healthcheck-content-${aem_healthcheck_version}.zip":
     ensure => present,
     source => $aem_healthcheck_source,
-    mode   => '0644',
     owner  => "aem-${aem_id}",
     group  => "aem-${aem_id}",
   } -> file {"${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
