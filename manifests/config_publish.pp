@@ -94,7 +94,7 @@ class aem_curator::config_publish (
   }
 
   if $enable_launchpad_dir_cleanup {
-    file { "${crx_quickstart_dir}/launchpad/":
+    file { "${crx_quickstart_dir}/launchpad":
       ensure  => absent,
       recurse => true,
       purge   => true,
