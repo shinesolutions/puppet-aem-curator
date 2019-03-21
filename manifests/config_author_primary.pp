@@ -154,7 +154,17 @@ class aem_curator::config_author_primary (
     source => $aem_healthcheck_source,
     user   => "aem-${aem_id}",
     group  => "aem-${aem_id}",
-  } -> file {"${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
+  } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
+    ensure => present,
+    mode => '640',
+    owner => "aem-${aem_id}",
+    group => "aem-${aem_id}",
+  } -> file { "${crx_quickstart_dir}/install/aem-healthcheck-content-${aem_healthcheck_version}.zip":
+    ensure => present,
+    mode => '640',
+    owner => "aem-${aem_id}",
+    group => "aem-${aem_id}",
+  } -> file { "${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
     ensure => present,
     source => 'puppet:///modules/aem_curator/crx-quickstart/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config',
     mode   => '0775',
@@ -369,8 +379,8 @@ class aem_curator::config_author_primary (
     aem_id                     => $aem_id,
     aem_username               => 'orchestrator',
     aem_password               => $credentials_hash['orchestrator'],
-  } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
-    ensure => absent,
+  } -> exec { "${aem_id}: Cleanup password reset package after installation":
+    command => "rm -f ${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip"
   }
 
 }
