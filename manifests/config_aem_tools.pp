@@ -126,6 +126,11 @@ class aem_curator::config_aem_tools (
     source => $oak_run_source,
     user   => 'root',
     group  => 'root',
+  } -> file { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":
+    ensure => present,
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
   } -> file { "${base_dir}/aem-tools/offline-compaction.sh":
     ensure  => present,
     mode    => '0755',
