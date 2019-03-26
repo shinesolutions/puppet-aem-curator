@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed syntax error in action_export_backups manifest shinesolutions/aem-aws-stack-builder#263
+- Fixed syntax error in action_import_backup manifest shinesolutions/aem-aws-stack-builder#263
+
 ## [1.18.0] - 2019-03-21
 ### Changed
 - Fix archive-downloaded files' permissions and ownership setting

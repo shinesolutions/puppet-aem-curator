@@ -90,7 +90,7 @@ class aem_curator::export_backup_packages (
 
     }
 
-    aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before creating backup file for package: ${package[name]}":
+    aem_aem { "${_aem_id}: Wait until CRX Package Manager is ready before creating backup file for package: ${package[name]}":
       ensure                     => aem_package_manager_is_ready,
       retries_max_tries          => $retries_max_tries,
       retries_base_sleep_seconds => $retries_base_sleep_seconds,
@@ -98,7 +98,7 @@ class aem_curator::export_backup_packages (
       aem_id                     => $_aem_id,
       aem_username               => $aem_username,
       aem_password               => $aem_password,
-    } -> aem_package { "Create and download backup file for package: ${package[name]}":
+    } -> aem_package { "${_aem_id}: Create and download backup file for package: ${package[name]}":
       ensure       => archived,
       name         => $package[name],
       version      => $package_version,
