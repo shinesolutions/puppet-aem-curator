@@ -137,6 +137,7 @@ define aem_curator::reconfig_aem (
       exec { "${aem_id}: Fix data volume permissions":
         command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
         before  => Exec["service aem-${aem_id} start"],
+        require => Exec["service aem-${aem_id} stop"],
       }
     }
 
