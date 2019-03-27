@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed syntax error in action_export_backups manifest shinesolutions/aem-aws-stack-builder#263
 - Fixed syntax error in action_import_backup manifest shinesolutions/aem-aws-stack-builder#263
 
+### Changed
+- Changed repository volume to data volume as with AEM 6.4 AEM installation directory needs to be consistent with the repository
+
+### Added
+- Cleanup install, logs & threaddumps directories before AEM start
+- Add migration of old repository volume structure to new data volume structure for reconfiguration
+
+
 ## [1.18.0] - 2019-03-21
 ### Changed
 - Fix archive-downloaded files' permissions and ownership setting
