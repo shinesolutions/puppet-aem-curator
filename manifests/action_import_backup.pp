@@ -26,7 +26,7 @@ class aem_curator::action_import_backup (
   archive { "${tmp_dir}/${package_group}/${package_name}-${package_version}.zip":
     ensure => present,
     source => "s3://${data_bucket_name}/backup/${source_stack_prefix}/${package_group}/${backup_path}/${package_name}-${package_version}.zip",
-  } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before installing backup file":
+  } -> aem_aem { "${_aem_id}: Wait until CRX Package Manager is ready before installing backup file":
     ensure                     => aem_package_manager_is_ready,
     retries_max_tries          => $retries_max_tries,
     retries_base_sleep_seconds => $retries_base_sleep_seconds,
