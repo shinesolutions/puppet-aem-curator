@@ -149,7 +149,7 @@ define aem_curator::reconfig_aem (
       require => Exec["service aem-${aem_id} stop"],
     } -> exec { "${aem_id}: Manual delay to let AEM become ready":
       command => "sleep ${post_install_sleep_secs}",
-    } -> aem_aem { "${aem_id}: Wait until login page is ready after installing AEM Healthcheck":
+    } -> aem_aem { "${aem_id}: Wait until login page is ready after starting AEM for reconfiguration":
       ensure => login_page_is_ready,
       aem_id => $aem_id,
     } -> aem_aem { "${aem_id}: Wait until aem health check is ok":
