@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add file copy to whitelist aem-password-bundle during AEM Startup shinesolutions/aem-aws-stack-builder#260
 
+### Changed
+- Add improvements to author-standby promotion script shinesolutions/aem-aws-stack-provisioner#155
+
 ## 1.11.0 - 2019-02-15
 ### Added
 - Upgrade aem_resources to 3.8.0

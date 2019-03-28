@@ -7,6 +7,11 @@ if [ "$#" -ne 0 ]; then
   exit 1
 fi
 
+PATH=<%= $aem_tools_env_path %>
+
+aem_username=admin
+aem_password=$(<%= $aem_password_retrieval_command %>)
+
 # translate puppet exit code to follow convention
 translate_exit_code() {
 
@@ -22,9 +27,10 @@ translate_exit_code() {
 
 set +o errexit
 
-
-cd <%= $base_dir %>/aem-aws-stack-provisioner/
-/opt/puppetlabs/bin/puppet apply \
+FACTER_aem_username="${aem_username}" \
+  FACTER_aem_password="${aem_password}" \
+  cd <%= $base_dir %>/aem-aws-stack-provisioner/
+  /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
   --modulepath modules \
@@ -34,7 +40,7 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 translate_exit_code "$?"
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
-/opt/puppetlabs/bin/puppet apply \
+  /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
   --modulepath modules \
