@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-### Changed
-- Changed repository volume to data volume as with AEM 6.4 AEM installation directory needs to be consistent with the repository
-
 ### Added
 - Cleanup install, logs & threaddumps directories before AEM start
 - Add migration of old repository volume structure to new data volume structure for reconfiguration
+- Add file copy to whitelist aem-password-bundle during AEM Startup shinesolutions/aem-aws-stack-builder#260
+
+### Changed
+- Changed repository volume to data volume as with AEM 6.4 AEM installation directory needs to be consistent with the repository
+- Add improvements to author-standby promotion script shinesolutions/aem-aws-stack-provisioner#155
 
 ## 1.11.0 - 2019-02-15
 ### Added

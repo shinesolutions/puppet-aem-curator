@@ -158,6 +158,12 @@ class aem_curator::config_author_primary (
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     source => $aem_password_reset_source,
+  } -> file {"${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
+    ensure => present,
+    source => 'puppet:///modules/aem_curator/crx-quickstart/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config',
+    mode   => '0775',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for author-primary':
     conf_dir => $puppet_conf_dir,
     timeout  => $author_timeout,
@@ -327,6 +333,8 @@ class aem_curator::config_author_primary (
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
+  } -> exec { "${aem_id}: Remove file org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
+    command => "rm -f ${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config",
   } -> aem_package { "${aem_id}: Remove password reset package":
     ensure  => absent,
     name    => 'aem-password-reset-content',
