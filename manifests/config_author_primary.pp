@@ -42,6 +42,7 @@ class aem_curator::config_author_primary (
   $aem_id                                                = 'author',
   $aem_ssl_keystore_password                             = undef,
   $aem_keystore_path                                     = undef,
+  $data_volume_mount_point                               = undef,
   $enable_aem_reconfiguration                            = false,
   $enable_truststore_migration                           = false,
   $enable_truststore_removal                             = false,
@@ -85,13 +86,12 @@ class aem_curator::config_author_primary (
     timeout => 0,
   }
 
-  exec { "${aem_id}: Set repository ownership":
-    command => "chown -R aem-${aem_id}:aem-${aem_id} ${crx_quickstart_dir}/repository/",
+  exec { "${aem_id}: Set data volume ownership":
+    command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
     before  => Service['aem-author'],
   }
 
   if $delete_repository_index {
-
     file { "${crx_quickstart_dir}/repository/index/":
       ensure  => absent,
       recurse => true,
@@ -99,7 +99,6 @@ class aem_curator::config_author_primary (
       force   => true,
       before  => Service['aem-author'],
     }
-
   }
 
   if $jvm_mem_opts {
@@ -136,6 +135,18 @@ class aem_curator::config_author_primary (
       command => "sleep ${post_start_sleep_seconds}",
       require => Service['aem-author'],
       before  => Aem_aem["${aem_id}: Wait until login page is ready"]
+    }
+  }
+
+  $list_clean_directories = [
+    'logs',
+    'threaddumps'
+  ]
+
+  $list_clean_directories.each | Integer $index, String $clean_directory| {
+    exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
+      command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+      before  => File["${crx_quickstart_dir}/install/"],
     }
   }
 
@@ -180,6 +191,7 @@ class aem_curator::config_author_primary (
     aem_healthcheck_version    => $aem_healthcheck_version,
     aem_ssl_keystore_password  => $aem_ssl_keystore_password,
     aem_keystore_path          => $aem_keystore_path,
+    data_volume_mount_point    => $data_volume_mount_point,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
     enable_truststore_removal  => $enable_truststore_removal,
     aem_ssl_port               => $author_ssl_port,
