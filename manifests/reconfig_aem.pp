@@ -105,7 +105,8 @@ define aem_curator::reconfig_aem (
           returns => [
             '0',
             '1'
-          ]
+          ],
+          timeout => 0,
         } -> exec { "${aem_id}: Remove ${source_repository_dir}":
           command => "rm -f ${source_repository_dir}",
           returns => [
@@ -115,12 +116,14 @@ define aem_curator::reconfig_aem (
           command => "mv ${aem_installation_old_directory} ${aem_installation_new_directory}",
           returns => [
             '0'
-          ]
+          ],
+          timeout => 0,
         } -> exec { "${aem_id}: Move ${tmp_repository_dir} to ${dest_repository_dir}":
           command => "mv ${tmp_repository_dir} ${dest_repository_dir}",
           returns => [
             '0'
-          ]
+          ],
+          timeout => 0,
         } -> exec { "${aem_id}: Remove ${aem_installation_old_directory}":
           command => "rm -fr ${aem_installation_old_directory}",
           returns => [
