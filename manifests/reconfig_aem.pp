@@ -3,28 +3,30 @@ File {
 }
 
 define aem_curator::reconfig_aem (
-  $aem_id                     = undef,
-  $aem_username               = undef,
-  $aem_password               = undef,
-  $enable_aem_reconfiguration = true,
-  $enable_truststore_removal  = true,
-  $aem_base                   = '/opt',
-  $aem_healthcheck_source     = undef,
-  $aem_healthcheck_version    = undef,
-  $aem_ssl_keystore_password  = undef,
-  $aem_keystore_path          = undef,
-  $aem_ssl_port               = undef,
-  $aem_system_users           = undef,
-  $cert_base_url              = undef,
-  $enable_create_system_users = true,
-  $credentials_hash           = undef,
-  $force                      = true,
-  $post_install_sleep_secs    = 120,
-  $retries_base_sleep_seconds = 10,
-  $retries_max_sleep_seconds  = 10,
-  $retries_max_tries          = 120,
-  $run_mode                   = undef,
-  $tmp_dir                    = undef,
+  $aem_id                            = undef,
+  $aem_username                      = undef,
+  $aem_password                      = undef,
+  $enable_aem_reconfiguration        = true,
+  $enable_truststore_removal         = true,
+  $aem_base                          = '/opt',
+  $aem_healthcheck_source            = undef,
+  $aem_healthcheck_version           = undef,
+  $aem_ssl_keystore_password         = undef,
+  $aem_keystore_path                 = undef,
+  $aem_ssl_port                      = undef,
+  $aem_system_users                  = undef,
+  $cert_base_url                     = undef,
+  $data_volume_mount_point           = undef,
+  $enable_create_system_users        = true,
+  $enable_aem_installation_migration = true,
+  $credentials_hash                  = undef,
+  $force                             = true,
+  $post_install_sleep_secs           = 120,
+  $retries_base_sleep_seconds        = 10,
+  $retries_max_sleep_seconds         = 10,
+  $retries_max_tries                 = 120,
+  $run_mode                          = undef,
+  $tmp_dir                           = undef,
 ) {
   if $enable_aem_reconfiguration {
 
@@ -76,6 +78,68 @@ define aem_curator::reconfig_aem (
         aem_password => $aem_password,
         force        => false,
         before       => Exec["service aem-${aem_id} stop"],
+      }
+    }
+
+    if $enable_aem_installation_migration {
+      # Migrating the AEM installation directories to the mounted data filesystem.
+      # Before migrating we are preparing the current repository as prior
+      # AEM OpenCloud version 3.11.0 the data filesystem only contains the repository.
+      # This is necessary as with AEM 6.4 the AEM installation directory
+      # and repository directory needs to be consistent.
+
+      $aem_installation_new_directory = "${data_volume_mount_point}/${aem_id}"
+      $aem_installation_old_directory = "${aem_base}/aem/${aem_id}"
+      $source_repository_dir = "${aem_installation_old_directory}/crx-quickstart/repository"
+      $tmp_repository_dir = "${data_volume_mount_point}/repository"
+      $dest_repository_dir = "${aem_installation_new_directory}/crx-quickstart/repository"
+
+      if !defined(File[$aem_installation_new_directory]) {
+        file { "${aem_id}: Create ${tmp_repository_dir}":
+          ensure  => directory,
+          path    => $tmp_repository_dir,
+          before  => Exec["${aem_id}: Fix data volume permissions"],
+          require => Exec["service aem-${aem_id} stop"]
+        } -> exec { "${aem_id}: Move ${source_repository_dir} to ${tmp_repository_dir}":
+          command => "mv ${source_repository_dir}/* ${tmp_repository_dir}/",
+          returns => [
+            '0',
+            '1'
+          ],
+          timeout => 0,
+        } -> exec { "${aem_id}: Remove ${source_repository_dir}":
+          command => "rm -f ${source_repository_dir}",
+          returns => [
+            '0'
+          ]
+        } -> exec { "${aem_id}: Move ${aem_installation_old_directory} to ${aem_installation_new_directory}":
+          command => "mv ${aem_installation_old_directory} ${aem_installation_new_directory}",
+          returns => [
+            '0'
+          ],
+          timeout => 0,
+        } -> exec { "${aem_id}: Move ${tmp_repository_dir} to ${dest_repository_dir}":
+          command => "mv ${tmp_repository_dir} ${dest_repository_dir}",
+          returns => [
+            '0'
+          ],
+          timeout => 0,
+        } -> exec { "${aem_id}: Remove ${aem_installation_old_directory}":
+          command => "rm -fr ${aem_installation_old_directory}",
+          returns => [
+            '0'
+          ]
+        } -> exec { "${aem_id}: Set link from ${aem_installation_old_directory} to ${aem_installation_new_directory}":
+          command => "ln -s ${aem_installation_new_directory} ${aem_installation_old_directory}",
+          returns => [
+            '0'
+          ]
+        }
+      }
+      exec { "${aem_id}: Fix data volume permissions":
+        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
+        before  => Exec["service aem-${aem_id} start"],
+        require => Exec["service aem-${aem_id} stop"],
       }
     }
 

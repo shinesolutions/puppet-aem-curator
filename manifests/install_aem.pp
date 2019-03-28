@@ -36,10 +36,10 @@
 #   Boolean that determines whether a separate volume is formatted and mounted
 #   for the AEM repository.
 #
-# [*repository_volume_device*]
+# [*data_volume_device*]
 #   The device for format and mount for the AEM repository.
 #
-# [*repository_volume_mount_point*]
+# [*data_volume_mount_point*]
 #   The mount point for the AEM repository volume.
 #
 # [*aem_keystore_path*]
@@ -85,16 +85,16 @@ define aem_curator::install_aem (
   $aem_ssl_port,
   $run_mode,
   $tmp_dir,
-  $aem_base                      = '/opt',
-  $aem_debug                     = false,
-  $aem_id                        = 'aem',
-  $aem_jvm_mem_opts              = '-Xss4m -Xmx8192m',
-  $aem_keystore_password         = undef,
-  $aem_keystore_path             = undef,
-  $aem_profile                   = 'aem62_sp1_cfp3',
-  $aem_sample_content            = false,
-  $cert_base_url                 = undef,
-  $aem_jvm_opts                  = [
+  $aem_base                   = '/opt',
+  $aem_debug                  = false,
+  $aem_id                     = 'aem',
+  $aem_jvm_mem_opts           = '-Xss4m -Xmx8192m',
+  $aem_keystore_password      = undef,
+  $aem_keystore_path          = undef,
+  $aem_profile                = 'aem62_sp1_cfp3',
+  $aem_sample_content         = false,
+  $cert_base_url              = undef,
+  $aem_jvm_opts               = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
     '-XX:+PrintGCDateStamps',
@@ -102,16 +102,16 @@ define aem_curator::install_aem (
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
-  $aem_start_opts                = '',
-  $post_install_sleep_secs       = 120,
-  $post_stop_sleep_secs          = 120,
-  $puppet_conf_dir               = '/etc/puppetlabs/puppet/',
-  $repository_volume_device      = '/dev/xvdb',
-  $repository_volume_mount_point = '/mnt/ebs1',
-  $retries_base_sleep_seconds    = 10,
-  $retries_max_sleep_seconds     = 10,
-  $retries_max_tries             = 120,
-  $setup_repository_volume       = false,
+  $aem_start_opts             = '',
+  $post_install_sleep_secs    = 120,
+  $post_stop_sleep_secs       = 120,
+  $puppet_conf_dir            = '/etc/puppetlabs/puppet/',
+  $data_volume_device         = '/dev/xvdb',
+  $data_volume_mount_point    = '/mnt/ebs1',
+  $retries_base_sleep_seconds = 10,
+  $retries_max_sleep_seconds  = 10,
+  $retries_max_tries          = 120,
+  $setup_repository_volume    = false,
 ) {
 
   if !defined(File[$tmp_dir]) {
@@ -140,13 +140,13 @@ define aem_curator::install_aem (
 
   if $setup_repository_volume {
     exec { "${aem_id}: Prepare device for the AEM repository":
-      command => "mkfs -t ext4 ${repository_volume_device}",
-    } -> file { $repository_volume_mount_point:
+      command => "mkfs -t ext4 ${data_volume_device}",
+    } -> file { $data_volume_mount_point:
       ensure => directory,
       mode   => '0755',
-    } -> mount { $repository_volume_mount_point:
+    } -> mount { $data_volume_mount_point:
       ensure   => mounted,
-      device   => $repository_volume_device,
+      device   => $data_volume_device,
       fstype   => 'ext4',
       options  => 'nofail,defaults,noatime',
       remounts => false,
@@ -209,22 +209,20 @@ define aem_curator::install_aem (
     exec { "service aem-${aem_id} stop":
       require => [
         Exec["rm -f ${aem_base}/aem/${aem_id}/aem-healthcheck-content-*.zip"],
-        Mount[$repository_volume_mount_point],
+        Mount[$data_volume_mount_point],
       ],
     } -> exec { "${aem_id}: Wait post AEM stop":
       command => "sleep ${post_stop_sleep_secs}",
     } -> exec { "${aem_id}: Ensure AEM resource is stopped":
       command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=stopped",
+    } -> exec { "mv ${aem_base}/aem/${aem_id} ${data_volume_mount_point}/${aem_id}":
+    } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to ${aem_base}/aem/${aem_id}":
+      command => "ln -s ${data_volume_mount_point}/${aem_id} ${aem_base}/aem/${aem_id}",
+      returns => [
+        '0'
+      ]
     } -> exec { "${aem_id}: Fix repository mount permissions":
-      command => "chown aem-${aem_id}:aem-${aem_id} ${repository_volume_mount_point}",
-    } -> exec { "mv ${aem_base}/aem/${aem_id}/crx-quickstart/repository/* ${repository_volume_mount_point}/":
-    } -> file { "${aem_base}/aem/${aem_id}/crx-quickstart/repository/":
-      ensure => 'link',
-      owner  => "aem-${aem_id}",
-      group  => "aem-${aem_id}",
-      force  => true,
-      target => $repository_volume_mount_point,
+      command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
     }
   }
-
 }
