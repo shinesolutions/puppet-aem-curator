@@ -3,9 +3,14 @@ File {
 }
 
 class aem_curator::action_promote_author_standby_to_primary (
+  $aem_username,
+  $aem_password,
   $base_dir,
   $tmp_dir,
-  $aem_version = '6.2',
+  $aem_version                    = '6.2',
+  $login_ready_max_tries          = 30,
+  $login_ready_base_sleep_seconds = 15,
+  $login_ready_max_sleep_seconds  = 15,
 ) {
 
   exec { 'service aem-author stop':
@@ -23,9 +28,11 @@ class aem_curator::action_promote_author_standby_to_primary (
     enable => true,
   } -> aem_aem { 'Wait until login page is ready':
     ensure                     => login_page_is_ready,
-    retries_max_tries          => 30,
-    retries_base_sleep_seconds => 5,
-    retries_max_sleep_seconds  => 5,
+    aem_username               => $aem_username,
+    aem_password               => $aem_password,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
   }
 }
 
