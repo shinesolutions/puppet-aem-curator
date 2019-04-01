@@ -99,6 +99,19 @@ class aem_curator::config_author_standby (
     }
   }
 
+  $list_clean_directories = [
+  'install',
+  'logs',
+  'threaddumps'
+  ]
+
+  $list_clean_directories.each | Integer $index, String $clean_directory| {
+    exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
+      command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+      before  => Service['aem-author'],
+    }
+  }
+
   aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for author-primary':
     conf_dir => $puppet_conf_dir,
     protocol => $author_protocol,

@@ -47,6 +47,7 @@ class aem_curator::config_publish (
   $aem_ssl_keystore_password   = undef,
   $aem_keystore_path           = undef,
   $cert_base_url               = undef,
+  $data_volume_mount_point     = undef,
   $delete_repository_index     = false,
   $enable_aem_reconfiguration  = false,
   $enable_post_start_sleep     = false,
@@ -78,7 +79,7 @@ class aem_curator::config_publish (
   }
 
   exec { "${aem_id}: Set repository ownership":
-    command => "chown -R aem-${aem_id}:aem-${aem_id} ${crx_quickstart_dir}/repository/",
+    command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
     before  => Service['aem-publish'],
   }
 
@@ -126,6 +127,19 @@ class aem_curator::config_publish (
       command => "sleep ${post_start_sleep_seconds}",
       require => Service['aem-publish'],
       before  => Aem_aem["${aem_id}: Wait until login page is ready"]
+    }
+  }
+
+  $list_clean_directories = [
+  'install',
+  'logs',
+  'threaddumps'
+  ]
+
+  $list_clean_directories.each | Integer $index, String $clean_directory| {
+    exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
+      command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+      before  => File["${crx_quickstart_dir}/install/"],
     }
   }
 
@@ -197,6 +211,7 @@ class aem_curator::config_publish (
     cert_base_url              => $cert_base_url,
     enable_create_system_users => $enable_create_system_users,
     credentials_hash           => $credentials_hash,
+    data_volume_mount_point    => $data_volume_mount_point,
     run_mode                   => $run_mode,
     tmp_dir                    => $tmp_dir,
   } -> aem_bundle { "${aem_id}: Stop webdav bundle":
