@@ -3,10 +3,10 @@ File {
 }
 
 class aem_curator::action_promote_author_standby_to_primary (
-  $aem_username,
-  $aem_password,
   $base_dir,
   $tmp_dir,
+  $aem_username                   = $::aem_username,
+  $aem_password                   = $::aem_password,
   $aem_version                    = '6.2',
   $login_ready_max_tries          = 30,
   $login_ready_base_sleep_seconds = 15,

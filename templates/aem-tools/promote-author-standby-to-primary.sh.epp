@@ -36,7 +36,6 @@ FACTER_aem_username="${aem_username}" \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::action_promote_author_standby_to_primary"
-
 translate_exit_code "$?"
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
@@ -46,5 +45,4 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
   --execute "include aem_curator::config_aem_scheduled_jobs"
-
 translate_exit_code "$?"
