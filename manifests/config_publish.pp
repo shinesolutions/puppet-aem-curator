@@ -131,7 +131,6 @@ class aem_curator::config_publish (
   }
 
   $list_clean_directories = [
-    'install',
     'logs',
     'threaddumps'
   ]
