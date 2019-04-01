@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Add improvements to author-standby promotion script shinesolutions/aem-aws-stack-provisioner#155
 - Changed repository volume to data volume as with AEM 6.4 AEM installation directory needs to be consistent with the repository
+- Upgrade aem_resources to 3.9.0
 
 ### Fixed
 - Fixed syntax error in action_export_backups manifest shinesolutions/aem-aws-stack-builder#263
