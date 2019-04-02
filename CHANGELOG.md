@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Upgrade aem_resources to 3.9.0
-- Remove system dir from docroot_dir in dispatchers
+- Remove system dir from docroot_dir in flush dispatcher cache
 
 ## [1.19.0] - 2019-04-01
 ### Added
