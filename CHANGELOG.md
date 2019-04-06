@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [1.20.0] - 2019-04-02
+### Added
+- Add owner and group to directories purged by flush dispatcher cache action
+
 ### Changed
 - Upgrade aem_resources to 3.9.0
 - Upgrade inspec-aem to 0.10.1
-- Remove system dir from docroot_dir in flush dispatcher cache
 
 ## [1.19.0] - 2019-04-01
 ### Added
