@@ -8,7 +8,7 @@
 #   A temporary directory used for staging
 #
 # [*run_modes*]
-#   The AEM role to install. Should be 'publish' or 'author' or additional via user config.
+#   List of additional AEM run modes
 #
 # [*aem_port*]
 #   TCP port AEM will listen on.
