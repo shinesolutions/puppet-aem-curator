@@ -76,7 +76,7 @@ class aem_curator::install_author (
     puppet_conf_dir               => '/etc/puppetlabs/puppet/',
     repository_volume_device      => $repository_volume_device,
     repository_volume_mount_point => $repository_volume_mount_point,
-    run_mode                      => $run_mode,
+    run_modes                     => $run_mode,
     setup_repository_volume       => $setup_repository_volume,
     tmp_dir                       => $tmp_dir,
   }
