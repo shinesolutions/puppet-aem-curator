@@ -94,7 +94,7 @@ define aem_curator::reconfig_aem (
       $tmp_repository_dir = "${data_volume_mount_point}/repository"
       $dest_repository_dir = "${aem_installation_new_directory}/crx-quickstart/repository"
 
-      if !defined(File[$aem_installation_new_directory]) {
+      unless File[$aem_installation_new_directory] {
         file { "${aem_id}: Create ${tmp_repository_dir}":
           ensure  => directory,
           path    => $tmp_repository_dir,
