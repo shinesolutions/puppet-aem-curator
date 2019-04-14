@@ -27,9 +27,10 @@ translate_exit_code() {
 
 set +o errexit
 
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+
 FACTER_aem_username="${aem_username}" \
   FACTER_aem_password="${aem_password}" \
-  cd <%= $base_dir %>/aem-aws-stack-provisioner/
   /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
