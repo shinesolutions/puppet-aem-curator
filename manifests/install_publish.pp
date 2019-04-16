@@ -51,7 +51,7 @@ class aem_curator::install_publish (
   $post_install_sleep_secs = 120,
   $post_stop_sleep_secs    = 120,
   $puppet_conf_dir         = '/etc/puppetlabs/puppet/',
-  $run_modes               = [],
+  $run_modes               = ['publish'],
 ) {
   aem_curator::install_aem { "${aem_id}: Install AEM Publish":
     aem_artifacts_base      => $aem_artifacts_base,
