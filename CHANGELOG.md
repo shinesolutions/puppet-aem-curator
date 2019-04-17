@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade aem_resources to 3.10.0
+
 ### Fixed
 - Fixed syntax error promote author-standby to primary script
 - Fixed error in the reconfiguration logic #109
