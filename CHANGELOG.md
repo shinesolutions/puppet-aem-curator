@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed syntax error promote author-standby to primary script
+- Fixed error in the reconfiguration logic #109
 
 ## [1.21.0] - 2019-04-06
 

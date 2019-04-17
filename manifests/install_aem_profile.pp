@@ -5,7 +5,7 @@ define aem_curator::install_aem_profile (
   $aem_port,
   $aem_profile,
   $aem_ssl_port,
-  $run_mode,
+  $run_modes,
   $tmp_dir,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
@@ -35,7 +35,7 @@ define aem_curator::install_aem_profile (
     aem_jvm_opts            => $aem_jvm_opts,
     aem_start_opts          => $aem_start_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
-    run_mode                => $run_mode,
+    run_modes               => $run_modes,
     tmp_dir                 => $tmp_dir,
   }
 }

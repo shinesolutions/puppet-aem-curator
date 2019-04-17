@@ -7,9 +7,6 @@
 # [*tmp_dir*]
 #   A temporary directory used for staging
 #
-# [*run_mode*]
-#   The AEM role to install. Should be 'publish' or 'author'.
-#
 # [*aem_port*]
 #   TCP port AEM will listen on.
 #

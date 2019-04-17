@@ -3,7 +3,7 @@ define aem_curator::install_aem62_sp1_cfp15(
   $aem_artifacts_base,
   $aem_healthcheck_version,
   $aem_port,
-  $run_mode,
+  $run_modes,
   $tmp_dir,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
@@ -23,7 +23,7 @@ define aem_curator::install_aem62_sp1_cfp15(
 
   aem_curator::install_aem62 { "${aem_id}: Install AEM":
     tmp_dir                 => $tmp_dir,
-    run_mode                => $run_mode,
+    run_modes               => $run_modes,
     aem_port                => $aem_port,
     aem_artifacts_base      => $aem_artifacts_base,
     aem_license_base        => $aem_license_base,
