@@ -51,7 +51,7 @@ class aem_curator::install_author (
   $post_install_sleep_secs = 120,
   $post_stop_sleep_secs    = 120,
   $puppet_conf_dir         = '/etc/puppetlabs/puppet/',
-  $run_mode                = 'author',
+  $run_modes               = ['author'],
 ) {
   aem_curator::install_aem { "${aem_id}: Install AEM Author":
     aem_artifacts_base      => $aem_artifacts_base,
@@ -76,7 +76,7 @@ class aem_curator::install_author (
     puppet_conf_dir         => '/etc/puppetlabs/puppet/',
     data_volume_device      => $data_volume_device,
     data_volume_mount_point => $data_volume_mount_point,
-    run_mode                => $run_mode,
+    run_modes               => $run_modes,
     setup_repository_volume => $setup_repository_volume,
     tmp_dir                 => $tmp_dir,
   }

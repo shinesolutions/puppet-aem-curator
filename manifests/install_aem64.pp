@@ -3,7 +3,7 @@ define aem_curator::install_aem64(
   $aem_artifacts_base,
   $aem_healthcheck_version,
   $aem_port,
-  $run_mode,
+  $run_modes,
   $tmp_dir,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
@@ -36,12 +36,12 @@ define aem_curator::install_aem64(
   }
 
   # Retrieve the cq-quickstart jar
-  archive { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
+  archive { "${aem_base}/aem/${aem_id}/aem-${aem_id}-${aem_port}.jar":
     ensure  => present,
     source  => "${aem_artifacts_base}/AEM_6.4_Quickstart.jar",
     cleanup => false,
     require => File["${aem_base}/aem/${aem_id}"],
-  } -> file { "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar":
+  } -> file { "${aem_base}/aem/${aem_id}/aem-${aem_id}-${aem_port}.jar":
     ensure  => file,
     mode    => '0775',
     owner   => "aem-${aem_id}",
@@ -58,11 +58,12 @@ define aem_curator::install_aem64(
   }
 
   aem::instance { $aem_id:
-    source         => "${aem_base}/aem/${aem_id}/aem-${run_mode}-${aem_port}.jar",
+    source         => "${aem_base}/aem/${aem_id}/aem-${aem_id}-${aem_port}.jar",
     home           => "${aem_base}/aem/${aem_id}",
     user           => "aem-${aem_id}",
     group          => "aem-${aem_id}",
-    type           => $run_mode,
+    type           => $aem_id,
+    runmodes       => $run_modes,
     port           => $aem_port,
     sample_content => $aem_sample_content,
     jvm_mem_opts   => $aem_jvm_mem_opts,
