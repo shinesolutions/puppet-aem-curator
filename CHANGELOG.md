@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Reverted default values for `run_mode` (back to empty) as they were incorrect values to be used by puppet-aem
 
 ## [1.22.0] - 2019-04-17
 ### Changed
