@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-- Reverted default values for `run_mode` (back to empty) as they were incorrect values to be used by puppet-aem
+## [1.22.1] - 2019-05-02
+### Changed
+- Reverted default values for run_mode [#113]
 
 ## [1.22.0] - 2019-04-17
 ### Changed
@@ -458,8 +459,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#75]: https://github.com/shinesolutions/puppet-aem-curator/issues/75
 [#76]: https://github.com/shinesolutions/puppet-aem-curator/issues/76
 [#109]: https://github.com/shinesolutions/puppet-aem-curator/issues/109
+[#113]: https://github.com/shinesolutions/puppet-aem-curator/issues/113
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.22.0...HEAD
+[1.22.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.22.0...1.22.1
 [1.22.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.21.0...1.22.0
 [1.21.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.20.0...1.21.0
 [1.20.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.19.0...1.20.0
