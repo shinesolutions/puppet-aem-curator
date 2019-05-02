@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade inspec-aem to 0.11.0
+
 ## [1.22.1] - 2019-05-02
 ### Changed
 - Reverted default values for run_mode [#113]
