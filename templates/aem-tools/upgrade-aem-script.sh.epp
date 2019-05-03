@@ -37,9 +37,7 @@ java_run=true
 
 update_permission () {
   echo "Update permissions to aem-${aem_id}:aem-${aem_id} in ${home}"
-  chown -R aem-${aem_id}:aem-${aem_id} ${home}
-  echo "Update permissions to aem-${aem_id}:aem-${aem_id} in ${crx_dir}/repository/"
-  chown -R aem-${aem_id}:aem-${aem_id} ${crx_dir}/repository/*
+  chown -R aem-${aem_id}:aem-${aem_id} ${home}/*
 }
 
 upgrade() {
