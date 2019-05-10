@@ -223,6 +223,10 @@ define aem_curator::install_aem (
     } -> exec { "${aem_id}: Fix repository mount permissions":
       command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
     } -> exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
+    } -> exec { "post start service aem-${aem_name}":
+      command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_name} ensure=running"
+    } -> exec { "${aem_name}: Wait post AEM start":
+      command => "sleep 120"
     }
   } else {
     exec { "service aem-${aem_id} stop":
@@ -234,6 +238,10 @@ define aem_curator::install_aem (
     } -> exec { "${aem_id}: Ensure AEM resource is stopped":
       command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=stopped",
     } -> exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
+    } -> exec { "post start service aem-${aem_name}":
+      command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_name} ensure=running"
+    } -> exec { "${aem_name}: Wait post AEM start":
+      command => "sleep 120"
     }
   }
 
