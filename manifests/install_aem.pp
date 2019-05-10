@@ -226,7 +226,7 @@ define aem_curator::install_aem (
     } -> exec { "post start service aem-${aem_id}":
       command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=running"
     } -> exec { "${aem_id}: Wait post AEM start":
-      command => "sleep 120"
+      command => "sleep ${post_install_sleep_secs}"
     }
   } else {
     exec { "service aem-${aem_id} stop":
@@ -241,7 +241,7 @@ define aem_curator::install_aem (
     } -> exec { "post start service aem-${aem_id}":
       command => "/opt/puppetlabs/bin/puppet resource service aem-${aem_id} ensure=running"
     } -> exec { "${aem_id}: Wait post AEM start":
-      command => "sleep 120"
+      command => "sleep ${post_install_sleep_secs}"
     }
   }
 
