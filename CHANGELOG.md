@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed issue in the AEM upgrade automation script shinesolutions/aem-aws-stack-builder#283
+- Fixed bug in repository migration script [#119]
 
 ## [1.23.0] - 2019-05-02
 ### Changed
