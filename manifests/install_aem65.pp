@@ -25,7 +25,7 @@ define aem_curator::install_aem65(
   # Retrieve the license file
   archive { "${aem_base}/aem/${aem_id}/license.properties":
     ensure  => present,
-    source  => "${aem_license_base}/license-6.4.properties",
+    source  => "${aem_license_base}/license-6.5.properties",
     cleanup => false,
     require => File["${aem_base}/aem/${aem_id}"],
   } -> file { "${aem_base}/aem/${aem_id}/license.properties":
@@ -38,7 +38,7 @@ define aem_curator::install_aem65(
   # Retrieve the cq-quickstart jar
   archive { "${aem_base}/aem/${aem_id}/aem-${aem_id}-${aem_port}.jar":
     ensure  => present,
-    source  => "${aem_artifacts_base}/AEM_6.4_Quickstart.jar",
+    source  => "${aem_artifacts_base}/AEM_6.5_Quickstart.jar",
     cleanup => false,
     require => File["${aem_base}/aem/${aem_id}"],
   } -> file { "${aem_base}/aem/${aem_id}/aem-${aem_id}-${aem_port}.jar":
