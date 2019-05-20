@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Upgrade inspec-aem to 0.11.1
+- Lock down dependencies version
 
 ### Fixed
 - Fixed issue in the AEM upgrade automation script shinesolutions/aem-aws-stack-builder#283
