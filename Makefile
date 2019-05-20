@@ -1,7 +1,10 @@
 ci: clean deps lint package
 
+clean:
+	rm -rf Gemfile.lock bin/ pkg/ stage/ test/ vendor/ /tmp/shinesolutions/puppet-aem-curator/
+
 deps:
-	gem install bundler
+	gem install bundler --version=1.17.3
 	bundle install --binstubs
 	bundle exec r10k puppetfile install --verbose --moduledir modules
 	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
@@ -11,10 +14,6 @@ deps:
 	# only needed while using shinesolutions/puppet-aem fork
 	# TODO: remove when switching back to bstopp/puppet-aem
 	rm -rf modules/aem/.git
-
-clean:
-	rm -rf bin/ pkg/ stage/ test/ vendor/
-	rm -rf /tmp/shinesolutions/puppet-aem-curator/
 
 lint:
 	bundle exec puppet-lint \
