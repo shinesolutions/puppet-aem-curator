@@ -5,10 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [1.24.0] - 2019-05-20
 ### Added
-- Add new AEM profile: aem64_sp4 #117
+- Add new AEM profile: aem64_sp4 [#117]
 
 ### Changed
 - Upgrade inspec-aem to 0.11.1
@@ -477,8 +476,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#76]: https://github.com/shinesolutions/puppet-aem-curator/issues/76
 [#109]: https://github.com/shinesolutions/puppet-aem-curator/issues/109
 [#113]: https://github.com/shinesolutions/puppet-aem-curator/issues/113
+[#117]: https://github.com/shinesolutions/puppet-aem-curator/issues/117
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.23.0...HEAD
+[1.24.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.22.1...1.23.0
 [1.22.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.22.0...1.22.1
 [1.22.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.21.0...1.22.0
