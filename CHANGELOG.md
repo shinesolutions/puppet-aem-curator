@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix incorrect 1.24.0 artifact published to Puppet Forge
+
 ## [1.24.0] - 2019-05-20
 ### Added
 - Add new AEM profile: aem64_sp4 [#117]
