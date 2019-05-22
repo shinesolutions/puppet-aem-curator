@@ -139,7 +139,6 @@ class aem_curator::config_author_primary (
   }
 
   $list_clean_directories = [
-  'install',
   'logs',
   'threaddumps'
   ]
@@ -161,17 +160,7 @@ class aem_curator::config_author_primary (
     source => $aem_password_reset_source,
     user   => "aem-${aem_id}",
     group  => "aem-${aem_id}",
-  } -> archive { "${crx_quickstart_dir}/install/aem-healthcheck-content-${aem_healthcheck_version}.zip":
-    ensure => present,
-    source => $aem_healthcheck_source,
-    user   => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
-    ensure => present,
-    mode   => '0640',
-    owner  => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  } -> file { "${crx_quickstart_dir}/install/aem-healthcheck-content-${aem_healthcheck_version}.zip":
     ensure => present,
     mode   => '0640',
     owner  => "aem-${aem_id}",
