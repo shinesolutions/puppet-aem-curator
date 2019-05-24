@@ -18,6 +18,7 @@ define aem_curator::reconfig_aem (
   $aem_system_users                  = undef,
   $cert_base_url                     = undef,
   $credentials_hash                  = undef,
+  $crx_quickstart_dir                = undef,
   $data_volume_mount_point           = undef,
   $enable_create_system_users        = true,
   $force                             = true,
