@@ -193,6 +193,7 @@ class aem_curator::config_publish (
     aem_healthcheck_version    => $aem_healthcheck_version,
     aem_ssl_keystore_password  => $aem_ssl_keystore_password,
     aem_keystore_path          => $aem_keystore_path,
+    crx_quickstart_dir         => $crx_quickstart_dir,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
     enable_truststore_removal  => $enable_truststore_removal,
     aem_ssl_port               => $publish_ssl_port,
