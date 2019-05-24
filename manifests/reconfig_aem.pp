@@ -168,7 +168,6 @@ define aem_curator::reconfig_aem (
     } else {
       exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
         before => [
-          Aem_curator::install_aem_healthcheck["${aem_id}: Install AEM Healthcheck"],
           Exec["service aem-${aem_id} stop"],
         ]
       }
@@ -176,7 +175,6 @@ define aem_curator::reconfig_aem (
 
     exec { "service aem-${aem_id} stop":
       before => [
-        Aem_curator::install_aem_healthcheck["${aem_id}: Install AEM Healthcheck"],
         Exec["service aem-${aem_id} start"],
       ]
     }
@@ -191,7 +189,6 @@ define aem_curator::reconfig_aem (
     } -> exec { "service aem-${aem_id} start":
       require => [
           Exec["service aem-${aem_id} stop"],
-          Aem_curator::install_aem_healthcheck["${aem_id}: Install AEM Healthcheck"]
         ],
     } -> exec { "${aem_id}: Manual delay to let AEM become ready":
       command => "sleep ${post_install_sleep_secs}",
