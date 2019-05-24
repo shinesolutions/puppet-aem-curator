@@ -8,7 +8,7 @@ define aem_curator::reconfig_aem (
   $aem_password                      = undef,
   $enable_aem_reconfiguration        = true,
   $enable_truststore_removal         = true,
-  $enable_clean_directories          = true,
+  $enable_clean_directories          = false,
   $aem_base                          = '/opt',
   $aem_healthcheck_source            = undef,
   $aem_healthcheck_version           = undef,
