@@ -7,8 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-06-06
+### Changed
+- Upgrade aem_resources to 4.0.0
+- Upgrade inspec-aem to 1.0.0
+
+## [1.25.0] - 2019-05-22
+### Changed
+- Package aem-healthcheck-content is no longer removed at the end of AEM installation
+- Install directory is no longer cleaned up at the beginning of AEM configuration
+- Package aem-healthcheck-content is no longer installed at the beginning of AEM configuration
+
+## [1.24.1] - 2019-05-20
+### Fixed
+- Fix incorrect 1.24.0 artifact published to Puppet Forge
+
+## [1.24.0] - 2019-05-20
+### Added
+- Add new AEM profile: aem64_sp4 [#117]
+
+### Changed
+- Upgrade inspec-aem to 0.11.1
+- Upgrade aem_resources to 3.10.1
+- Lock down dependencies version
+
 ### Fixed
 - Fixed issue in the AEM upgrade automation script shinesolutions/aem-aws-stack-builder#283
+- Fixed bug in repository migration script [#119]
+- Fixed version number in AEM 6.5 installation profile
 
 ## [1.23.0] - 2019-05-02
 ### Changed
@@ -469,8 +495,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#76]: https://github.com/shinesolutions/puppet-aem-curator/issues/76
 [#109]: https://github.com/shinesolutions/puppet-aem-curator/issues/109
 [#113]: https://github.com/shinesolutions/puppet-aem-curator/issues/113
+[#117]: https://github.com/shinesolutions/puppet-aem-curator/issues/117
+[#119]: https://github.com/shinesolutions/puppet-aem-curator/issues/119
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.23.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.0...2.0.0
+[1.25.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.24.1...1.25.0
+[1.24.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.24.0...1.24.1
+[1.24.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.23.0...1.24.0
 [1.23.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.22.1...1.23.0
 [1.22.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.22.0...1.22.1
 [1.22.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.21.0...1.22.0

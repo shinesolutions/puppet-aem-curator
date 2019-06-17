@@ -100,7 +100,6 @@ class aem_curator::config_author_standby (
   }
 
   $list_clean_directories = [
-  'install',
   'logs',
   'threaddumps'
   ]

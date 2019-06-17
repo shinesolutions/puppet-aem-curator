@@ -21,11 +21,6 @@ translate_exit_code() {
 
 set +o errexit
 
-if [[ -z "${source_crx2oak}" ]]; then
-  source_crx2oak=false
-fi
-
-
 <% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
