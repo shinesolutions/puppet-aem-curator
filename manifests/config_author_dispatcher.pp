@@ -10,7 +10,7 @@ class aem_curator::config_author_dispatcher (
   $virtual_hosts_dir,
   $author_host,
   $author_port,
-  $author_secure,
+  $author_secure     = '1',
   $ssl_cert,
   $tmp_dir,
   $apache_http_port  = '80',
@@ -25,6 +25,7 @@ class aem_curator::config_author_dispatcher (
     ssl_cert            => $ssl_cert,
     author_host         => $author_host,
     author_port         => $author_port,
+    author_secure       => $author_secure,
   } -> exec { 'httpd -k graceful':
     cwd  => $tmp_dir,
     path => $exec_path,
