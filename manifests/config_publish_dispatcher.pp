@@ -9,9 +9,9 @@ class aem_curator::config_publish_dispatcher (
   $virtual_hosts_dir,
   $publish_host,
   $publish_port,
-  $publish_secure,
   $ssl_cert,
   $tmp_dir,
+  $publish_secure    = '1',
   $allowed_client    = undef,
   $apache_http_port  = '80',
   $apache_https_port = '443',
@@ -26,6 +26,7 @@ class aem_curator::config_publish_dispatcher (
     allowed_client      => $allowed_client,
     publish_host        => $publish_host,
     publish_port        => $publish_port,
+    publish_secure      => $publish_secure,
   } -> exec { 'httpd -k graceful':
     cwd  => $tmp_dir,
     path => $exec_path,
