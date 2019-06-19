@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [2.1.0] - 2019-06-19
 ### Added
 - Add new AEM profile: aem62_sp1_cfp20
@@ -503,6 +505,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#117]: https://github.com/shinesolutions/puppet-aem-curator/issues/117
 [#119]: https://github.com/shinesolutions/puppet-aem-curator/issues/119
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.1.0...HEAD
 [2.1.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.0...2.0.0
 [1.25.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.24.1...1.25.0
