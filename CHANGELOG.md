@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem62_sp1_cfp20
+
 ### Fixed
 - Fix author_secure and publish_secure parameters passing on config_author_dispatcher and config_publish_dispatcher
 
