@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix author_secure and publish_secure parameters passing on config_author_dispatcher and config_publish_dispatcher
+
 ## [2.0.0] - 2019-06-06
 ### Changed
 - Upgrade aem_resources to 4.0.0
