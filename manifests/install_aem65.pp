@@ -8,6 +8,7 @@ define aem_curator::install_aem65(
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
   $aem_healthcheck_source  = undef,
+  $aem_type                = undef,
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
   $aem_sample_content      = false,
   $aem_jvm_opts            = [
@@ -62,7 +63,7 @@ define aem_curator::install_aem65(
     home           => "${aem_base}/aem/${aem_id}",
     user           => "aem-${aem_id}",
     group          => "aem-${aem_id}",
-    type           => $aem_id,
+    type           => $aem_type,
     runmodes       => $run_modes,
     port           => $aem_port,
     sample_content => $aem_sample_content,

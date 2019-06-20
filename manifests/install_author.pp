@@ -61,6 +61,7 @@ class aem_curator::install_author (
     aem_healthcheck_version => $aem_healthcheck_version,
     aem_host                => $aem_host,
     aem_id                  => $aem_id,
+    aem_type                => 'author',
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_keystore_password   => $aem_keystore_password,
     aem_keystore_path       => $aem_keystore_path,

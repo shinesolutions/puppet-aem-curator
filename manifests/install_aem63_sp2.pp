@@ -7,6 +7,7 @@ define aem_curator::install_aem63_sp2(
   $tmp_dir,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
+  $aem_type                = undef,
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
   $aem_sample_content      = false,
   $aem_jvm_opts            = [
@@ -35,6 +36,7 @@ define aem_curator::install_aem63_sp2(
     aem_start_opts          => $aem_start_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
+    aem_type                => $aem_type,
   } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 2":
     tmp_dir         => $tmp_dir,
     file_name       => 'AEM-6.3.2.0-6.3.2.zip',
