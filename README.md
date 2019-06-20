@@ -22,6 +22,48 @@ Other than AEM installation, it also supports some common AEM management events:
 * List AEM packages
 * AEM Upgrade automation
 
+Puppet AEM Curator is designed to provision an AEM environment in two phases:
+
+1. Installation of AEM
+2. Configuration and running of AEM
+
+*Phase 1: Installation of AEM*
+
+A single AEM installation can take quite a while. Rough timing of an AEM installation
+(on AWS EC2 instance type [m4.2xlarge](https://aws.amazon.com/ec2/instance-types/))
+which includes variation of service packs, cumulative fix packs, and hotfixes,
+can take about half an hour plus.
+
+Due to the above, the desire is to take a machine image of this AEM installation,
+so we don't have to reinstall AEM every time a new AEM environment is created.
+This AEM installation can then be used across multiple environments, hence the
+installation cost is only once per AEM / service pack / cumulative fix version
+for a given machine image.
+
+The installation is implemented in the following manifests:
+* [install_author.pp](https://github.com/shinesolutions/puppet-aem-curator/blob/master/manifests/install_author.pp)
+* [install_publish.pp](https://github.com/shinesolutions/puppet-aem-curator/blob/master/manifests/install_publish.pp)
+
+The above manifests result in AEM being gracefully stopped in order to ensure the
+correctness of the repository.
+
+*Phase 2: Configuration and running of AEM*
+
+The configuration and running of AEM ends up with the AEM instance being provisioned
+with environment-specific details (e.g. an admin password that is unique to that
+environment, a configuration file that uses the ip address of the server, etc).
+The idea here is that we can stand up dozens of AEM environments without installing
+AEM each and every time. It simply uses the machine image taken on step one above
+(Installation of AEM).
+
+The configuration and running are implemented in the following manifests:
+* [config_author_primary.pp](https://github.com/shinesolutions/puppet-aem-curator/blob/master/manifests/config_author_primary.pp)
+* [config_author_standby.pp](https://github.com/shinesolutions/puppet-aem-curator/blob/master/manifests/config_author_standby.pp)
+* [config_publish.pp](https://github.com/shinesolutions/puppet-aem-curator/blob/master/manifests/config_publish.pp)
+
+The above manifests result in AEM being configured, up and running, ready to accept
+incoming requests.
+
 Learn more about Puppet AEM Curator:
 
 * [Installation](https://github.com/shinesolutions/puppet-aem-curator#installation)
@@ -45,4 +87,4 @@ If you want to use the master version:
 Usage
 -----
 
-TODO
+TODO: example class/definition calls
