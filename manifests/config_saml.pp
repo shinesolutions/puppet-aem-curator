@@ -1,5 +1,5 @@
 define aem_curator::config_saml (
-  $aem_id                                                = 'aem',
+  $aem_id                                                = 'author',
   $aem_username                                          = undef,
   $aem_password                                          = undef,
   $aem_system_users                                      = {},
@@ -15,6 +15,7 @@ define aem_curator::config_saml (
     if !defined(File["${tmp_dir}/SAML"]) {
         file { "${tmp_dir}/SAML":
           ensure => directory,
+          before => Aem_saml[aem_saml]
         }
       }
 
