@@ -25,11 +25,10 @@ usage() {
     echo "--idp_url=http:..."
     echo "--path=/:... (default: /)"
     echo "--service_provider_entity_id=..."
+    echo "--aem_id=(author|publish)"
     echo ""
     echo ""
     echo "Optional options:"
-    echo ""
-    echo "--aem_id=(author|publish) (default: author)"
     echo ""
     echo "--add_group_memberships=(true|false) (default: true)"
     echo ""
@@ -126,7 +125,9 @@ while [[ $# -gt 0 ]]; do
              option_count=$(expr ${option_count} + 1)
   ;;
   --aem_id)
+             required_value $PARAM $VALUE
              aem_id=${VALUE}
+             option_count=$(expr ${option_count} + 1)
   ;;
   --add_group_memberships)
              add_group_memberships=$VALUE
@@ -198,7 +199,7 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-if [ "$option_count" -lt 4 ]; then
+if [ "$option_count" -lt 5 ]; then
   echo "Error please define all options."
   echo ""
   usage
@@ -224,19 +225,15 @@ aem_password=$(<%= $aem_password_retrieval_command %>)
 
 set +o errexit
 
-<% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
-
-echo "Testing if SAML is disabled for AEM <%= $aem_instance['aem_id'] %> before enabling SAML using InSpec..."
+echo "Testing if SAML is disabled for AEM ${aem_id} before enabling SAML using InSpec..."
 cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
 HOME=/root \
   aem_username="${aem_username}" \
   aem_password="${aem_password}" \
-  INSPEC_AEM_CONF="<%= $confdir %>/<%= $aem_instance['aem_id'] %>.yaml" \
+  INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
   inspec exec . --controls aem-saml-disabled
 
 translate_exit_code "$?"
-
-<% } -%>
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
@@ -266,7 +263,6 @@ FACTER_aem_username="${aem_username}" \
   FACTER_signature_method="${signature_method}" \
   FACTER_sp_private_key_alias="${sp_private_key_alias}" \
   FACTER_synchronize_attributes="${synchronize_attributes}" \
-  FACTER_tmp_dir="${tmp_dir}" \
   FACTER_use_encryption="${use_encryption}" \
   FACTER_user_id_attribute="${user_id_attribute}" \
   FACTER_user_intermediate_path="${user_intermediate_path}" \
@@ -279,16 +275,12 @@ FACTER_aem_username="${aem_username}" \
 
 translate_exit_code "$?"
 
-<% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
-
-echo "Testing if SAML is enabled for AEM <%= $aem_instance['aem_id'] %> using InSpec..."
+echo "Testing if SAML is enabled for AEM ${aem_id} using InSpec..."
 cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
 HOME=/root \
   aem_username="${aem_username}" \
   aem_password="${aem_password}" \
-  INSPEC_AEM_CONF="<%= $confdir %>/<%= $aem_instance['aem_id'] %>.yaml" \
+  INSPEC_AEM_CONF="<%= $confdir %>/${aem_id}.yaml" \
   inspec exec . --controls aem-saml-enabled
 
 translate_exit_code "$?"
-
-<% } -%>

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add new aem-tool enable-saml.sh
+- Add new aem-tool disable-saml.sh
 
 ### Changed
 - Changed default aem_id to `author` in manifest config_saml
