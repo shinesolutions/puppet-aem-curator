@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix publish installation default AEM type to 'publish'
+
 ## [2.2.0] - 2019-06-20
 
 ## [2.1.0] - 2019-06-19
