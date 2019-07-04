@@ -62,7 +62,7 @@ usage() {
     echo ""
     echo "--sp_private_key_alias=..."
     echo ""
-    echo "--synchronize_attributes=[givenName=profile/givenName,familyName=...]"
+    echo "--synchronize_attributes=givenName=profile/givenName,familyName=profile/familyName"
     echo ""
     echo "--use_encryption=(true|false) (default: true)"
     echo ""
