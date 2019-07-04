@@ -1,5 +1,5 @@
 class aem_curator::action_enable_saml (
-  $tmp_dir,
+  $tmp_dir  = $::tmp_dir,
   $add_group_memberships          = $::add_group_memberships,
   $aem_id                         = $::aem_id,
   $aem_username                   = $::aem_username,
@@ -174,7 +174,7 @@ class aem_curator::action_enable_saml (
   $_synchronize_attributes = if empty($synchronize_attributes) {
     undef
   } else {
-    $synchronize_attributes
+    split($synchronize_attributes, /,/)
   }
 
   $_use_encryption = if empty($use_encryption) {
