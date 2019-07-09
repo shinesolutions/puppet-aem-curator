@@ -9,6 +9,7 @@ define aem_curator::install_aem_profile (
   $tmp_dir,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
+  $aem_type                = undef,
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
   $aem_sample_content      = false,
   $aem_jvm_opts            = [
@@ -29,6 +30,7 @@ define aem_curator::install_aem_profile (
     aem_base                => $aem_base,
     aem_healthcheck_version => $aem_healthcheck_version,
     aem_id                  => $aem_id,
+    aem_type                => $aem_type,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_port                => $aem_port,
     aem_sample_content      => $aem_sample_content,

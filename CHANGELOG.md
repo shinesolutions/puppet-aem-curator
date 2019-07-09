@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2019-06-28
+### Fixed
+- Fix publish installation default AEM type to 'publish'
+
+## [2.2.0] - 2019-06-20
+
+## [2.1.0] - 2019-06-19
+### Added
+- Add new AEM profile: aem62_sp1_cfp20
+
+### Fixed
+- Fix AEM type incorrect use of AEM ID [#114]
+- Fix author_secure and publish_secure parameters passing on config_author_dispatcher and config_publish_dispatcher
+
 ## [2.0.0] - 2019-06-06
 ### Changed
 - Upgrade aem_resources to 4.0.0
@@ -495,10 +509,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#76]: https://github.com/shinesolutions/puppet-aem-curator/issues/76
 [#109]: https://github.com/shinesolutions/puppet-aem-curator/issues/109
 [#113]: https://github.com/shinesolutions/puppet-aem-curator/issues/113
+[#114]: https://github.com/shinesolutions/puppet-aem-curator/issues/114
 [#117]: https://github.com/shinesolutions/puppet-aem-curator/issues/117
 [#119]: https://github.com/shinesolutions/puppet-aem-curator/issues/119
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.2.0...2.3.0
+[2.2.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.1.0...2.2.0
+[2.1.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.0...2.0.0
 [1.25.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.24.1...1.25.0
 [1.24.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.24.0...1.24.1

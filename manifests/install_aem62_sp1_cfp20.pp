@@ -1,4 +1,4 @@
-define aem_curator::install_aem63_sp1_cfp2(
+define aem_curator::install_aem62_sp1_cfp20(
   $aem_license_base,
   $aem_artifacts_base,
   $aem_healthcheck_version,
@@ -22,7 +22,7 @@ define aem_curator::install_aem63_sp1_cfp2(
   $post_install_sleep_secs = 120,
 ) {
 
-  aem_curator::install_aem63 { "${aem_id}: Install AEM":
+  aem_curator::install_aem62 { "${aem_id}: Install AEM":
     tmp_dir                 => $tmp_dir,
     run_modes               => $run_modes,
     aem_port                => $aem_port,
@@ -37,23 +37,47 @@ define aem_curator::install_aem63_sp1_cfp2(
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
     aem_type                => $aem_type,
-  } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 1":
+  } -> aem_curator::install_aem_package { "${aem_id}: Install hotfix 11490":
     tmp_dir         => $tmp_dir,
-    file_name       => 'AEM-6.3-Service-Pack-1-6.3.SP1.zip',
-    package_name    => 'aem-service-pkg',
-    package_group   => 'adobe/cq630/servicepack',
-    package_version => '6.3.1',
+    package_group   => 'adobe/cq620/hotfix',
+    package_name    => 'cq-6.2.0-hotfix-11490',
+    package_version => '1.2',
     artifacts_base  => $aem_artifacts_base,
     aem_id          => $aem_id,
-  } -> aem_curator::install_aem_package { "${aem_id}: Install cumulative fix pack 2":
+  } -> aem_curator::install_aem_package { "${aem_id}: Install hotfix 12785":
+    tmp_dir                     => $tmp_dir,
+    package_group               => 'adobe/cq620/hotfix',
+    package_name                => 'cq-6.2.0-hotfix-12785',
+    package_version             => '7.0',
+    restart                     => true,
+    post_install_sleep_secs     => 150,
+    post_login_page_ready_sleep => 30,
+    artifacts_base              => $aem_artifacts_base,
+    aem_id                      => $aem_id,
+  } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 1":
+    tmp_dir         => $tmp_dir,
+    file_name       => 'AEM-6.2-Service-Pack-1-6.2.SP1.zip',
+    package_name    => 'aem-service-pkg',
+    package_group   => 'adobe/cq620/servicepack',
+    package_version => '6.2.SP1',
+    artifacts_base  => $aem_artifacts_base,
+    aem_id          => $aem_id,
+  } -> aem_curator::install_aem_package { "${aem_id}: Install cumulative fix pack ":
     tmp_dir                 => $tmp_dir,
-    file_name               => 'AEM-CFP-6.3.1.2-2.0.zip',
-    package_name            => 'aem-6.3.1-cfp',
-    package_group           => 'adobe/cq630/cumulativefixpack',
+    file_name               => 'AEM-6.2-SP1-CFP20-20.0.zip',
+    package_name            => 'cq-6.2.0-sp1-cfp',
+    package_group           => 'adobe/cq620/cumulativefixpack',
     post_install_sleep_secs => 900,
-    package_version         => '2.0',
+    package_version         => '20.0',
     artifacts_base          => $aem_artifacts_base,
     aem_id                  => $aem_id,
+  } -> aem_curator::install_aem_package { "${aem_id}: Install hotfix 15607":
+    tmp_dir         => $tmp_dir,
+    package_group   => 'adobe/cq620/hotfix',
+    package_name    => 'cq-6.2.0-hotfix-15607',
+    package_version => '1.0',
+    artifacts_base  => $aem_artifacts_base,
+    aem_id          => $aem_id,
   }
 
 }
