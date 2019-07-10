@@ -113,6 +113,7 @@ class aem_curator::export_backup_packages (
       cwd  => $tmp_dir,
       path => ['/bin'],
     } -> file { "${tmp_dir}/${_aem_id}/${package[group]}/${package[name]}-${package_version}.zip":
+      backup => false,
       ensure => absent,
     }
 
