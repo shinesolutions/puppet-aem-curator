@@ -1,4 +1,0 @@
----
-# Opt out PDK data collection.
-# https://puppet.com/docs/pdk/1.x/pdk_install.html#opting-out-of-pdk-data-collection
-disabled: true
