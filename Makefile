@@ -24,7 +24,7 @@ lint:
 		./manifests/*.pp
 	puppet epp validate templates/*/*.epp
 	bundle exec rubocop Gemfile
-	mv Gemfile.lock Gemfile.lock.orig && PDK_DISABLE_ANALYTICS=true pdk validate metadata && mv Gemfile.lock.orig Gemfile.lock
+	# mv Gemfile.lock Gemfile.lock.orig && PDK_DISABLE_ANALYTICS=true pdk validate metadata && mv Gemfile.lock.orig Gemfile.lock
 
 package: deps
 	pdk build --force
