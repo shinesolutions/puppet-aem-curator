@@ -16,6 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix publish installation default AEM type to 'publish'
 
+### Added
+- Add new aem-tool enable-saml.sh
+- Add new aem-tool disable-saml.sh
+
+### Changed
+- Changed default aem_id to `author` in manifest config_saml
+
+### Fixed
+- Fixed error in manifest action_enable_saml
+
 ## [2.2.0] - 2019-06-20
 
 ## [2.1.0] - 2019-06-19
