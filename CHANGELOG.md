@@ -8,23 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add new AEM profile: aem65_sp1
-
-### Changed
-- Disable Puppet file backup on package export backup
-
-## [2.3.0] - 2019-06-28
-### Fixed
-- Fix publish installation default AEM type to 'publish'
-
-### Added
 - Add new aem-tool enable-saml.sh
 - Add new aem-tool disable-saml.sh
 
 ### Changed
+- Disable Puppet file backup on package export backup
 - Changed default aem_id to `author` in manifest config_saml
 
 ### Fixed
 - Fixed error in manifest action_enable_saml
+
+## [2.3.0] - 2019-06-28
+### Fixed
+- Fix publish installation default AEM type to 'publish'
 
 ## [2.2.0] - 2019-06-20
 
