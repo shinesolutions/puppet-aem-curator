@@ -66,6 +66,7 @@ class aem_curator::install_author (
     aem_keystore_password   => $aem_keystore_password,
     aem_keystore_path       => $aem_keystore_path,
     aem_port                => $aem_port,
+    aem_debug_port          => $aem_debug_port,
     aem_profile             => $aem_profile,
     aem_sample_content      => $aem_sample_content,
     aem_ssl_port            => $aem_ssl_port,

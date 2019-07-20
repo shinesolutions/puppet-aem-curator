@@ -35,6 +35,7 @@ class aem_curator::action_install_aem_profile (
     aem_healthcheck_version => $aem_healthcheck_version,
     aem_id                  => $aem_id,
     aem_port                => $aem_port,
+    aem_debug_port          => $aem_debug_port,
     aem_profile             => $aem_profile,
     aem_ssl_port            => $aem_ssl_port,
     run_mode                => $aem_id,

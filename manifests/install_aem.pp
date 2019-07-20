@@ -187,6 +187,7 @@ define aem_curator::install_aem (
     aem_type                => $aem_type,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_port                => $aem_port,
+    aem_debug_port          => $aem_debug_port,
     aem_profile             => $aem_profile,
     aem_sample_content      => $aem_sample_content,
     aem_ssl_port            => $aem_ssl_port,
