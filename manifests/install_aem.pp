@@ -85,6 +85,7 @@ define aem_curator::install_aem (
   $aem_ssl_port,
   $run_modes,
   $tmp_dir,
+  $aem_debug_port                = undef,
   $aem_base                      = '/opt',
   $aem_debug                     = false,
   $aem_id                        = undef,

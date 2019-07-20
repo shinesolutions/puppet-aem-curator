@@ -34,6 +34,7 @@ class aem_curator::install_publish (
   $data_volume_mount_point,
   $setup_repository_volume,
   $tmp_dir,
+  $aem_debug_port          = undef,
   $aem_debug               = false,
   $aem_id                  = 'publish',
   $aem_keystore_path       = undef,
