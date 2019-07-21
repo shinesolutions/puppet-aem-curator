@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Upgrade inspec-aem to 1.1.0
 
+### Fixed
+- Fix metadata puppet-aem-resources dep version to 4.1.0
+
 ## [2.4.0] - 2019-07-19
 ### Added
 - Add new AEM profile: aem65_sp1
