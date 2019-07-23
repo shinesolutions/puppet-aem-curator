@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- Remove start_opts param following upgrade to puppet-aem 3.0.0 #131
+
 ## [2.5.0] - 2019-07-23
 ### Changed
 - Upgrade inspec-aem to 1.1.0

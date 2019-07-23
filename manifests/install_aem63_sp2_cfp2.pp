@@ -18,7 +18,6 @@ define aem_curator::install_aem63_sp2_cfp2(
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
-  $aem_start_opts          = '',
   $post_install_sleep_secs = 120,
 ) {
 
@@ -33,7 +32,6 @@ define aem_curator::install_aem63_sp2_cfp2(
     aem_sample_content      => $aem_sample_content,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_jvm_opts            => $aem_jvm_opts,
-    aem_start_opts          => $aem_start_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
     aem_type                => $aem_type,

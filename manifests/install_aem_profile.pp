@@ -20,7 +20,6 @@ define aem_curator::install_aem_profile (
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
-  $aem_start_opts          = '',
   $post_install_sleep_secs = 120,
 ) {
 
@@ -35,7 +34,6 @@ define aem_curator::install_aem_profile (
     aem_port                => $aem_port,
     aem_sample_content      => $aem_sample_content,
     aem_jvm_opts            => $aem_jvm_opts,
-    aem_start_opts          => $aem_start_opts,
     post_install_sleep_secs => $post_install_sleep_secs,
     run_modes               => $run_modes,
     tmp_dir                 => $tmp_dir,
