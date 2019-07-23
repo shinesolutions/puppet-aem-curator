@@ -14,7 +14,7 @@
     },
     {
       "name": "bstopp/aem",
-      "version_requirement": "2.5.0"
+      "version_requirement": "3.0.0"
     },
     {
       "name": "puppetlabs/apache",

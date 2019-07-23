@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Upgrade inspec-aem to 1.1.0
+- Upgrade puppet-aem to 3.0.0, reverting back to origin bstopp/puppet-aem #131
 
 ### Fixed
 - Fix metadata puppet-aem-resources dep version to 4.1.0
