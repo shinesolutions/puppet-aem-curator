@@ -8,6 +8,7 @@ define aem_curator::reconfig_aem (
   $aem_password                      = undef,
   $enable_aem_reconfiguration        = true,
   $enable_truststore_removal         = true,
+  $enable_clean_directories          = false,
   $aem_base                          = '/opt',
   $aem_healthcheck_source            = undef,
   $aem_healthcheck_version           = undef,
@@ -17,6 +18,7 @@ define aem_curator::reconfig_aem (
   $aem_system_users                  = undef,
   $cert_base_url                     = undef,
   $credentials_hash                  = undef,
+  $crx_quickstart_dir                = undef,
   $data_volume_mount_point           = undef,
   $enable_create_system_users        = true,
   $force                             = true,
@@ -144,15 +146,54 @@ define aem_curator::reconfig_aem (
       }
     }
 
-    exec { "service aem-${aem_id} stop":
-      before  => Exec["service aem-${aem_id} start"],
+    ###########################################################################
+    # If clean dir is enabled clean up directories in list
+    # If not enabled cleanup only any existing aem-healthcheck packages
+    ###########################################################################
+    if $enable_clean_directories {
+        $list_clean_directories = [
+        'install',
+        ]
+        #
+        # since we are only cleaning the install dir
+        # we clean during runtime.
+        #
+        $list_clean_directories.each | Integer $index, String $clean_directory| {
+          exec { "${aem_id}: Clean directory ${crx_quickstart_dir}/${clean_directory}/":
+            command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+            before  => Exec["service aem-${aem_id} stop"]
+          } -> exec { "${aem_id}: sleep ${post_install_sleep_secs} seconds for package uninstallations":
+            command => "sleep ${post_install_sleep_secs}",
+          }
+        }
+    } else {
+      exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
+        before => [
+          Exec["service aem-${aem_id} stop"],
+        ]
+      }
     }
 
-    exec { "service aem-${aem_id} start":
-      require => Exec["service aem-${aem_id} stop"],
+    exec { "service aem-${aem_id} stop":
+      before => [
+        Exec["service aem-${aem_id} start"],
+      ]
+    }
+
+    aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
+      aem_base                => $aem_base,
+      aem_healthcheck_source  => $aem_healthcheck_source,
+      aem_healthcheck_version => $aem_healthcheck_version,
+      aem_id                  => $aem_id,
+      tmp_dir                 => $tmp_dir,
+      require                 => Exec["service aem-${aem_id} stop"],
+    } -> exec { "service aem-${aem_id} start":
+      require => [
+          Exec["service aem-${aem_id} stop"],
+        ],
     } -> exec { "${aem_id}: Manual delay to let AEM become ready":
       command => "sleep ${post_install_sleep_secs}",
-    } -> aem_aem { "${aem_id}: Wait until login page is ready after starting AEM for reconfiguration":
+    } -> aem_aem { "${aem_id}: Wait until login page is ready after installing AEM Healthcheck":
       ensure => login_page_is_ready,
       aem_id => $aem_id,
     } -> aem_aem { "${aem_id}: Wait until aem health check is ok":

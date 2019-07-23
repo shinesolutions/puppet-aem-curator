@@ -45,6 +45,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade aem_resources to 4.0.0
 - Upgrade inspec-aem to 1.0.0
 
+### Changed
+- Changed reconfiguration process to cleanup `install` dir
+- Changed reconfiguration process to install aem-healthcheck package
+
 ## [1.25.0] - 2019-05-22
 ### Changed
 - Package aem-healthcheck-content is no longer removed at the end of AEM installation

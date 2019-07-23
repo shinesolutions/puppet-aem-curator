@@ -208,6 +208,7 @@ class aem_curator::config_author_primary (
     aem_system_users           => $aem_system_users,
     cert_base_url              => $cert_base_url,
     credentials_hash           => $credentials_hash,
+    crx_quickstart_dir         => $crx_quickstart_dir,
     data_volume_mount_point    => $data_volume_mount_point,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
     enable_create_system_users => $enable_create_system_users,
