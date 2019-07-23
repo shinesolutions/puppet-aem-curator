@@ -62,7 +62,7 @@ define aem_curator::install_aem_package (
   $activate                    = false,
   $aem_id                      = 'aem',
   $file_name                   = '',
-  $force                       = true,
+  $force                       = false,
   $post_install_sleep_secs     = 120,
   $post_login_page_ready_sleep = 0,
   $post_restart_sleep_secs     = 120,
