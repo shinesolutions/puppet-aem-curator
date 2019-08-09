@@ -12,6 +12,7 @@
 #
 class aem_curator::config_collectd (
   $proxy_protocol,
+  $proxy_enabled,
   $proxy_host,
   $proxy_port,
   $component,
@@ -20,7 +21,7 @@ class aem_curator::config_collectd (
   $ec2_id,
 ) {
 
-  if $proxy_host != '' {
+  if $proxy_enabled = 'true' {
     file_line { 'Set the collectd cloudwatch proxy_server_name':
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
       line   => "proxy_server_name = \"${proxy_protocol}://${proxy_host}\"",
