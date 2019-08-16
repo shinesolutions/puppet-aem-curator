@@ -36,7 +36,7 @@ class aem_curator::config_author_primary (
   $login_ready_max_tries,
   $puppet_conf_dir,
   $tmp_dir,
-  $aem_base                                              = undef,
+  $aem_base                                              = '/opt',
   $aem_healthcheck_source                                = undef,
   $aem_healthcheck_version                               = undef,
   $aem_id                                                = 'author',
@@ -44,6 +44,7 @@ class aem_curator::config_author_primary (
   $aem_keystore_path                                     = undef,
   $data_volume_mount_point                               = undef,
   $enable_aem_reconfiguration                            = false,
+  $enable_aem_reconfiguratiton_clean_directories         = false,
   $enable_truststore_migration                           = false,
   $enable_truststore_removal                             = false,
   $enable_authorizable_keystore_creation                 = false,
@@ -150,6 +151,42 @@ class aem_curator::config_author_primary (
     }
   }
 
+  #
+  # remove any aem-healthcheck-content package from the install directory
+  # If install dir isn't cleaned up a step before per default
+  #
+  if !('install' in $list_clean_directories) {
+   exec { "${aem_id}: remove ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip":
+     command => "rm -fr ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip",
+     before  => [
+       Service['aem-author']
+     ],
+   }
+ }
+
+ #
+ # If reconfiguration is enabled & clean directories for reconfiguration
+ # is enabled than we don't install AEM Healthcheck because it's already
+ # done during the reconfiguration process. Otherwise install aem healthcheck
+ # apart from the reconfiguration process.
+ #
+ unless $enable_aem_reconfiguratiton_clean_directories {
+   aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
+     aem_base                => $aem_base,
+     aem_healthcheck_source  => $aem_healthcheck_source,
+     aem_healthcheck_version => $aem_healthcheck_version,
+     aem_id                  => $aem_id,
+     tmp_dir                 => $tmp_dir,
+     require                 => [
+                                  Service['aem-author'],
+                                ],
+     before                  => [
+                                  Aem_bundle["${aem_id}: Stop webdav bundle"],
+                                  Aem_aem["${aem_id}: Wait until aem health check is ok after stopping davex bundle"],
+                                ]
+   }
+ }
+
   file { "${crx_quickstart_dir}/install/":
     ensure => directory,
     mode   => '0775',
@@ -211,6 +248,7 @@ class aem_curator::config_author_primary (
     crx_quickstart_dir         => $crx_quickstart_dir,
     data_volume_mount_point    => $data_volume_mount_point,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
+    enable_clean_directories   => $enable_aem_reconfiguratiton_clean_directories,
     enable_create_system_users => $enable_create_system_users,
     enable_truststore_removal  => $enable_truststore_removal,
     run_mode                   => $run_mode,
