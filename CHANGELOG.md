@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [2.9.0] - 2019-08-16
 ### Added
 - Add installation of package aem-healthcheck-content to the provisioning process [#181]
@@ -559,6 +561,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#134]: https://github.com/shinesolutions/puppet-aem-curator/issues/134
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.9.0...HEAD
 [2.9.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.8.0...2.9.0
 [2.8.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.7.0...2.8.0
 [2.7.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.6.0...2.7.0
