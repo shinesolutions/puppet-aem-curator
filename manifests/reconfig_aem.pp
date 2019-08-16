@@ -166,12 +166,15 @@ define aem_curator::reconfig_aem (
             command => "sleep ${post_install_sleep_secs}",
           }
         }
-    } else {
-      exec { "rm -f ${aem_base}/aem/${aem_id}/crx-quickstart/install/aem-healthcheck-content-*.zip":
-        before => [
-          Exec["service aem-${aem_id} stop"],
-        ]
-      }
+
+        aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
+          aem_base                => $aem_base,
+          aem_healthcheck_source  => $aem_healthcheck_source,
+          aem_healthcheck_version => $aem_healthcheck_version,
+          aem_id                  => $aem_id,
+          tmp_dir                 => $tmp_dir,
+          require                 => Exec["service aem-${aem_id} start"],
+        }
     }
 
     exec { "service aem-${aem_id} stop":
@@ -180,20 +183,13 @@ define aem_curator::reconfig_aem (
       ]
     }
 
-    aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
-      aem_base                => $aem_base,
-      aem_healthcheck_source  => $aem_healthcheck_source,
-      aem_healthcheck_version => $aem_healthcheck_version,
-      aem_id                  => $aem_id,
-      tmp_dir                 => $tmp_dir,
-      require                 => Exec["service aem-${aem_id} stop"],
-    } -> exec { "service aem-${aem_id} start":
+    exec { "service aem-${aem_id} start":
       require => [
           Exec["service aem-${aem_id} stop"],
         ],
     } -> exec { "${aem_id}: Manual delay to let AEM become ready":
       command => "sleep ${post_install_sleep_secs}",
-    } -> aem_aem { "${aem_id}: Wait until login page is ready after installing AEM Healthcheck":
+    } -> aem_aem { "${aem_id}: Wait until login page is ready to start reconfiguration":
       ensure => login_page_is_ready,
       aem_id => $aem_id,
     } -> aem_aem { "${aem_id}: Wait until aem health check is ok":

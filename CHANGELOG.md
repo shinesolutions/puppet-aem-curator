@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add installation of package aem-healthcheck-content to the provisioning process #181
+
 ## [2.8.0] - 2019-08-15
 ### Added
 - Added proxy_enabled parameter for collectd configuration [#134]
