@@ -150,40 +150,40 @@ class aem_curator::config_publish (
     }
   }
 
- #
- # If reconfiguration is enabled & clean directories for reconfiguration
- # is enabled than we don't install AEM Healthcheck because it's already
- # done during the reconfiguration process. Otherwise install aem healthcheck
- # apart from the reconfiguration process.
- #
- unless $enable_aem_reconfiguratiton_clean_directories {
-   #
-   # remove any aem-healthcheck-content package from the install directory
-   # If install dir isn't cleaned up a step before per default
-   #
-   if !('install' in $list_clean_directories) {
-    exec { "${aem_id}: remove ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip":
-      command => "rm -fr ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip",
-      before  => [
-        Service['aem-publish']
+  #
+  # If reconfiguration is enabled & clean directories for reconfiguration
+  # is enabled than we don't install AEM Healthcheck because it's already
+  # done during the reconfiguration process. Otherwise install aem healthcheck
+  # apart from the reconfiguration process.
+  #
+  unless $enable_aem_reconfiguratiton_clean_directories {
+  #
+  # remove any aem-healthcheck-content package from the install directory
+  # If install dir isn't cleaned up a step before per default
+  #
+  if !('install' in $list_clean_directories) {
+  exec { "${aem_id}: remove ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip":
+    command => "rm -fr ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip",
+    before  => [
+      Service['aem-publish']
       ],
-     }
-   }
+    }
+  }
 
-   aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
-     aem_base                => $aem_base,
-     aem_healthcheck_source  => $aem_healthcheck_source,
-     aem_healthcheck_version => $aem_healthcheck_version,
-     aem_id                  => $aem_id,
-     tmp_dir                 => $tmp_dir,
-     require                 => [
-                                  Service['aem-publish'],
-                                ],
-     before                  => [
-                                  Aem_aem["${aem_id}: Wait until login page is ready"],
-                                ]
-   }
- }
+  aem_curator::install_aem_healthcheck {"${aem_id}: Install AEM Healthcheck":
+    aem_base                => $aem_base,
+    aem_healthcheck_source  => $aem_healthcheck_source,
+    aem_healthcheck_version => $aem_healthcheck_version,
+    aem_id                  => $aem_id,
+    tmp_dir                 => $tmp_dir,
+    require                 => [
+                                Service['aem-publish'],
+                              ],
+    before                  => [
+                                Aem_aem["${aem_id}: Wait until login page is ready"],
+                              ]
+    }
+  }
 
   file { "${crx_quickstart_dir}/install/":
     ensure => directory,
