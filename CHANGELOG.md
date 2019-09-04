@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- Removed AEM login page check after runing the AEM In-Place upgrade [#138]
+
 ## [2.9.0] - 2019-08-16
 ### Added
 - Add installation of package aem-healthcheck-content to the provisioning process [#181]
