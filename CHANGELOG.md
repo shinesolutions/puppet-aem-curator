@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- [author-standby] Update permissions of the mount point [#141]
+
 ### Removed
 - Removed AEM login page check after runing the AEM In-Place upgrade [#138]
 
