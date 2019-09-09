@@ -32,6 +32,7 @@ class aem_curator::config_author_standby (
   $tmp_dir,
   $aem_id                  = 'author',
   $aem_version             = '6.2',
+  $data_volume_mount_point = undef,
   $delete_repository_index = false,
   $jmxremote_port          = '5982',
   $jvm_mem_opts            = undef,
@@ -54,7 +55,7 @@ class aem_curator::config_author_standby (
   }
 
   exec { "${aem_id}: Set repository ownership":
-    command => "chown -R aem-${aem_id}:aem-${aem_id} ${crx_quickstart_dir}/repository/",
+    command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
     before  => Service['aem-author'],
   }
 
