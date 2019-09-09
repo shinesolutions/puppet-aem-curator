@@ -52,7 +52,6 @@ class aem_curator::install_dispatcher (
   $apache_https_port = '443',
   $aem_id            = 'dispatcher',
 ) {
-  include ::config::base
 
   # Prepare AEM certificate
   concat { $cert_filename:

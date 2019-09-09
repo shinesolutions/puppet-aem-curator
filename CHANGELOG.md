@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Removed AEM login page check after runing the AEM In-Place upgrade [#138]
+- Remove unused reference of include ::config::base in install dispatcher manifest
 
 ## [2.9.0] - 2019-08-16
 ### Added
