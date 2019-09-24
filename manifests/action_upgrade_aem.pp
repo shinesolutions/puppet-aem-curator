@@ -1,10 +1,6 @@
 class aem_curator::action_upgrade_aem (
   $aem_base,
   $base_dir,
-  $login_ready_max_tries,
-  $login_ready_base_sleep_seconds,
-  $login_ready_max_sleep_seconds,
-  $tmp_dir,
   $aem_id                  = $::aem_id,
   $aem_port                = $::aem_port,
   $aem_upgrade_version     = $::aem_upgrade_version,
@@ -18,8 +14,5 @@ class aem_curator::action_upgrade_aem (
     post_upgrade_sleep_secs        => $post_upgrade_sleep_secs,
     tmp_dir                        => $tmp_dir,
     aem_upgrade_version            => $aem_upgrade_version,
-    login_ready_max_tries          => $login_ready_max_tries,
-    login_ready_base_sleep_seconds => $login_ready_base_sleep_seconds,
-    login_ready_max_sleep_seconds  => $login_ready_max_sleep_seconds,
   }
 }
