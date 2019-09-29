@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- Removed deprecated reconfiguration parameter enable_create_system_users
+
 ## [2.10.0] - 2019-09-09
 ### Changed
 - [author-standby] Update permissions of the mount point [#141]
