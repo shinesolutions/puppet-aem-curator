@@ -3,29 +3,29 @@ File {
 }
 
 define aem_curator::reconfig_aem (
-  $aem_id                            = undef,
-  $aem_username                      = undef,
-  $aem_password                      = undef,
-  $enable_aem_reconfiguration        = false,
-  $enable_truststore_removal         = true,
-  $enable_clean_directories          = false,
-  $aem_base                          = '/opt',
-  $aem_healthcheck_source            = undef,
-  $aem_healthcheck_version           = undef,
-  $aem_ssl_keystore_password         = undef,
-  $aem_keystore_path                 = undef,
-  $aem_ssl_port                      = undef,
-  $aem_system_users                  = undef,
-  $credentials_hash                  = undef,
-  $crx_quickstart_dir                = undef,
-  $enable_create_system_users        = true,
-  $force                             = true,
-  $post_install_sleep_secs           = 120,
-  $retries_base_sleep_seconds        = 10,
-  $retries_max_sleep_seconds         = 10,
-  $retries_max_tries                 = 120,
-  $run_mode                          = undef,
-  $tmp_dir                           = undef,
+  $aem_id                     = undef,
+  $aem_username               = undef,
+  $aem_password               = undef,
+  $enable_aem_reconfiguration = false,
+  $enable_truststore_removal  = true,
+  $enable_clean_directories   = false,
+  $aem_base                   = '/opt',
+  $aem_healthcheck_source     = undef,
+  $aem_healthcheck_version    = undef,
+  $aem_ssl_keystore_password  = undef,
+  $aem_keystore_path          = undef,
+  $aem_ssl_port               = undef,
+  $aem_system_users           = undef,
+  $credentials_hash           = undef,
+  $crx_quickstart_dir         = undef,
+  $enable_create_system_users = true,
+  $force                      = true,
+  $post_install_sleep_secs    = 120,
+  $retries_base_sleep_seconds = 10,
+  $retries_max_sleep_seconds  = 10,
+  $retries_max_tries          = 120,
+  $run_mode                   = undef,
+  $tmp_dir                    = undef,
 ) {
   if $enable_aem_reconfiguration {
 
@@ -53,11 +53,11 @@ define aem_curator::reconfig_aem (
     # Otherwise, the configurations are kept and will be overwritten
     if $force {
       aem_node { "${aem_id}: Delete path /apps/system/config":
-        ensure => absent,
-        path   => '/apps/system',
-        name   => 'config',
-        aem_id => $aem_id,
-        before => [
+        ensure  => absent,
+        path    => '/apps/system',
+        name    => 'config',
+        aem_id  => $aem_id,
+        before  => [
                     Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
                   ],
         require => [
@@ -83,12 +83,12 @@ define aem_curator::reconfig_aem (
         aem_username => $aem_username,
         aem_password => $aem_password,
         force        => false,
-        before => [
-                    Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
-                  ],
-        require => [
-                      Aem_aem["${aem_id}: Wait until aem health check is ok"]
-                    ],
+        before       => [
+                          Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
+                        ],
+        require      => [
+                          Aem_aem["${aem_id}: Wait until aem health check is ok"]
+                        ],
       }
     }
 
@@ -107,7 +107,7 @@ define aem_curator::reconfig_aem (
         $list_clean_directories.each | Integer $index, String $clean_directory| {
           exec { "${aem_id}: Clean directory ${crx_quickstart_dir}/${clean_directory}/":
             command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
-            before => [
+            before  => [
                         Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
                       ],
             require => [
@@ -124,12 +124,12 @@ define aem_curator::reconfig_aem (
           aem_healthcheck_version => $aem_healthcheck_version,
           aem_id                  => $aem_id,
           tmp_dir                 => $tmp_dir_final,
-          before => [
-                      Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
-                    ],
-          require => [
-                        Aem_aem["${aem_id}: Wait until aem health check is ok"]
-                      ],
+          before                  => [
+                                      Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
+                                      ],
+          require                 => [
+                                      Aem_aem["${aem_id}: Wait until aem health check is ok"]
+                                      ],
         }
     }
 

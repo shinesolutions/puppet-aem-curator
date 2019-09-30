@@ -35,15 +35,15 @@ define aem_curator::reconfig_pre_aem (
       command => "mkdir -p ${tmp_dir}/certs",
       path    => '/usr/local/bin/:/bin/',
       require => [
-                    File["${tmp_dir}"]
+                    File[$tmp_dir]
                   ],
     }
 
     # Update directopry permissions for downloading AEM Certificate
     file { "change mode ${tmp_dir}/certs":
-      ensure => directory,
-      path   => "${tmp_dir}/certs",
-      mode   => '0700',
+      ensure  => directory,
+      path    => "${tmp_dir}/certs",
+      mode    => '0700',
       require => [
                     Exec["${aem_id}: Create ${tmp_dir}/certs"]
                   ],
@@ -63,7 +63,7 @@ define aem_curator::reconfig_pre_aem (
       $dest_repository_dir = "${aem_installation_new_directory}/crx-quickstart/repository"
 
       exec { "${aem_id}: Create ${tmp_repository_dir}":
-        command => "mkdir -p $tmp_repository_dir",
+        command => "mkdir -p ${tmp_repository_dir}",
         unless  => "ls -ld ${aem_installation_new_directory}",
         before  => Exec["${aem_id}: Fix data volume permissions"]
       } -> exec { "${aem_id}: Move ${source_repository_dir} to ${tmp_repository_dir}":
@@ -110,11 +110,11 @@ define aem_curator::reconfig_pre_aem (
 
       exec { "${aem_id}: Fix data volume permissions":
         command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
-        before => [
-          File["${tmp_dir}/start-env"],
-          File["${tmp_dir}/start-env"],
-          File["${tmp_dir}/start.orig"],
-        ],
+        before  => [
+                    File["${tmp_dir}/start-env"],
+                    File["${tmp_dir}/start-env"],
+                    File["${tmp_dir}/start.orig"],
+                  ],
       }
     }
 
@@ -172,7 +172,7 @@ define aem_curator::reconfig_pre_aem (
     # Create the env script
     file { "${tmp_dir}/start-env":
       ensure  => file,
-      content => template("aem_curator/aem/start-env.erb"),
+      content => template('aem_curator/aem/start-env.erb'),
       mode    => '0775',
       owner   => "aem-${aem_id}",
       group   => "aem-${aem_id}",
@@ -191,7 +191,7 @@ define aem_curator::reconfig_pre_aem (
     # Create the start script
     file { "${tmp_dir}/start":
       ensure  => file,
-      content => template("aem_curator/aem/start.erb"),
+      content => template('aem_curator/aem/start.erb'),
       mode    => '0775',
       owner   => "aem-${aem_id}",
       group   => "aem-${aem_id}",
@@ -229,7 +229,7 @@ define aem_curator::reconfig_pre_aem (
       /^s3:/: {
         archive { "${tmp_dir}/certs/aem.cert":
           ensure  => present,
-          source  => "${$certificate_arn}",
+          source  => $certificate_arn,
           require => File["${tmp_dir}/certs"],
           before  => [
             File["${tmp_dir}/certs/aem.cert"]
@@ -256,7 +256,7 @@ define aem_curator::reconfig_pre_aem (
       /^s3:/, /^http:/, /^https:/, /^file:/ : {
         archive { "${tmp_dir}/certs/aem.key":
           ensure  => present,
-          source  => "${$certificate_key_arn}",
+          source  => $certificate_key_arn,
           require => File["${tmp_dir}/certs"],
           before  => [
             File["${tmp_dir}/certs/aem.key"]
