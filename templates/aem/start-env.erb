@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# ************************************
+# Managed by Puppet AEM Module
+# ************************************
+#
+# This file manages the configuration of the run script.
+#
+
+TYPE='<%= @aem_template_type %>'
+PORT=<%= @aem_template_port %>
+RUNMODES='<%= @aem_template_runmodes.join(",") if @aem_template_runmodes %>'
+SAMPLE_CONTENT='<%= "nosamplecontent" if @aem_template_sample_content == false %>'
+DEBUG_PORT=<%= @debug_port %>
+
+<% if @context_root %>
+CONTEXT_ROOT='<%= @context_root %>'
+<% end %>
+
+JVM_MEM_OPTS='<%= @aem_template_jvm_mem_opts %>'
+
+DEFAULT_JVM_OPTS='-server -Djava.awt.headless=true'
+JVM_OPTS='<%= @aem_template_jvm_opts %>'
+START_OPTS='<%= @aem_template_start_opts %>'
+
+SLING_PROPS='conf/sling.properties'
+
+# Do we ever implement these?
+#HOST=
+#FILE_SIZE_LIMIT
+
+# This doesn't ever seem to work
+#LOG_LEVEL=

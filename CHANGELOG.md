@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added new step to reconfiguration to reset `start-env` & `start` binaries of AEM
+- Extend certificate download support for AEM reconfiguration
+
+### Changed
+- Separated offline and online activities of reconfiguration
+
 ### Removed
 - Removed deprecated reconfiguration parameter enable_create_system_users
 

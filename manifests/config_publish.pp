@@ -44,9 +44,12 @@ class aem_curator::config_publish (
   $aem_healthcheck_source                        = undef,
   $aem_healthcheck_version                       = undef,
   $aem_id                                        = 'publish',
+  $aem_reconfiguration_start_opts                = undef,
+  $aem_reconfiguration_run_modes                 = [],
   $aem_ssl_keystore_password                     = undef,
   $aem_keystore_path                             = undef,
-  $cert_base_url                                 = undef,
+  $certificate_arn                               = undef,
+  $certificate_key_arn                           = undef,
   $data_volume_mount_point                       = undef,
   $delete_repository_index                       = false,
   $enable_aem_reconfiguration                    = false,
@@ -97,6 +100,71 @@ class aem_curator::config_publish (
       purge   => true,
       force   => true,
       before  => Service['aem-publish'],
+    }
+  }
+
+
+  if $enable_aem_reconfiguration {
+    aem_curator::reconfig_pre_aem{ "${aem_id}: Execute Pre-reconfiguration for AEM":
+      aem_base                          => $aem_base,
+      aem_id                            => $aem_id,
+      aem_jvm_jmxremote_port            => $jmxremote_port,
+      aem_jvm_mem_opts                  => $jvm_mem_opts,
+      aem_port                          => $publish_port,
+      aem_runmodes                      => $aem_reconfiguration_run_modes,
+      aem_start_opts                    => $aem_reconfiguration_start_opts,
+      enable_aem_reconfiguration        => $enable_aem_reconfiguration,
+      certificate_arn                   => $certificate_arn,
+      certificate_key_arn               => $certificate_key_arn,
+      crx_quickstart_dir                => $crx_quickstart_dir,
+      data_volume_mount_point           => $data_volume_mount_point,
+      tmp_dir                           => "${tmp_dir}/${aem_id}",
+      before                            => [
+                                             File["${crx_quickstart_dir}/install/"]
+                                           ],
+    }
+
+    # Copy created start-env template file to destination dir
+    # It has to live here because
+    file { "${crx_quickstart_dir}/bin/start-env":
+      ensure  => file,
+      source  => "${tmp_dir}/${aem_id}/start-env",
+      mode    => '0775',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+      require => [
+                    File["${crx_quickstart_dir}/install/"],
+                    File["${tmp_dir}/${aem_id}/start-env"],
+                  ],
+      before  => [
+                    File_line["${aem_id}: Set JVM memory opts"],
+                    File_line["${aem_id}: enable JMXRemote"],
+                    File_line["${aem_id}: Add custom JVM OPTS settings"],
+                  ]
+    }
+
+    file { "${crx_quickstart_dir}/bin/start.orig":
+      ensure  => file,
+      source  => "${tmp_dir}/${aem_id}/start.orig",
+      mode    => '0775',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+      require => [
+                    File["${crx_quickstart_dir}/install/"],
+                    File["${tmp_dir}/${aem_id}/start.orig"],
+                  ]
+    }
+
+    file { "${crx_quickstart_dir}/bin/start":
+      ensure  => file,
+      source  => "${tmp_dir}/${aem_id}/start",
+      mode    => '0775',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+      require => [
+                    File["${crx_quickstart_dir}/install/"],
+                    File["${tmp_dir}/${aem_id}/start"],
+                  ]
     }
   }
 
@@ -230,20 +298,18 @@ class aem_curator::config_publish (
     aem_id                     => $aem_id,
   } -> aem_curator::reconfig_aem{ "${aem_id}: Reconfigure AEM":
     aem_base                   => $aem_base,
-    aem_id                     => $aem_id,
     aem_healthcheck_source     => $aem_healthcheck_source,
     aem_healthcheck_version    => $aem_healthcheck_version,
-    aem_ssl_keystore_password  => $aem_ssl_keystore_password,
+    aem_id                     => $aem_id,
     aem_keystore_path          => $aem_keystore_path,
+    aem_ssl_keystore_password  => $aem_ssl_keystore_password,
+    aem_ssl_port               => $publish_ssl_port,
+    aem_system_users           => $aem_system_users,
+    credentials_hash           => $credentials_hash,
     crx_quickstart_dir         => $crx_quickstart_dir,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
     enable_clean_directories   => $enable_aem_reconfiguratiton_clean_directories,
     enable_truststore_removal  => $enable_truststore_removal,
-    aem_ssl_port               => $publish_ssl_port,
-    aem_system_users           => $aem_system_users,
-    cert_base_url              => $cert_base_url,
-    credentials_hash           => $credentials_hash,
-    data_volume_mount_point    => $data_volume_mount_point,
     run_mode                   => $run_mode,
     tmp_dir                    => $tmp_dir,
   } -> aem_bundle { "${aem_id}: Stop webdav bundle":
