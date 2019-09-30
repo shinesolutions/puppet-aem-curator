@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Separated offline and online activities of reconfiguration
 
+### Fixed
+- Fixed error in reconfiguration logic
+
 ### Removed
 - Removed deprecated reconfiguration parameter enable_create_system_users
 

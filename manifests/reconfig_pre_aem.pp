@@ -59,53 +59,62 @@ define aem_curator::reconfig_pre_aem (
       $aem_installation_new_directory = "${data_volume_mount_point}/${aem_id}"
       $aem_installation_old_directory = "${aem_base}/aem/${aem_id}"
       $source_repository_dir = "${aem_installation_old_directory}/crx-quickstart/repository"
-      $tmp_repository_dir = "${ data_volume_mount_point}/repository"
+      $tmp_repository_dir = "${data_volume_mount_point}/repository"
       $dest_repository_dir = "${aem_installation_new_directory}/crx-quickstart/repository"
 
-      unless File[$aem_installation_new_directory] {
-        file { "${aem_id}: Create ${tmp_repository_dir}":
-          ensure  => directory,
-          path    => $tmp_repository_dir,
-          before  => Exec["${aem_id}: Fix data volume permissions"]
-        } -> exec { "${aem_id}: Move ${source_repository_dir} to ${tmp_repository_dir}":
-          command => "mv ${source_repository_dir}/* ${tmp_repository_dir}/",
-          returns => [
-            '0',
-            '1'
-          ],
-          timeout => 0,
-        } -> exec { "${aem_id}: Remove ${source_repository_dir}":
-          command => "rm -f ${source_repository_dir}",
-          returns => [
-            '0'
-          ]
-        } -> exec { "${aem_id}: Move ${aem_installation_old_directory} to ${aem_installation_new_directory}":
-          command => "mv ${aem_installation_old_directory} ${aem_installation_new_directory}",
-          returns => [
-            '0'
-          ],
-          timeout => 0,
-        } -> exec { "${aem_id}: Move ${tmp_repository_dir} to ${dest_repository_dir}":
-          command => "mv ${tmp_repository_dir} ${dest_repository_dir}",
-          returns => [
-            '0'
-          ],
-          timeout => 0,
-        } -> exec { "${aem_id}: Remove ${aem_installation_old_directory}":
-          command => "rm -fr ${aem_installation_old_directory}",
-          returns => [
-            '0'
-          ]
-        } -> exec { "${aem_id}: Set link from ${aem_installation_old_directory} to ${aem_installation_new_directory}":
-          command => "ln -s ${aem_installation_new_directory} ${aem_installation_old_directory}",
-          returns => [
-            '0'
-          ]
-        }
+      exec { "${aem_id}: Create ${tmp_repository_dir}":
+        command => "mkdir -p $tmp_repository_dir",
+        unless  => "ls -ld ${aem_installation_new_directory}",
+        before  => Exec["${aem_id}: Fix data volume permissions"]
+      } -> exec { "${aem_id}: Move ${source_repository_dir} to ${tmp_repository_dir}":
+        command => "mv ${source_repository_dir}/* ${tmp_repository_dir}/",
+        returns => [
+          '0',
+          '1'
+        ],
+        onlyif  => "ls -ld ${tmp_repository_dir}",
+        timeout => 0,
+      } -> exec { "${aem_id}: Remove ${source_repository_dir}":
+        command => "rm -f ${source_repository_dir}",
+        returns => [
+          '0'
+        ],
+        onlyif  => "ls -ld ${tmp_repository_dir}",
+      } -> exec { "${aem_id}: Move ${aem_installation_old_directory} to ${aem_installation_new_directory}":
+        command => "mv ${aem_installation_old_directory} ${aem_installation_new_directory}",
+        returns => [
+          '0'
+        ],
+        onlyif  => "ls -ld ${tmp_repository_dir}",
+        timeout => 0,
+      } -> exec { "${aem_id}: Move ${tmp_repository_dir} to ${dest_repository_dir}":
+        command => "mv ${tmp_repository_dir} ${dest_repository_dir}",
+        returns => [
+          '0'
+        ],
+        onlyif  => "ls -ld ${tmp_repository_dir}",
+        timeout => 0,
+      } -> exec { "${aem_id}: Remove ${aem_installation_old_directory}":
+        command => "rm -fr ${aem_installation_old_directory}",
+        returns => [
+          '0'
+        ],
+        onlyif  => "ls -ld ${tmp_repository_dir}",
+      } -> exec { "${aem_id}: Set link from ${aem_installation_old_directory} to ${aem_installation_new_directory}":
+        command => "ln -s ${aem_installation_new_directory} ${aem_installation_old_directory}",
+        returns => [
+          '0'
+        ],
+        unless  => "ls -ld ${aem_installation_old_directory}",
       }
 
       exec { "${aem_id}: Fix data volume permissions":
-        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}"
+        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
+        before => [
+          File["${tmp_dir}/start-env"],
+          File["${tmp_dir}/start-env"],
+          File["${tmp_dir}/start.orig"],
+        ],
       }
     }
 
