@@ -168,7 +168,6 @@ define aem_curator::reconfig_pre_aem (
     $aem_template_start_opts = $aem_start_opts
 
 
-    # File_line["Set standby primary on ${crx_quickstart_dir}"]
     # Create the env script
     file { "${tmp_dir}/start-env":
       ensure  => file,
