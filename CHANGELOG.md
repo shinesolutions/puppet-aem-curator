@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Separated offline and online activities of reconfiguration
+- Set `enable_aem_installation_migration` default to `false`
 
 ### Fixed
 - Fixed error in reconfiguration logic

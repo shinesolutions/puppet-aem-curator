@@ -106,22 +106,23 @@ class aem_curator::config_publish (
 
   if $enable_aem_reconfiguration {
     aem_curator::reconfig_pre_aem{ "${aem_id}: Execute Pre-reconfiguration for AEM":
-      aem_base                   => $aem_base,
-      aem_id                     => $aem_id,
-      aem_jvm_jmxremote_port     => $jmxremote_port,
-      aem_jvm_mem_opts           => $jvm_mem_opts,
-      aem_port                   => $publish_port,
-      aem_runmodes               => $aem_reconfiguration_run_modes,
-      aem_start_opts             => $aem_reconfiguration_start_opts,
-      enable_aem_reconfiguration => $enable_aem_reconfiguration,
-      certificate_arn            => $certificate_arn,
-      certificate_key_arn        => $certificate_key_arn,
-      crx_quickstart_dir         => $crx_quickstart_dir,
-      data_volume_mount_point    => $data_volume_mount_point,
-      tmp_dir                    => "${tmp_dir}/${aem_id}",
-      before                     => [
-                                      File["${crx_quickstart_dir}/install/"]
-                                    ],
+      aem_base                          => $aem_base,
+      aem_id                            => $aem_id,
+      aem_jvm_jmxremote_port            => $jmxremote_port,
+      aem_jvm_mem_opts                  => $jvm_mem_opts,
+      aem_port                          => $publish_port,
+      aem_runmodes                      => $aem_reconfiguration_run_modes,
+      aem_start_opts                    => $aem_reconfiguration_start_opts,
+      enable_aem_reconfiguration        => $enable_aem_reconfiguration,
+      enable_aem_installation_migration => $enable_aem_reconfiguration,
+      certificate_arn                   => $certificate_arn,
+      certificate_key_arn               => $certificate_key_arn,
+      crx_quickstart_dir                => $crx_quickstart_dir,
+      data_volume_mount_point           => $data_volume_mount_point,
+      tmp_dir                           => "${tmp_dir}/${aem_id}",
+      before                            => [
+                                            File["${crx_quickstart_dir}/install/"]
+                                          ],
     }
 
     # Copy created start-env template file to destination dir

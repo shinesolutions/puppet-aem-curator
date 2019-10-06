@@ -15,7 +15,7 @@ define aem_curator::reconfig_pre_aem (
   $certificate_key_arn               = undef,
   $crx_quickstart_dir                = undef,
   $data_volume_mount_point           = undef,
-  $enable_aem_installation_migration = true,
+  $enable_aem_installation_migration = false,
   $aem_jvm_jmxremote_port            = undef,
   $tmp_dir                           = undef,
 ) {
