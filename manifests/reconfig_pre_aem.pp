@@ -5,7 +5,6 @@ File {
 define aem_curator::reconfig_pre_aem (
   $aem_id                            = undef,
   $aem_jvm_mem_opts                  = undef,
-  $aem_start_opts                    = '-nofork',
   $enable_aem_reconfiguration        = false,
   $aem_base                          = '/opt',
   $aem_port                          = undef,
@@ -165,8 +164,6 @@ define aem_curator::reconfig_pre_aem (
     $aem_template_sample_content = false
     $aem_template_jvm_mem_opts = $aem_jvm_mem_opts
     $aem_template_jvm_opts = $aem_default_jvm_opts.join(' ')
-    $aem_template_start_opts = $aem_start_opts
-
 
     # Create the env script
     file { "${tmp_dir}/start-env":
