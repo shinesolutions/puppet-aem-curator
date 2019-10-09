@@ -7,6 +7,8 @@ define aem_curator::config_aem_system_users (
   $enable_default_passwords = false,
 ) {
 
+  validate_bool($enable_default_passwords)
+
   if $enable_default_passwords == false {
 
     # Add the non-default password from credentials_hash to aem_system_users as

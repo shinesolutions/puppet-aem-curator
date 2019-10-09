@@ -12,6 +12,8 @@ class aem_curator::config_aem_tools (
   $compaction_remove_bak_files_older_than_in_days = 30,
 ) {
 
+  validate_bool($enable_compaction_remove_bak_files)
+
   $_aem_instances = pick(
     $aem_instances,
     [{'aem_id' => 'author'}]

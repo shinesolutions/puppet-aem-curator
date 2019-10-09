@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Enforced translation of boolean parameters in various manifests shinesolutions/aem-aws-stack-builder#332
+- Added boolean validation in various manifests shinesolutions/aem-aws-stack-builder#332
+
 ## [2.11.0] - 2019-10-07
 ### Added
 - Add new AEM profile: aem65_sp2
