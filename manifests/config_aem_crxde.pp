@@ -4,7 +4,7 @@ define aem_curator::config_aem_crxde (
   $enable_crxde = false,
 ) {
 
-  validate_bool($package_replicate)
+  validate_bool($enable_crxde)
 
   if $enable_crxde == true {
     aem_resources::enable_crxde { "${aem_id}: Enable CRXDE":
