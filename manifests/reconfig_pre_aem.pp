@@ -222,7 +222,7 @@ define aem_curator::reconfig_pre_aem (
           ],
         }
       }
-      /^s3:/: {
+      /^s3:/, /^http:/, /^https:/, /^file:/ : {
         archive { "${tmp_dir}/certs/aem.cert":
           ensure  => present,
           source  => $certificate_arn,
