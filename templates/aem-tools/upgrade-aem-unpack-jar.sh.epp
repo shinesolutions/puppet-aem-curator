@@ -27,12 +27,16 @@ set +o errexit
 aem_artifacts_base=$1
 aem_upgrade_version=$2
 enable_backup=$3
+aem_username=admin
+aem_password=$(<%= $aem_password_retrieval_command %>)
 
 <% $aem_instances.each | Integer $index, Hash $aem_instance | { -%>
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
-FACTER_aem_artifacts_base="${aem_artifacts_base}" \
+FACTER_aem_username="${aem_username}" \
+  FACTER_aem_password="${aem_password}" \
+  FACTER_aem_artifacts_base="${aem_artifacts_base}" \
   FACTER_upgrade_version="${aem_upgrade_version}" \
   FACTER_enable_backup="${enable_backup}" \
   FACTER_aem_port=<%= $aem_instance['aem_port'] %> \
