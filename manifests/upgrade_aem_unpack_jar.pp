@@ -47,9 +47,11 @@
 
 define aem_curator::upgrade_aem_unpack_jar (
   $aem_artifacts_base,
-  $aem_port                   = '4502',
   $aem_base                   = '/opt/aem',
   $aem_id                     = 'aem',
+  $aem_password               = undef,
+  $aem_username               = undef,
+  $aem_port                   = '4502',
   $enable_backup              = false,
   $post_stop_sleep_secs       = 120,
   $retries_base_sleep_seconds = 10,
@@ -100,8 +102,11 @@ define aem_curator::upgrade_aem_unpack_jar (
   }
 
   aem_aem { "${aem_id}: Remove all agents":
-    ensure => all_agents_removed,
-    aem_id => $aem_id,
+    ensure       => all_agents_removed,
+    aem_id       => $aem_id,
+    run_mode     => $aem_id,
+    aem_username => $aem_username,
+    aem_password => $aem_password,
   } -> service { "aem-${aem_id}":
     ensure => 'stopped'
   } -> exec { "${aem_id}: Wait post AEM stop":

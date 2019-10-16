@@ -12,6 +12,8 @@ define aem_curator::config_aem (
   $credentials_hash           = undef
 ) {
 
+  validate_bool($enable_create_system_users)
+
   Exec {
     cwd     => $tmp_dir,
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],

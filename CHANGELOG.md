@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add new InSpec test for repo migration [#147]
+- Add AEM admin user credentials to the AEM Upgrade tool unpack AEM jar [#139]
+- Enforced translation of boolean parameters in various manifests shinesolutions/aem-aws-stack-builder#332
+- Added boolean validation in various manifests shinesolutions/aem-aws-stack-builder#332
+- Added new step to reconfiguration to reset `start-env` & `start` binaries of AEM
+- Extend certificate download support for AEM reconfiguration
+- Added http, https and file support for archiving certificate/private-key
+
+### Changed
+- Separated offline and online activities of reconfiguration
+- Set `enable_aem_installation_migration` default to `false`
+
+### Fixed
+- Fixed error in reconfiguration logic
+
+### Removed
+- Removed deprecated reconfiguration parameter enable_create_system_users
+- Removed unnecessary parameter for action aem upgrade manifest
 
 ## [2.11.0] - 2019-10-07
 ### Added
