@@ -40,7 +40,7 @@ translate_exit_code "$?"
 echo "Testing if repository migration for AEM <%= $aem_instance['aem_id'] %> was skipped using InSpec..."
 cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
 HOME=/root \
-  inspec exec . --controls <%= $aem_instance['aem_id'] %>-aem-${aem_upgrade_version}-repo-migration-not-needed-upgrade-log
+  inspec exec . --controls <%= $aem_instance['aem_id'] %>-repo-migration-not-needed-upgrade-log
 
 repo_migration_exitcode=$?
 
