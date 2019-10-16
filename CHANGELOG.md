@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- Removed unnecessary parameter for action aem upgrade manifest
+
 ## [2.11.0] - 2019-10-07
 ### Added
 - Add new AEM profile: aem65_sp2
