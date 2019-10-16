@@ -40,6 +40,7 @@ class aem_curator::config_author_primary (
   $aem_healthcheck_source                                = undef,
   $aem_healthcheck_version                               = undef,
   $aem_id                                                = 'author',
+  $aem_reconfiguration_run_modes                         = [],
   $aem_ssl_keystore_password                             = undef,
   $aem_keystore_path                                     = undef,
   $data_volume_mount_point                               = undef,
@@ -53,8 +54,8 @@ class aem_curator::config_author_primary (
   $enable_truststore_creation                            = false,
   $author_ssl_port                                       = undef,
   $aem_version                                           = '6.2',
-  $cert_base_url                                         = undef,
-  $enable_create_system_users                            = undef,
+  $certificate_arn                                       = undef,
+  $certificate_key_arn                                   = undef,
   $delete_repository_index                               = false,
   $post_start_sleep_seconds                              = '120',
   $proxy_enabled                                         = false,
@@ -109,12 +110,81 @@ class aem_curator::config_author_primary (
     }
   }
 
+  # If reconfiguration is enabled run pre-reconfiguration manifest.
+  # The pre-reconfiguration will execute all offline tasks including
+  # updating the crx-quickstart/bin/start-env. If not enabled we update
+  # start-env as usual.
+  if $enable_aem_reconfiguration {
+    aem_curator::reconfig_pre_aem{ "${aem_id}: Execute Pre-reconfiguration for AEM":
+      aem_base                          => $aem_base,
+      aem_id                            => $aem_id,
+      aem_jvm_jmxremote_port            => $jmxremote_port,
+      aem_jvm_mem_opts                  => $jvm_mem_opts,
+      aem_port                          => $author_port,
+      aem_runmodes                      => $aem_reconfiguration_run_modes,
+      enable_aem_reconfiguration        => $enable_aem_reconfiguration,
+      enable_aem_installation_migration => $enable_aem_reconfiguration,
+      certificate_arn                   => $certificate_arn,
+      certificate_key_arn               => $certificate_key_arn,
+      crx_quickstart_dir                => $crx_quickstart_dir,
+      data_volume_mount_point           => $data_volume_mount_point,
+      tmp_dir                           => "${tmp_dir}/${aem_id}",
+      before                            => [
+                                              File["${crx_quickstart_dir}/install/"]
+                                            ],
+    }
+
+    # Copy created start-env template file to destination dir
+    # It has to live here because
+    file { "${crx_quickstart_dir}/bin/start-env":
+      ensure  => file,
+      source  => "${tmp_dir}/${aem_id}/start-env",
+      mode    => '0775',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+      require => [
+                    File["${crx_quickstart_dir}/install/"],
+                    File["${tmp_dir}/${aem_id}/start-env"],
+                  ],
+      before  => [
+        File_line["${aem_id}: Set JVM memory opts"],
+        File_line["${aem_id}: enable JMXRemote"],
+        File_line["${aem_id}: Add custom JVM OPTS settings"],
+      ]
+    }
+
+    file { "${crx_quickstart_dir}/bin/start.orig":
+      ensure  => file,
+      source  => "${tmp_dir}/${aem_id}/start.orig",
+      mode    => '0775',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+      require => [
+                    File["${crx_quickstart_dir}/install/"],
+                    File["${tmp_dir}/${aem_id}/start.orig"],
+                  ]
+    }
+
+    file { "${crx_quickstart_dir}/bin/start":
+      ensure  => file,
+      source  => "${tmp_dir}/${aem_id}/start",
+      mode    => '0775',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+      require => [
+                    File["${crx_quickstart_dir}/install/"],
+                    File["${tmp_dir}/${aem_id}/start"],
+                  ]
+    }
+  }
+
   if $jvm_mem_opts {
     file_line { "${aem_id}: Set JVM memory opts":
       ensure => present,
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
       match  => '^JVM_MEM_OPTS',
+      notify => Service['aem-author'],
     }
   }
 
@@ -249,13 +319,10 @@ class aem_curator::config_author_primary (
     aem_ssl_keystore_password  => $aem_ssl_keystore_password,
     aem_ssl_port               => $author_ssl_port,
     aem_system_users           => $aem_system_users,
-    cert_base_url              => $cert_base_url,
     credentials_hash           => $credentials_hash,
     crx_quickstart_dir         => $crx_quickstart_dir,
-    data_volume_mount_point    => $data_volume_mount_point,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
     enable_clean_directories   => $enable_aem_reconfiguratiton_clean_directories,
-    enable_create_system_users => $enable_create_system_users,
     enable_truststore_removal  => $enable_truststore_removal,
     run_mode                   => $run_mode,
     tmp_dir                    => $tmp_dir,
