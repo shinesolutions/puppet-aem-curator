@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [3.0.0] - 2019-10-16
 ### Added
 - Add new InSpec test for repo migration [#147]
@@ -598,6 +600,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#147]: https://github.com/shinesolutions/puppet-aem-curator/issues/147
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.0.0...HEAD
 [3.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.11.0...3.0.0
 [2.11.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.10.0...2.11.0
 [2.10.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.9.0...2.10.0
