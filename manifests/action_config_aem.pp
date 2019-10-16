@@ -13,10 +13,14 @@ class aem_curator::action_config_aem (
   $cert_base_url              = $::cert_base_url,
   $enable_create_system_users = true,
   $enable_truststore_removal  = true,
-  $force                      = $::force,
+  $force                      = str2bool($::force),
   $run_mode                   = $::run_mode,
   $tmp_dir                    = $::tmp_dir
 ) {
+
+  validate_bool($force)
+  validate_bool($enable_create_system_users)
+  validate_bool($enable_truststore_removal)
 
   # Action manifest currently does not support changing the existing
   # system user password

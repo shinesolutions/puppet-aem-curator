@@ -10,14 +10,18 @@ class aem_curator::action_deploy_artifact (
   $package_group              = $::package_group,
   $package_name               = $::package_name,
   $package_version            = $::package_version,
-  $package_replicate          = $::package_replicate,
-  $package_activate           = $::package_activate,
-  $package_force              = $::package_force,
+  $package_replicate          = str2bool($::package_replicate),
+  $package_activate           = str2bool($::package_activate),
+  $package_force              = str2bool($::package_force),
   $path                       = '/tmp/shinesolutions/aem-aws-stack-provisioner',
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,
 ) {
+
+  validate_bool($package_replicate)
+  validate_bool($package_activate)
+  validate_bool($package_force)
 
   Aem_aem {
     retries_max_tries          => $retries_max_tries,

@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Enforced translation of boolean parameters in various manifests shinesolutions/aem-aws-stack-builder#332
+- Added boolean validation in various manifests shinesolutions/aem-aws-stack-builder#332
 - Added new step to reconfiguration to reset `start-env` & `start` binaries of AEM
 - Extend certificate download support for AEM reconfiguration
 - Added http, https and file support for archiving certificate/private-key
