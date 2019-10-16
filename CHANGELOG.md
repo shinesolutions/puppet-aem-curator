@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Removed unnecessary parameter for action aem upgrade manifest
 
+## [2.11.0] - 2019-10-07
+### Added
+- Add new AEM profile: aem65_sp2
+
 ## [2.10.0] - 2019-09-09
 ### Changed
 - [author-standby] Update permissions of the mount point [#141]
@@ -574,7 +578,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#141]: https://github.com/shinesolutions/puppet-aem-curator/issues/141
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.10.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.11.0...HEAD
+[2.11.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.10.0...2.11.0
 [2.10.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.9.0...2.10.0
 [2.9.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.8.0...2.9.0
 [2.8.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.7.0...2.8.0
