@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added http, https and file support for archiving certificate/private-key
 
 ### Changed
+- Upgrade aem_resources to 5.0.0
 - Separated offline and online activities of reconfiguration
 - Set `enable_aem_installation_migration` default to `false`
 
