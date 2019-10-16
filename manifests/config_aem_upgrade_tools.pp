@@ -1,4 +1,5 @@
 class aem_curator::config_aem_upgrade_tools (
+  $aem_password_retrieval_command,
   $base_dir,
   $tmp_dir,
   $enable_upgrade_tools     = undef,
@@ -21,10 +22,11 @@ class aem_curator::config_aem_upgrade_tools (
       ensure  => present,
       content => epp(
         'aem_curator/aem-tools/upgrade-aem-unpack-jar.sh.epp', {
-          'base_dir'           => $base_dir,
-          'confdir'            => $confdir,
-          'aem_instances'      => $aem_instances,
-          'aem_tools_env_path' => $aem_tools_env_path,
+          'base_dir'                       => $base_dir,
+          'confdir'                        => $confdir,
+          'aem_instances'                  => $aem_instances,
+          'aem_tools_env_path'             => $aem_tools_env_path,
+          'aem_password_retrieval_command' => $aem_password_retrieval_command
         }
       ),
       mode    => '0775',
