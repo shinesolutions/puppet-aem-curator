@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Upgrade aem_resources to 5.0.0
+- Upgrade inspec-aem to 1.2.0
 - Separated offline and online activities of reconfiguration
 - Set `enable_aem_installation_migration` default to `false`
 
