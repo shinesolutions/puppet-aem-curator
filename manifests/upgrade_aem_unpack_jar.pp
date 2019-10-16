@@ -104,6 +104,7 @@ define aem_curator::upgrade_aem_unpack_jar (
   aem_aem { "${aem_id}: Remove all agents":
     ensure       => all_agents_removed,
     aem_id       => $aem_id,
+    run_mode     => $aem_id,
     aem_username => $aem_username,
     aem_password => $aem_password,
   } -> service { "aem-${aem_id}":
