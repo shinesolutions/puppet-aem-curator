@@ -38,11 +38,11 @@
 define aem_curator::upgrade_aem (
   $base_dir,
   $tmp_dir,
-  $aem_base                       = '/opt/aem',
-  $aem_id                         = 'aem',
-  $aem_port                       = '4502',
-  $post_upgrade_sleep_secs        = '600',
-  $aem_upgrade_version            = '6.4',
+  $aem_base                = '/opt/aem',
+  $aem_id                  = 'aem',
+  $aem_port                = '4502',
+  $post_upgrade_sleep_secs = '600',
+  $aem_upgrade_version     = '6.4',
 ) {
 
   file { $tmp_dir:
