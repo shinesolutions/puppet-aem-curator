@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [3.0.0] - 2019-10-16
 ### Added
 - Add new InSpec test for repo migration [#147]
 - Add AEM admin user credentials to the AEM Upgrade tool unpack AEM jar [#139]
@@ -22,12 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Separated offline and online activities of reconfiguration
 - Set `enable_aem_installation_migration` default to `false`
 
-### Fixed
-- Fixed error in reconfiguration logic
-
 ### Removed
 - Removed deprecated reconfiguration parameter enable_create_system_users
 - Removed unnecessary parameter for action aem upgrade manifest
+
+### Fixed
+- Fixed error in reconfiguration logic
 
 ## [2.11.0] - 2019-10-07
 ### Added
@@ -594,10 +593,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#132]: https://github.com/shinesolutions/puppet-aem-curator/issues/132
 [#134]: https://github.com/shinesolutions/puppet-aem-curator/issues/134
 [#138]: https://github.com/shinesolutions/puppet-aem-curator/issues/138
+[#139]: https://github.com/shinesolutions/puppet-aem-curator/issues/139
 [#141]: https://github.com/shinesolutions/puppet-aem-curator/issues/141
+[#147]: https://github.com/shinesolutions/puppet-aem-curator/issues/147
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.11.0...HEAD
+[3.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.11.0...3.0.0
 [2.11.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.10.0...2.11.0
 [2.10.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.9.0...2.10.0
 [2.9.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.8.0...2.9.0
