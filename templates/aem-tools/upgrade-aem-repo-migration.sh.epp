@@ -37,11 +37,27 @@ FACTER_source_crx2oak="${source_crx2oak}" \
 
 translate_exit_code "$?"
 
-echo "Testing repository migratoin for  AEM <%= $aem_instance['aem_id'] %> was successful using InSpec..."
+echo "Testing if repository migration for AEM <%= $aem_instance['aem_id'] %> was skipped using InSpec..."
 cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
 HOME=/root \
-  inspec exec . --controls <%= $aem_instance['aem_id'] %>-repo-migration-upgrade-log
+  inspec exec . --controls <%= $aem_instance['aem_id'] %>-repo-migration-not-needed-upgrade-log
 
-translate_exit_code "$?"
+repo_migration_exitcode=$?
+
+if [ "$repo_migration_exitcode" -gt 0 ]; then
+  echo "."
+  echo "."
+  echo "Repository migration was not skipped."
+  echo "."
+  echo "."
+  echo "Testing repository migration for  AEM <%= $aem_instance['aem_id'] %> was successful using InSpec..."
+  cd "<%= $base_dir %>/aem-tools/test/inspec/inspec-aem"
+  HOME=/root \
+    inspec exec . --controls <%= $aem_instance['aem_id'] %>-repo-migration-upgrade-log
+
+  repo_migration_exitcode=$?
+fi
+
+translate_exit_code "${repo_migration_exitcode}"
 
 <% } -%>

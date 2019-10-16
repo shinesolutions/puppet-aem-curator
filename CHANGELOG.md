@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Add new InSpec test for repo migration [#147]
 - Add AEM admin user credentials to the AEM Upgrade tool unpack AEM jar [#139]
 - Enforced translation of boolean parameters in various manifests shinesolutions/aem-aws-stack-builder#332
 - Added boolean validation in various manifests shinesolutions/aem-aws-stack-builder#332
