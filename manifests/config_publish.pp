@@ -53,6 +53,7 @@ class aem_curator::config_publish (
   $delete_repository_index                       = false,
   $enable_aem_reconfiguration                    = false,
   $enable_aem_reconfiguratiton_clean_directories = false,
+  $enable_create_flush_agents                    = false,
   $enable_post_start_sleep                       = false,
   $enable_remove_all_agents                      = false,
   $enable_truststore_creation                    = false,
@@ -430,7 +431,7 @@ class aem_curator::config_publish (
   } -> aem_curator::config_aem_agents { "${aem_id}: Create flush agent":
     run_mode                   => 'publish',
     aem_id                     => $aem_id,
-    enable_create_flush_agents => true,
+    enable_create_flush_agents => $enable_create_flush_agents,
     log_level                  => 'info',
     dispatcher_id              => $publish_dispatcher_id,
     dispatcher_host_url        => $publish_dispatcher_host,
