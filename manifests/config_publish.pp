@@ -54,6 +54,7 @@ class aem_curator::config_publish (
   $enable_aem_reconfiguration                    = false,
   $enable_aem_reconfiguratiton_clean_directories = false,
   $enable_create_flush_agents                    = false,
+  $enable_create_outbox_replication_agents       = false,
   $enable_post_start_sleep                       = false,
   $enable_remove_all_agents                      = false,
   $enable_truststore_creation                    = false,
@@ -451,7 +452,7 @@ class aem_curator::config_publish (
   } -> aem_curator::config_aem_agents { "${aem_id}: Create outbox replication agent":
     run_mode                                => 'publish',
     aem_id                                  => $aem_id,
-    enable_create_outbox_replication_agents => true,
+    enable_create_outbox_replication_agents => $enable_create_outbox_replication_agents,
     log_level                               => 'info',
     dispatcher_id                           => $publish_dispatcher_id,
     replication_agent_user_id               => 'replicator'

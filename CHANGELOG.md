@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new manifest to configure AEM agents [#149] [#150]
 - Added new parameter `enable_remove_all_agents` to enable removal of all AEM agents when configuring author-primary & publish [#149] [#150]
 - Added new parameter `enable_create_flush_agents` to enable creation of flush agent when configuring publish [#149] [#150]
+- Added new parameter `enable_create_outbox_replication_agents` to enable creation of outbox replication agent when configuring publish [#149] [#150]
 
 ### Removed
 - Removed all agents configurations from the config author-primary & publish manifest [#149] [#150]
