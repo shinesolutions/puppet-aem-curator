@@ -54,6 +54,7 @@ class aem_curator::config_publish (
   $enable_aem_reconfiguration                    = false,
   $enable_aem_reconfiguratiton_clean_directories = false,
   $enable_post_start_sleep                       = false,
+  $enable_remove_all_agents                      = false,
   $enable_truststore_creation                    = false,
   $enable_truststore_migration                   = false,
   $enable_truststore_removal                     = false,
@@ -366,7 +367,7 @@ class aem_curator::config_publish (
   } -> aem_curator::config_aem_agents { "${aem_id}: Remove all agents":
     run_mode                 => 'publish',
     aem_id                   => $aem_id,
-    enable_remove_all_agents => true,
+    enable_remove_all_agents => $enable_remove_all_agents,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after removing all agents":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
