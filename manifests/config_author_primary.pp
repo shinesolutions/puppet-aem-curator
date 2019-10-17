@@ -147,10 +147,8 @@ class aem_curator::config_author_primary (
                     File["${tmp_dir}/${aem_id}/start-env"],
                   ],
       before  => [
-        File_line["${aem_id}: Set JVM memory opts"],
-        File_line["${aem_id}: enable JMXRemote"],
-        File_line["${aem_id}: Add custom JVM OPTS settings"],
-      ]
+                    Service['aem-author'],
+                  ]
     }
 
     file { "${crx_quickstart_dir}/bin/start.orig":

@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed dependency issue during reconfiguration process [#156]
+
 ## [3.0.0] - 2019-10-16
 ### Added
 - Add new InSpec test for repo migration [#147]

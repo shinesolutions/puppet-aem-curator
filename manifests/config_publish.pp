@@ -102,7 +102,10 @@ class aem_curator::config_publish (
     }
   }
 
-
+  # If reconfiguration is enabled run pre-reconfiguration manifest.
+  # The pre-reconfiguration will execute all offline tasks including
+  # updating the crx-quickstart/bin/start-env. If not enabled we update
+  # start-env as usual.
   if $enable_aem_reconfiguration {
     aem_curator::reconfig_pre_aem{ "${aem_id}: Execute Pre-reconfiguration for AEM":
       aem_base                          => $aem_base,
@@ -136,9 +139,7 @@ class aem_curator::config_publish (
                     File["${tmp_dir}/${aem_id}/start-env"],
                   ],
       before  => [
-                    File_line["${aem_id}: Set JVM memory opts"],
-                    File_line["${aem_id}: enable JMXRemote"],
-                    File_line["${aem_id}: Add custom JVM OPTS settings"],
+                    Service['aem-publish'],
                   ]
     }
 
