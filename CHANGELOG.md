@@ -8,10 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added new manifest to configure AEM agents #149 #150
+- Added new manifest to configure AEM agents [#149] [#150]
 
 ### Removed
-- Removed all agents configurations from the config author-primary & publish manifest #149 #150
+- Removed all agents configurations from the config author-primary & publish manifest [#149] [#150]
 
 ## [3.0.1] - 2019-10-17
 
