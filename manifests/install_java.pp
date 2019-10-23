@@ -32,13 +32,13 @@ class aem_curator::install_java (
 ) {
 
   class { 'oracle_java':
-    download_url    => $jdk_base_url,
-    filename        => $jdk_filename,
-    version         => "${jdk_version}u${jdk_version_update}",
-    build           => $jdk_version_build,
-    type            => 'jdk',
-    format          => $jdk_format,
-    check_checksum  => false,
+    download_url   => $jdk_base_url,
+    filename       => $jdk_filename,
+    version        => "${jdk_version}u${jdk_version_update}",
+    build          => $jdk_version_build,
+    type           => 'jdk',
+    format         => $jdk_format,
+    check_checksum => false,
   } -> exec { "alternatives --set  java /usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre/bin/java":
     path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
   }
