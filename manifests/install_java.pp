@@ -39,6 +39,7 @@ class aem_curator::install_java (
     type           => 'jdk',
     format         => $jdk_format,
     check_checksum => false,
+  # Need to set alternative for java here due to oracle_java module's add alternative feature is broken in version 2.9.4
   } -> exec { "alternatives --set  java /usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre/bin/java":
     path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
   }
