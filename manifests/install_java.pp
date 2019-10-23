@@ -43,6 +43,12 @@ class aem_curator::install_java (
     path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
   }
 
+  file { '/etc/ld.so.conf.d/99-libjvm.conf':
+    ensure  => present,
+    content => "/usr/java/latest/jre/lib/amd64/server\n",
+    notify  => Exec['/sbin/ldconfig'],
+  }
+
   exec { '/sbin/ldconfig':
     refreshonly => true,
   }
