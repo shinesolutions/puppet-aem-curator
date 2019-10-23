@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [Unreleased]
+
 ## [2.13.0] - 2019-10-23
 ### Changed
 - Enforce java alternative setting after Oracle JDK installation
@@ -583,6 +585,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#141]: https://github.com/shinesolutions/puppet-aem-curator/issues/141
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.13.0...HEAD
 [Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.13.0...HEAD
 [2.13.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.12.0...2.13.0
 [2.12.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.11.0...2.12.0
