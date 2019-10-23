@@ -42,25 +42,26 @@ class aem_curator::install_java (
   } -> exec { "alternatives --set  java /usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre/bin/java":
     path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
   }
-    exec { '/sbin/ldconfig':
-      refreshonly => true,
-    }
 
-    file { "${tmp_dir}/java":
-      ensure => directory,
-      mode   => '0700',
-    }
+  exec { '/sbin/ldconfig':
+    refreshonly => true,
+  }
 
-    [ 'cert' ].each |$idx, $part| {
-      archive { "${tmp_dir}/aem.${part}":
-        ensure  => present,
-        source  => "${cert_base_url}/aem.${part}",
-        require => File[$tmp_dir],
-      } -> java_ks { "cqse-${idx}:/usr/java/default/jre/lib/security/cacerts":
-        ensure      => latest,
-        certificate => "${tmp_dir}/aem.${part}",
-        password    => 'changeit',
-        path        => ['/bin','/usr/bin'],
-      }
+  file { "${tmp_dir}/java":
+    ensure => directory,
+    mode   => '0700',
+  }
+
+  [ 'cert' ].each |$idx, $part| {
+    archive { "${tmp_dir}/aem.${part}":
+      ensure  => present,
+      source  => "${cert_base_url}/aem.${part}",
+      require => File[$tmp_dir],
+    } -> java_ks { "cqse-${idx}:/usr/java/default/jre/lib/security/cacerts":
+      ensure      => latest,
+      certificate => "${tmp_dir}/aem.${part}",
+      password    => 'changeit',
+      path        => ['/bin','/usr/bin'],
     }
   }
+}
