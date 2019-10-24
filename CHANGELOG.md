@@ -5,15 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## Unreleased
+### Added
+- Enable mod_proxy, mod_proxy_http, and mod_proxy_connect to AEM Dispatcher installation
+
 ### Changed
 - Enforce java alternative setting after Oracle JDK installation
-
-## [Unreleased]
-### Changed
 - Change install_java manifest to download a custom jdk file instead of from oracle.com via Oracle SSO
 
 ## [3.0.1] - 2019-10-17
-
 ### Fixed
 - Fixed dependency issue during reconfiguration process [#156]
 

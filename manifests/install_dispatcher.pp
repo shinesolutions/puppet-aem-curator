@@ -86,6 +86,9 @@ class aem_curator::install_dispatcher (
   $apache_module_classes = [
     '::apache::mod::ssl',
     '::apache::mod::headers',
+    '::apache::mod::proxy',
+    '::apache::mod::proxy_http',
+    '::apache::mod::proxy_connect',
   ]
   class { $apache_module_classes: }
 
