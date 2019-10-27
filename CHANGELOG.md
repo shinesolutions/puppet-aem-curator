@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Force password reset of the AEM System Users
+- Force password reset of the AEM System Users [#164]
 
 ## [3.0.1] - 2019-10-17
 
