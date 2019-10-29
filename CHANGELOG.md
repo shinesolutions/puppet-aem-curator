@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Force password reset of the AEM admin Users [#164]
+- Upgrade puppet-aem-resource to version 3.10.2
 
 ## [1.25.1] - 2019-08-29
 ### Added
