@@ -2,9 +2,10 @@ define aem_curator::config_aem_system_users (
   $aem_id,
   $aem_system_users,
   $credentials_hash,
-  $aem_username = undef,
-  $aem_password = undef,
+  $aem_username             = undef,
+  $aem_password             = undef,
   $enable_default_passwords = false,
+  $force                    = true,
 ) {
 
   if $enable_default_passwords == false {
@@ -45,6 +46,7 @@ define aem_curator::config_aem_system_users (
       aem_username     => $aem_username,
     } -> aem_user { "${aem_id}: Set admin password for current stack":
       ensure       => password_changed,
+      force        => $force,
       name         => $aem_system_users[admin][name],
       path         => $aem_system_users[admin][path],
       old_password => 'admin',

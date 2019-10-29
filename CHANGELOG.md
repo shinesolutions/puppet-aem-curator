@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Force password reset of the AEM admin Users [#164]
+
 ## [1.25.1] - 2019-08-29
 ### Added
 - Add installation of package aem-healthcheck-content to the provisioning process [#181]
