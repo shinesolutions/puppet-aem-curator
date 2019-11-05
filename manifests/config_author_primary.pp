@@ -52,6 +52,7 @@ class aem_curator::config_author_primary (
   $enable_post_start_sleep                               = false,
   $enable_saml                                           = false,
   $enable_truststore_creation                            = false,
+  $enable_remove_all_agents                              = false,
   $author_ssl_port                                       = undef,
   $aem_version                                           = '6.2',
   $certificate_arn                                       = undef,
@@ -375,10 +376,10 @@ class aem_curator::config_author_primary (
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     tags                       => 'deep',
     aem_id                     => $aem_id,
-  } -> aem_aem { "${aem_id}: Remove all agents":
-    ensure   => all_agents_removed,
-    run_mode => 'author',
-    aem_id   => $aem_id,
+  } -> aem_curator::config_aem_agents { "${aem_id}: Remove all agents":
+    run_mode                 => 'author',
+    aem_id                   => $aem_id,
+    enable_remove_all_agents => $enable_remove_all_agents,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after removing all agents":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
