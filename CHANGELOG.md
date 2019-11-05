@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [3.2.0] - 2019-11-05
 ### Added
 - Added new manifest to configure AEM agents [#149] [#150]
 - Added new parameter `enable_remove_all_agents` to enable removal of all AEM agents when configuring author-primary & publish [#149] [#150]
@@ -622,10 +621,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#139]: https://github.com/shinesolutions/puppet-aem-curator/issues/139
 [#141]: https://github.com/shinesolutions/puppet-aem-curator/issues/141
 [#147]: https://github.com/shinesolutions/puppet-aem-curator/issues/147
+[#149]: https://github.com/shinesolutions/puppet-aem-curator/issues/149
+[#150]: https://github.com/shinesolutions/puppet-aem-curator/issues/150
 [#156]: https://github.com/shinesolutions/puppet-aem-curator/issues/156
+[#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.1.0...HEAD
+[3.2.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/2.11.0...3.0.0
