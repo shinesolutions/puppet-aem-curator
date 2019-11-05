@@ -50,6 +50,7 @@ class aem_curator::install_dispatcher (
   $tmp_dir,
   $apache_http_port  = '80',
   $apache_https_port = '443',
+  $default_vhost     = true,
   $aem_id            = 'dispatcher',
 ) {
 
@@ -79,12 +80,17 @@ class aem_curator::install_dispatcher (
   apache::listen { $apache_http_port: }
   apache::listen { $apache_https_port: }
 
-  $apache_classes = [
-    '::apache',
+  class { '::apache':
+    default_vhost => $default_vhost
+  }
+  $apache_module_classes = [
     '::apache::mod::ssl',
     '::apache::mod::headers',
+    '::apache::mod::proxy',
+    '::apache::mod::proxy_http',
+    '::apache::mod::proxy_connect',
   ]
-  class { $apache_classes: }
+  class { $apache_module_classes: }
 
   archive { $apache_module_tarball:
     source       => "${apache_module_base_url}/${apache_module_tarball}",
