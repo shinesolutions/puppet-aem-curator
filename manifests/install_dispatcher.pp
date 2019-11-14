@@ -57,6 +57,7 @@ class aem_curator::install_dispatcher (
   $apache_https_port         = '443',
   $default_vhost             = true,
   $aem_id                    = 'dispatcher',
+  $dispatcher_service_name   = 'httpd',
 ) {
 
     Exec {
@@ -149,7 +150,7 @@ class aem_curator::install_dispatcher (
     }  -> exec { "${aem_id}: Wait post dispatcher stop":
     command => "sleep ${post_stop_sleep_secs}",
     } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
-      command => /opt/puppetlabs/bin/puppet resource service httpd ensure=stopped,
+      command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
     } -> exec { "mv /var/www/html ${data_volume_mount_point}/${aem_id}":
     } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to /var/www/":
       command => "ln -s ${data_volume_mount_point}/${aem_id} /var/www/html",
@@ -159,7 +160,7 @@ class aem_curator::install_dispatcher (
     } -> exec { "${aem_id}: Fix Data Volume mount permissions":
       command => "chown -R apache:apache ${data_volume_mount_point}",
     } -> exec { "${aem_id}: Ensure AEM resource is started":
-      command => /opt/puppetlabs/bin/puppet resource service httpd ensure=running,
+      command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=running",
     }
 
 }
