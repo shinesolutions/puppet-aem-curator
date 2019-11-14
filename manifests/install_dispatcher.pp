@@ -48,15 +48,15 @@ class aem_curator::install_dispatcher (
   $cert_base_url,
   $cert_filename,
   $tmp_dir,
+  $data_volume_device,
+  $data_volume_mount_point,
   $post_stop_sleep_secs      = 120,
   $aem_base                  = '/var',
-  $data_volume_device        = '/dev/xvdb',
-  $data_volume_mount_point   = '/mnt/ebs1',
-  $setup_repository_volume   = false,
+  $setup_data_volume         = false,
   $apache_http_port          = '80',
   $apache_https_port         = '443',
   $default_vhost             = true,
-  $aem_id                   = 'dispatcher',
+  $aem_id                    = 'dispatcher',
 ) {
 
     Exec {
@@ -65,10 +65,10 @@ class aem_curator::install_dispatcher (
       timeout => 0,
     }
 
-    if $setup_repository_volume {
-    exec { "${aem_id}: Wait for post AEM stop":
+    if $setup_data_volume {
+    exec { "${aem_id}: Wait for post Dispatcher stop":
     command => "sleep  ${post_stop_sleep_secs}"
-    } -> exec { "${aem_id}: Prepare device for the AEM repository":
+    } -> exec { "${aem_id}: Prepare device for the AEM Data Volume":
         command => "mkfs -t ext4 ${data_volume_device}",
       } -> file { $data_volume_mount_point:
         ensure => directory,
@@ -146,9 +146,9 @@ class aem_curator::install_dispatcher (
     port      => $apache_https_port,
     try_sleep => 5,
     timeout   => 60,
-   } -> exec { "${aem_id}: Wait post AEM stop":
+   } -> exec { "${aem_id}: Wait post dispatcher stop":
         command => "sleep ${post_stop_sleep_secs}",
-    } -> exec { "${aem_id}: Ensure AEM resource is stopped":
+    } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
       command => "/opt/puppetlabs/bin/puppet resource service httpd ensure=stopped",
     } -> exec { "mv /var/www/html ${data_volume_mount_point}/${aem_id}":
     } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to /var/www/":
@@ -156,7 +156,7 @@ class aem_curator::install_dispatcher (
       returns => [
         '0'
       ]
-    } -> exec { "${aem_id}: Fix repository mount permissions":
+    } -> exec { "${aem_id}: Fix Data Volume mount permissions":
       command => "chown -R apache:apache ${data_volume_mount_point}",
     } -> exec { "${aem_id}: Ensure AEM resource is started":
       command => "/opt/puppetlabs/bin/puppet resource service httpd ensure=running",
