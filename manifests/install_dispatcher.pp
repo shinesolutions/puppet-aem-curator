@@ -67,9 +67,9 @@ class aem_curator::install_dispatcher (
     }
 
     if $setup_data_volume {
-    exec { "${aem_id}: Wait for post Dispatcher stop":
-    command => "sleep  ${post_stop_sleep_secs}"
-    } -> exec { "${aem_id}: Prepare device for the AEM Data Volume":
+      exec { "${aem_id}: Wait for post Dispatcher stop":
+        command => "sleep  ${post_stop_sleep_secs}"
+      } -> exec { "${aem_id}: Prepare device for the AEM Data Volume":
         command => "mkfs -t ext4 ${data_volume_device}",
       } -> file { $data_volume_mount_point:
         ensure => directory,
