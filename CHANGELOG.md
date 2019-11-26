@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add new data_volume for Author-Dispatcher , Publish-Dispatcher and Author-Publish-Dispatcher
 
+### Changed
+- Upgrade aem_resources to 5.1.0
+
 ## [3.2.0] - 2019-11-05
 ### Added
 - Added new manifest to configure AEM agents [#149] [#150]
