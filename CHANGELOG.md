@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [3.6.0] - 2019-12-18
 ### Added
 - Created separate variable to configure `enable_aem_installation_migration` in `config_author_primary` and `config_publish`
 
@@ -647,7 +646,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.5.0...HEAD
+[3.6.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.5.0...3.6.0
 [3.5.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.4.0...3.5.0
 [3.4.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.2.0...3.3.0
