@@ -32,6 +32,9 @@
 # [*aem_jvm_mem_opts*]
 #   Extra memory options to be passed to the JVM.
 #
+# [*aem_osgi_configs*]
+#   OSGi configurations to be present before AEM's first start.
+#
 # [*setup_repository_volume*]
 #   Boolean that determines whether a separate volume is formatted and mounted
 #   for the AEM repository.
@@ -104,6 +107,7 @@ define aem_curator::install_aem (
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
+  $aem_osgi_configs              = undef,
   $post_install_sleep_secs       = 120,
   $post_stop_sleep_secs          = 120,
   $puppet_conf_dir               = '/etc/puppetlabs/puppet/',
@@ -192,6 +196,7 @@ define aem_curator::install_aem (
     aem_sample_content      => $aem_sample_content,
     aem_ssl_port            => $aem_ssl_port,
     aem_jvm_opts            => $aem_jvm_opts,
+    aem_osgi_configs        => $aem_osgi_configs,
     post_install_sleep_secs => $post_install_sleep_secs,
     run_modes               => $run_modes,
     tmp_dir                 => $tmp_dir,

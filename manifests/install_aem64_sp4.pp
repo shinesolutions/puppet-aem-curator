@@ -19,6 +19,7 @@ define aem_curator::install_aem64_sp4(
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
+  $aem_osgi_configs        = undef,
   $post_install_sleep_secs = 120,
 ) {
 
@@ -34,6 +35,7 @@ define aem_curator::install_aem64_sp4(
     aem_sample_content      => $aem_sample_content,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_jvm_opts            => $aem_jvm_opts,
+    aem_osgi_configs        => $aem_osgi_configs,
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
     aem_type                => $aem_type,
