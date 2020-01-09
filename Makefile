@@ -5,7 +5,7 @@ clean:
 
 deps:
 	gem install bundler --version=1.17.3
-	bundle install --binstubs
+	bundle install --binstubs -j4
 	bundle exec r10k puppetfile install --verbose --moduledir modules
 	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
 	bundle exec inspec vendor --overwrite vendor/inspec
