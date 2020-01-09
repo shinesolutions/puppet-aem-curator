@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.0] - 2019-12-18
+### Added
+- Created separate variable to configure `enable_aem_installation_migration` in `config_author_primary` and `config_publish`
+
+## [3.5.0] - 2019-12-14
+### Changed
+- Upgrade aem_resources to 5.3.0
+
+## [3.4.0] - 2019-12-01
+### Changed
+- Dispatcher artifacts deployment allows both symlink and directory by copying static assets using exec type
+
+## [3.3.0] - 2019-11-26
+### Added
+- Add new data_volume for Author-Dispatcher , Publish-Dispatcher and Author-Publish-Dispatcher
+
+### Changed
+- Upgrade aem_resources to 5.1.0
+
 ## [3.2.0] - 2019-11-05
 ### Added
 - Added new manifest to configure AEM agents [#149] [#150]
@@ -629,7 +648,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.2.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.6.0...HEAD
+[3.6.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.5.0...3.6.0
+[3.5.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.4.0...3.5.0
+[3.4.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.3.0...3.4.0
+[3.3.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.2.0...3.3.0
 [3.2.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.0.0...3.0.1

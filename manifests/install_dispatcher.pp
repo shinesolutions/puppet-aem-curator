@@ -51,12 +51,43 @@ class aem_curator::install_dispatcher (
   $cert_base_url,
   $cert_filename,
   $tmp_dir,
-  $apache_http_port  = '80',
-  $apache_https_port = '443',
-  $default_vhost     = true,
-  $aem_id            = 'dispatcher',
+  $data_volume_device,
+  $data_volume_mount_point,
+  $post_stop_sleep_secs      = 120,
+  $aem_base                  = '/var',
+  $setup_data_volume         = false,
+  $apache_http_port          = '80',
+  $apache_https_port         = '443',
+  $default_vhost             = true,
+  $aem_id                    = 'dispatcher',
+  $dispatcher_service_name   = 'httpd',
+  $docroot_dir               = '/var/www/html',
   $apache_additional_modules = [],
 ) {
+
+    Exec {
+      cwd     => $tmp_dir,
+      path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+      timeout => 0,
+    }
+
+    if $setup_data_volume {
+      exec { "${aem_id}: Wait for post Dispatcher stop":
+        command => "sleep  ${post_stop_sleep_secs}"
+      } -> exec { "${aem_id}: Prepare device for the AEM Data Volume":
+        command => "mkfs -t ext4 ${data_volume_device}",
+      } -> file { $data_volume_mount_point:
+        ensure => directory,
+        mode   => '0755',
+      } -> mount { $data_volume_mount_point:
+        ensure   => mounted,
+        device   => $data_volume_device,
+        fstype   => 'ext4',
+        options  => 'nofail,defaults,noatime',
+        remounts => false,
+        atboot   => false,
+      }
+    }
 
   # Prepare AEM certificate
   concat { $cert_filename:
@@ -108,7 +139,7 @@ class aem_curator::install_dispatcher (
 
   class { '::aem::dispatcher' :
     module_file => "${apache_module_temp_dir}/${apache_module_filename}",
-  } -> file { '/var/www/html':
+  } -> file { $docroot_dir:
     # Set the Docroot owner and group to apache
     # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
     ensure => directory,
@@ -124,5 +155,22 @@ class aem_curator::install_dispatcher (
     port      => $apache_https_port,
     try_sleep => 5,
     timeout   => 60,
+  }  -> exec { "${aem_id}: Wait post dispatcher stop":
+    command => "sleep ${post_stop_sleep_secs}",
+  } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
+    command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
+  } -> exec { "mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}":
+  } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to /var/www/":
+    command => "ln -s ${data_volume_mount_point}/${aem_id} ${docroot_dir}",
+    returns => [
+      '0'
+    ]
+  } -> exec { "${aem_id}: Fix docroot dir permissions":
+    command => "chown -R apache:apache ${docroot_dir}",
+  } -> exec { "${aem_id}: Fix data volume mount permissions":
+    command => "chown -R apache:apache ${data_volume_mount_point}",
+  } -> exec { "${aem_id}: Ensure AEM resource is started":
+    command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=running",
   }
+
 }
