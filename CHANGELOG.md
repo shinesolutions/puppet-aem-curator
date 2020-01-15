@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade puppet to 5.5.17
+
 ## [3.6.0] - 2019-12-18
 ### Added
 - Created separate variable to configure `enable_aem_installation_migration` in `config_author_primary` and `config_publish`
