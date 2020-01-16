@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add parameter to define source URL for aem-healthcheck-content package when installing AEM #181
+
+### Fixed
+- Fixed Maven URL for aem-healthcheck-content package #181
+
 ## [3.6.0] - 2019-12-18
 ### Added
 - Created separate variable to configure `enable_aem_installation_migration` in `config_author_primary` and `config_publish`

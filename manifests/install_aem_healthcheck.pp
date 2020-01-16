@@ -8,7 +8,7 @@ define aem_curator::install_aem_healthcheck(
 
   $_aem_healthcheck_source = pick(
     $aem_healthcheck_source,
-    "http://central.maven.org/maven2/com/shinesolutions/aem-healthcheck-content/${aem_healthcheck_version}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
+    "https://repo.maven.apache.org/maven2/com/shinesolutions/aem-healthcheck-content/${aem_healthcheck_version}/aem-healthcheck-content-${aem_healthcheck_version}.zip",
   )
 
   # Install AEM Health Check using aem::crx::package file type which will place
