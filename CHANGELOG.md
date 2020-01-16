@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add parameter to define source URL for aem-healthcheck-content package when installing AEM #181
 
+### Changed
+- Change default health check Maven Central URL from central.maven.org to repo.maven.apache.org
+
 ### Fixed
 - Fixed Maven URL for aem-healthcheck-content package #181
 
