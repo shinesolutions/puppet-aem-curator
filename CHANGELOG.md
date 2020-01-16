@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add parameter to define source URL for aem-healthcheck-content package when installing AEM #181
 
 ### Changed
+- Upgrade puppet to 5.5.17
 - Change default health check Maven Central URL from central.maven.org to repo.maven.apache.org
 
 ### Fixed
