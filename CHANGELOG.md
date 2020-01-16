@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.25.3] - 2020-01-17
 
 ### Added
 - Add parameter to define source URL for aem-healthcheck-content package when installing AEM #181
@@ -511,7 +511,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[1.25.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.2...HEAD
+[1.25.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.2...1.25.3
 [1.25.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.1...1.25.2
 [1.25.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.25.0...1.25.1
 [1.25.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/1.24.1...1.25.0
