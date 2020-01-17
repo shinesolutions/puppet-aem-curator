@@ -9,6 +9,7 @@ define aem_curator::reconfig_pre_aem (
   $aem_base                          = '/opt',
   $aem_port                          = undef,
   $aem_runmodes                      = [],
+  $aem_debug_port                    = undef,
   $aws_region                        = $::aws_region,
   $certificate_arn                   = undef,
   $certificate_key_arn               = undef,
@@ -164,6 +165,7 @@ define aem_curator::reconfig_pre_aem (
     $aem_template_sample_content = false
     $aem_template_jvm_mem_opts = $aem_jvm_mem_opts
     $aem_template_jvm_opts = $aem_default_jvm_opts.join(' ')
+    $aem_template_debug_port = $aem_debug_port
 
     # Create the env script
     file { "${tmp_dir}/start-env":
