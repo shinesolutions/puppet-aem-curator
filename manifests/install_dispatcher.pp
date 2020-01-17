@@ -148,7 +148,8 @@ class aem_curator::install_dispatcher (
     port      => $apache_https_port,
     try_sleep => 5,
     timeout   => 60,
-  }  -> exec { "${aem_id}: Wait post dispatcher stop":
+  } -> if $setup_data_volume {
+    exec { "${aem_id}: Wait post dispatcher stop":
     command => "sleep ${post_stop_sleep_secs}",
   } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
     command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
@@ -165,5 +166,5 @@ class aem_curator::install_dispatcher (
   } -> exec { "${aem_id}: Ensure AEM resource is started":
     command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=running",
   }
-
+  }
 }
