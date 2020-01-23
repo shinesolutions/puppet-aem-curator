@@ -29,4 +29,5 @@ There is no obvious file name convention because Adobe has historically been pub
 | `aem64_sp4` | `aem64` artifacts + AEM-6.4.4.0-6.4.4.zip |
 | `aem65` | license-6.5.properties, AEM_6.5_Quickstart.jar |
 | `aem65_sp1` | `aem65` artifacts + AEM-6.5.1.0-6.5.1.zip |
-| `aem65_sp2` | `aem65` artifacts + AEM-6.5.1.0-6.5.2.zip |
+| `aem65_sp2` | `aem65` artifacts + AEM-6.5.2.0-6.5.2.zip |
+| `aem65_sp3` | `aem65` artifacts + AEM-6.5.3.0-6.5.3.zip |
