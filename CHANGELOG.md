@@ -1,4 +1,4 @@
-### Unreleased
+### 0.10.7
 * Fixed Maven URL for aem-healthcheck-content package #181
 
 ### 0.10.6
