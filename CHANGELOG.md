@@ -1,3 +1,6 @@
+### Unreleased
+* Fixed Maven URL for aem-healthcheck-content package #181
+
 ### 0.10.6
 * Upgrade aem_resources to 2.3.1 for aem_user_alias support
 
