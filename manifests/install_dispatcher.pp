@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*cert_base_url*]
-#   Base URL (supported by the puppet-archive module) to download the X.509
+#   Base URL (supported by the puppet-archive module) to download the zX.509
 #   certificate and private key to be used with Apache.
 #
 # [*cert_filename*]
@@ -148,8 +148,9 @@ class aem_curator::install_dispatcher (
     port      => $apache_https_port,
     try_sleep => 5,
     timeout   => 60,
-  } -> if $setup_data_volume {
-    exec { "${aem_id}: Wait post dispatcher stop":
+  }
+    if $setup_data_volume {
+      exec { "${aem_id}: Wait post dispatcher stop":
       command => "sleep ${post_stop_sleep_secs}",
     } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
       command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
