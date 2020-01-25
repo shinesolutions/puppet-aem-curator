@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add new AEM profile: aem65_sp3 #186
+- Add initial OSGI configurations support #178
+- Add AEM debug port support on configuration manifests #184
+- Add additional Apache modules support for Dispatcher installation #177
 
 ## [3.7.0] - 2020-01-16
 ### Added
