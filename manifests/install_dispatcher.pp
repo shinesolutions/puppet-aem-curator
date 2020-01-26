@@ -31,6 +31,9 @@
 #   A temporary directory used to store the AEM Dispatcher Apache module while
 #   installing it.
 #
+# [*apache_additional_modules*]
+#   List of additional modules that will be installed with apache
+#
 # === Authors
 #
 # Andy Wang <andy.wang@shinesolutions.com>
@@ -59,6 +62,7 @@ class aem_curator::install_dispatcher (
   $aem_id                    = 'dispatcher',
   $dispatcher_service_name   = 'httpd',
   $docroot_dir               = '/var/www/html',
+  $apache_additional_modules = [],
 ) {
 
     Exec {
@@ -114,13 +118,16 @@ class aem_curator::install_dispatcher (
   class { '::apache':
     default_vhost => $default_vhost
   }
-  $apache_module_classes = [
+  $apache_base_module_classes = [
     '::apache::mod::ssl',
     '::apache::mod::headers',
     '::apache::mod::proxy',
     '::apache::mod::proxy_http',
     '::apache::mod::proxy_connect',
   ]
+
+  $apache_module_classes = unique($apache_base_module_classes + $apache_additional_modules)
+
   class { $apache_module_classes: }
 
   archive { $apache_module_tarball:

@@ -7,6 +7,7 @@ define aem_curator::install_aem62_sp1_cfp2(
   $tmp_dir,
   $aem_debug_port          = undef,
   $aem_base                = '/opt',
+  $aem_healthcheck_source  = undef,
   $aem_id                  = 'aem',
   $aem_type                = undef,
   $aem_jvm_mem_opts        = '-Xss4m -Xmx8192m',
@@ -19,6 +20,7 @@ define aem_curator::install_aem62_sp1_cfp2(
     '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
+  $aem_osgi_configs        = undef,
   $post_install_sleep_secs = 120,
 ) {
 
@@ -30,10 +32,12 @@ define aem_curator::install_aem62_sp1_cfp2(
     aem_artifacts_base      => $aem_artifacts_base,
     aem_license_base        => $aem_license_base,
     aem_healthcheck_version => $aem_healthcheck_version,
+    aem_healthcheck_source  => $aem_healthcheck_source,
     aem_base                => $aem_base,
     aem_sample_content      => $aem_sample_content,
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_jvm_opts            => $aem_jvm_opts,
+    aem_osgi_configs        => $aem_osgi_configs,
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
     aem_type                => $aem_type,

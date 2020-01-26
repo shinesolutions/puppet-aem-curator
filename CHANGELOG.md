@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem65_sp3 #186
+- Add initial OSGI configurations support #178
+- Add AEM debug port support on configuration manifests #184
+- Add additional Apache modules support for Dispatcher installation #177
+
+### Changed
+- Upgrade puppet to 5.5.18
+
+## [3.7.0] - 2020-01-16
+### Added
+- Add parameter to define source URL for aem-healthcheck-content package when installing AEM [#181]
+
+### Changed
+- Upgrade puppet to 5.5.17
+- Change default health check Maven Central URL from central.maven.org to repo.maven.apache.org
+
+### Fixed
+- Fixed Maven URL for aem-healthcheck-content package [#181]
+
 ## [3.6.0] - 2019-12-18
 ### Added
 - Created separate variable to configure `enable_aem_installation_migration` in `config_author_primary` and `config_publish`
@@ -648,7 +668,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.6.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.7.0...HEAD
+[3.7.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.6.0...3.7.0
 [3.6.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.5.0...3.6.0
 [3.5.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.4.0...3.5.0
 [3.4.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.3.0...3.4.0

@@ -11,7 +11,7 @@ TYPE='<%= @aem_template_type %>'
 PORT=<%= @aem_template_port %>
 RUNMODES='<%= @aem_template_runmodes.join(",") if @aem_template_runmodes %>'
 SAMPLE_CONTENT='<%= "nosamplecontent" if @aem_template_sample_content == false %>'
-DEBUG_PORT=<%= @debug_port %>
+DEBUG_PORT=<%= @aem_template_debug_port %>
 
 <% if @context_root %>
 CONTEXT_ROOT='<%= @context_root %>'
