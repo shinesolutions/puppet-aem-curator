@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*cert_base_url*]
-#   Base URL (supported by the puppet-archive module) to download the zX.509
+#   Base URL (supported by the puppet-archive module) to download the X.509
 #   certificate and private key to be used with Apache.
 #
 # [*cert_filename*]
