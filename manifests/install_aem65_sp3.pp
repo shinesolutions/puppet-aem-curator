@@ -41,7 +41,7 @@ define aem_curator::install_aem65_sp3(
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
     aem_type                => $aem_type,
-  } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 2":
+  } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 3":
     tmp_dir         => $tmp_dir,
     file_name       => 'AEM-6.5.3.0-6.5.3.zip',
     package_name    => 'aem-service-pkg',
