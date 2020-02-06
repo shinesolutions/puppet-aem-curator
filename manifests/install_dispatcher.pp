@@ -155,22 +155,24 @@ class aem_curator::install_dispatcher (
     port      => $apache_https_port,
     try_sleep => 5,
     timeout   => 60,
-  }  -> exec { "${aem_id}: Wait post dispatcher stop":
-    command => "sleep ${post_stop_sleep_secs}",
-  } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
-    command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
-  } -> exec { "mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}":
-  } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to /var/www/":
-    command => "ln -s ${data_volume_mount_point}/${aem_id} ${docroot_dir}",
-    returns => [
-      '0'
-    ]
-  } -> exec { "${aem_id}: Fix docroot dir permissions":
-    command => "chown -R apache:apache ${docroot_dir}",
-  } -> exec { "${aem_id}: Fix data volume mount permissions":
-    command => "chown -R apache:apache ${data_volume_mount_point}",
-  } -> exec { "${aem_id}: Ensure AEM resource is started":
-    command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=running",
   }
-
+    if $setup_data_volume {
+      exec { "${aem_id}: Wait post dispatcher stop":
+      command => "sleep ${post_stop_sleep_secs}",
+    } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
+      command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
+    } -> exec { "mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}":
+    } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to /var/www/":
+      command => "ln -s ${data_volume_mount_point}/${aem_id} ${docroot_dir}",
+      returns => [
+        '0'
+      ]
+    } -> exec { "${aem_id}: Fix docroot dir permissions":
+      command => "chown -R apache:apache ${docroot_dir}",
+    } -> exec { "${aem_id}: Fix data volume mount permissions":
+      command => "chown -R apache:apache ${data_volume_mount_point}",
+    } -> exec { "${aem_id}: Ensure AEM resource is started":
+      command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=running",
+    }
+  }
 }

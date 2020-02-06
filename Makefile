@@ -11,9 +11,6 @@ deps:
 	bundle exec inspec vendor --overwrite vendor/inspec
 	cd vendor/inspec/vendor && mv */inspec-aem-*.*.* inspec-aem
 	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/ && cp -R vendor/inspec/vendor/inspec-aem files/test/inspec/
-	# only needed while using shinesolutions/puppet-aem fork
-	# TODO: remove when switching back to bstopp/puppet-aem
-	rm -rf modules/aem/.git
 
 lint:
 	bundle exec puppet-lint \
