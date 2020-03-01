@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [3.9.0] - 2020-03-01
 ### Added
 - Added new parameter to control directory cleanup while executing `config_author_primary`, `config_author_standby`, `config_publish` [#179]
 - Add missing healthcheck installation paramter for manifest `install_aem65_sp3`
@@ -675,11 +674,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#177]: https://github.com/shinesolutions/puppet-aem-curator/issues/177
 [#178]: https://github.com/shinesolutions/puppet-aem-curator/issues/178
+[#179]: https://github.com/shinesolutions/puppet-aem-curator/issues/179
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
 [#184]: https://github.com/shinesolutions/puppet-aem-curator/issues/184
 [#186]: https://github.com/shinesolutions/puppet-aem-curator/issues/186
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.8.0...HEAD
+[3.9.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.8.0...3.9.0
 [3.8.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.7.0...3.8.0
 [3.7.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.6.0...3.7.0
 [3.6.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.5.0...3.6.0
