@@ -30,14 +30,15 @@ class aem_curator::config_author_standby (
   $enable_default_passwords,
   $puppet_conf_dir,
   $tmp_dir,
-  $aem_id                  = 'author',
-  $aem_version             = '6.2',
-  $data_volume_mount_point = undef,
-  $delete_repository_index = false,
-  $jmxremote_port          = '5982',
-  $jvm_mem_opts            = undef,
-  $jvm_opts                = undef,
-  $run_mode                = 'author',
+  $aem_id                       = 'author',
+  $aem_version                  = '6.2',
+  $enable_aem_clean_directories = false,
+  $data_volume_mount_point      = undef,
+  $delete_repository_index      = false,
+  $jmxremote_port               = '5982',
+  $jvm_mem_opts                 = undef,
+  $jvm_opts                     = undef,
+  $run_mode                     = 'author',
 ) {
 
   if !defined(File[$tmp_dir]) {
@@ -100,15 +101,17 @@ class aem_curator::config_author_standby (
     }
   }
 
-  $list_clean_directories = [
-  'logs',
-  'threaddumps'
-  ]
+  if $enable_aem_clean_directories {
+    $list_clean_directories = [
+      'logs',
+      'threaddumps'
+    ]
 
-  $list_clean_directories.each | Integer $index, String $clean_directory| {
-    exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
-      command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
-      before  => Service['aem-author'],
+    $list_clean_directories.each | Integer $index, String $clean_directory| {
+      exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
+        command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+        before  => Service['aem-author'],
+      }
     }
   }
 

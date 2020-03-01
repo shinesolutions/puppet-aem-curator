@@ -55,6 +55,7 @@ class aem_curator::config_publish (
   $enable_aem_reconfiguration                    = false,
   $enable_aem_installation_migration             = false,
   $enable_aem_reconfiguratiton_clean_directories = false,
+  $enable_aem_clean_directories                  = false,
   $enable_create_flush_agents                    = false,
   $enable_create_outbox_replication_agents       = false,
   $enable_post_start_sleep                       = false,
@@ -211,15 +212,17 @@ class aem_curator::config_publish (
     }
   }
 
-  $list_clean_directories = [
-  'logs',
-  'threaddumps'
-  ]
+  if $enable_aem_clean_directories {
+    $list_clean_directories = [
+      'logs',
+      'threaddumps'
+    ]
 
-  $list_clean_directories.each | Integer $index, String $clean_directory| {
-    exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
-      command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
-      before  => File["${crx_quickstart_dir}/install/"],
+    $list_clean_directories.each | Integer $index, String $clean_directory| {
+      exec { "${aem_id}: Cleaning directory ${crx_quickstart_dir}/${clean_directory}/":
+        command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+        before  => File["${crx_quickstart_dir}/install/"],
+      }
     }
   }
 
