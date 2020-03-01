@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added new parameter to control directory cleanup while executing `config_author_primary`, `config_author_standby`, `config_publish` [#179]
 - Add missing healthcheck installation paramter for manifest `install_aem65_sp3`
+- Lockdown Gem dependency 'faraday` to version `0.12.0
 
 ## [3.8.0] - 2020-01-27
 ### Added
