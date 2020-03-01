@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added new parameter to control directory cleanup while executing `config_author_primary`, `config_author_standby`, `config_publish` [#179]
+- Add missing healthcheck installation paramter for manifest `install_aem65_sp3`
+
 ## [3.8.0] - 2020-01-27
 ### Added
 - Added condition for create dispatcher data volume
