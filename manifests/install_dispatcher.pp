@@ -1,6 +1,6 @@
-# == Class: config::author
+# == Class: aem_curator::install_dispatcher
 #
-# Install AEM and configure for the `publisher` role.
+# Install AEM and configure for the `dispatcher` role.
 #
 # === Parameters
 #
@@ -33,6 +33,11 @@
 #
 # [*apache_additional_modules*]
 #   List of additional modules that will be installed with apache
+# [*apache_user*]
+#   The apache user for updating the permissions to the docroot dir
+#
+# [*apache_group*]
+#   The apache group for updating the permissions to the docroot dir
 #
 # === Authors
 #
@@ -41,7 +46,7 @@
 #
 # === Copyright
 #
-# Copyright © 2017 Shine Solutions Group, unless otherwise noted.
+# Copyright © 2019 Shine Solutions Group, unless otherwise noted.
 #
 class aem_curator::install_dispatcher (
   $apache_module_base_url,
@@ -51,18 +56,20 @@ class aem_curator::install_dispatcher (
   $cert_base_url,
   $cert_filename,
   $tmp_dir,
-  $data_volume_device,
-  $data_volume_mount_point,
   $post_stop_sleep_secs      = 120,
   $aem_base                  = '/var',
   $setup_data_volume         = false,
   $apache_http_port          = '80',
   $apache_https_port         = '443',
+  $data_volume_device        = undef,
+  $data_volume_mount_point   = undef,
   $default_vhost             = true,
   $aem_id                    = 'dispatcher',
   $dispatcher_service_name   = 'httpd',
   $docroot_dir               = '/var/www/html',
   $apache_additional_modules = [],
+  $apache_user               = 'apache',
+  $apache_group              = 'apache'
 ) {
 
     Exec {
@@ -72,9 +79,8 @@ class aem_curator::install_dispatcher (
     }
 
     if $setup_data_volume {
-      exec { "${aem_id}: Wait for post Dispatcher stop":
-        command => "sleep  ${post_stop_sleep_secs}"
-      } -> exec { "${aem_id}: Prepare device for the AEM Data Volume":
+      # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
+      exec { "${aem_id}: Prepare device for the AEM Data Volume":
         command => "mkfs -t ext4 ${data_volume_device}",
       } -> file { $data_volume_mount_point:
         ensure => directory,
@@ -86,7 +92,53 @@ class aem_curator::install_dispatcher (
         options  => 'nofail,defaults,noatime',
         remounts => false,
         atboot   => false,
+        before   => [
+                      Exec["mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}"],
+                      Class['Apache::Service']
+                    ]
       }
+
+      # Dependencies to Package['httpd'] is resolved by the puppet module apache
+      exec { "mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}":
+        require => [
+                    Package['httpd'],
+                    Mount[$data_volume_mount_point]
+                  ]
+      }
+
+     exec { "${aem_id}: Fix data volume mount permissions":
+       command => "chown -R ${apache_user}:${apache_group} ${data_volume_mount_point}",
+       require => [
+                     Exec["mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}"]
+                   ]
+     }
+
+      # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
+      file { $docroot_dir:
+         # Set the Docroot owner and group to apache
+         # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
+         ensure  => link,
+         owner   => $apache_user,
+         group   => $apache_group,
+         target  =>  "${data_volume_mount_point}/${aem_id}",
+         replace => true,
+         require => [
+           Exec["${aem_id}: Fix data volume mount permissions"],
+           Class['Apache']
+         ],
+         notify  => Class['Apache::Service']
+       }
+    } else {
+        # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
+        file { $docroot_dir:
+           # Set the Docroot owner and group to apache
+           # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
+           ensure  => directory,
+           owner   => $apache_user,
+           group   => $apache_group,
+           require => Class['Apache'],
+           notify  => Class['Apache::Service'],
+         }
     }
 
   # Prepare AEM certificate
@@ -115,7 +167,7 @@ class aem_curator::install_dispatcher (
   apache::listen { $apache_http_port: }
   apache::listen { $apache_https_port: }
 
-  class { '::apache':
+  class { 'apache':
     default_vhost => $default_vhost
   }
   $apache_base_module_classes = [
@@ -139,40 +191,27 @@ class aem_curator::install_dispatcher (
 
   class { '::aem::dispatcher' :
     module_file => "${apache_module_temp_dir}/${apache_module_filename}",
-  } -> file { $docroot_dir:
-    # Set the Docroot owner and group to apache
-    # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
-    ensure => directory,
-    owner  => 'apache',
-    group  => 'apache',
-  } -> tcp_conn_validator { "Ensure dispatcher is listening on http port ${apache_http_port}" :
+  }
+
+  # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
+  # Dependencies to Class 'dispatcher' is resolved by the puppet module dispatcher
+  tcp_conn_validator { "Ensure dispatcher is listening on http port ${apache_http_port}" :
     host      => 'localhost',
     port      => $apache_http_port,
     try_sleep => 5,
     timeout   => 60,
+    require   => [
+                  Class['Apache::Service'],
+                  Class['::aem::dispatcher']
+                  ]
   } -> tcp_conn_validator { "Ensure dispatcher is listening on https port ${apache_https_port}" :
     host      => 'localhost',
     port      => $apache_https_port,
     try_sleep => 5,
     timeout   => 60,
-  }
-    if $setup_data_volume {
-      exec { "${aem_id}: Wait post dispatcher stop":
-      command => "sleep ${post_stop_sleep_secs}",
-    } -> exec { "${aem_id}: Ensure dispatcher resource is stopped":
-      command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=stopped",
-    } -> exec { "mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}":
-    } -> exec { "${aem_id}: Set link from ${data_volume_mount_point}/${aem_id} to /var/www/":
-      command => "ln -s ${data_volume_mount_point}/${aem_id} ${docroot_dir}",
-      returns => [
-        '0'
-      ]
-    } -> exec { "${aem_id}: Fix docroot dir permissions":
-      command => "chown -R apache:apache ${docroot_dir}",
-    } -> exec { "${aem_id}: Fix data volume mount permissions":
-      command => "chown -R apache:apache ${data_volume_mount_point}",
-    } -> exec { "${aem_id}: Ensure AEM resource is started":
-      command => "/opt/puppetlabs/bin/puppet resource service ${dispatcher_service_name} ensure=running",
+    require   => [
+                  Class['Apache::Service'],
+                  Class['::aem::dispatcher']
+                  ]
     }
-  }
 }

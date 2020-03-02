@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix `install_dispatcher` manifest [#183]
+
 ## [3.9.0] - 2020-03-01
 ### Added
 - Added new parameter to control directory cleanup while executing `config_author_primary`, `config_author_standby`, `config_publish` [#179]
@@ -678,6 +681,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#178]: https://github.com/shinesolutions/puppet-aem-curator/issues/178
 [#179]: https://github.com/shinesolutions/puppet-aem-curator/issues/179
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
+[#183]: https://github.com/shinesolutions/puppet-aem-curator/issues/183
 [#184]: https://github.com/shinesolutions/puppet-aem-curator/issues/184
 [#186]: https://github.com/shinesolutions/puppet-aem-curator/issues/186
 
