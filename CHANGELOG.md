@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add service notify when configuring `jvm_mem_opts` for author-standby & publish [#173] 
+
 ## [3.9.0] - 2020-03-01
 ### Added
 - Added new parameter to control directory cleanup while executing `config_author_primary`, `config_author_standby`, `config_publish` [#179]

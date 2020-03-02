@@ -78,6 +78,7 @@ class aem_curator::config_author_standby (
       path   => "${crx_quickstart_dir}/bin/start-env",
       line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
       match  => '^JVM_MEM_OPTS',
+      notify => Service['aem-author'],
     }
   }
 
