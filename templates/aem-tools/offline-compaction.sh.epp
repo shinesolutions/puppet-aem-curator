@@ -37,11 +37,11 @@ else
 
     echo "$(date) - Compacting repository <%= $aem_instance['crx_quickstart_dir'] %>/repository ..."
 
-    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -Xms2048m -Xmx4096m -XX:-UseGCOverheadLimit -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
+    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java <%= $aem_compaction_jvm_mem_opts %> -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
     sleep 2
-    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -Xms2048m -Xmx4096m -XX:-UseGCOverheadLimit -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore" rm-unreferenced'
+    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java <%= $aem_compaction_jvm_mem_opts %> -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar checkpoints "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore" rm-unreferenced'
     sleep 2
-    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java -Xms2048m -Xmx4096m -XX:-UseGCOverheadLimit -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar compact "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
+    sudo -H -u <%= $aem_instance['user'] %> bash -c 'java <%= $aem_compaction_jvm_mem_opts %> -jar <%= $base_dir %>/aem-tools/oak-run-<%= $oak_run_version %>.jar compact "<%= $aem_instance['crx_quickstart_dir'] %>/repository/segmentstore"'
 
     echo "$(date) - Finished repository compaction on <%= $aem_instance['crx_quickstart_dir'] %>/repository"
 

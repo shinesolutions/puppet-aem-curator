@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- Fix the offline compaction failure due to out of memory
+- Added variable jvm_mem_opts to configure JVM Memory for offline compaction in order to solve our-of-memory failure in c4.xlarge (7.5Gb  memory)
 
 ## [3.9.0] - 2020-03-01
 ### Added
