@@ -10,7 +10,7 @@ class aem_curator::config_aem_tools (
   $confdir                                        = $settings::confdir,
   $enable_compaction_remove_bak_files             = false,
   $compaction_remove_bak_files_older_than_in_days = 30,
-  $aem_compaction_jvm_mem_opts                    = ''
+  $aem_compaction_jvm_mem_opts                    = '-Xms2048m -Xmx4096m -XX:-UseGCOverheadLimit'
 ) {
 
   validate_bool($enable_compaction_remove_bak_files)
