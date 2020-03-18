@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add variable `aem_curator::config_aem_tools::aem_compaction_jvm_mem_opts` to configure JVM memory options for offline compaction script
+
+### Changed
+- Update faraday from 1.12 to 1.12.0.1 to fix checksum failure on Travis CI
+
 ## [3.9.0] - 2020-03-01
 ### Added
 - Added new parameter to control directory cleanup while executing `config_author_primary`, `config_author_standby`, `config_publish` [#179]
 - Add missing healthcheck installation paramter for manifest `install_aem65_sp3`
-- Lockdown Gem dependency 'faraday` to version `0.12.0
+- Lockdown Gem dependency 'faraday` to version `0.12.0`
 
 ## [3.8.0] - 2020-01-27
 ### Added
