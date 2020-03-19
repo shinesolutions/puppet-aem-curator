@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix missing commas on config_aem_tools.pp
+
 ## [3.10.0] - 2020-03-18
 ### Added
 - Add variable `aem_curator::config_aem_tools::aem_compaction_jvm_mem_opts` to configure JVM memory options for offline compaction script
