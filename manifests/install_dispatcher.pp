@@ -187,10 +187,12 @@ class aem_curator::install_dispatcher (
     path         => "${apache_module_temp_dir}/${apache_module_tarball}",
     extract      => true,
     extract_path => $apache_module_temp_dir,
+    before       => Class['aem::dispatcher']
   }
 
   class { '::aem::dispatcher' :
     module_file => "${apache_module_temp_dir}/${apache_module_filename}",
+    require     => Archive[$apache_module_tarball]
   }
 
   # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache

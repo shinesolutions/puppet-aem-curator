@@ -3,7 +3,6 @@
 source 'https://rubygems.org'
 
 gem 'facter', '2.5.1', require: false
-gem 'faraday', '0.12', require: false
 gem 'inspec', '2.3.10', require: false
 gem 'metadata-json-lint', '2.2.0', require: false
 gem 'puppet', '5.5.18', require: false
