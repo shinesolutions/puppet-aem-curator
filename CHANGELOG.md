@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix `install_dispatcher` manifest re data volume device and mount point should be optional and also data directory should be  linked to data volume [#183]
+
 ## [3.10.1] - 2020-03-19
 ### Fixed
 - Fix missing commas on config_aem_tools.pp
@@ -689,6 +692,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#178]: https://github.com/shinesolutions/puppet-aem-curator/issues/178
 [#179]: https://github.com/shinesolutions/puppet-aem-curator/issues/179
 [#181]: https://github.com/shinesolutions/puppet-aem-curator/issues/181
+[#183]: https://github.com/shinesolutions/puppet-aem-curator/issues/183
 [#184]: https://github.com/shinesolutions/puppet-aem-curator/issues/184
 [#186]: https://github.com/shinesolutions/puppet-aem-curator/issues/186
 
