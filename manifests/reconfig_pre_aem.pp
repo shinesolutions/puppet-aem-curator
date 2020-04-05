@@ -200,6 +200,8 @@ define aem_curator::reconfig_pre_aem (
     #  - Certificate Manager (arn:aws:acm)
     #  - IAM Server Certificates (arn:aws:iam)
     #  - S3 (s3:)
+    #  - file
+    #  - http/https
     case $certificate_arn {
       /^arn:aws:acm/: {
         exec { "${aem_id}: Download Certificate from AWS Certificate Manager using cli":
@@ -235,7 +237,7 @@ define aem_curator::reconfig_pre_aem (
         }
       }
       default: {
-        fail('Certificate ARN can only be of types: ( arn:aws:acm | arn:aws:iam | s3: )')
+        fail('Certificate ARN can only be of types: ( arn:aws:acm | arn:aws:iam | s3: | http: | https: | file: )')
       }
     }
 
