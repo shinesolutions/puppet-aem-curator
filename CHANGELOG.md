@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
+## [3.11.0] - 2020-04-05
 ### Added
 - Add service notify when configuring `jvm_mem_opts` for author-standby & publish [#173]
 
@@ -695,6 +694,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#150]: https://github.com/shinesolutions/puppet-aem-curator/issues/150
 [#156]: https://github.com/shinesolutions/puppet-aem-curator/issues/156
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
+[#166]: https://github.com/shinesolutions/puppet-aem-curator/issues/166
+[#173]: https://github.com/shinesolutions/puppet-aem-curator/issues/173
 [#177]: https://github.com/shinesolutions/puppet-aem-curator/issues/177
 [#178]: https://github.com/shinesolutions/puppet-aem-curator/issues/178
 [#179]: https://github.com/shinesolutions/puppet-aem-curator/issues/179
@@ -703,7 +704,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#184]: https://github.com/shinesolutions/puppet-aem-curator/issues/184
 [#186]: https://github.com/shinesolutions/puppet-aem-curator/issues/186
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.10.1...HEAD
+[3.11.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.10.1...3.11.0
 [3.10.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.10.0...3.10.1
 [3.10.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.9.0...3.10.0
 [3.9.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.8.0...3.9.0
