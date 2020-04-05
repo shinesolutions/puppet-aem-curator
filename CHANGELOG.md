@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Update default error description for certificate handling with more options http, https, and file [#166]
+
 ### Fixed
 - Fix `install_dispatcher` manifest re data volume device and mount point should be optional and also data directory should be  linked to data volume [#183]
 
