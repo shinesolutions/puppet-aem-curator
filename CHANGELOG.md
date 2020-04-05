@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- Fix `install_dispatcher` manifest [#183]
+- Fix `install_dispatcher` manifest re data volume device and mount point should be optional and also data directory should be  linked to data volume [#183]
 
 ## [3.9.0] - 2020-03-01
 ### Added
