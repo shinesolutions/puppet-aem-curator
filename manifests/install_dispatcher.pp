@@ -106,39 +106,39 @@ class aem_curator::install_dispatcher (
                   ]
       }
 
-     exec { "${aem_id}: Fix data volume mount permissions":
-       command => "chown -R ${apache_user}:${apache_group} ${data_volume_mount_point}",
-       require => [
-                     Exec["mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}"]
-                   ]
-     }
+      exec { "${aem_id}: Fix data volume mount permissions":
+        command => "chown -R ${apache_user}:${apache_group} ${data_volume_mount_point}",
+        require => [
+          Exec["mv ${docroot_dir} ${data_volume_mount_point}/${aem_id}"]
+        ]
+      }
 
       # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
       file { $docroot_dir:
-         # Set the Docroot owner and group to apache
-         # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
-         ensure  => link,
-         owner   => $apache_user,
-         group   => $apache_group,
-         target  =>  "${data_volume_mount_point}/${aem_id}",
-         replace => true,
-         require => [
-           Exec["${aem_id}: Fix data volume mount permissions"],
-           Class['Apache']
-         ],
-         notify  => Class['Apache::Service']
-       }
+        # Set the Docroot owner and group to apache
+        # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
+        ensure  => link,
+        owner   => $apache_user,
+        group   => $apache_group,
+        target  =>  "${data_volume_mount_point}/${aem_id}",
+        replace => true,
+        require => [
+          Exec["${aem_id}: Fix data volume mount permissions"],
+          Class['Apache']
+        ],
+        notify  => Class['Apache::Service']
+      }
     } else {
-        # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
-        file { $docroot_dir:
-           # Set the Docroot owner and group to apache
-           # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
-           ensure  => directory,
-           owner   => $apache_user,
-           group   => $apache_group,
-           require => Class['Apache'],
-           notify  => Class['Apache::Service'],
-         }
+      # Dependencies to Class 'Apache::Service' is resolved by the puppet module apache
+      file { $docroot_dir:
+        # Set the Docroot owner and group to apache
+        # https://docs.adobe.com/docs/en/dispatcher/disp-install.html#Apache Web Server - Configure Apache Web Server for Dispatcher
+        ensure  => directory,
+        owner   => $apache_user,
+        group   => $apache_group,
+        require => Class['Apache'],
+        notify  => Class['Apache::Service'],
+      }
     }
 
   # Prepare AEM certificate
