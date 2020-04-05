@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add service notify when configuring `jvm_mem_opts` for author-standby & publish [#173] 
+
 ### Changed
 - Update default error description for certificate handling with more options http, https, and file [#166]
 
