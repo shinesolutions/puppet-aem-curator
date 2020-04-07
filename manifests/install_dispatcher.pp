@@ -187,10 +187,10 @@ class aem_curator::install_dispatcher (
     path         => "${apache_module_temp_dir}/${apache_module_tarball}",
     extract      => true,
     extract_path => $apache_module_temp_dir,
-    before       => Class['aem::dispatcher']
+    before       => Class['dispatcher']
   }
 
-  class { '::aem::dispatcher' :
+  class { 'dispatcher':
     module_file => "${apache_module_temp_dir}/${apache_module_filename}",
     require     => Archive[$apache_module_tarball]
   }
@@ -204,7 +204,7 @@ class aem_curator::install_dispatcher (
     timeout   => 60,
     require   => [
                   Class['Apache::Service'],
-                  Class['::aem::dispatcher']
+                  Class['dispatcher']
                   ]
   } -> tcp_conn_validator { "Ensure dispatcher is listening on https port ${apache_https_port}" :
     host      => 'localhost',
@@ -213,7 +213,7 @@ class aem_curator::install_dispatcher (
     timeout   => 60,
     require   => [
                   Class['Apache::Service'],
-                  Class['::aem::dispatcher']
+                  Class['dispatcher']
                   ]
     }
 }
