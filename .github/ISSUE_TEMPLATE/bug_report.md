@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information if relevant):**
- - Libraries and versions: [e.g. puppet-aem-curator 1.0.0]
+ - Libraries and versions: [e.g. puppet-aem-curator 1.0.0, puppet 1.2.3]
  - OS [e.g. rhel7, amz2]
 
 **Additional context**
