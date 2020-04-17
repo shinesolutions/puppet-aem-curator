@@ -46,6 +46,7 @@ class aem_curator::config_author_primary (
   $aem_keystore_path                                     = undef,
   $data_volume_mount_point                               = undef,
   $enable_aem_reconfiguration                            = false,
+  $enable_aem_reconfiguration_reset_aem_binaries         = true,
   $enable_aem_installation_migration                     = false,
   $enable_aem_clean_directories                          = false,
   $enable_aem_reconfiguratiton_clean_directories         = false,
@@ -139,45 +140,47 @@ class aem_curator::config_author_primary (
                                             ],
     }
 
-    # Copy created start-env template file to destination dir
-    # It has to live here because
-    file { "${crx_quickstart_dir}/bin/start-env":
-      ensure  => file,
-      source  => "${tmp_dir}/${aem_id}/start-env",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => [
-                    File["${crx_quickstart_dir}/install/"],
-                    File["${tmp_dir}/${aem_id}/start-env"],
-                  ],
-      before  => [
-                    Service['aem-author'],
-                  ]
-    }
+    if $enable_aem_reconfiguration_reset_aem_binaries {
+      # Copy created start-env template file to destination dir
+      # It has to live here because
+      file { "${crx_quickstart_dir}/bin/start-env":
+        ensure  => file,
+        source  => "${tmp_dir}/${aem_id}/start-env",
+        mode    => '0775',
+        owner   => "aem-${aem_id}",
+        group   => "aem-${aem_id}",
+        require => [
+                      File["${crx_quickstart_dir}/install/"],
+                      File["${tmp_dir}/${aem_id}/start-env"],
+                    ],
+        before  => [
+                      Service['aem-author'],
+                    ]
+      }
 
-    file { "${crx_quickstart_dir}/bin/start.orig":
-      ensure  => file,
-      source  => "${tmp_dir}/${aem_id}/start.orig",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => [
-                    File["${crx_quickstart_dir}/install/"],
-                    File["${tmp_dir}/${aem_id}/start.orig"],
-                  ]
-    }
+      file { "${crx_quickstart_dir}/bin/start.orig":
+        ensure  => file,
+        source  => "${tmp_dir}/${aem_id}/start.orig",
+        mode    => '0775',
+        owner   => "aem-${aem_id}",
+        group   => "aem-${aem_id}",
+        require => [
+                      File["${crx_quickstart_dir}/install/"],
+                      File["${tmp_dir}/${aem_id}/start.orig"],
+                    ]
+      }
 
-    file { "${crx_quickstart_dir}/bin/start":
-      ensure  => file,
-      source  => "${tmp_dir}/${aem_id}/start",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => [
-                    File["${crx_quickstart_dir}/install/"],
-                    File["${tmp_dir}/${aem_id}/start"],
-                  ]
+      file { "${crx_quickstart_dir}/bin/start":
+        ensure  => file,
+        source  => "${tmp_dir}/${aem_id}/start",
+        mode    => '0775',
+        owner   => "aem-${aem_id}",
+        group   => "aem-${aem_id}",
+        require => [
+                      File["${crx_quickstart_dir}/install/"],
+                      File["${tmp_dir}/${aem_id}/start"],
+                    ]
+      }
     }
   }
 
