@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Extend AEM stop verification process in `upgrade-aem-script` [#205]
+
 ## [3.11.0] - 2020-04-05
 ### Added
 - Add service notify when configuring `jvm_mem_opts` for author-standby & publish [#173]

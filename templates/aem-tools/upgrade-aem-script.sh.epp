@@ -56,8 +56,14 @@ wait_stopped () {
       sleep 10
       java_run=true
     else
-      echo "${aem_id} process is stopped"
-      java_run=false
+      if [ -f ${crx_dir}/conf/controlport ]; then
+        echo "Wait till ${aem_id} process is stopped"
+        sleep 10
+        java_run=true
+      else
+        echo "${aem_id} process is stopped"
+        java_run=false
+      fi
     fi
   done
 }
