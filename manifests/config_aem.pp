@@ -75,6 +75,7 @@ define aem_curator::config_aem (
     value            => [
       'org.apache.sling.jcr.webdav',
       'org.apache.sling.jcr.davex',
+      'com.adobe.granite.crxde-support',
       'com.adobe.granite.crx-explorer',
       'com.adobe.granite.crxde-lite',
       'com.adobe.acs.acs-aem-commons-bundle-twitter',
