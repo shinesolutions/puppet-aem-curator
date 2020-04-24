@@ -8,9 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Add new AEM profile: aem64_sp5 [#204]
-- Add new AEM profile: aem64_sp6 [#204]
-- Add new AEM profile: aem64_sp7 [#204]
+- Add new AEM installation profiles: aem64_sp5, aem64_sp6, aem64_sp7 & aem64_sp8 [#204]
 
 ## [3.11.0] - 2020-04-05
 ### Added
