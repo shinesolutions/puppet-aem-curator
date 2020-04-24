@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade aem_resources to 5.6.0
+
 ## [3.11.0] - 2020-04-05
 ### Added
 - Add service notify when configuring `jvm_mem_opts` for author-standby & publish [#173]
