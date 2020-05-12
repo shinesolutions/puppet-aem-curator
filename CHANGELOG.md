@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed syntax error in manifest `config_author_standby`
+
 ## [3.13.0] - 2020-05-12
 ### Changed
 - Update reconfiguration process to remove AEM config files in `crx-quickstart/install` as part of the reconfiguration pre-tasks

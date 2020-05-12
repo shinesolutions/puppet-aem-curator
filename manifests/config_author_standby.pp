@@ -157,7 +157,7 @@ class aem_curator::config_author_standby (
     aem_version      => $aem_version,
     jvm_mem_opts     => $jvm_mem_opts,
     jvm_opts         => $_jvm_opts,
-    osgi_configs     => $author_standby_osgi_config
+    osgi_configs     => $author_standby_osgi_config,
     primary_host     => $author_primary_host,
   } -> aem_resources::set_osgi_config { "${aem_id}: Set AEM OSGI config":
     aem_home_dir   => $aem_home_dir,
