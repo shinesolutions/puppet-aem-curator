@@ -11,6 +11,36 @@
 # [*jvm_opts*]
 #   User defined additional JVM options
 #
+# [*aem_home_dir*]
+#  Path to the AEM Application home directory
+#  default: /opt/aem/author
+#
+# [*author_standby_osgi_config*]
+#  Author Standby OSGI configuration as hashmap.
+#  default: undef
+#
+# [*aem_context_root*]
+#  Set CONTEXT_ROOT in AEM start-env binary
+#  default: undef
+#
+# [*aem_debug_port*]
+#  Enable AEM Debug port
+#  default: undef
+#
+# [*aem_osgi_configs*]
+#  A Hashmap of OSGI to configure on AEM.
+#  A list of examples can be found here https://github.com/bstopp/puppet-aem/blob/1441ee00f4669b56e43476273bba5073f0985fbc/docs/aem-instance/OSGi-Configurations.md
+#  default: {}
+#
+# [*aem_runmodes*]
+#  A list of additional runmodes for AEM
+#  default: []
+#
+# [*aem_crx_packages*]
+#   A list of CRX packages.
+#   Allowed values are  s3: | http: | https: | file:
+#  default: undef
+#
 # === Copyright
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
@@ -30,8 +60,15 @@ class aem_curator::config_author_standby (
   $enable_default_passwords,
   $puppet_conf_dir,
   $tmp_dir,
+  $aem_context_root             = undef,
+  $aem_crx_packages             = undef,
+  $aem_debug_port               = undef,
+  $aem_osgi_configs             = {},
+  $aem_home_dir                 = '/opt/aem/author',
   $aem_id                       = 'author',
+  $aem_runmodes                 = [],
   $aem_version                  = '6.2',
+  $author_standby_osgi_config   = undef,
   $enable_aem_clean_directories = false,
   $data_volume_mount_point      = undef,
   $delete_repository_index      = false,
@@ -69,37 +106,40 @@ class aem_curator::config_author_standby (
       force   => true,
       before  => Service['aem-author'],
     }
-
-  }
-
-  if $jvm_mem_opts {
-    file_line { "${aem_id}: Set JVM memory opts":
-      ensure => present,
-      path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
-      match  => '^JVM_MEM_OPTS',
-      notify => Service['aem-author'],
-    }
   }
 
   if $jmxremote_port {
-    file_line { "${aem_id}: enable JMXRemote":
-      ensure => present,
-      path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
-      after  => '^JVM_OPTS',
-      notify => Service['aem-author'],
-    }
+    $jmxremote_options = [
+      '-Dcom.sun.management.jmxremote',
+      "-Dcom.sun.management.jmxremote.port=${jmxremote_port}",
+      '-Dcom.sun.management.jmxremote.authenticate=false',
+      '-Dcom.sun.management.jmxremote.ssl=false',
+      '-Dcom.sun.management.jmxremote.local.only=true',
+      '-Djava.rmi.server.hostname=localhost'
+    ]
+    $_jvm_opts_list = concat([$jvm_opts], $jmxremote_options)
+    $_jvm_opts = $_jvm_opts_list.join(' ')
+  } else {
+    $_jvm_opts = $jvm_opts
   }
 
-  if $jvm_opts {
-    file_line { "${aem_id}: Add custom JVM OPTS settings":
-      ensure => present,
-      path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
-      after  => '^JVM_OPTS=\"\$JVM_OPTS',
-      notify => Service['aem-author'],
-    }
+  # Making sure AEM start & start-env binaries are getting set with the correct values
+  # Also the user can provide additional parameters
+  aem::config { "${aem_id}: Configure AEM ${aem_id}":
+    context_root   => $aem_context_root,
+    debug_port     => $aem_debug_port,
+    group          => "aem-${aem_id}",
+    home           => $aem_home_dir,
+    jvm_mem_opts   => $jvm_mem_opts,
+    jvm_opts       => $_jvm_opts,
+    osgi_configs   => $aem_osgi_configs,
+    crx_packages   => $aem_crx_packages,
+    port           => $author_port,
+    runmodes       => $aem_runmodes,
+    sample_content => false,
+    type           => $aem_id,
+    user           => "aem-${aem_id}",
+    before         => Service['aem-author'],
   }
 
   if $enable_aem_clean_directories {

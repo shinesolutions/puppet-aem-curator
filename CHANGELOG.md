@@ -7,10 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add additional process to `config_author_primary`, `config_author_standby` & `config_publish` for resetting AEM binaries
+- Add support to inject own AEM OSGI configuration to configure AEM [#217]
+- Add new AEM installation profiles: aem64_sp5, aem64_sp6, aem64_sp7 & aem64_sp8 [#204]
+- Add new AEM profile: aem65_sp4 [#203]
+
 ### Changed
 - Upgrade aem_resources to 6.0.0
 - Update `config_author_primary` & `config_author_standby` manifests to support aem_resources 6.0.0
 - SegmentNodeStoreService.config does not get deleted anymore as part of manifest author_primary_set_config [#200]
+- AEM does not restart anymore when setting JVM_OPTS, JVM_MEM_OPTS or enabling JMXRemote [#193]
+
+### Removed
+- Removed reset of AEM binaries as part of the pre-tasks for the reconfiguration
 
 ## [3.11.0] - 2020-04-05
 ### Added
