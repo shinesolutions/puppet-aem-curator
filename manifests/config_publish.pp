@@ -152,6 +152,7 @@ class aem_curator::config_publish (
       aem_id                            => $aem_id,
       enable_aem_reconfiguration        => $enable_aem_reconfiguration,
       enable_aem_installation_migration => $enable_aem_installation_migration,
+      enable_clean_directories          => $enable_aem_reconfiguratiton_clean_directories,
       certificate_arn                   => $certificate_arn,
       certificate_key_arn               => $certificate_key_arn,
       crx_quickstart_dir                => $crx_quickstart_dir,
@@ -177,25 +178,6 @@ class aem_curator::config_publish (
     $_jvm_opts = $_jvm_opts_list.join(' ')
   } else {
     $_jvm_opts = $jvm_opts
-  }
-
-  # Making sure AEM start & start-env binaries are getting set with the correct values
-  # Also the user can provide additional parameters
-  aem::config { "${aem_id}: Configure AEM ${aem_id}":
-    context_root   => $aem_context_root,
-    debug_port     => $aem_debug_port,
-    group          => "aem-${aem_id}",
-    home           => $aem_home_dir,
-    jvm_mem_opts   => $jvm_mem_opts,
-    jvm_opts       => $_jvm_opts,
-    osgi_configs   => $aem_osgi_configs,
-    crx_packages   => $aem_crx_packages,
-    port           => $publish_port,
-    runmodes       => $aem_runmodes,
-    sample_content => false,
-    type           => $aem_id,
-    user           => "aem-${aem_id}",
-    before         => Service['aem-publish'],
   }
 
   if $enable_post_start_sleep {
@@ -255,7 +237,28 @@ class aem_curator::config_publish (
     }
   }
 
-  archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
+  aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for publish':
+    conf_dir => $puppet_conf_dir,
+    timeout  => $publish_timeout,
+    protocol => $publish_protocol,
+    host     => 'localhost',
+    port     => $publish_port,
+    debug    => false,
+    aem_id   => $aem_id,
+  }  -> aem_resources::publish_set_config { 'Set publish config':
+    aem_context_root => $aem_context_root,
+    aem_crx_packages => $aem_crx_packages,
+    aem_debug_port   => $aem_debug_port,
+    aem_home_dir     => $aem_home_dir,
+    aem_id           => $aem_id,
+    aem_port         => $publish_port,
+    aem_runmodes     => $aem_runmodes,
+    aem_user         => "aem-${aem_id}",
+    aem_user_group   => "aem-${aem_id}",
+    jvm_mem_opts     => $jvm_mem_opts,
+    jvm_opts         => $_jvm_opts,
+    osgi_configs     => $aem_osgi_configs
+  } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     source => $aem_password_reset_source,
     user   => "aem-${aem_id}",
@@ -271,14 +274,6 @@ class aem_curator::config_publish (
     mode   => '0775',
     owner  => "aem-${aem_id}",
     group  => "aem-${aem_id}",
-  } -> aem_resources::puppet_aem_resources_set_config { 'Set puppet-aem-resources config file for publish':
-    conf_dir => $puppet_conf_dir,
-    timeout  => $publish_timeout,
-    protocol => $publish_protocol,
-    host     => 'localhost',
-    port     => $publish_port,
-    debug    => false,
-    aem_id   => $aem_id,
   } -> service { 'aem-publish':
     ensure => 'running',
     enable => true,

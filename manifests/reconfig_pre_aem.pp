@@ -9,8 +9,10 @@ define aem_curator::reconfig_pre_aem (
   $aws_region                        = $::aws_region,
   $certificate_arn                   = undef,
   $certificate_key_arn               = undef,
+  $crx_quickstart_dir                = undef,
   $data_volume_mount_point           = undef,
   $enable_aem_installation_migration = false,
+  $enable_clean_directories          = false,
   $tmp_dir                           = undef,
 ) {
   # Run Pre-reconfiguration if reconfiguration is enabled
@@ -103,12 +105,7 @@ define aem_curator::reconfig_pre_aem (
       }
 
       exec { "${aem_id}: Fix data volume permissions":
-        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
-        before  => [
-                    File["${tmp_dir}/start-env"],
-                    File["${tmp_dir}/start-env"],
-                    File["${tmp_dir}/start.orig"],
-                  ],
+        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}"
       }
     }
 
@@ -193,6 +190,25 @@ define aem_curator::reconfig_pre_aem (
     file { "${tmp_dir}/certs/aem.key":
       ensure => file,
       mode   => '0600',
+    }
+
+    ###########################################################################
+    # If clean dir is enabled clean up directories in list
+    # If not enabled cleanup only any existing aem-healthcheck packages
+    ###########################################################################
+    if $enable_clean_directories {
+      $list_clean_directories = [
+      'install',
+      ]
+      #
+      # since we are only cleaning the install dir
+      # we clean during runtime.
+      #
+      $list_clean_directories.each | Integer $index, String $clean_directory| {
+        exec { "${aem_id}: Delete configurations in ${crx_quickstart_dir}/${clean_directory}/":
+          command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*.config",
+        }
+      }
     }
   }
 }

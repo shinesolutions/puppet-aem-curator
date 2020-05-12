@@ -8,7 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Update reconfiguration process to remove AEM config files in `crx-quickstart/install` as part of the reconfiguration pre-tasks
+- Update reconfiguration process to remove AEM `.zip` packages in `crx-quickstart/install` as part of the main reconfiguration process
 - Upgrade aem_resources to 7.0.0
+
+### Fixed
+- Fixed error in reconfiguration process
 
 ## [3.12.0] - 2020-05-12
 ### Added
