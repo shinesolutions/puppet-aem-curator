@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem65_sp4 [#203]
+
 ### Changed
 - Upgrade aem_resources to 5.6.0
 
