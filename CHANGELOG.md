@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade aem_resources to 7.0.0
+
 ## [3.12.0] - 2020-05-12
 ### Added
 - Add additional process to `config_author_primary`, `config_author_standby` & `config_publish` for resetting AEM binaries
