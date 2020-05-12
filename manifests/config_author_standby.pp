@@ -164,9 +164,14 @@ class aem_curator::config_author_standby (
     debug    => false,
     aem_id   => $aem_id,
   } -> aem_resources::author_standby_set_config { 'Set author-standby config':
+    aem_home_dir       => $aem_home_dir,
+    aem_id             => $aem_id,
+    aem_user           => "aem-${aem_id}",
+    aem_user_group     => "aem-${aem_id}",
+    aem_version        => $aem_version,
+    osgi_configs       => $author_standby_osgi_config,
     crx_quickstart_dir => $crx_quickstart_dir,
     primary_host       => $author_primary_host,
-    aem_version        => $aem_version,
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,

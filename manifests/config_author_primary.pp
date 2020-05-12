@@ -288,8 +288,13 @@ class aem_curator::config_author_primary (
     debug    => false,
     aem_id   => $aem_id,
   } -> aem_resources::author_primary_set_config { 'Set author-primary config':
-    crx_quickstart_dir => $crx_quickstart_dir,
+    aem_home_dir       => $aem_home_dir,
+    aem_id             => $aem_id,
+    aem_user           => "aem-${aem_id}",
+    aem_user_group     => "aem-${aem_id}",
     aem_version        => $aem_version,
+    osgi_configs       => $author_primary_osgi_config,
+    crx_quickstart_dir => $crx_quickstart_dir,
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,

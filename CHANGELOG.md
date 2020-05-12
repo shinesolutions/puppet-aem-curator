@@ -14,7 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add new AEM profile: aem65_sp4 [#203]
 
 ### Changed
-- Upgrade aem_resources to 5.6.0
+- Upgrade aem_resources to 6.0.0
+- Update `config_author_primary` & `config_author_standby` manifests to support aem_resources 6.0.0
+- SegmentNodeStoreService.config does not get deleted anymore as part of manifest author_primary_set_config [#200]
 - AEM does not restart anymore when setting JVM_OPTS, JVM_MEM_OPTS or enabling JMXRemote [#193]
 
 ### Removed
