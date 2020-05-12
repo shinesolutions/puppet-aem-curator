@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add new AEM installation profiles: aem64_sp5, aem64_sp6, aem64_sp7 & aem64_sp8 [#204]
+- Add new AEM profile: aem65_sp4 [#203]
+
+### Changed
+- Upgrade aem_resources to 5.6.0
 
 ## [3.11.0] - 2020-04-05
 ### Added
