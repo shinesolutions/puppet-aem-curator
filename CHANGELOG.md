@@ -7,8 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add additional process to `config_author_primary`, `config_author_standby` & `config_publish` for resetting AEM binaries
+- Add support to inject own AEM OSGI configuration to configure AEM [#217]
+
 ### Changed
 - Upgrade aem_resources to 5.6.0
+- AEM does not restart anymore when setting JVM_OPTS, JVM_MEM_OPTS or enabling JMXRemote [#193]
+
+### Removed
+- Removed reset of AEM binaries as part of the pre-tasks for the reconfiguration
 
 ## [3.11.0] - 2020-04-05
 ### Added

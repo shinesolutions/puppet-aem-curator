@@ -10,7 +10,37 @@
 #
 # [*jvm_opts*]
 #   User defined additional JVM options
-
+#
+# [*aem_home_dir*]
+#  Path to the AEM Application home directory
+#  default: /opt/aem/author
+#
+# [*author_primary_osgi_config*]
+#  Author Primary OSGI configuration as hashmap
+#  default: undef
+#
+# [*aem_context_root*]
+#  Set CONTEXT_ROOT in AEM start-env binary
+#  default: undef
+#
+# [*aem_debug_port*]
+#  Enable AEM Debug port
+#  default: undef
+#
+# [*aem_osgi_configs*]
+#  A Hashmap of OSGI to configure on AEM.
+#  A list of examples can be found here https://github.com/bstopp/puppet-aem/blob/1441ee00f4669b56e43476273bba5073f0985fbc/docs/aem-instance/OSGi-Configurations.md
+#  default: {}
+#
+# [*aem_runmodes*]
+#  A list of additional runmodes for AEM
+#  default: []
+#
+# [*aem_crx_packages*]
+#   A list of CRX packages.
+#   Allowed values are  s3: | http: | https: | file:
+#  default: undef
+#
 # === Copyright
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
@@ -36,14 +66,19 @@ class aem_curator::config_author_primary (
   $login_ready_max_tries,
   $puppet_conf_dir,
   $tmp_dir,
+  $aem_context_root                                      = undef,
+  $aem_crx_packages                                      = undef,
+  $aem_debug_port                                        = undef,
+  $aem_osgi_configs                                      = {},
+  $aem_home_dir                                          = '/opt/aem/author',
   $aem_base                                              = '/opt',
   $aem_healthcheck_source                                = undef,
   $aem_healthcheck_version                               = undef,
   $aem_id                                                = 'author',
-  $aem_reconfiguration_run_modes                         = [],
-  $aem_debug_port                                        = undef,
+  $aem_runmodes                                          = [],
   $aem_ssl_keystore_password                             = undef,
   $aem_keystore_path                                     = undef,
+  $author_primary_osgi_config                            = undef,
   $data_volume_mount_point                               = undef,
   $enable_aem_reconfiguration                            = false,
   $enable_aem_installation_migration                     = false,
@@ -122,11 +157,6 @@ class aem_curator::config_author_primary (
     aem_curator::reconfig_pre_aem{ "${aem_id}: Execute Pre-reconfiguration for AEM":
       aem_base                          => $aem_base,
       aem_id                            => $aem_id,
-      aem_jvm_jmxremote_port            => $jmxremote_port,
-      aem_jvm_mem_opts                  => $jvm_mem_opts,
-      aem_port                          => $author_port,
-      aem_runmodes                      => $aem_reconfiguration_run_modes,
-      aem_debug_port                    => $aem_debug_port,
       enable_aem_reconfiguration        => $enable_aem_reconfiguration,
       enable_aem_installation_migration => $enable_aem_installation_migration,
       certificate_arn                   => $certificate_arn,
@@ -135,80 +165,44 @@ class aem_curator::config_author_primary (
       data_volume_mount_point           => $data_volume_mount_point,
       tmp_dir                           => "${tmp_dir}/${aem_id}",
       before                            => [
-                                              File["${crx_quickstart_dir}/install/"]
-                                            ],
-    }
-
-    # Copy created start-env template file to destination dir
-    # It has to live here because
-    file { "${crx_quickstart_dir}/bin/start-env":
-      ensure  => file,
-      source  => "${tmp_dir}/${aem_id}/start-env",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => [
-                    File["${crx_quickstart_dir}/install/"],
-                    File["${tmp_dir}/${aem_id}/start-env"],
-                  ],
-      before  => [
-                    Service['aem-author'],
-                  ]
-    }
-
-    file { "${crx_quickstart_dir}/bin/start.orig":
-      ensure  => file,
-      source  => "${tmp_dir}/${aem_id}/start.orig",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => [
-                    File["${crx_quickstart_dir}/install/"],
-                    File["${tmp_dir}/${aem_id}/start.orig"],
-                  ]
-    }
-
-    file { "${crx_quickstart_dir}/bin/start":
-      ensure  => file,
-      source  => "${tmp_dir}/${aem_id}/start",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => [
-                    File["${crx_quickstart_dir}/install/"],
-                    File["${tmp_dir}/${aem_id}/start"],
-                  ]
+                                            File["${crx_quickstart_dir}/install/"]
+                                          ],
     }
   }
 
-  if $jvm_mem_opts {
-    file_line { "${aem_id}: Set JVM memory opts":
-      ensure => present,
-      path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_MEM_OPTS='${jvm_mem_opts}'",
-      match  => '^JVM_MEM_OPTS',
-      notify => Service['aem-author'],
-    }
-  }
-
+  # Updating provided JVM Options with JMXRemote JVM options if port is provided
   if $jmxremote_port {
-    file_line { "${aem_id}: enable JMXRemote":
-      ensure => present,
-      path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_OPTS=\"\$JVM_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=${jmxremote_port} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true -Djava.rmi.server.hostname=localhost\"",
-      after  => '^JVM_OPTS',
-      notify => Service['aem-author'],
-    }
+    $jmxremote_options = [
+      '-Dcom.sun.management.jmxremote',
+      "-Dcom.sun.management.jmxremote.port=${jmxremote_port}",
+      '-Dcom.sun.management.jmxremote.authenticate=false',
+      '-Dcom.sun.management.jmxremote.ssl=false',
+      '-Dcom.sun.management.jmxremote.local.only=true',
+      '-Djava.rmi.server.hostname=localhost'
+    ]
+    $_jvm_opts_list = concat([$jvm_opts], $jmxremote_options)
+    $_jvm_opts = $_jvm_opts_list.join(' ')
+  } else {
+    $_jvm_opts = $jvm_opts
   }
 
-  if $jvm_opts {
-    file_line { "${aem_id}: Add custom JVM OPTS settings":
-      ensure => present,
-      path   => "${crx_quickstart_dir}/bin/start-env",
-      line   => "JVM_OPTS=\"\$JVM_OPTS ${jvm_opts} \"",
-      after  => '^JVM_OPTS=\"\$JVM_OPTS',
-      notify => Service['aem-author'],
-    }
+  # Making sure AEM start & start-env binaries are getting set with the correct values
+  # Also the user can provide additional parameters
+  aem::config { "${aem_id}: Configure AEM ${aem_id}":
+    context_root   => $aem_context_root,
+    debug_port     => $aem_debug_port,
+    group          => "aem-${aem_id}",
+    home           => $aem_home_dir,
+    jvm_mem_opts   => $jvm_mem_opts,
+    jvm_opts       => $_jvm_opts,
+    osgi_configs   => $aem_osgi_configs,
+    crx_packages   => $aem_crx_packages,
+    port           => $author_port,
+    runmodes       => $aem_runmodes,
+    sample_content => false,
+    type           => $aem_id,
+    user           => "aem-${aem_id}",
+    before         => Service['aem-author'],
   }
 
   if $enable_post_start_sleep {
@@ -268,16 +262,12 @@ class aem_curator::config_author_primary (
     }
   }
 
-  file { "${crx_quickstart_dir}/install/":
-    ensure => directory,
-    mode   => '0775',
-    owner  => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
-    ensure => present,
-    source => $aem_password_reset_source,
-    user   => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
+  archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
+    ensure  => present,
+    source  => $aem_password_reset_source,
+    user    => "aem-${aem_id}",
+    group   => "aem-${aem_id}",
+    require => File["${crx_quickstart_dir}/install/"]
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     mode   => '0640',
