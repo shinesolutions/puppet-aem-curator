@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add additional process to `config_author_primary`, `config_author_standby` & `config_publish` for resetting AEM binaries
 - Add support to inject own AEM OSGI configuration to configure AEM [#217]
+- Add new AEM installation profiles: aem64_sp5, aem64_sp6, aem64_sp7 & aem64_sp8 [#204]
+- Add new AEM profile: aem65_sp4 [#203]
 
 ### Changed
 - Upgrade aem_resources to 5.6.0
