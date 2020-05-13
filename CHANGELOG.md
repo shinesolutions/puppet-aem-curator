@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Upgrade aem_resources to 7.0.1
 
+### Fixed
+- Fixed class `aem_curator::action_promote_author_standby_to_primary`
+
 ## [3.13.1] - 2020-05-12
 ### Fixed
 - Fixed syntax error in manifest `config_author_standby`
