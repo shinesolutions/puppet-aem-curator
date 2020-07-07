@@ -20,15 +20,13 @@
 #
 # Copyright © 2017 Shine Solutions Group, unless otherwise noted.
 #
-class aem_curator::install_java (
+class aem_curator::install_aem_java (
   $cert_base_url,
   $tmp_dir,
   $jdk_base_url,
-  $jdk_filename       = 'jdk-8u221-linux-x64.rpm',
-  $jdk_version        = '8',
-  $jdk_version_update = '221',
-  $jdk_version_build  = '',
-)  {
+  $jdk_filename       = 'jdk-11.0.7_linux-x64_bin.rpm',
+  $jdk_version        = '11.0.7',
+) {
 
     java::download { $jdk_version :
       ensure  => 'present',
@@ -41,7 +39,7 @@ class aem_curator::install_java (
     content => "/usr/java/latest/lib/server\n",
     notify  => Exec['/sbin/ldconfig'],
     require => Java::Download[$jdk_version],
-  }
+    }
 
   exec { '/sbin/ldconfig':
     refreshonly => true,
@@ -60,11 +58,11 @@ class aem_curator::install_java (
         File["${tmp_dir}/java"],
         Java::Download[$jdk_version],
         ],
-      } -> java_ks { "cqse-${idx}:/usr/java/latest/jre/lib/security/cacerts":
-        ensure      => latest,
-        certificate => "${tmp_dir}/aem.${part}",
-        password    => 'changeit',
-        path        => ['/bin','/usr/bin'],
+        } ->  java_ks { "cqse-${idx}:/usr/java/latest/lib/security/cacerts":
+          ensure      => latest,
+          certificate => "${tmp_dir}/aem.${part}",
+          password    => 'changeit',
+          path        => ['/bin','/usr/bin'],
       }
     }
   }
