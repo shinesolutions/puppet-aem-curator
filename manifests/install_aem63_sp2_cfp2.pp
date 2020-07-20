@@ -14,6 +14,10 @@ define aem_curator::install_aem63_sp2_cfp2(
   $aem_sample_content      = false,
   $aem_jvm_opts            = [
     '-XX:+PrintGCDetails',
+    '-XX:+PrintGCTimeStamps',
+    '-XX:+PrintGCDateStamps',
+    '-XX:+PrintTenuringDistribution',
+    '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
   $aem_osgi_configs        = undef,

@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added JDK11 Support [#220]
 - Added Granite SSL Support [#220]
 - Added new java Module [#220]
-- Added AEM and Orchestrator Java installation [#220]
 
 ## [3.13.2] - 2020-05-13
 ### Changed

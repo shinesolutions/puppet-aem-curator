@@ -2,24 +2,14 @@ define aem_curator::config_aem_ssl (
   $tmp_dir,
   $run_mode,
   $aem_ssl_port,
-  $host,
   $aem_base                      = '/opt',
   $aem_id                        = 'aem',
   $aem_ssl_method                = 'jetty',
+  $https_hostname                = 'localhost',
   $aem_keystore_password         = undef,
   $aem_keystore_path             = undef,
   $cert_base_url                 = undef,
 ) {
-  $keystore_path = pick(
-    $aem_keystore_path,
-    "${aem_base}/aem/${aem_id}/crx-quickstart/ssl/aem.ks",
-  )
-  file { dirname($keystore_path):
-    ensure => directory,
-    mode   => '0770',
-    owner  => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  }
   if !defined(File[$tmp_dir]) {
     file { $tmp_dir:
       ensure => directory,
@@ -46,9 +36,10 @@ define aem_curator::config_aem_ssl (
   $java_ks_require = $x509_parts.map |$part| {
     Archive["${tmp_dir}/${aem_id}/aem.${part}"]
   }
-if $aem_ssl_method == 'granite' {
+  case $aem_ssl_method {
+  /granite/: {
   aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
-    https_hostname      => $host,
+    https_hostname      => $https_hostname,
     port                => $aem_ssl_port,
     keystore_password   => $aem_keystore_password,
     truststore_password => 'changeit',
@@ -59,8 +50,16 @@ if $aem_ssl_method == 'granite' {
     ssl_method          => $aem_ssl_method,
   }
 }
-else {
-  java_ks { "cqse:${keystore_path}":
+    /jetty/: {
+  $keystore_path = pick(
+    $aem_keystore_path,
+    "${aem_base}/aem/${aem_id}/crx-quickstart/ssl/aem.ks",
+  ) -> file { dirname($keystore_path):
+    ensure => directory,
+    mode   => '0770',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
+  } -> java_ks { "cqse:${keystore_path}":
     ensure       => latest,
     certificate  => "${tmp_dir}/${aem_id}/aem.cert",
     private_key  => "${tmp_dir}/${aem_id}/aem.key",
@@ -83,5 +82,9 @@ else {
       aem_id              => $aem_id,
       ssl_method          => $aem_ssl_method,
     }
-}
+  }
+  default: {
+  fail('SSL methods can only be of types: ( granite | jettu )')
+  }
+  }
 }

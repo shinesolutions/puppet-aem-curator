@@ -2,7 +2,6 @@ define aem_curator::config_aem (
   $run_mode,
   $tmp_dir,
   $aem_ssl_port,
-  $host,
   $aem_system_users           = undef,
   $aem_base                   = '/opt',
   $aem_id                     = 'aem',
@@ -122,6 +121,5 @@ define aem_curator::config_aem (
     run_mode              => $aem_id,
     tmp_dir               => $tmp_dir,
     aem_ssl_method        => $aem_ssl_method,
-    host                  => $host,
   }
 }

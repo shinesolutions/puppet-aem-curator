@@ -44,6 +44,10 @@ class aem_curator::install_author (
   $aem_ssl_port            = '5432',
   $aem_jvm_opts            = [
     '-XX:+PrintGCDetails',
+    '-XX:+PrintGCTimeStamps',
+    '-XX:+PrintGCDateStamps',
+    '-XX:+PrintTenuringDistribution',
+    '-XX:+PrintGCApplicationStoppedTime',
     '-XX:+HeapDumpOnOutOfMemoryError',
   ],
   $aem_osgi_configs        = undef,
