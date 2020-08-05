@@ -2,13 +2,13 @@ define aem_curator::config_aem_ssl (
   $tmp_dir,
   $run_mode,
   $aem_ssl_port,
-  $aem_base                      = '/opt',
-  $aem_id                        = 'aem',
-  $aem_ssl_method                = 'jetty',
-  $https_hostname                = 'localhost',
-  $aem_keystore_password         = undef,
-  $aem_keystore_path             = undef,
-  $cert_base_url                 = undef,
+  $aem_keystore_password = undef,
+  $aem_keystore_path     = undef,
+  $cert_base_url         = undef,
+  $aem_base              = '/opt',
+  $aem_id                = 'aem',
+  $aem_ssl_method        = 'jetty',
+  $https_hostname        = 'localhost',
 ) {
   if !defined(File[$tmp_dir]) {
     file { $tmp_dir:
@@ -38,35 +38,35 @@ define aem_curator::config_aem_ssl (
   }
   case $aem_ssl_method {
   /granite/: {
-  aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
-    https_hostname      => $https_hostname,
-    port                => $aem_ssl_port,
-    keystore_password   => $aem_keystore_password,
-    truststore_password => 'changeit',
-    keystore            => "${tmp_dir}/${aem_id}/aem.key",
-    truststore          => "${tmp_dir}/${aem_id}/aem.cert",
-    aem_id              => $aem_id,
-    require             => $java_ks_require,
-    ssl_method          => $aem_ssl_method,
+    aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
+      https_hostname      => $https_hostname,
+      port                => $aem_ssl_port,
+      keystore_password   => $aem_keystore_password,
+      truststore_password => 'changeit',
+      keystore            => "${tmp_dir}/${aem_id}/aem.key",
+      truststore          => "${tmp_dir}/${aem_id}/aem.cert",
+      aem_id              => $aem_id,
+      require             => $java_ks_require,
+      ssl_method          => $aem_ssl_method,
+    }
   }
-}
-    /jetty/: {
-  $keystore_path = pick(
-    $aem_keystore_path,
-    "${aem_base}/aem/${aem_id}/crx-quickstart/ssl/aem.ks",
-  ) -> file { dirname($keystore_path):
-    ensure => directory,
-    mode   => '0770',
-    owner  => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  } -> java_ks { "cqse:${keystore_path}":
-    ensure       => latest,
-    certificate  => "${tmp_dir}/${aem_id}/aem.cert",
-    private_key  => "${tmp_dir}/${aem_id}/aem.key",
-    password     => $aem_keystore_password,
-    trustcacerts => true,
-    require      => $java_ks_require,
-  } -> file { $keystore_path:
+  /jetty/: {
+    $keystore_path = pick(
+      $aem_keystore_path,
+      "${aem_base}/aem/${aem_id}/crx-quickstart/ssl/aem.ks",
+    ) -> file { dirname($keystore_path):
+      ensure => directory,
+      mode   => '0770',
+      owner  => "aem-${aem_id}",
+      group  => "aem-${aem_id}",
+    } -> java_ks { "cqse:${keystore_path}":
+      ensure       => latest,
+      certificate  => "${tmp_dir}/${aem_id}/aem.cert",
+      private_key  => "${tmp_dir}/${aem_id}/aem.key",
+      password     => $aem_keystore_password,
+      trustcacerts => true,
+      require      => $java_ks_require,
+    } -> file { $keystore_path:
       ensure => file,
       mode   => '0640',
       owner  => "aem-${aem_id}",
@@ -84,7 +84,7 @@ define aem_curator::config_aem_ssl (
     }
   }
   default: {
-  fail('SSL methods can only be of types: ( granite | jettu )')
+    fail('SSL methods can only be of types: ( granite | jettu )')
   }
   }
 }

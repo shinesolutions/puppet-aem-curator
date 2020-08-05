@@ -34,7 +34,7 @@ class aem_curator::install_author (
   $data_volume_mount_point,
   $aem_keystore_password,
   $cert_base_url,
-  $aem_ssl_method,
+  $aem_ssl_method          = undef,
   $aem_debug_port          = undef,
   $aem_debug               = false,
   $aem_healthcheck_source  = undef,

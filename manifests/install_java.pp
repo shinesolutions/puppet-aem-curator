@@ -28,6 +28,7 @@ class aem_curator::install_java (
   $jdk_version        = '8',
   $jdk_version_update = '221',
   $jdk_version_build  = '',
+  $jdk_format         = 'rpm',
 )  {
 
     java::download { $jdk_version :

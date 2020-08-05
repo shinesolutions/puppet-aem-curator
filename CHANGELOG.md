@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added JDK11 Support [#220]
-- Added Granite SSL Support [#220]
-- Added new java Module [#220]
+- Add new manifest `install_aem_java` to install Java for AEM Component
+- Add new manifest `config_aem_ssl` for configuring SSL on AEM
+
+### Changed
+- Replaced `aco/oracle_java` module with `puppetlabs/java`
+- Update `install_java` manifest to use the new puppetlabs/java module for installing Java
+- Update `config_aem` manifest to use new `config_aem_ssl` manifest for configuring SSL on AEM
 
 ## [3.13.2] - 2020-05-13
 ### Changed

@@ -34,7 +34,7 @@ class aem_curator::install_publish (
   $data_volume_mount_point,
   $setup_repository_volume,
   $tmp_dir,
-  $aem_ssl_method,
+  $aem_ssl_method          = undef,
   $aem_debug_port          = undef,
   $aem_debug               = false,
   $aem_healthcheck_source  = undef,
