@@ -37,17 +37,6 @@ class aem_curator::install_java (
       url     => "${jdk_base_url}/${jdk_filename}",
     }
 
-  file { '/etc/ld.so.conf.d/99-libjvm.conf':
-    ensure  => present,
-    content => "/usr/java/latest/lib/server\n",
-    notify  => Exec['/sbin/ldconfig'],
-    require => Java::Download[$jdk_version],
-  }
-
-  exec { '/sbin/ldconfig':
-    refreshonly => true,
-  }
-
   file { "${tmp_dir}/java":
     ensure => directory,
     mode   => '0700',
@@ -61,11 +50,56 @@ class aem_curator::install_java (
         File["${tmp_dir}/java"],
         Java::Download[$jdk_version],
         ],
-      } -> java_ks { "cqse-${idx}:/usr/java/latest/jre/lib/security/cacerts":
+      }-> case $jdk_version {
+      /(8)/:
+      {
+        java_ks { "cqse-${idx}:/usr/java/latest/jre/lib/security/cacerts":
         ensure      => latest,
         certificate => "${tmp_dir}/aem.${part}",
         password    => 'changeit',
         path        => ['/bin','/usr/bin'],
+        require     => [
+          File["${tmp_dir}/java"],
+          Java::Download[$jdk_version],
+          ],
+        }
+        file { '/etc/ld.so.conf.d/99-libjvm.conf':
+          ensure  => present,
+          content => "/usr/java/latest/jre/lib/amd64/server/\n",
+          require => [
+            File["${tmp_dir}/java"],
+            Java::Download[$jdk_version],
+            ],
+        }-> exec { '/sbin/ldconfig':
+          refreshonly => true,
+        }
       }
-    }
+      /(11)/:
+      {
+        java_ks { "cqse-${idx}:/usr/java/latest/lib/security/cacerts":
+        ensure      => latest,
+        certificate => "${tmp_dir}/aem.${part}",
+        password    => 'changeit',
+        path        => ['/bin','/usr/bin'],
+        require     => [
+          File["${tmp_dir}/java"],
+          Java::Download[$jdk_version],
+          ],
+        }
+        file { '/etc/ld.so.conf.d/99-libjvm.conf':
+          ensure  => present,
+          content => "/usr/java/latest/lib/server\n",
+          require => [
+            File["${tmp_dir}/java"],
+            Java::Download[$jdk_version],
+            ],
+        }-> exec { '/sbin/ldconfig':
+          refreshonly => true,
+        }
+      }
+      default: {
+        fail('Support java versions are : ( 8 | 11 )')
+        }
+      }
+  }
   }

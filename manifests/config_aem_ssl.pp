@@ -54,24 +54,24 @@ define aem_curator::config_aem_ssl (
     $keystore_path = pick(
       $aem_keystore_path,
       "${aem_base}/aem/${aem_id}/crx-quickstart/ssl/aem.ks",
-    ) -> file { dirname($keystore_path):
+    ) file { dirname($keystore_path):
       ensure => directory,
       mode   => '0770',
       owner  => "aem-${aem_id}",
       group  => "aem-${aem_id}",
-    } -> java_ks { "cqse:${keystore_path}":
+    } java_ks { "cqse:${keystore_path}":
       ensure       => latest,
       certificate  => "${tmp_dir}/${aem_id}/aem.cert",
       private_key  => "${tmp_dir}/${aem_id}/aem.key",
       password     => $aem_keystore_password,
       trustcacerts => true,
       require      => $java_ks_require,
-    } -> file { $keystore_path:
+    } file { $keystore_path:
       ensure => file,
       mode   => '0640',
       owner  => "aem-${aem_id}",
       group  => "aem-${aem_id}",
-    } -> aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
+    } aem_resources::author_publish_enable_ssl { "${aem_id}: Enable SSL":
       run_mode            => $run_mode,
       port                => $aem_ssl_port,
       keystore            => $keystore_path,
