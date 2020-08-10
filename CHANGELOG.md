@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add new AEM profile: aem65_sp5
 - Add new manifest `install_aem_java` to install Java for AEM Component
 - Add new manifest `config_aem_ssl` for configuring SSL on AEM
 
 ### Changed
+- Upgrade aem_resources to 7.1.0
 - Replaced `aco/oracle_java` module with `puppetlabs/java`
 - Update `install_java` manifest to use the new puppetlabs/java module for installing Java
 - Update `config_aem` manifest to use new `config_aem_ssl` manifest for configuring SSL on AEM
