@@ -3,7 +3,7 @@
 # Install Java for AEM Component
 #
 # === Parameters
-#
+
 # [*cert_base_url*]
 #   Base URL (supported by the puppet-archive module) to download the X.509
 #   certificate and private key to be used with Apache.
@@ -29,15 +29,60 @@ class aem_curator::install_aem_java (
   $cert_base_url,
   $tmp_dir,
   $jdk_base_url,
-  $jdk_filename       = 'jdk-8u221-linux-x64.rpm',
-  $jdk_version        = '8',
+  $jdk_filename = 'jdk-8u221-linux-x64.rpm',
 ) {
-
-    java::download { $jdk_version :
-      ensure  => 'present',
-      java_se => 'jdk',
-      url     => "${jdk_base_url}/${jdk_filename}",
+  # Split JDK filename to determine JDK Major Version
+  $jdk_filename_splitted = split($jdk_filename, '-')
+  # Case to Setup variables per JDK Version
+  case $jdk_filename_splitted[1] {
+    /^8/: {
+      # Automation to determine JDK Version via default filename
+      # Splitting JDK File Name jdk-8u221-linux-x64.rpm to [8, 221]
+      $jdk_version = $jdk_filename_splitted[1]
+      $jdk_version_splitted = split($jdk_version, 'u')
+      $jdk_version_major = $jdk_version_splitted[0]
+      $jdk_version_update = $jdk_version_splitted[1]
+      $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
+      $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
     }
+    /^11/:
+    {
+      # Automation to determine JDK Version via default filename
+      # Splitting JDK File Name jdk-11.0.7_linux-x64_bin.rpm
+      # to receive JDK version 11.0.7
+      $jdk_version_raw = split($jdk_filename_splitted[1], '_')
+      $jdk_version = $jdk_version_raw[0]
+      $java_home_path = "/usr/java/jdk-${jdk_version}"
+      $libjvm_content_path= "${java_home_path}/lib/server/\n"
+    }
+    default: {
+      fail('Error: Unknown Java Version. Supported java versions are : ( 8 | 11 )')
+      }
+  }
+
+  java::download { $jdk_version :
+    ensure  => 'present',
+    java_se => 'jdk',
+    url     => "${jdk_base_url}/${jdk_filename}",
+  }
+
+  # Need to set alternative for java here due to oracle_java module's add alternative feature is broken in version 2.9.4
+  exec { "alternatives --set  java ${java_home_path}/bin/java":
+    path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    require => Java::Download[$jdk_version],
+  }
+
+  file { '/etc/ld.so.conf.d/99-libjvm.conf':
+    ensure  => present,
+    content => $libjvm_content_path,
+    notify  => Exec['/sbin/ldconfig'],
+    require => Java::Download[$jdk_version],
+  }
+
+  exec { '/sbin/ldconfig':
+    refreshonly => true,
+    require     => File['/etc/ld.so.conf.d/99-libjvm.conf']
+  }
 
   file { "${tmp_dir}/java":
     ensure => directory,
@@ -45,59 +90,16 @@ class aem_curator::install_aem_java (
   }
 
   [ 'cert' ].each |$idx, $part| {
-    archive { "${tmp_dir}/aem.${part}":
-      ensure => present,
-      source => "${cert_base_url}/aem.${part}",
-      }-> case $jdk_version {
-      /(8)/:
-      {
-        java_ks { "cqse-${idx}:/usr/java/latest/jre/lib/security/cacerts":
-        ensure      => latest,
-        certificate => "${tmp_dir}/aem.${part}",
-        password    => 'changeit',
-        path        => ['/bin','/usr/bin'],
-        require     => [
-          File["${tmp_dir}/java"],
-          Java::Download[$jdk_version],
-          ],
-        }
-        file { '/etc/ld.so.conf.d/99-libjvm.conf':
-          ensure  => present,
-          content => "/usr/java/latest/jre/lib/amd64/server/\n",
-          require => [
-            File["${tmp_dir}/java"],
-            Java::Download[$jdk_version],
-            ],
-        }-> exec { '/sbin/ldconfig':
-          refreshonly => true,
-        }
-      }
-      /(11)/:
-      {
-        java_ks { "cqse-${idx}:/usr/java/latest/lib/security/cacerts":
-        ensure      => latest,
-        certificate => "${tmp_dir}/aem.${part}",
-        password    => 'changeit',
-        path        => ['/bin','/usr/bin'],
-        require     => [
-          File["${tmp_dir}/java"],
-          Java::Download[$jdk_version],
-          ],
-        }
-        file { '/etc/ld.so.conf.d/99-libjvm.conf':
-          ensure  => present,
-          content => "/usr/java/latest/lib/server\n",
-          require => [
-            File["${tmp_dir}/java"],
-            Java::Download[$jdk_version],
-            ],
-        }-> exec { '/sbin/ldconfig':
-          refreshonly => true,
-        }
-      }
-      default: {
-        fail('Support java versions are : ( 8 | 11 )')
-        }
-      }
+    archive { "${tmp_dir}/java/aem.${part}":
+      ensure  => present,
+      source  => "${cert_base_url}/aem.${part}",
+      require => File["${tmp_dir}/java"],
+    } -> java_ks { "cqse-${idx}:${java_home_path}/lib/security/cacerts":
+      ensure      => latest,
+      certificate => "${tmp_dir}/java/aem.${part}",
+      password    => 'changeit',
+      path        => ['/bin','/usr/bin'],
+      require     => Java::Download[$jdk_version],
+    }
   }
-  }
+}
