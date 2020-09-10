@@ -49,6 +49,10 @@
 #   The full path to the Java keystore that will store the X.509 certificate
 #   and private key to be used by AEM.
 #
+# [*aem_ssl_method*]
+#    The method to upload ssl certificate to AEM, possible options are jetty and granite
+#    JDK 11 only support granite method.
+#
 # [*aem_keystore_password*]
 #   The password for the AEM Java keystore.
 #
@@ -97,6 +101,7 @@ define aem_curator::install_aem (
   $aem_jvm_mem_opts              = '-Xss4m -Xmx8192m',
   $aem_keystore_password         = undef,
   $aem_keystore_path             = undef,
+  $aem_ssl_method                = undef,
   $aem_profile                   = 'aem62_sp1_cfp3',
   $aem_sample_content            = false,
   $cert_base_url                 = undef,
@@ -207,10 +212,11 @@ define aem_curator::install_aem (
     aem_id                => $aem_id,
     aem_keystore_password => $aem_keystore_password,
     aem_keystore_path     => $aem_keystore_path,
+    aem_ssl_method        => $aem_ssl_method,
     aem_ssl_port          => $aem_ssl_port,
     cert_base_url         => $cert_base_url,
     run_mode              => $aem_id,
-    tmp_dir               => $tmp_dir
+    tmp_dir               => $tmp_dir,
   }
 
   if $setup_repository_volume {

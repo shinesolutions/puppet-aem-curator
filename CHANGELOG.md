@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Upgrade aem_resources to 7.1.0
+- Add new manifest `config_aem_ssl` for configuring SSL on AEM
+- Update `config_aem` manifest to use new `config_aem_ssl` manifest for configuring SSL on AEM
 
 ## [3.13.2] - 2020-05-13
 ### Changed
