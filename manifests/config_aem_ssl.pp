@@ -2,13 +2,14 @@ define aem_curator::config_aem_ssl (
   $tmp_dir,
   $run_mode,
   $aem_ssl_port,
-  $aem_keystore_password = undef,
-  $aem_keystore_path     = undef,
-  $cert_base_url         = undef,
-  $aem_base              = '/opt',
-  $aem_id                = 'aem',
-  $aem_ssl_method        = 'jetty',
-  $https_hostname        = 'localhost',
+  $aem_keystore_password   = undef,
+  $aem_keystore_path       = undef,
+  $cert_base_url           = undef,
+  $aem_base                = '/opt',
+  $aem_id                  = 'aem',
+  $aem_ssl_method          = 'jetty',
+  $aem_truststore_password = 'changeit',
+  $https_hostname          = 'localhost',
 ) {
   if !defined(File[$tmp_dir]) {
     file { $tmp_dir:
@@ -42,12 +43,13 @@ define aem_curator::config_aem_ssl (
         https_hostname      => $https_hostname,
         port                => $aem_ssl_port,
         keystore_password   => $aem_keystore_password,
-        truststore_password => 'changeit',
+        truststore_password => $aem_truststore_password,
         keystore            => "${tmp_dir}/${aem_id}/aem.key",
         truststore          => "${tmp_dir}/${aem_id}/aem.cert",
         aem_id              => $aem_id,
         require             => $java_ks_require,
         ssl_method          => $aem_ssl_method,
+        before              => Aem_aem["${aem_id}: Ensure login page is ready after enabling SSL"],
       }
     }
     /jetty/: {
@@ -83,10 +85,23 @@ define aem_curator::config_aem_ssl (
         truststore_password => 'changeit',
         aem_id              => $aem_id,
         ssl_method          => $aem_ssl_method,
+        before              => Aem_aem["${aem_id}: Ensure login page is ready after enabling SSL"],
       }
     }
     default: {
       fail('SSL methods can only be of types: ( granite | jetty )')
     }
+  }
+  aem_aem { "${aem_id}: Ensure login page is ready after enabling SSL":
+    ensure                     => login_page_is_ready,
+    aem_id                     => $aem_id,
+    retries_max_tries          => 120,
+    retries_base_sleep_seconds => 5,
+    retries_max_sleep_seconds  => 5,
+  } -> aem_aem { "${aem_id}: Ensure aem health check is ok after enabling SSL":
+    ensure  => aem_health_check_is_ok,
+    tags    => 'deep',
+    aem_id  => $aem_id,
+    require => Aem_aem["${aem_id}: Ensure login page is ready after enabling SSL"],
   }
 }

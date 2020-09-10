@@ -42,6 +42,7 @@ class aem_curator::install_author (
   $aem_keystore_path       = undef,
   $aem_port                = '4502',
   $aem_ssl_port            = '5432',
+  $aem_truststore_password = undef,
   $aem_jvm_opts            = [
     '-XX:+PrintGCDetails',
     '-XX:+PrintGCTimeStamps',
@@ -68,6 +69,7 @@ class aem_curator::install_author (
     aem_type                => 'author',
     aem_jvm_mem_opts        => $aem_jvm_mem_opts,
     aem_keystore_password   => $aem_keystore_password,
+    aem_truststore_password => $aem_truststore_password,
     aem_keystore_path       => $aem_keystore_path,
     aem_ssl_method          => $aem_ssl_method,
     aem_port                => $aem_port,
