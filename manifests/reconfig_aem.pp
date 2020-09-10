@@ -1,3 +1,13 @@
+#== Define: aem_curator::reconfig_aem
+# Configuration AEM Author
+#
+# === Parameters
+# [*aem_ssl_method*]
+#   AEM SSL Method. Allowed values are "jetty" & "granite". JDK11 only supports granite.
+#
+# [*aem_truststore_password*]
+#   AEM Truststore password. Required if aem_ssl_method is set to "granite".
+
 File {
   backup => false,
 }
@@ -17,6 +27,7 @@ define aem_curator::reconfig_aem (
   $aem_ssl_method             = undef,
   $aem_ssl_port               = undef,
   $aem_system_users           = undef,
+  $aem_truststore_password    = undef,
   $credentials_hash           = undef,
   $crx_quickstart_dir         = undef,
   $enable_create_system_users = true,
@@ -158,6 +169,7 @@ define aem_curator::reconfig_aem (
       aem_ssl_method             => $aem_ssl_method,
       aem_ssl_port               => $aem_ssl_port,
       aem_system_users           => $aem_system_users,
+      aem_truststore_password    => $aem_truststore_password,
       cert_base_url              => "file://${tmp_dir_final}/certs",
       enable_create_system_users => $enable_create_system_users,
       credentials_hash           => $credentials_hash,

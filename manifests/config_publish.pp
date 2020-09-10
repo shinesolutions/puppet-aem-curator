@@ -300,6 +300,7 @@ class aem_curator::config_publish (
     aem_ssl_keystore_password  => $aem_ssl_keystore_password,
     aem_ssl_port               => $publish_ssl_port,
     aem_system_users           => $aem_system_users,
+    aem_truststore_password    => $truststore_password,
     credentials_hash           => $credentials_hash,
     crx_quickstart_dir         => $crx_quickstart_dir,
     enable_aem_reconfiguration => $enable_aem_reconfiguration,
