@@ -49,8 +49,15 @@
 #   The full path to the Java keystore that will store the X.509 certificate
 #   and private key to be used by AEM.
 #
+# [*aem_ssl_method*]
+#    The method to upload ssl certificate to AEM, possible options are jetty and granite
+#    JDK 11 only support granite method.
+#
 # [*aem_keystore_password*]
 #   The password for the AEM Java keystore.
+#
+# [*aem_truststore_password*]
+#   The password for the AEM Truststore.
 #
 # [*cert_base_url*]
 #   Base URL (supported by the puppet-archive module) to download the X.509
@@ -97,6 +104,8 @@ define aem_curator::install_aem (
   $aem_jvm_mem_opts              = '-Xss4m -Xmx8192m',
   $aem_keystore_password         = undef,
   $aem_keystore_path             = undef,
+  $aem_ssl_method                = undef,
+  $aem_truststore_password       = undef,
   $aem_profile                   = 'aem62_sp1_cfp3',
   $aem_sample_content            = false,
   $cert_base_url                 = undef,
@@ -203,15 +212,30 @@ define aem_curator::install_aem (
     run_modes               => $run_modes,
     tmp_dir                 => $tmp_dir,
   } -> aem_curator::config_aem { "${aem_id}: Configure AEM":
-    aem_base              => $aem_base,
-    aem_id                => $aem_id,
-    aem_keystore_password => $aem_keystore_password,
-    aem_keystore_path     => $aem_keystore_path,
-    aem_ssl_port          => $aem_ssl_port,
-    cert_base_url         => $cert_base_url,
-    run_mode              => $aem_id,
-    tmp_dir               => $tmp_dir
+    aem_base                => $aem_base,
+    aem_id                  => $aem_id,
+    aem_keystore_password   => $aem_keystore_password,
+    aem_keystore_path       => $aem_keystore_path,
+    aem_ssl_method          => $aem_ssl_method,
+    aem_ssl_port            => $aem_ssl_port,
+    aem_truststore_password => $aem_truststore_password,
+    cert_base_url           => $cert_base_url,
+    run_mode                => $aem_id,
+    tmp_dir                 => $tmp_dir,
   }
+
+  # To allow AEM to process all executed changes in "aem_curator::config_aem"
+  # we are waiting for a configured amount of time until we process further
+  # with the installation process.
+  exec { "${aem_id}: Wait post AEM installation":
+      command => "sleep ${post_stop_sleep_secs}",
+      require => [
+                  Aem_curator::Config_aem["${aem_id}: Configure AEM"]
+                ],
+      before  => [
+                  Exec["service aem-${aem_id} stop"]
+                ],
+    }
 
   if $setup_repository_volume {
     exec { "service aem-${aem_id} stop":
