@@ -219,6 +219,19 @@ define aem_curator::install_aem (
     tmp_dir               => $tmp_dir,
   }
 
+  # To allow AEM to process all executed changes in "aem_curator::config_aem"
+  # we are waiting for a configured amount of time until we process further
+  # with the installation process.
+  exec { "${aem_id}: Wait post AEM installation":
+      command => "sleep ${post_stop_sleep_secs}",
+      require => [
+                  Aem_curator::Config_aem["${aem_id}: Configure AEM"]
+                ],
+      before  => [
+                  Exec["service aem-${aem_id} stop"]
+                ],
+    }
+
   if $setup_repository_volume {
     exec { "service aem-${aem_id} stop":
       require => [
