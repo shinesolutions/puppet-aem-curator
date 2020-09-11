@@ -31,17 +31,13 @@ class aem_curator::install_java (
   $jdk_format         = 'rpm',
 ) {
 
-  class { 'oracle_java':
-    download_url   => $jdk_base_url,
-    filename       => $jdk_filename,
-    version        => "${jdk_version}u${jdk_version_update}",
-    build          => $jdk_version_build,
-    type           => 'jdk',
-    format         => $jdk_format,
-    check_checksum => false,
-  # Need to set alternative for java here due to oracle_java module's add alternative feature is broken in version 2.9.4
+  java::download { $jdk_version :
+    ensure  => 'present',
+    java_se => 'jdk',
+    url     => "${jdk_base_url}/${jdk_filename}",
   } -> exec { "alternatives --set  java /usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre/bin/java":
-    path => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    require => Java::Download[$jdk_version],
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
@@ -69,6 +65,7 @@ class aem_curator::install_java (
       certificate => "${tmp_dir}/aem.${part}",
       password    => 'changeit',
       path        => ['/bin','/usr/bin'],
+      require     => Java::Download[$jdk_version],
     }
   }
 }

@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add new manifest `install_aem_java` to install Java for AEM Component
+- Add new manifest `config_aem_ssl` for configuring SSL on AEM
+- Add missing `puppet/archive` module to Puppetfile
+
+### Changed
+- Replaced `aco/oracle_java` module with `puppetlabs/java`
+- Update `install_java` manifest to use the new `puppetlabs/java` module for installing Java
+- Update `config_aem` manifest to use new `config_aem_ssl` manifest for configuring SSL on AEM
 
 ## [3.14.0] - 2020-09-10
 ### Added
