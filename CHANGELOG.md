@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem65_sp6
+
 ## [3.15.0] - 2020-09-11
 ### Added
 - Add new manifest `install_aem_java` to install Java for AEM Component
