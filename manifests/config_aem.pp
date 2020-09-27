@@ -108,11 +108,7 @@ define aem_curator::config_aem (
   }
 
   # Ensure login page is still ready after all provisioning steps and before stopping AEM.
-  aem_aem { "${aem_id}: Ensure login page is ready":
-    ensure  => login_page_is_ready,
-    require => $all_provisioning_steps,
-    aem_id  => $aem_id,
-  } -> aem_curator::config_aem_ssl { "${aem_id}: Configure AEM":
+  aem_curator::config_aem_ssl { "${aem_id}: Configure AEM":
     aem_base                => $aem_base,
     aem_id                  => $aem_id,
     aem_keystore_password   => $aem_keystore_password,
