@@ -34,7 +34,7 @@
     },
     {
       "name": "shinesolutions/aem_resources",
-      "version_requirement": "7.0.1"
+      "version_requirement": "7.2.0"
     }
   ],
   "data_provider": "hiera",
