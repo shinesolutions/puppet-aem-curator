@@ -49,7 +49,7 @@ define aem_curator::config_aem_ssl (
         aem_id              => $aem_id,
         require             => $java_ks_require,
         ssl_method          => $aem_ssl_method,
-        before              => Aem_aem["${aem_id}: Ensure login page is ready after enabling SSL"],
+        before              => Aem_aem["${aem_id}: Ensure login page is ready"],
       }
     }
     /jetty/: {
@@ -85,14 +85,14 @@ define aem_curator::config_aem_ssl (
         truststore_password => 'changeit',
         aem_id              => $aem_id,
         ssl_method          => $aem_ssl_method,
-        before              => Aem_aem["${aem_id}: Ensure login page is ready after enabling SSL"],
+        before              => Aem_aem["${aem_id}: Ensure login page is ready"],
       }
     }
     default: {
       fail('SSL methods can only be of types: ( granite | jetty )')
     }
   }
-  aem_aem { "${aem_id}: Ensure login page is ready after enabling SSL":
+  aem_aem { "${aem_id}: Ensure login page is ready":
     ensure                     => login_page_is_ready,
     aem_id                     => $aem_id,
     retries_max_tries          => 120,
@@ -102,6 +102,6 @@ define aem_curator::config_aem_ssl (
     ensure  => aem_health_check_is_ok,
     tags    => 'deep',
     aem_id  => $aem_id,
-    require => Aem_aem["${aem_id}: Ensure login page is ready after enabling SSL"],
+    require => Aem_aem["${aem_id}: Ensure login page is ready"],
   }
 }
