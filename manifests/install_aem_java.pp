@@ -42,7 +42,14 @@ class aem_curator::install_aem_java (
       $jdk_version_splitted = split($jdk_version, 'u')
       $jdk_version_major = $jdk_version_splitted[0]
       $jdk_version_update = $jdk_version_splitted[1]
-      $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
+      # Support of different JDK8 versions with different binary pathes
+      if Integer($jdk_version_update) >= 261 {
+        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64"
+      } elsif Integer($jdk_version_update) <= 162 {
+        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}/jre"
+      } else {
+        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
+      }
       $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
     }
     /^11/:

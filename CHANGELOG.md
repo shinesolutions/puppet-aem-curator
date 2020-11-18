@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Lockdown version of ruby library `parallel` to `1.19.2` [#229]
+- Update Java installation manifests to support all Oracle Java JDK8 versions [#226]
 
 ## [3.16.0] - 2020-09-27
 ### Added
