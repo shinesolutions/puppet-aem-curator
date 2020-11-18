@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lockdown version of ruby library `parallel` to `1.19.2` [#229]
 - Update Java installation manifests to support all Oracle Java JDK8 versions [#226]
 
+### Fixed
+- Fixed libjvm path to Oracle JDK11
+
 ## [3.16.0] - 2020-09-27
 ### Added
 - Add new AEM profile: aem65_sp6
