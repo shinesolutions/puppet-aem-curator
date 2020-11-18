@@ -46,12 +46,15 @@ class aem_curator::install_aem_java (
       if Integer($jdk_version_update) >= 261 {
         $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64"
         $libjvm_content_path= "${java_home_path}/jre/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
       } elsif Integer($jdk_version_update) <= 162 {
         $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}/jre"
         $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/lib/security/cacerts"
       } else {
         $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
         $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/lib/security/cacerts"
       }
     }
     /^11/:
@@ -63,6 +66,7 @@ class aem_curator::install_aem_java (
       $jdk_version = $jdk_version_raw[0]
       $java_home_path = "/usr/java/jdk-${jdk_version}"
       $libjvm_content_path= "${java_home_path}/lib/server/\n"
+      $cacert_path = "${java_home_path}/lib/security/cacerts"
     }
     default: {
       fail('Error: Unknown Java Version. Supported java versions are : ( 8 | 11 )')
@@ -103,7 +107,7 @@ class aem_curator::install_aem_java (
       ensure  => present,
       source  => "${cert_base_url}/aem.${part}",
       require => File["${tmp_dir}/java"],
-    } -> java_ks { "cqse-${idx}:${java_home_path}/lib/security/cacerts":
+    } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
       certificate => "${tmp_dir}/java/aem.${part}",
       password    => 'changeit',
