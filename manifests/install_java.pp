@@ -30,19 +30,32 @@ class aem_curator::install_java (
   $jdk_version_build  = '',
   $jdk_format         = 'rpm',
 ) {
-
+  # Support of different JDK8 versions with different binary pathes
+  if Integer($jdk_version_update) >= 261 {
+    $java_home_path = "/usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64"
+    $libjvm_content_path= "${java_home_path}/jre/lib/amd64/server/\n"
+    $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
+  } elsif Integer($jdk_version_update) <= 162 {
+    $java_home_path = "/usr/java/jdk1.${jdk_version}.0_${jdk_version_update}/jre"
+    $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
+    $cacert_path = "${java_home_path}/lib/security/cacerts"
+  } else {
+    $java_home_path = "/usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre"
+    $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
+    $cacert_path = "${java_home_path}/lib/security/cacerts"
+  }
   java::download { $jdk_version :
     ensure  => 'present',
     java_se => 'jdk',
     url     => "${jdk_base_url}/${jdk_filename}",
-  } -> exec { "alternatives --set  java /usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre/bin/java":
+  } -> exec { "alternatives --set  java ${java_home_path}/bin/java":
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
     require => Java::Download[$jdk_version],
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => present,
-    content => "/usr/java/latest/jre/lib/amd64/server\n",
+    content => $libjvm_content_path,
     notify  => Exec['/sbin/ldconfig'],
   }
 
@@ -60,7 +73,7 @@ class aem_curator::install_java (
       ensure  => present,
       source  => "${cert_base_url}/aem.${part}",
       require => File[$tmp_dir],
-    } -> java_ks { "cqse-${idx}:/usr/java/default/jre/lib/security/cacerts":
+    } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
       certificate => "${tmp_dir}/aem.${part}",
       password    => 'changeit',
