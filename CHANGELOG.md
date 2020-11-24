@@ -6,12 +6,86 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
 ### Added
 - Add new puppet module [adobeinc/dispatcher](https://github.com/adobe/puppet-dispatcher) for installing AEM Dispatcher [#174]
 
 ### Changed
 - Update class `aem_curator::install_dispatcher` to support new puppet module [adobeinc/dispatcher](https://github.com/adobe/puppet-dispatcher) [#174]
+
+## [3.17.0] - 2020-11-19
+### Changed
+- Lockdown version of ruby library `parallel` to `1.19.2` [#229]
+- Update Java installation manifests to support all Oracle Java JDK8 versions [#226]
+
+### Fixed
+- Fixed cacert path to Oracle JDK11
+- Fixed libjvm path to Oracle JDK11
+
+## [3.16.0] - 2020-09-27
+### Added
+- Add new AEM profile: aem65_sp6
+
+### Changed
+- Update configuration & reconfiguration process to work with enabled option `enable_clean_directories`
+- Upgrade aem_resources to 7.2.0
+- Upgrade puppet to 5.5.21
+
+## [3.15.0] - 2020-09-11
+### Added
+- Add new manifest `install_aem_java` to install Java for AEM Component
+- Add new manifest `config_aem_ssl` for configuring SSL on AEM
+- Add missing `puppet/archive` module to Puppetfile
+
+### Changed
+- Replaced `aco/oracle_java` module with `puppetlabs/java`
+- Update `install_java` manifest to use the new `puppetlabs/java` module for installing Java
+- Update `config_aem` manifest to use new `config_aem_ssl` manifest for configuring SSL on AEM
+
+## [3.14.0] - 2020-09-10
+### Added
+- Add new AEM profile: aem65_sp5
+
+### Changed
+- Upgrade aem_resources to 7.1.0
+- Add new manifest `config_aem_ssl` for configuring SSL on AEM
+- Update `config_aem` manifest to use new `config_aem_ssl` manifest for configuring SSL on AEM
+- Add post AEM installation wait timer
+
+## [3.13.2] - 2020-05-13
+### Changed
+- Upgrade aem_resources to 7.0.1
+
+### Fixed
+- Fixed class `aem_curator::action_promote_author_standby_to_primary`
+
+## [3.13.1] - 2020-05-12
+### Fixed
+- Fixed syntax error in manifest `config_author_standby`
+
+## [3.13.0] - 2020-05-12
+### Changed
+- Update reconfiguration process to remove AEM config files in `crx-quickstart/install` as part of the reconfiguration pre-tasks
+- Update reconfiguration process to remove AEM `.zip` packages in `crx-quickstart/install` as part of the main reconfiguration process
+- Upgrade aem_resources to 7.0.0
+
+### Fixed
+- Fixed error in reconfiguration process
+
+## [3.12.0] - 2020-05-12
+### Added
+- Add additional process to `config_author_primary`, `config_author_standby` & `config_publish` for resetting AEM binaries
+- Add support to inject own AEM OSGI configuration to configure AEM [#217]
+- Add new AEM installation profiles: aem64_sp5, aem64_sp6, aem64_sp7 & aem64_sp8 [#204]
+- Add new AEM profile: aem65_sp4 [#203]
+
+### Changed
+- Upgrade aem_resources to 6.0.0
+- Update `config_author_primary` & `config_author_standby` manifests to support aem_resources 6.0.0
+- SegmentNodeStoreService.config does not get deleted anymore as part of manifest author_primary_set_config [#200]
+- AEM does not restart anymore when setting JVM_OPTS, JVM_MEM_OPTS or enabling JMXRemote [#193]
+
+### Removed
+- Removed reset of AEM binaries as part of the pre-tasks for the reconfiguration
 
 ## [3.11.0] - 2020-04-05
 ### Added
@@ -712,8 +786,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#183]: https://github.com/shinesolutions/puppet-aem-curator/issues/183
 [#184]: https://github.com/shinesolutions/puppet-aem-curator/issues/184
 [#186]: https://github.com/shinesolutions/puppet-aem-curator/issues/186
+[#193]: https://github.com/shinesolutions/puppet-aem-curator/issues/193
+[#200]: https://github.com/shinesolutions/puppet-aem-curator/issues/200
+[#203]: https://github.com/shinesolutions/puppet-aem-curator/issues/203
+[#204]: https://github.com/shinesolutions/puppet-aem-curator/issues/204
+[#217]: https://github.com/shinesolutions/puppet-aem-curator/issues/217
+[#226]: https://github.com/shinesolutions/puppet-aem-curator/issues/226
+[#229]: https://github.com/shinesolutions/puppet-aem-curator/issues/229
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.11.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.17.0...HEAD
+[3.17.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.16.0...3.17.0
+[3.16.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.15.0...3.16.0
+[3.15.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.14.0...3.15.0
+[3.14.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.13.2...3.14.0
+[3.13.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.13.1...3.13.2
+[3.13.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.13.0...3.13.1
+[3.13.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.12.0...3.13.0
+[3.12.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.11.0...3.12.0
 [3.11.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.10.1...3.11.0
 [3.10.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.10.0...3.10.1
 [3.10.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.9.0...3.10.0

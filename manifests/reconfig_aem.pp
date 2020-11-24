@@ -1,3 +1,13 @@
+#== Define: aem_curator::reconfig_aem
+# Configuration AEM Author
+#
+# === Parameters
+# [*aem_ssl_method*]
+#   AEM SSL Method. Allowed values are "jetty" & "granite". JDK11 only supports granite.
+#
+# [*aem_truststore_password*]
+#   AEM Truststore password. Required if aem_ssl_method is set to "granite".
+
 File {
   backup => false,
 }
@@ -14,8 +24,10 @@ define aem_curator::reconfig_aem (
   $aem_healthcheck_version    = undef,
   $aem_ssl_keystore_password  = undef,
   $aem_keystore_path          = undef,
+  $aem_ssl_method             = undef,
   $aem_ssl_port               = undef,
   $aem_system_users           = undef,
+  $aem_truststore_password    = undef,
   $credentials_hash           = undef,
   $crx_quickstart_dir         = undef,
   $enable_create_system_users = true,
@@ -53,27 +65,42 @@ define aem_curator::reconfig_aem (
     # Otherwise, the configurations are kept and will be overwritten
     if $force {
       aem_node { "${aem_id}: Delete path /apps/system/config":
-        ensure  => absent,
-        path    => '/apps/system',
-        name    => 'config',
-        aem_id  => $aem_id,
-        before  => [
-                    Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
-                  ],
-        require => [
-                      Aem_aem["${aem_id}: Wait until aem health check is ok"]
-                    ],
+        ensure => absent,
+        path   => '/apps/system',
+        name   => 'config',
+        aem_id => $aem_id,
+        before => [
+                      Exec["[${aem_id}] Wait after deletion of /apps/system/config"]
+                  ]
       } -> exec { "[${aem_id}] Wait after deletion of /apps/system/config":
         command => 'sleep 15',
         path    => ['/usr/bin', '/usr/sbin', '/bin'],
+        before  => [
+                      Aem_node["${aem_id}: Delete path /apps/system/config.${run_mode}"]
+                  ],
+        require => [
+                      Aem_node["${aem_id}: Delete path /apps/system/config"]
+                    ],
       } -> aem_node { "${aem_id}: Delete path /apps/system/config.${run_mode}":
-        ensure => absent,
-        path   => '/apps/system',
-        name   => "config.${run_mode}",
-        aem_id => $aem_id,
+        ensure  => absent,
+        path    => '/apps/system',
+        name    => "config.${run_mode}",
+        aem_id  => $aem_id,
+        before  => [
+                      Exec["[${aem_id}] Wait after deletion of /apps/system/config.${run_mode}"]
+                  ],
+        require => [
+                      Exec["[${aem_id}] Wait after deletion of /apps/system/config"]
+                    ],
       } -> exec { "[${aem_id}] Wait after deletion of /apps/system/config.${run_mode}":
         command => 'sleep 15',
         path    => ['/usr/bin', '/usr/sbin', '/bin'],
+        before  => [
+                      Aem_curator::Config_aem["Configure AEM ${aem_id}"]
+                  ],
+        require => [
+                      Aem_node["${aem_id}: Delete path /apps/system/config.${run_mode}"]
+                    ],
       }
     }
 
@@ -84,10 +111,10 @@ define aem_curator::reconfig_aem (
         aem_password => $aem_password,
         force        => false,
         before       => [
-                          Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
+                          Aem_curator::Config_aem["Configure AEM ${aem_id}"]
                         ],
         require      => [
-                          Aem_aem["${aem_id}: Wait until aem health check is ok"]
+                          Aem_aem["${aem_id}: Wait until aem health check is ok before configure aem"]
                         ],
       }
     }
@@ -101,17 +128,16 @@ define aem_curator::reconfig_aem (
         'install',
         ]
         #
-        # since we are only cleaning the install dir
-        # we clean during runtime.
+        # since we are only cleaning the install dir we are only removing AEM Packages
         #
         $list_clean_directories.each | Integer $index, String $clean_directory| {
           exec { "${aem_id}: Clean directory ${crx_quickstart_dir}/${clean_directory}/":
-            command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*",
+            command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*.zip",
             before  => [
-                        Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
+                        Exec["${aem_id}: sleep ${post_install_sleep_secs} seconds for package uninstallations"]
                       ],
             require => [
-                          Aem_aem["${aem_id}: Wait until aem health check is ok"]
+                          Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
                         ],
           } -> exec { "${aem_id}: sleep ${post_install_sleep_secs} seconds for package uninstallations":
             command => "sleep ${post_install_sleep_secs}",
@@ -125,20 +151,17 @@ define aem_curator::reconfig_aem (
           aem_id                  => $aem_id,
           tmp_dir                 => $tmp_dir_final,
           before                  => [
-                                      Aem_aem["${aem_id}: Wait until CRX Package Manager is ready before reconfiguration"]
+                                        Aem_aem["${aem_id}: Wait until aem health check is ok before configure aem"],
+                                        Aem_aem["${aem_id}: Wait until aem health check is ok"]
                                       ],
           require                 => [
-                                      Aem_aem["${aem_id}: Wait until aem health check is ok"]
+                                      Exec["${aem_id}: sleep ${post_install_sleep_secs} seconds for package uninstallations"]
                                       ],
         }
     }
 
     aem_aem { "${aem_id}: Wait until login page is ready to start reconfiguration":
       ensure => login_page_is_ready,
-      aem_id => $aem_id,
-    } -> aem_aem { "${aem_id}: Wait until aem health check is ok":
-      ensure => aem_health_check_is_ok,
-      tags   => 'shallow',
       aem_id => $aem_id,
     } -> aem_aem { "${aem_id}: Wait until CRX Package Manager is ready before reconfiguration":
       ensure                     => aem_package_manager_is_ready,
@@ -148,15 +171,27 @@ define aem_curator::reconfig_aem (
       aem_id                     => $aem_id,
       aem_username               => $aem_username,
       aem_password               => $aem_password,
+    } -> aem_aem { "${aem_id}: Wait until aem health check is ok before configure aem":
+      ensure => aem_health_check_is_ok,
+      tags   => 'shallow',
+      aem_id => $aem_id,
     }
 
-    aem_curator::config_aem { "Configure AEM ${aem_id}":
+    aem_aem { "${aem_id}: Wait until aem health check is ok":
+      ensure => aem_health_check_is_ok,
+      tags   => 'shallow',
+      aem_id => $aem_id,
+    }
+
+    Aem_curator::Config_aem { "Configure AEM ${aem_id}":
       aem_base                   => $aem_base,
       aem_id                     => $aem_id,
       aem_keystore_password      => $aem_ssl_keystore_password,
       aem_keystore_path          => $aem_keystore_path,
+      aem_ssl_method             => $aem_ssl_method,
       aem_ssl_port               => $aem_ssl_port,
       aem_system_users           => $aem_system_users,
+      aem_truststore_password    => $aem_truststore_password,
       cert_base_url              => "file://${tmp_dir_final}/certs",
       enable_create_system_users => $enable_create_system_users,
       credentials_hash           => $credentials_hash,

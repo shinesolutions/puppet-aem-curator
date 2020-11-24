@@ -4,19 +4,15 @@ File {
 
 define aem_curator::reconfig_pre_aem (
   $aem_id                            = undef,
-  $aem_jvm_mem_opts                  = undef,
   $enable_aem_reconfiguration        = false,
   $aem_base                          = '/opt',
-  $aem_port                          = undef,
-  $aem_runmodes                      = [],
-  $aem_debug_port                    = undef,
   $aws_region                        = $::aws_region,
   $certificate_arn                   = undef,
   $certificate_key_arn               = undef,
   $crx_quickstart_dir                = undef,
   $data_volume_mount_point           = undef,
   $enable_aem_installation_migration = false,
-  $aem_jvm_jmxremote_port            = undef,
+  $enable_clean_directories          = false,
   $tmp_dir                           = undef,
 ) {
   # Run Pre-reconfiguration if reconfiguration is enabled
@@ -109,91 +105,8 @@ define aem_curator::reconfig_pre_aem (
       }
 
       exec { "${aem_id}: Fix data volume permissions":
-        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
-        before  => [
-                    File["${tmp_dir}/start-env"],
-                    File["${tmp_dir}/start-env"],
-                    File["${tmp_dir}/start.orig"],
-                  ],
+        command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}"
       }
-    }
-
-    #
-    # Default JVM opts for start-env init
-    # Taken from packer-aem default jvm opts
-    #
-    $aem_default_jvm_opts = [
-                              '-XX:+PrintGCDetails',
-                              '-XX:+PrintGCTimeStamps',
-                              '-XX:+PrintGCDateStamps',
-                              '-XX:+PrintTenuringDistribution',
-                              '-XX:+PrintGCApplicationStoppedTime',
-                              '-XX:+HeapDumpOnOutOfMemoryError'
-                            ]
-    #
-    # The aem::config from bstopp/aem module
-    # unfortunatley always executes the file resource
-    # "${aem_base}/aem/${aem_id}/crx-quickstart/install"
-    # This is needed by our provisioing steps. Therefor
-    # We cna't use the puppet module until the installation
-    # of that directory is configurable. So far we have to
-    # rely on the manual way to re-init start-env
-    #
-    #
-    # aem::config { "$aem_id: re-init start-env":
-    #   context_root   => undef,
-    #   debug_port     => undef,
-    #   group          => "aem-${aem_id}",
-    #   home           => "${aem_base}/aem/${aem_id}",
-    #   jvm_mem_opts   => $aem_jvm_mem_opts,
-    #   jvm_opts       => $aem_default_jvm_opts.join(' '),
-    #   osgi_configs   => undef,
-    #   crx_packages   => undef,
-    #   port           => $aem_port,
-    #   runmodes       => $aem_runmodes,
-    #   sample_content => false,
-    #   type           => $aem_id,
-    #   user           => "aem-${aem_id}",
-    #   require => [
-    #     Exec["service aem-${aem_id} stop"]
-    #   ]
-    # }
-
-    $aem_template_type = $aem_id
-    $aem_template_port = $aem_port
-    $aem_template_runmodes = $aem_runmodes
-    $aem_template_sample_content = false
-    $aem_template_jvm_mem_opts = $aem_jvm_mem_opts
-    $aem_template_jvm_opts = $aem_default_jvm_opts.join(' ')
-    $aem_template_debug_port = $aem_debug_port
-
-    # Create the env script
-    file { "${tmp_dir}/start-env":
-      ensure  => file,
-      content => template('aem_curator/aem/start-env.erb'),
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-    }
-
-    # Rename the original start script.
-    file { "${tmp_dir}/start.orig":
-      ensure  => file,
-      replace => false,
-      source  => "${crx_quickstart_dir}/bin/start",
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-    }
-
-    # Create the start script
-    file { "${tmp_dir}/start":
-      ensure  => file,
-      content => template('aem_curator/aem/start.erb'),
-      mode    => '0775',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
-      require => File["${tmp_dir}/start.orig"],
     }
 
     # Get SSL certificate based on ARN from:
@@ -277,6 +190,25 @@ define aem_curator::reconfig_pre_aem (
     file { "${tmp_dir}/certs/aem.key":
       ensure => file,
       mode   => '0600',
+    }
+
+    ###########################################################################
+    # If clean dir is enabled clean up directories in list
+    # If not enabled cleanup only any existing aem-healthcheck packages
+    ###########################################################################
+    if $enable_clean_directories {
+      $list_clean_directories = [
+      'install',
+      ]
+      #
+      # since we are only cleaning the install dir
+      # we clean during runtime.
+      #
+      $list_clean_directories.each | Integer $index, String $clean_directory| {
+        exec { "${aem_id}: Delete configurations in ${crx_quickstart_dir}/${clean_directory}/":
+          command => "rm -fr ${crx_quickstart_dir}/${clean_directory}/*.config",
+        }
+      }
     }
   }
 }
