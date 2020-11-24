@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add new puppet module [adobeinc/dispatcher](https://github.com/adobe/puppet-dispatcher) for installing AEM Dispatcher [#174]
+
+### Changed
+- Update class `aem_curator::install_dispatcher` to support new puppet module [adobeinc/dispatcher](https://github.com/adobe/puppet-dispatcher) [#174]
 
 ## [3.17.0] - 2020-11-19
 ### Changed
@@ -773,6 +778,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#164]: https://github.com/shinesolutions/puppet-aem-curator/issues/164
 [#166]: https://github.com/shinesolutions/puppet-aem-curator/issues/166
 [#173]: https://github.com/shinesolutions/puppet-aem-curator/issues/173
+[#174]: https://github.com/shinesolutions/puppet-aem-curator/issues/174
 [#177]: https://github.com/shinesolutions/puppet-aem-curator/issues/177
 [#178]: https://github.com/shinesolutions/puppet-aem-curator/issues/178
 [#179]: https://github.com/shinesolutions/puppet-aem-curator/issues/179
