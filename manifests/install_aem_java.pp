@@ -23,7 +23,7 @@
 #
 # === Copyright
 #
-# Copyright © 2020 Shine Solutions Group, unless otherwise noted.
+# Copyright © 2021 Shine Solutions Group Group, unless otherwise noted.
 #
 class aem_curator::install_aem_java (
   $cert_base_url,

@@ -40,7 +40,7 @@
 #
 # === Copyright
 #
-# Copyright © 2017 Shine Solutions Group, unless otherwise noted.
+# Copyright © 2021 Shine Solutions Group Group, unless otherwise noted.
 #
 
 define aem_curator::config_aem_agents (

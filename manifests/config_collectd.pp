@@ -8,7 +8,7 @@
 #
 # === Copyright
 #
-# Copyright © 2017 Shine Solutions Group, unless otherwise noted.
+# Copyright © 2021 Shine Solutions Group Group, unless otherwise noted.
 #
 class aem_curator::config_collectd (
   $proxy_protocol,

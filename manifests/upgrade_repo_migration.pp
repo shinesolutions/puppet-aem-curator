@@ -34,7 +34,7 @@
 #
 # === Copyright
 #
-# Copyright © 2018 Shine Solutions Group, unless otherwise noted.
+# Copyright © 2018-2021 Shine Solutions Group Group, unless otherwise noted.
 #
 
 define aem_curator::upgrade_repo_migration (
