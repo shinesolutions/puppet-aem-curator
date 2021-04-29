@@ -31,3 +31,4 @@ There is no obvious file name convention because Adobe has historically been pub
 | `aem65_sp1` | `aem65` artifacts + AEM-6.5.1.0-6.5.1.zip |
 | `aem65_sp2` | `aem65` artifacts + AEM-6.5.2.0-6.5.2.zip |
 | `aem65_sp3` | `aem65` artifacts + AEM-6.5.3.0-6.5.3.zip |
+| `aem65_sp7` | `aem65` artifacts + aem-service-pkg-6.5.7.zip |

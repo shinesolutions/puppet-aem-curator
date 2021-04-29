@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem65_sp7
+
 ## [3.18.1] - 2020-11-27
 ### Changed
 - Upgrade puppet to 5.5.22
