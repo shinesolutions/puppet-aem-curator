@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add new AEM profile: aem65_sp7
+- Add new AEM profile: aem65_sp8
 
 ## [3.18.1] - 2020-11-27
 ### Changed

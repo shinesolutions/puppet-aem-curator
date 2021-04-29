@@ -7,6 +7,8 @@ The file names _must_ be identical to what's listed here. These names are exactl
 
 There is no obvious file name convention because Adobe has historically been publishing the artifacts with inconsistent naming between versions.
 
+For AEM 6.5, the service pack file names used to have the format `AEM-6.5.x.0-6.5.x.zip` when the artifacts were distributed via adobeaemcloud.com . However, the naming convention has been changed to `aem-service-pkg-6.5.x.zip` when the artifacts distribution was moved to 
+
 | AEM Profile | Required Artifacts |
 |-------------|--------------------|
 | `aem62` | license-6.2.properties, AEM_6.2_Quickstart.jar, cq-6.2.0-hotfix-11490-1.2.zip, cq-6.2.0-hotfix-12785-7.0.zip, cq-6.2.0-hotfix-15607-1.0.zip |
@@ -32,3 +34,4 @@ There is no obvious file name convention because Adobe has historically been pub
 | `aem65_sp2` | `aem65` artifacts + AEM-6.5.2.0-6.5.2.zip |
 | `aem65_sp3` | `aem65` artifacts + AEM-6.5.3.0-6.5.3.zip |
 | `aem65_sp7` | `aem65` artifacts + aem-service-pkg-6.5.7.zip |
+| `aem65_sp8` | `aem65` artifacts + aem-service-pkg-6.5.8.zip |
