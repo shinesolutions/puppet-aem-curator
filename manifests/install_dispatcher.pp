@@ -168,7 +168,11 @@ class aem_curator::install_dispatcher (
   apache::listen { $apache_https_port: }
 
   class { 'apache':
-    default_vhost => $default_vhost
+    default_vhost            => $default_vhost,
+    keepalive                => 'On',
+    timeout                  => 120,
+    max_keepalive_requests   => 200,
+    keepalive_timeout        => 120,
   }
   $apache_base_module_classes = [
     '::apache::mod::ssl',
