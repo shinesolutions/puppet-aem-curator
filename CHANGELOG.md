@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem65_sp9 #235
+
 ### Changed
 - Add `com.adobe.granite.crxde-support`, `com.adobe.granite.crx-explorer`, `com.adobe.granite.crxde-lite` bundles to health check ignore list #208
 
