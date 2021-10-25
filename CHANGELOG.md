@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add development bundles configuration enable/disable option `enable_development_bundles` on config author primary, author standby, and publish
 - Add new AEM profile: aem65_sp10
+- Add publish and release-* GitHub Actions
 
 ### Changed
 - Upgrade aem_resources to 7.4.0

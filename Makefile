@@ -26,7 +26,18 @@ lint:
 package: deps
 	PDK_DISABLE_ANALYTICS=true pdk build --force
 
-release:
-	rtk release
+release-major:
+	rtk release --release-increment-type major
 
-.PHONY: ci clean deps lint package release
+release-minor:
+	rtk release --release-increment-type minor
+
+release-patch:
+	rtk release --release-increment-type patch
+
+release: release-minor
+
+publish:
+	pdk release publish --force --forge-token=$(forge_token)
+
+.PHONY: ci clean deps lint package release release-major release-minor release-patch publish
