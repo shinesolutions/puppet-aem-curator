@@ -87,6 +87,7 @@ class aem_curator::config_publish (
   $certificate_key_arn                           = undef,
   $data_volume_mount_point                       = undef,
   $delete_repository_index                       = false,
+  $enable_development_bundles                    = false,
   $enable_aem_reconfiguration                    = false,
   $enable_aem_installation_migration             = false,
   $enable_aem_reconfiguratiton_clean_directories = false,
@@ -346,6 +347,10 @@ class aem_curator::config_publish (
     aem_id       => $aem_id,
     enable_crxde => $enable_crxde,
     run_mode     => $run_mode,
+  } -> aem_curator::config_aem_development_bundles { "${aem_id}: Configure Development bundles":
+    aem_id                     => $aem_id,
+    enable_development_bundles => $enable_development_bundles,
+    run_mode                   => $run_mode,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after configuring CRXDE":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,

@@ -69,6 +69,7 @@ class aem_curator::config_author_standby (
   $aem_runmodes                 = [],
   $aem_version                  = '6.2',
   $author_standby_osgi_config   = undef,
+  $enable_development_bundles   = false,
   $enable_aem_clean_directories = false,
   $data_volume_mount_point      = undef,
   $delete_repository_index      = false,
