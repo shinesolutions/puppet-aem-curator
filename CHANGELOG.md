@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade aem_resources to 7.4.0
 - Upgrade inspec-aem to 1.4.0
 
+### Fixed
+- Fix incorrect class install_aem65_sp8 for aem65_sp9 profile
+
 ## [3.20.0] - 2021-06-18
 ### Added
 - Add new AEM profile: aem65_sp9 [#235]
