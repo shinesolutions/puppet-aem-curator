@@ -1,4 +1,4 @@
-define aem_curator::install_aem65_sp8(
+define aem_curator::install_aem65_sp9(
   $aem_license_base,
   $aem_artifacts_base,
   $aem_healthcheck_version,
