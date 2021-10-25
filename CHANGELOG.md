@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Apache hard restart option for deploying Dispatcher Artifacts [#238]
+- Add Apache hard restart option for deploying Dispatcher Artifacts [#238]
 
-### Changed
-- Remove '-k' parameter for Apache restart command [#239]
+### Removed
+- Remove '-k' parameter for Apache graceful restart command since it's no longer necessary [#239]
 
 ## [3.20.0] - 2021-06-18
 ### Added
