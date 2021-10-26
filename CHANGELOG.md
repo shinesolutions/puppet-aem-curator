@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.22.0] - 2021-10-26
 ### Added
 - Add Apache hard restart option for deploying Dispatcher Artifacts [#238]
 
@@ -832,8 +832,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#226]: https://github.com/shinesolutions/puppet-aem-curator/issues/226
 [#229]: https://github.com/shinesolutions/puppet-aem-curator/issues/229
 [#235]: https://github.com/shinesolutions/puppet-aem-curator/issues/235
+[#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
+[#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.21.0...HEAD
+[3.22.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.21.0...3.22.0
 [3.21.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.20.0...3.21.0
 [3.20.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.19.0...3.20.0
 [3.19.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.18.1...3.19.0
