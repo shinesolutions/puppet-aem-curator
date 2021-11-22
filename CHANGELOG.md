@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade aem_resources to 7.5.0
+
 ## [3.22.0] - 2021-10-26
 ### Added
 - Add Apache hard restart option for deploying Dispatcher Artifacts [#238]
