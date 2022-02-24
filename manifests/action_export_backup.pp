@@ -1,6 +1,3 @@
-File {
-  backup => false,
-}
 
 class aem_curator::action_export_backup (
   $tmp_dir,

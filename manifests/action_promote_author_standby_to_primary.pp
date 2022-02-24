@@ -1,6 +1,3 @@
-File {
-  backup => false,
-}
 
 class aem_curator::action_promote_author_standby_to_primary (
   $author_port,
