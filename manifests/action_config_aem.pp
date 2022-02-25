@@ -1,6 +1,3 @@
-File {
-  backup => false,
-}
 
 class aem_curator::action_config_aem (
   $aem_base                   = $::aem_base,
