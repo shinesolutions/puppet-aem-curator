@@ -1,3 +1,6 @@
+File {
+  backup => false,
+}
 
 class aem_curator::action_download_descriptor (
   $tmp_dir,

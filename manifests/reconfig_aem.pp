@@ -8,6 +8,10 @@
 # [*aem_truststore_password*]
 #   AEM Truststore password. Required if aem_ssl_method is set to "granite".
 
+File {
+  backup => false,
+}
+
 define aem_curator::reconfig_aem (
   $aem_id                     = undef,
   $aem_username               = undef,

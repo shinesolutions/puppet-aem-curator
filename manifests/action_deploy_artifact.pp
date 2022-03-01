@@ -1,3 +1,6 @@
+File {
+  backup => false,
+}
 
 class aem_curator::action_deploy_artifact (
   $aem_id                     = $::aem_id,

@@ -1,3 +1,6 @@
+File {
+  backup => false,
+}
 
 define aem_curator::reconfig_pre_aem (
   $aem_id                            = undef,
