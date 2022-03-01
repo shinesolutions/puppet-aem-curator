@@ -1,3 +1,6 @@
+File {
+  backup => false,
+}
 
 class aem_curator::action_import_backup (
   $tmp_dir,
