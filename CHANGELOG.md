@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Reverse the removal of Puppet File->backup explicit parameter, see note in 3.25.0 below
+### Removed
+- Reverse the removal of Puppet File->backup explicit parameter, see note in previous version below
 
 ## [3.25.0] - 2022-02-25
 ### Changed
