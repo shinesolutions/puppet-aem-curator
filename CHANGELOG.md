@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Removed Puppet File->backup explicit parameter as it is now defaulted to 'false' since Puppet 7.0.0
+- Added support for Puppet 7, removed support for Puppet 5, 6
 
 ## [3.26.0] - 2022-03-01
 ### Removed

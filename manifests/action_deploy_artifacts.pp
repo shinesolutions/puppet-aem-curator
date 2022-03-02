@@ -1,6 +1,3 @@
-File {
-  backup => false,
-}
 
 class aem_curator::action_deploy_artifacts (
   $tmp_dir,

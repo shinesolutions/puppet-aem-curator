@@ -46,10 +46,6 @@
 # Copyright © 2021 Shine Solutions Group Group, unless otherwise noted.
 #
 
-File {
-  backup => false,
-}
-
 class aem_curator::config_author_primary (
   $aem_password_reset_source,
   $aem_password_reset_version,
