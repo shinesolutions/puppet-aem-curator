@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Removed Puppet File->backup explicit parameter as it is now defaulted to 'false' since Puppet 7.0.0
 - Added support for Puppet 7, removed support for Puppet 5, 6
+- Split out deploy and download functions with their own manifest files to work with Puppet 7
 
 ## [3.26.0] - 2022-03-01
 ### Removed
