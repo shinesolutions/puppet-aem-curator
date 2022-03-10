@@ -1,6 +1,3 @@
-File {
-  backup => false,
-}
 
 class aem_curator::action_promote_author_standby_to_primary (
   $author_port,
@@ -74,5 +71,3 @@ class aem_curator::action_promote_author_standby_to_primary (
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
   }
 }
-
-include promote_author_standby_to_primary

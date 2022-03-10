@@ -1,6 +1,3 @@
-File {
-  backup => false,
-}
 
 class aem_curator::config_author_dispatcher (
   $base_dir,
