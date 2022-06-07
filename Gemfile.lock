@@ -102,7 +102,7 @@ GEM
       tomlrb (~> 1.2)
       train (~> 1.5)
     jaro_winkler (1.5.4)
-    jmespath (1.4.0)
+    jmespath (1.6.1)
     json (2.6.1)
     json-schema (2.8.1)
       addressable (>= 2.4)
