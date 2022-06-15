@@ -24,11 +24,7 @@ class aem_curator::install_java (
   $cert_base_url,
   $tmp_dir,
   $jdk_base_url,
-  $jdk_filename       = 'jdk-8u221-linux-x64.rpm',
-  $jdk_version        = '8',
-  $jdk_version_update = '221',
-  $jdk_version_build  = '',
-  $jdk_format         = 'rpm',
+  $jdk_filename   = 'jdk-8u221-linux-x64.rpm',
 ) {
   # Split JDK filename to determine JDK Major Version
   $jdk_filename_splitted = split($jdk_filename, '-')
@@ -59,8 +55,8 @@ class aem_curator::install_java (
     /^11/:
     {
       # Automation to determine JDK Version via default filename
-      # Splitting JDK File Name jdk-11.0.7_linux-x64_bin.rpm
-      # to receive JDK version 11.0.7
+      # Splitting JDK File Name jdk-11.0.9_linux-x64_bin.rpm
+      # to receive JDK version 11.0.9
       $jdk_version_raw = split($jdk_filename_splitted[1], '_')
       $jdk_version = $jdk_version_raw[0]
       $java_home_path = "/usr/java/jdk-${jdk_version}"
