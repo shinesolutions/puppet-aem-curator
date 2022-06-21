@@ -24,26 +24,50 @@ class aem_curator::install_java (
   $cert_base_url,
   $tmp_dir,
   $jdk_base_url,
-  $jdk_filename       = 'jdk-8u221-linux-x64.rpm',
-  $jdk_version        = '8',
-  $jdk_version_update = '221',
-  $jdk_version_build  = '',
-  $jdk_format         = 'rpm',
+  $jdk_filename   = 'jdk-8u221-linux-x64.rpm',
 ) {
-  # Support of different JDK8 versions with different binary pathes
-  if Integer($jdk_version_update) >= 261 {
-    $java_home_path = "/usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64"
-    $libjvm_content_path= "${java_home_path}/jre/lib/amd64/server/\n"
-    $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-  } elsif Integer($jdk_version_update) <= 162 {
-    $java_home_path = "/usr/java/jdk1.${jdk_version}.0_${jdk_version_update}/jre"
-    $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
-    $cacert_path = "${java_home_path}/lib/security/cacerts"
-  } else {
-    $java_home_path = "/usr/java/jdk1.${jdk_version}.0_${jdk_version_update}-amd64/jre"
-    $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
-    $cacert_path = "${java_home_path}/lib/security/cacerts"
+  # Split JDK filename to determine JDK Major Version
+  $jdk_filename_splitted = split($jdk_filename, '-')
+  # Case to Setup variables per JDK Version
+  case $jdk_filename_splitted[1] {
+    /^8/: {
+      # Automation to determine JDK Version via default filename
+      # Splitting JDK File Name jdk-8u221-linux-x64.rpm to [8, 221]
+      $jdk_version = $jdk_filename_splitted[1]
+      $jdk_version_splitted = split($jdk_version, 'u')
+      $jdk_version_major = $jdk_version_splitted[0]
+      $jdk_version_update = $jdk_version_splitted[1]
+      # Support of different JDK8 versions with different binary pathes
+      if Integer($jdk_version_update) >= 261 {
+        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64"
+        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
+      } elsif Integer($jdk_version_update) <= 162 {
+        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}/jre"
+        $libjvm_content_path = "${java_home_path}/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/lib/security/cacerts"
+      } else {
+        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
+        $libjvm_content_path = "${java_home_path}/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/lib/security/cacerts"
+      }
+    }
+    /^11/:
+    {
+      # Automation to determine JDK Version via default filename
+      # Splitting JDK File Name jdk-11.0.9_linux-x64_bin.rpm
+      # to receive JDK version 11.0.9
+      $jdk_version_raw = split($jdk_filename_splitted[1], '_')
+      $jdk_version = $jdk_version_raw[0]
+      $java_home_path = "/usr/java/jdk-${jdk_version}"
+      $libjvm_content_path = "${java_home_path}/lib/server/\n"
+      $cacert_path = "${java_home_path}/lib/security/cacerts"
+    }
+    default: {
+      fail('Error: Unknown Java Version. Supported java versions are : ( 8 | 11 )')
+    }
   }
+
   java::download { $jdk_version :
     ensure  => 'present',
     java_se => 'jdk',
