@@ -1,4 +1,4 @@
-define aem_curator::install_aem65_sp11(
+define aem_curator::install_aem65_sp13(
   $aem_license_base,
   $aem_artifacts_base,
   $aem_healthcheck_version,
@@ -41,12 +41,12 @@ define aem_curator::install_aem65_sp11(
     post_install_sleep_secs => $post_install_sleep_secs,
     aem_id                  => $aem_id,
     aem_type                => $aem_type,
-  } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 11":
+  } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 13":
     tmp_dir         => $tmp_dir,
-    file_name       => 'aem-service-pkg-6.5.11.zip',
+    file_name       => 'aem-service-pkg-6.5.13.zip',
     package_name    => 'aem-service-pkg',
     package_group   => 'adobe/cq650/servicepack',
-    package_version => '6.5.11',
+    package_version => '6.5.13',
     artifacts_base  => $aem_artifacts_base,
     aem_id          => $aem_id,
   }

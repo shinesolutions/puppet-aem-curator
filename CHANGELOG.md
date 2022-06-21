@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add new AEM profile: aem65_sp13
+
 ## [3.27.0] - 2022-03-10
 ### Changed
 - Removed Puppet File->backup explicit parameter as it is now defaulted to 'false' since Puppet 7.0.0
