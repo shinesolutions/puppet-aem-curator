@@ -43,10 +43,10 @@ define aem_curator::install_aem65_sp13(
     aem_type                => $aem_type,
   } -> aem_curator::install_aem_package { "${aem_id}: Install service pack 13":
     tmp_dir         => $tmp_dir,
-    file_name       => 'aem-service-pkg-6.5.13.zip',
+    file_name       => 'aem-service-pkg-6.5.13.0.zip',
     package_name    => 'aem-service-pkg',
     package_group   => 'adobe/cq650/servicepack',
-    package_version => '6.5.13',
+    package_version => '6.5.13.0',
     artifacts_base  => $aem_artifacts_base,
     aem_id          => $aem_id,
   }
