@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgrade Puppet module `puppet-yum` to `6.0.0`
 - Upgrade Puppet module `shinesolutions/aem_resources` to `7.6.1`
 - Upgrade ruby dependencies to most recent working version
+- Update Github Action Publish Docker image to `shinesolutions/aem-platform-buildenv:3.1.0`
 
 ## [3.28.1] - 2022-08-03
 ### Fixed
