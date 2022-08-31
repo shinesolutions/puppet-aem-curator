@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade Puppet module `puppet/archive` to `6.0.2`
+- Upgrade Puppet module `puppetlabs/apache` to `8.1.0`
+- Upgrade Puppet module `puppet-collectd` to `13.0.0`
+- Upgrade Puppet module `puppetlabs/concat` to `7.2.0`
+- Upgrade Puppet module `puppet-healthcheck` to `1.0.1`
+- Upgrade Puppet module `puppetlabs/java` to `8.2.0`
+- Upgrade Puppet module `puppetlabs/java_ks` to `4.3.1`
+- Upgrade Puppet module `puppet-logrotate` to `6.1.0`
+- Upgrade Puppet module `puppetlabs/selinux_core` to `1.2.0`
+- Upgrade Puppet module `puppetlabs/stdlib` to `8.4.0`
+- Upgrade Puppet module `puppet-yum` to `6.0.0`
+- Upgrade Puppet module `shinesolutions/aem_resources` to `7.6.1`
+- Upgrade ruby dependencies to most recent working version
+- Update Github Action Publish Docker image to `shinesolutions/aem-platform-buildenv:3.1.0`
+
 ## [3.28.1] - 2022-08-03
 ### Fixed
 - Corrected aem65_sp13 profile with version 6.5.13.0

@@ -41,7 +41,7 @@ class aem_curator::config_collectd (
     'garbage_collector':
       object_name     => 'java.lang:type=GarbageCollector,*',
       instance_prefix => 'gc-',
-      instance_from   => 'name',
+      instance_from   => ['name'],
       values          => [
         {
           mbean_type => 'invocations',

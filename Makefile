@@ -4,7 +4,7 @@ clean:
 	rm -rf Gemfile.lock bin/ pkg/ stage/ test/ vendor/ /tmp/shinesolutions/puppet-aem-curator/
 
 deps:
-	gem install bundler --version=1.17.3
+	gem install bundler --version=2.3.21
 	bundle install --binstubs -j4
 	bundle exec r10k puppetfile install --verbose --moduledir modules
 	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
