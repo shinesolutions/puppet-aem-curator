@@ -5,7 +5,6 @@ clean:
 
 deps:
 	gem install bundler --version=2.3.24
-	gem install hiera --version=3.10.0
 	bundle install --binstubs -j4
 	bundle exec r10k puppetfile install --verbose --moduledir modules
 	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
