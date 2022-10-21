@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+ruby '2.7.6'
 
-gem 'hiera', '3.10.0', require: false
 gem 'facter', '2.5.7', require: false
 gem 'inspec', '2.3.10', require: false
 gem 'metadata-json-lint', '3.0.2', require: false
