@@ -5,6 +5,7 @@ ruby '2.7.6'
 
 gem 'facter', '2.5.7', require: false
 gem 'inspec', '2.3.10', require: false
+gem 'hiera', '3.9.0', require: false
 gem 'metadata-json-lint', '3.0.2', require: false
 gem 'puppet', '7.20.0', require: false
 gem 'puppetlabs_spec_helper', '4.0.1', require: false
