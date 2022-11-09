@@ -1,3 +1,3 @@
-FROM shinesolutions/aem-platform-buildenv:3.1.0
+FROM shinesolutions/aem-platform-buildenv:latest
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh", "$PUPPETFORGE_TOKEN"]
