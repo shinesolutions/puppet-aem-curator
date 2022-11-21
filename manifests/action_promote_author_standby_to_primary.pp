@@ -44,6 +44,9 @@ class aem_curator::action_promote_author_standby_to_primary (
   } -> exec { 'crx-process-quited.sh 24 5':
     cwd  => $tmp_dir,
     path => ["${base_dir}/aem-tools", '/usr/bin', '/opt/puppetlabs/bin/', '/bin'],
+  } -> exec { 'sleep 180':
+    cwd  => $tmp_dir,
+    path => ['/usr/bin', '/usr/sbin', '/sbin'],
   } -> aem_resources::author_primary_set_config {'Promote author-primary':
     aem_context_root => $aem_context_root,
     aem_crx_packages => $aem_crx_packages,
