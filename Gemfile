@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
-ruby '2.7.6'
 
 gem 'facter', '2.5.7', require: false
 gem 'hiera', '3.9.0', require: false
