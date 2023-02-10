@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added feature to enable SSL for JMX #RS-124
+
+### Changed
+- Lockdown version of `concurrent-ruby` to `1.1.9` #RS-126
 
 ## [3.31.0] - 2022-11-29
 ### Changed
