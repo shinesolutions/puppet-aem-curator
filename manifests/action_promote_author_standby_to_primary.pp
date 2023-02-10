@@ -13,6 +13,9 @@ class aem_curator::action_promote_author_standby_to_primary (
   $aem_runmodes                    = [],
   $aem_version                    = '6.2',
   $jmxremote_port                 = '5982',
+  $jmxremote_enable_ssl           = false,
+  $jmxremote_keystore_path        = undef,
+  $jmxremote_keystore_password    = 'changeit',
   $jvm_mem_opts                   = undef,
   $jvm_opts                       = undef,
   $login_ready_max_tries          = 30,
@@ -24,15 +27,41 @@ class aem_curator::action_promote_author_standby_to_primary (
 
   # Updating provided JVM Options with JMXRemote JVM options if port is provided
   if $jmxremote_port {
+    # File path containing the JMX properties
+    $jmxremote_file_path = '/etc/jmx.properties'
+    # Setting up JMX Remote properties
     $jmxremote_options = [
-      '-Dcom.sun.management.jmxremote',
-      "-Dcom.sun.management.jmxremote.port=${jmxremote_port}",
-      '-Dcom.sun.management.jmxremote.authenticate=false',
-      '-Dcom.sun.management.jmxremote.ssl=false',
-      '-Dcom.sun.management.jmxremote.local.only=true',
-      '-Djava.rmi.server.hostname=localhost'
+      'com.sun.management.jmxremote=true',
+      "com.sun.management.jmxremote.port=${jmxremote_port}",
+      'com.sun.management.jmxremote.authenticate=false',
+      'com.sun.management.jmxremote.local.only=true',
+      'java.rmi.server.hostname=localhost'
     ]
-    $_jvm_opts_list = concat([$jvm_opts], $jmxremote_options)
+    # Configure SSL for JMX
+    if $jmxremote_enable_ssl {
+      # Setting up JMX SSL options
+      $jmxremote_ssl_options = [
+        'com.sun.management.jmxremote.ssl=true',
+        "com.sun.management.jmxremote.ssl.config.file=${jmxremote_file_path}", #  Filepath containing the SSL Keystore properties
+        "javax.net.ssl.keyStore=${jmxremote_keystore_path}",
+        "javax.net.ssl.keyStorePassword=${jmxremote_keystore_password}"
+      ]
+    } else {
+      # Disabling JMX SSL if not enabled
+      $jmxremote_ssl_options = [
+        'com.sun.management.jmxremote.ssl=false',
+      ]
+    }
+
+    # Creating JMX property file based on $jmxremote_options & $jmxremote_ssl_options
+    file { $jmxremote_file_path:
+      content => template('aem_curator/config/jmx.properties.erb'),
+      mode    => '0400',
+      owner   => "aem-${aem_id}",
+      group   => "aem-${aem_id}",
+    }
+
+    $_jvm_opts_list = concat([$jvm_opts], ["-Dcom.sun.management.config.file=${jmxremote_file_path}"])
     $_jvm_opts = $_jvm_opts_list.join(' ')
   } else {
     $_jvm_opts = $jvm_opts
