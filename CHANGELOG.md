@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added feature to enable SSL for JMX #RS-124
 
 ### Changed
-- Lockdown version of `concurrent-ruby` to `1.0.9` #RS-126
+- Lockdown version of `concurrent-ruby` to `1.1.9` #RS-126
 
 ## [3.31.0] - 2022-11-29
 ### Changed
