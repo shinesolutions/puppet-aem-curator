@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added feature to enable authentication for JMX #RS-125
+- Added feature to connect to JMX using username & password #RS-125
+- Added new Class to configure JMX for AEM #RS-125
+- Added execution of `config_collectd` manifest to action_promote_author_standby_to_primary manifest, to ensure collectd is properly configured if authentication is enabled #RS-125
+
+### Changed
+- Changed component configuration manifest to use new Class `config_aem_jmx` to configure JMX for EM #RS-125
 
 ## [3.32.0] - 2023-02-10
 ### Added
