@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.33.0] - 2023-02-15
 ### Added
 - Added feature to enable authentication for JMX #RS-125
 - Added feature to connect to JMX using username & password #RS-125
@@ -914,7 +914,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.32.0...HEAD
+[3.33.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.32.0...3.33.0
 [3.32.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.31.0...3.32.0
 [3.31.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.30.0...3.31.0
 [3.30.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.29.0...3.30.0
