@@ -3,68 +3,63 @@ class aem_curator::action_promote_author_standby_to_primary (
   $author_port,
   $base_dir,
   $tmp_dir,
-  $aem_context_root               = undef,
-  $aem_crx_packages               = undef,
-  $aem_debug_port                 = undef,
-  $aem_home_dir                   = '/opt/aem/author',
-  $aem_id                         = 'author',
-  $aem_username                   = $::aem_username,
-  $aem_password                   = $::aem_password,
-  $aem_runmodes                    = [],
-  $aem_version                    = '6.2',
-  $jmxremote_port                 = '5982',
-  $jmxremote_enable_ssl           = false,
-  $jmxremote_keystore_path        = undef,
-  $jmxremote_keystore_password    = 'changeit',
-  $jvm_mem_opts                   = undef,
-  $jvm_opts                       = undef,
-  $login_ready_max_tries          = 30,
-  $login_ready_base_sleep_seconds = 15,
-  $login_ready_max_sleep_seconds  = 15,
-  $osgi_configs                   = undef,
+  $aem_context_root                   = undef,
+  $aem_crx_packages                   = undef,
+  $aem_debug_port                     = undef,
+  $aem_home_dir                       = '/opt/aem/author',
+  $aem_id                             = 'author',
+  $aem_username                       = $::aem_username,
+  $aem_password                       = $::aem_password,
+  $aem_runmodes                       = [],
+  $aem_version                        = '6.2',
+  $ec2_id                             = $::ec2_metadata['instance-id'],
+  $jmxremote_port                     = '5982',
+  $jmxremote_enable_authentication    = false,
+  $jmxremote_enable_ssl               = false,
+  $jmxremote_keystore_path            = undef,
+  $jmxremote_keystore_password        = 'changeit',
+  $jmxremote_monitoring_username      = undef,
+  $jmxremote_monitoring_user_password = undef,
+  $jvm_mem_opts                       = undef,
+  $jvm_opts                           = undef,
+  $login_ready_max_tries              = 30,
+  $login_ready_base_sleep_seconds     = 15,
+  $login_ready_max_sleep_seconds      = 15,
+  $osgi_configs                       = undef,
+  $stack_prefix                       = $::stack_prefix,
 ) {
 
 
   # Updating provided JVM Options with JMXRemote JVM options if port is provided
   if $jmxremote_port {
     # File path containing the JMX properties
-    $jmxremote_file_path = '/etc/jmx.properties'
-    # Setting up JMX Remote properties
-    $jmxremote_options = [
-      'com.sun.management.jmxremote=true',
-      "com.sun.management.jmxremote.port=${jmxremote_port}",
-      'com.sun.management.jmxremote.authenticate=false',
-      'com.sun.management.jmxremote.local.only=true',
-      'java.rmi.server.hostname=localhost'
-    ]
-    # Configure SSL for JMX
-    if $jmxremote_enable_ssl {
-      # Setting up JMX SSL options
-      $jmxremote_ssl_options = [
-        'com.sun.management.jmxremote.ssl=true',
-        "com.sun.management.jmxremote.ssl.config.file=${jmxremote_file_path}", #  Filepath containing the SSL Keystore properties
-        "javax.net.ssl.keyStore=${jmxremote_keystore_path}",
-        "javax.net.ssl.keyStorePassword=${jmxremote_keystore_password}"
-      ]
-    } else {
-      # Disabling JMX SSL if not enabled
-      $jmxremote_ssl_options = [
-        'com.sun.management.jmxremote.ssl=false',
-      ]
-    }
+    $jmxremote_configuration_file_path = "/etc/jmx-${aem_id}.properties"
 
-    # Creating JMX property file based on $jmxremote_options & $jmxremote_ssl_options
-    file { $jmxremote_file_path:
-      content => template('aem_curator/config/jmx.properties.erb'),
-      mode    => '0400',
-      owner   => "aem-${aem_id}",
-      group   => "aem-${aem_id}",
+    # Creating JMX property file with JMX configuration
+    aem_curator::config_aem_jmx { "${aem_id}: Configure JMX for AEM":
+      aem_id                             => $aem_id,
+      jmxremote_configuration_file_path  => $jmxremote_configuration_file_path,
+      jmxremote_enable_authentication    => $jmxremote_enable_authentication,
+      jmxremote_enable_ssl               => $jmxremote_enable_ssl,
+      jmxremote_port                     => $jmxremote_port,
+      jmxremote_keystore_password        => $jmxremote_keystore_password,
+      jmxremote_keystore_path            => $jmxremote_keystore_path,
+      jmxremote_monitoring_username      => $jmxremote_monitoring_username,
+      jmxremote_monitoring_user_password => $jmxremote_monitoring_user_password,
     }
-
-    $_jvm_opts_list = concat([$jvm_opts], ["-Dcom.sun.management.config.file=${jmxremote_file_path}"])
+    # Setting JVM Option with the patah to the JMX property file
+    $_jvm_opts_list = concat([$jvm_opts], ["-Dcom.sun.management.config.file=${jmxremote_configuration_file_path}"])
     $_jvm_opts = $_jvm_opts_list.join(' ')
   } else {
     $_jvm_opts = $jvm_opts
+  }
+
+  class { 'aem_curator::config_collectd':
+    component       => 'author-primary',
+    collectd_prefix => "${stack_prefix}-author-primary",
+    ec2_id          => $ec2_id},
+    jmx_user          => $jmxremote_monitoring_username,
+    jmx_user_password => $jmxremote_monitoring_user_password,
   }
 
   exec { 'service aem-author stop':

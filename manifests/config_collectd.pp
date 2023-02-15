@@ -2,6 +2,14 @@
 #
 # Configuration AEM Java AMIs
 #
+# [*jmx_user*]
+#  JMX Username of the Monitoring user
+#  default: undef
+#
+# [*jmx_user_password*]
+#  JMX User password of the monitoring user
+#  default: undef
+#
 # === Authors
 #
 # James Sinclair <james.sinclair@shinesolutions.com>
@@ -19,6 +27,8 @@ class aem_curator::config_collectd (
   $aem_instances,
   $collectd_prefix,
   $ec2_id,
+  $jmx_user          = undef,
+  $jmx_user_password = undef,
 ) {
 
   if $proxy_enabled == true {
@@ -92,6 +102,8 @@ class aem_curator::config_collectd (
       host        => "aem-${aem_instance['aem_id']}",
       service_url => "service:jmx:rmi:///jndi/rmi://localhost:${aem_instance['jmxremote_port']}/jmxrmi",
       collect     => $aem_instance['instance_prefixes'],
+      user        => $jmx_user,
+      password    => $jmx_user_password,
     }
   }
 
