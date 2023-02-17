@@ -62,7 +62,7 @@ class aem_curator::action_promote_author_standby_to_primary (
     jmx_user_password => $jmxremote_monitoring_user_password,
   }
 
-  exec { 'service aem-author stop':
+  exec { 'systemctl stop aem-author':
     cwd  => $tmp_dir,
     path => ['/usr/bin', '/usr/sbin', '/sbin'],
   } -> exec { 'crx-process-quited.sh 24 5':
@@ -84,7 +84,7 @@ class aem_curator::action_promote_author_standby_to_primary (
     osgi_configs     => $osgi_configs
   } -> class { 'aem_curator::config_logrotate':
   } -> service { 'aem-author':
-    ensure => 'running',
+    start  => 'systemctl start aem-author',
     enable => true,
   } -> aem_aem { 'Wait until login page is ready':
     ensure                     => login_page_is_ready,
