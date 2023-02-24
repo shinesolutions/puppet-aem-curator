@@ -84,6 +84,7 @@ class aem_curator::action_promote_author_standby_to_primary (
     osgi_configs     => $osgi_configs
   } -> class { 'aem_curator::config_logrotate':
   } -> service { 'aem-author':
+    ensure => running,
     start  => 'systemctl start aem-author',
     enable => true,
   } -> aem_aem { 'Wait until login page is ready':
