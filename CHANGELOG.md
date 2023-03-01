@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.33.2] - 2023-02-24
+### Fixed
+- Fixed issue with restart of aem author service during author promotion on Amazon Linux 2 #RS-40
+
 ## [3.33.1] - 2023-02-17
 ### Fixed
 - Fixed syntax error in `action_promote_author_standby_to_primary` manifest #RS-125
