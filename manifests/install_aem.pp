@@ -233,12 +233,12 @@ define aem_curator::install_aem (
                   Aem_curator::Config_aem["${aem_id}: Configure AEM"]
                 ],
       before  => [
-                  Exec["service aem-${aem_id} stop"]
+                  Exec["systemctl stop aem-${aem_id}"]
                 ],
     }
 
   if $setup_repository_volume {
-    exec { "service aem-${aem_id} stop":
+    exec { "systemctl stop aem-${aem_id}":
       require => [
         Aem_curator::Config_aem["${aem_id}: Configure AEM"],
         Mount[$data_volume_mount_point],
@@ -257,7 +257,7 @@ define aem_curator::install_aem (
       command => "chown -R aem-${aem_id}:aem-${aem_id} ${data_volume_mount_point}",
     }
   } else {
-    exec { "service aem-${aem_id} stop":
+    exec { "systemctl stop aem-${aem_id}":
       require => [
         Aem_curator::Config_aem["${aem_id}: Configure AEM"],
       ],
