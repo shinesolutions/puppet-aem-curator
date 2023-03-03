@@ -127,11 +127,11 @@ define aem_curator::install_aem_package (
       tags   => 'deep',
       aem_id => $aem_id,
     } -> exec { "${aem_id}: Stop post install of ${package_name}":
-      command => "service aem-${aem_id} stop",
+      command => "systemctl stop aem-${aem_id}",
     } -> exec { "${aem_id}: Wait post stop with ${package_name}":
       command => 'sleep 120',
     } -> exec { "${aem_id}: Start post install of ${package_name}":
-      command => "service aem-${aem_id} start",
+      command => "systemctl start aem-${aem_id}",
     } -> exec { "${aem_id}: Wait post start with ${package_name}":
       command => "sleep ${post_restart_sleep_secs}",
     }
