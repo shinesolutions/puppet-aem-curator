@@ -1,14 +1,25 @@
 define aem_curator::config_truststore (
-  $aem_id                      = 'aem',
-  $aem_username                = undef,
-  $aem_password                = undef,
-  $enable_truststore_creation  = false,
-  $enable_truststore_migration = false,
-  $file                        = undef,
-  $tmp_dir                     = '/tmp',
-  $truststore_password         = undef,
+  $aem_id                                     = 'aem',
+  $aem_username                               = undef,
+  $aem_password                               = undef,
+  $enable_truststore_creation                 = false,
+  $enable_truststore_deletion_before_creation = false,
+  $enable_truststore_migration                = false,
+  $file                                       = undef,
+  $tmp_dir                                    = '/tmp',
+  $truststore_password                        = undef,
 ) {
   if $enable_truststore_creation {
+
+    if $enable_truststore_deletion_before_creation {
+      aem_resources::remove_truststore { "${aem_id}: Remove AEM Global Truststore":
+        aem_id       => $aem_id,
+        aem_username => $aem_username,
+        aem_password => $aem_password,
+        force        => true,
+      }
+    }
+
     if $file {
       archive { "${tmp_dir}/truststore.p12":
         ensure => present,
