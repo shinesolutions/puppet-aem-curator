@@ -1,6 +1,6 @@
 {
   "name": "shinesolutions-aem_curator",
-  "version": "3.29.1",
+  "version": "3.29.2",
   "author": "Shine Solutions (opensource@shinesolutions.com)",
   "summary": "Puppet module for installing and configuring a curated set of Adobe Experience Manager (AEM) components",
   "license": "Apache-2.0",

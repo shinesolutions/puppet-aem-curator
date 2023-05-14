@@ -92,6 +92,7 @@ class aem_curator::config_publish (
   $enable_post_start_sleep                       = false,
   $enable_remove_all_agents                      = false,
   $enable_truststore_creation                    = false,
+  $enable_truststore_deletion_before_creation    = false,
   $enable_truststore_migration                   = false,
   $enable_truststore_removal                     = false,
   $post_start_sleep_seconds                      = '120',
@@ -377,11 +378,12 @@ class aem_curator::config_publish (
     tags                       => 'deep',
     aem_id                     => $aem_id,
   } -> aem_curator::config_truststore { "${aem_id}: Configure AEM Truststore":
-    aem_id                      => $aem_id,
-    enable_truststore_creation  => $enable_truststore_creation,
-    enable_truststore_migration => $enable_truststore_migration,
-    truststore_password         => $truststore_password,
-    tmp_dir                     => $tmp_dir
+    aem_id                                     => $aem_id,
+    enable_truststore_creation                 => $enable_truststore_creation,
+    enable_truststore_deletion_before_creation => $enable_truststore_deletion_before_creation,
+    enable_truststore_migration                => $enable_truststore_migration,
+    truststore_password                        => $truststore_password,
+    tmp_dir                                    => $tmp_dir
   } -> aem_aem { "${aem_id}: Wait until login page is ready after configuring AEM Truststore":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
