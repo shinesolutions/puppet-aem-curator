@@ -54,7 +54,7 @@
     },
     {
       "name": "shinesolutions/aem_resources",
-      "version_requirement": "7.8.0"
+      "version_requirement": "7.9.0"
     },
     {
       "name": "bstopp/aem",

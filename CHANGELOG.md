@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Upgrade Puppet module `shinesolutions/aem_resources` to `7.9.0`
+
 ## [3.35.0] - 2023-04-20
 ### Added
 - Added new AEM profile: aem65_sp16 #RS-142
