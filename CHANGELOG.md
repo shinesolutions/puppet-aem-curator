@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed missing /usr/java directory when adding Java symlink #RS-146
+ 
 ## [3.40.0] - 2023-06-22
 
+### Added
+- Add Java symlink for JDK 371 support RS-146
+
 ## [3.39.0] - 2023-06-22
+
 ### Added
 - JDK 371 Support Added #RS-146
 

@@ -81,6 +81,11 @@ class aem_curator::install_java (
     require => Java::Download[$jdk_version],
   }
 
+  file { '/usr/java':
+    ensure => directory,
+    mode   => '0700',
+  }
+
   # Set "default" symlink as this is used in checks and is not created by all Java installations
   file { '/usr/java/default':
     ensure => 'link',
