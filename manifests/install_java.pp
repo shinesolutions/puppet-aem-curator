@@ -81,7 +81,7 @@ class aem_curator::install_java (
     require => Java::Download[$jdk_version],
   }
 
-  file { "/usr/java":
+  file { '/usr/java':
     ensure => directory,
     mode   => '0700',
   }
