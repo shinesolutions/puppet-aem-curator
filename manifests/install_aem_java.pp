@@ -92,7 +92,7 @@ class aem_curator::install_aem_java (
   # Set "default" symlink as this is referenced by keystore settings and is not created by all Java installations
   file { '/usr/java/default':
     ensure => 'link',
-    target => "${java_home_path}",
+    target => ${java_home_path},
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
