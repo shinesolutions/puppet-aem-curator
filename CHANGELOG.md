@@ -6,12 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
 ### Fixed
 - Fixed missing /usr/java directory when adding Java symlink #RS-146
  
 ## [3.40.0] - 2023-06-22
+
+### Added
+- Add Java symlink for JDK 371 support RS-146
+
+## [3.39.0] - 2023-06-22
+
 ### Added
 - JDK 371 Support Added #RS-146
+
+## [3.38.0] - 2023-06-07
+### Changed
+- Upgrade Puppet module shinesolutions/aem_resources to 7.10.1
+
+## [3.37.0] - 2023-06-07
+### Changed
+- Upgrade Puppet module `shinesolutions/aem_resources` to `7.10.0`
+
+## [3.36.0] - 2023-06-03
+### Changed
+- Upgrade Puppet module `shinesolutions/aem_resources` to `7.9.0`
 
 ## [3.35.0] - 2023-04-20
 ### Added
@@ -938,7 +957,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.35.0...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.0...HEAD
+[3.40.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.39.0...3.40.0
+[3.39.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.38.0...3.39.0
+[3.38.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.37.0...3.38.0
+[3.37.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.36.0...3.37.0
+[3.36.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.35.0...3.36.0
 [3.35.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.34.0...3.35.0
 [3.34.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.33.2...3.34.0
 [3.33.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.33.1...3.33.2
