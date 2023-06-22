@@ -81,6 +81,12 @@ class aem_curator::install_java (
     require => Java::Download[$jdk_version],
   }
 
+  # Set "default" symlink as this is used in checks and is not created by all Java installations
+  file { '/usr/java/default':
+    ensure => 'link',
+    target => $java_home_path,
+  }
+
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => present,
     content => $libjvm_content_path,
