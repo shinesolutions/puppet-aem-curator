@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Fixed missing /usr/java directory when adding Java symlink #RS-146
+ 
+## [3.40.0] - 2023-06-22
 ### Added
 - JDK 371 Support Added #RS-146
 
