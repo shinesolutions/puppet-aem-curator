@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Corrects java_home_path for jdk 8_371 #RS-146
+
+## [3.40.1] - 2023-06-23
+### Fixed
 - Fixed missing /usr/java directory when adding Java symlink #RS-146
  
 ## [3.40.0] - 2023-06-22
