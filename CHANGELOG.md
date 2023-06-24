@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [3.40.2] - 2023-06-24
 
 ## [3.40.1] - 2023-06-23
@@ -960,6 +962,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.2...HEAD
 [3.40.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.2
 [3.40.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.1
 [3.40.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.0...3.40.1
