@@ -83,7 +83,7 @@ class aem_curator::install_java (
 
   file { '/usr/java':
     ensure => directory,
-    mode   => '0700',
+    mode   => '0775',
   }
 
   # Set "default" symlink as this is used in checks and is not created by all Java installations

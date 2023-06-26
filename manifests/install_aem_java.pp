@@ -91,7 +91,7 @@ class aem_curator::install_aem_java (
 
   file { '/usr/java':
     ensure => directory,
-    mode   => '0700',
+    mode   => '0775',
   }
 
   # Set "default" symlink as this is referenced by keystore settings and is not created by all Java installations
