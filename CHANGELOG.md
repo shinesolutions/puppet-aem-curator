@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
-Fixing /usr/java directory permissions
+- Fixing /usr/java directory permissions  
 
 ## [3.40.2] - 2023-06-24
 
