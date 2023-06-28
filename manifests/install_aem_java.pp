@@ -43,7 +43,11 @@ class aem_curator::install_aem_java (
       $jdk_version_major = $jdk_version_splitted[0]
       $jdk_version_update = $jdk_version_splitted[1]
       # Support of different JDK8 versions with different binary pathes
-      if Integer($jdk_version_update) >= 261 {
+      if Integer($jdk_version_update) >= 371  {
+        $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}-oracle-x64"
+        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
+      } elsif Integer($jdk_version_update) >= 261 and Integer($jdk_version_update) < 371 {
         $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64"
         $libjvm_content_path= "${java_home_path}/jre/lib/amd64/server/\n"
         $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
@@ -84,6 +88,17 @@ class aem_curator::install_aem_java (
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
     require => Java::Download[$jdk_version],
   }
+  file { '/usr/java':
+    ensure => directory,
+    mode   => '0775',
+  }
+
+  # Set "default" symlink as this is referenced by keystore settings and is not created by all Java installations
+  file { '/usr/java/default':
+    ensure => 'link',
+    target => $java_home_path,
+  }
+
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => present,
