@@ -9,6 +9,7 @@ class aem_curator::action_flush_dispatcher_cache (
       "${docroot_dir}/conf",
       "${docroot_dir}/content",
       "${docroot_dir}/etc",
+      "${docroot_dir}/etc.clientlibs",
       "${docroot_dir}/home",
       "${docroot_dir}/libs",
       "${docroot_dir}/system",
