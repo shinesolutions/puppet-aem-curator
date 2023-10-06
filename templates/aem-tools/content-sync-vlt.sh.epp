@@ -41,11 +41,15 @@ source_ip=$(aws ec2 describe-instances
   -- output text
 )
 
+instance_id=$(facter ec2_metadata.instance-id)
+security_groups=$(aws ec2 describe-instances --instance-ids $instance_id --query Reservations[*].Instances[*].SecurityGroups[*].GroupId --output text)
+
 FACTER_aem_username="${aem_username}" \
 FACTER_aem_password="${aem_password}" \
 FACTER_source_ip="${source_ip}" \
 FACTER_component="${component}"
 FACTER_aem_port="${aem_port}"
+FACTER_security_groups="${security_groups}"
 /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
