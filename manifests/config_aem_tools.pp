@@ -4,6 +4,7 @@ class aem_curator::config_aem_tools (
   $base_dir,
   $oak_run_source,
   $oak_run_version,
+  $aem_vlt_version,
   $tmp_dir,
   $aem_instances                                  = undef,
   $aem_tools_env_path                             = '$PATH',
