@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+if [ "$#" -ne 1 ]; then
+  echo 'Usage: ./attach-detach-content-sync-sg.sh <source_stack_prefix> <action>'
+  echo "   where action is either 'attach' or 'detach'"
+  exit 1
+fi
+
+PATH=<%= $aem_tools_env_path %>
+
+source_stack_prefix="$1"
+action="$2"
+
+# translate puppet exit code to follow convention
+translate_exit_code() {
+
+  exit_code="$1"
+  if [ "$exit_code" -eq 0 ] || [ "$exit_code" -eq 2 ]; then
+    exit_code=0
+  else
+    exit "$exit_code"
+  fi
+
+  return "$exit_code"
+}
+
+set +o errexit
+
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+
+mac=$(ifconfig | grep ether | awk '{print $2}')
+security_group_ids=($(facter "ec2_metadata.interfaces.macs.${mac}.security-group-ids"))
+security_group_ids="${security_groups[@]}"
+
+stack_prefix=$(facter stack_prefix)
+sg_stack=$(aws cloudformation describe-stacks --query Stacks[?StackName!=`null`][?starts_with(StackName, `${stack_prefix}-aem-full-set-prerequisites-stack-SecurityGroupsStack`) == `true`].StackName' --output text)
+content_sync_sg=$(aws cloudfront describe-stacks --stack_name "$sg_stack" --query "Stacks[*].Outputs[?ExportName == '${stack_prefix}-AemContentSyncSecurityGroup'].OutputValue" --output text)
+
+if [[ $action == 'attach' ]]; then
+  $security_group_ids="$security_group_ids $content_sync_sg" 
+elif [[ $action != 'detach' ]]; then
+  echo "Error: action must be either 'detach' or 'attach', found '$action'"
+  exit 1
+fi
+
+FACTER_security_group_ids="${security_group_ids}"
+/opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  --execute "include aem_curator::action_attach_detach_content_sync_vlt_sg"
+
+translate_exit_code "$?"
+

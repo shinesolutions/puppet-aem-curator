@@ -47,9 +47,15 @@ security_groups=$(aws ec2 describe-instances --instance-ids $instance_id --query
 FACTER_aem_username="${aem_username}" \
 FACTER_aem_password="${aem_password}" \
 FACTER_source_ip="${source_ip}" \
-FACTER_component="${component}"
-FACTER_aem_port="${aem_port}"
-FACTER_security_groups="${security_groups}"
+FACTER_component="${component}" \
+FACTER_aem_port="${aem_port}" \
+FACTER_recursive="${recursive}" \
+FACTER_batch_size="${batch_size}" \
+FACTER_update="${update}" \
+FACTER_newer_only="${newer_only}" \
+FACTER_exclude_path="${exclude_path}" \
+FACTER_content_sync_path="${content_sync_path}" \
+FACTER_security_groups="${security_groups}" \
 /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \
