@@ -17,27 +17,62 @@ class aem_curator::action_deploy_artifacts (
   $security_groups            = $::security_groups,
   $deployment_sleep_seconds   = 10,
   $component                  = $::component,
-  $source_stack_prefix        = $::source_stack_prefix
+  $source_stack_prefix        = $::source_stack_prefix,
+  $recursive                  = $::recursive,
+  $batch_size                 = $::batch_size,
+  $update                     = $::update,
+  $newer_only                 = $::newer_only,
+  $exclude_path               = $::exclude_path,
+  $content_sync_path          = $::content_sync_path,
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,
 ) {
 
-  exec { "${aem_id}: Add security group to allow access to target stack from source stack"
+  exec { "${aem_id}: Add security group to allow access to target stack from source stack":
     command => "aws ec2 modify-instance-attribute --instance-id ${aem_host} --groups ${security_groups} ${content_sync_sg}",
     path    => '/usr/local/bin/:/bin/',
   }
+  $vlt_rcp_cmd_options = ""
+  if $recursive {
+    if $exclude_path {
+      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
+    }
+    $vlt_rcp_cmd_options = "-r "
+  }
 
-  exec { "${aem_id}: Execute VLT content sync command"
+  if $batch_size {
+    if $exclude_path {
+      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
+    }
+    $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -b ${batch_size} "
+  }
+
+  if $update {
+    if $exclude_path {
+      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
+    }
+    $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -u "
+  }
+
+  if $newer_only {
+    if $exclude_path {
+      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
+    }
+    $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -n "
+  }
+
+
+  exec { "${aem_id}: Execute VLT content sync command":
     command => @("CMD"/L),
-      /opt/aws-stack-provisioner/aem-tools/${vlt_dir}/vlt rcp -b 100 -r -n -u \
-      http://${aem_username}:${aem_password}@${source_ip}:${aem_port}/crx/-/jcr:root/content/ \
-      http://${aem_username}:${aem_password}@localhost:${aem_port}/crx/-/jcr:root/content/, 
+      /opt/aws-stack-provisioner/aem-tools/${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+      http://${aem_username}:${aem_password}@${source_ip}:${aem_port}/crx/-/jcr:root${content_sync_path} \
+      http://${aem_username}:${aem_password}@localhost:${aem_port}/crx/-/jcr:root${content_sync_path},
     | CMD
     path    => '/usr/local/bin/:/bin/',
   }
 
-  exec { "${aem_id}: Remove security group to revert access to target stack from source stack"
+  exec { "${aem_id}: Remove security group to revert access to target stack from source stack":
     command => "aws ec2 modify-instance-attribute --instance-id ${aem_host} --groups ${security_groups}",
     path    => '/usr/local/bin/:/bin/',
   }
