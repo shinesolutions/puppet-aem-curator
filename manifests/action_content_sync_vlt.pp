@@ -1,5 +1,5 @@
 
-class aem_curator::action_deploy_artifacts (
+class aem_curator::action_content_sync_vlt (
   $aem_host,
   $author_port,
   $author_secure,
