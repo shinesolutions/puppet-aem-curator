@@ -50,9 +50,6 @@ source_ip=$(aws ec2 describe-instances
   -- output text
 )
 
-instance_id=$(facter ec2_metadata.instance-id)
-security_groups=$(aws ec2 describe-instances --instance-ids $instance_id --query Reservations[*].Instances[*].SecurityGroups[*].GroupId --output text)
-
 FACTER_aem_username="${aem_username}" \
 FACTER_aem_password="${aem_password}" \
 FACTER_aem_source_stack_password="${aem_source_stack_password}" \
@@ -65,7 +62,6 @@ FACTER_update="${update}" \
 FACTER_newer_only="${newer_only}" \
 FACTER_exclude_path="${exclude_path}" \
 FACTER_content_sync_path="${content_sync_path}" \
-FACTER_security_groups="${security_groups}" \
 /opt/puppetlabs/bin/puppet apply \
   --debug \
   --detailed-exitcodes \

@@ -14,10 +14,8 @@ class aem_curator::action_content_sync_vlt (
   $source_ip                  = $::source_ip,
   $aem_port                   = $::aem_port,
   $content_sync_sg            = $::content_sync_sg,
-  $security_groups            = $::security_groups,
   $deployment_sleep_seconds   = 10,
   $component                  = $::component,
-  $source_stack_prefix        = $::source_stack_prefix,
   $aem_source_stack_password  = $::aem_source_stack_password,
   $recursive                  = $::recursive,
   $batch_size                 = $::batch_size,
@@ -30,16 +28,12 @@ class aem_curator::action_content_sync_vlt (
   $retries_max_sleep_seconds  = 5,
 ) {
 
-  exec { "${aem_id}: Add security group to allow access to target stack from source stack":
-    command => "aws ec2 modify-instance-attribute --instance-id ${aem_host} --groups ${security_groups} ${content_sync_sg}",
-    path    => '/usr/local/bin/:/bin/',
-  }
-  $vlt_rcp_cmd_options = ""
+  $vlt_rcp_cmd_options = ''
   if $recursive {
     if $exclude_path {
       $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
     }
-    $vlt_rcp_cmd_options = "-r "
+    $vlt_rcp_cmd_options = '-r '
   }
 
   if $batch_size {
@@ -63,18 +57,12 @@ class aem_curator::action_content_sync_vlt (
     $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -n "
   }
 
-
   exec { "${aem_id}: Execute VLT content sync command":
     command => @("CMD"/L),
       /opt/aws-stack-provisioner/aem-tools/${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
       http://${aem_username}:${aem_source_stack_password}@${source_ip}:${aem_port}/crx/-/jcr:root${content_sync_path} \
       http://${aem_username}:${aem_password}@localhost:${aem_port}/crx/-/jcr:root${content_sync_path},
     | CMD
-    path    => '/usr/local/bin/:/bin/',
-  }
-
-  exec { "${aem_id}: Remove security group to revert access to target stack from source stack":
-    command => "aws ec2 modify-instance-attribute --instance-id ${aem_host} --groups ${security_groups}",
     path    => '/usr/local/bin/:/bin/',
   }
 }
