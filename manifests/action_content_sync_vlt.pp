@@ -1,5 +1,5 @@
 
-class aem_curator::action_deploy_artifacts (
+class aem_curator::action_content_sync_vlt (
   $aem_host,
   $author_port,
   $author_secure,
@@ -18,6 +18,7 @@ class aem_curator::action_deploy_artifacts (
   $deployment_sleep_seconds   = 10,
   $component                  = $::component,
   $source_stack_prefix        = $::source_stack_prefix,
+  $aem_source_stack_password  = $::aem_source_stack_password,
   $recursive                  = $::recursive,
   $batch_size                 = $::batch_size,
   $update                     = $::update,
@@ -66,7 +67,7 @@ class aem_curator::action_deploy_artifacts (
   exec { "${aem_id}: Execute VLT content sync command":
     command => @("CMD"/L),
       /opt/aws-stack-provisioner/aem-tools/${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
-      http://${aem_username}:${aem_password}@${source_ip}:${aem_port}/crx/-/jcr:root${content_sync_path} \
+      http://${aem_username}:${aem_source_stack_password}@${source_ip}:${aem_port}/crx/-/jcr:root${content_sync_path} \
       http://${aem_username}:${aem_password}@localhost:${aem_port}/crx/-/jcr:root${content_sync_path},
     | CMD
     path    => '/usr/local/bin/:/bin/',

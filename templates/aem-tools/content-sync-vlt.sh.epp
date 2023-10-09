@@ -21,7 +21,9 @@ content_sync_path="$9"
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
+data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
 
+aem_source_stack_password=$(aws s3 cp s3://${data_bucket_name}/${source_stack_prefix}/system-users-credentials.json - | jq --raw-output .$aem_username)
 # translate puppet exit code to follow convention
 translate_exit_code() {
 
@@ -53,6 +55,7 @@ security_groups=$(aws ec2 describe-instances --instance-ids $instance_id --query
 
 FACTER_aem_username="${aem_username}" \
 FACTER_aem_password="${aem_password}" \
+FACTER_aem_source_stack_password="${aem_source_stack_password}" \
 FACTER_source_ip="${source_ip}" \
 FACTER_component="${component}" \
 FACTER_aem_port="${aem_port}" \
