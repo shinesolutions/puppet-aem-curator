@@ -28,12 +28,12 @@ class aem_curator::action_content_sync_vlt (
   $retries_max_sleep_seconds  = 5,
 ) {
 
-  $vlt_rcp_cmd_options = ""
+  $vlt_rcp_cmd_options = ''
   if $recursive {
     if $exclude_path {
       $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
     }
-    $vlt_rcp_cmd_options = "-r "
+    $vlt_rcp_cmd_options = '-r '
   }
 
   if $batch_size {
