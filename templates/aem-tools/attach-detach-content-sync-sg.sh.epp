@@ -2,7 +2,7 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" -ne 2 ]; then
   echo 'Usage: ./attach-detach-content-sync-sg.sh <source_stack_prefix> <action>'
   echo "   where action is either 'attach' or 'detach'"
   exit 1
