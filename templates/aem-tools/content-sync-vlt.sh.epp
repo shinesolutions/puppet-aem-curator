@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -o nounset
+set -o errexit
+
+if [ "$#" -ne 9 ]; then
+  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <aem_port> <recursive> <batch_size> <update> <newer_only> <exclude_path> <content_sync_path>'
+  exit 1
+fi
+
+PATH=<%= $aem_tools_env_path %>
+
+source_stack_prefix="$1"
+target_stack_prefix="$2"
+aem_port="$3"
+recursive="$4"
+batch_size="$5"
+update="$6"
+newer_only="$7"
+exclude_path="$8"
+content_sync_path="$9"
+component=$(/opt/puppetlabs/bin/facter component)
+aem_username=admin
+aem_password=$(<%= $aem_password_retrieval_command %>)
+data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
+aem_source_stack_password=$(aws s3 cp s3://${data_bucket_name}/${source_stack_prefix}/system-users-credentials.json - | jq --raw-output .$aem_username)
+# translate puppet exit code to follow convention
+translate_exit_code() {
+
+  exit_code="$1"
+  if [ "$exit_code" -eq 0 ] || [ "$exit_code" -eq 2 ]; then
+    exit_code=0
+  else
+    exit "$exit_code"
+  fi
+
+  return "$exit_code"
+}
+
+set +o errexit
+
+cd <%= $base_dir %>/aem-aws-stack-provisioner/
+
+# get the IP of AEM instance to sync content from
+aws_region=$(facter aws_region)
+source_ip=$(aws ec2 describe-instances
+  --filters Name=tag:StackPrefix,Values=${source_stack_prefix} Name=tag:Component,Values=${component} \
+  --region ${aws_region} \
+  --query Reservations[0].NetworkInterfaces[0].PrivateIpAddresses \
+  -- output text
+)
+
+if [[ -z $source_ip ]]; then
+  echo "No source IP found for source stack '${source_stack_prefix}' and component '${component}'."
+  echo "Exiting without performing content sync."
+  exit 1
+fi
+
+FACTER_aem_username="${aem_username}" \
+FACTER_aem_password="${aem_password}" \
+FACTER_aem_source_stack_password="${aem_source_stack_password}" \
+FACTER_source_ip="${source_ip}" \
+FACTER_component="${component}" \
+FACTER_aem_port="${aem_port}" \
+FACTER_recursive="${recursive}" \
+FACTER_batch_size="${batch_size}" \
+FACTER_update="${update}" \
+FACTER_aem_id="${component}" \
+FACTER_newer_only="${newer_only}" \
+FACTER_exclude_path="${exclude_path}" \
+FACTER_content_sync_path="${content_sync_path}" \
+/opt/puppetlabs/bin/puppet apply \
+  --debug \
+  --detailed-exitcodes \
+  --modulepath modules \
+  --hiera_config conf/hiera.yaml \
+  --execute "include aem_curator::action_content_sync_vlt"
+
+translate_exit_code "$?"
+
