@@ -1,11 +1,5 @@
 
 class aem_curator::action_content_sync_vlt (
-  $aem_host,
-  $author_port,
-  $author_secure,
-  $log_dir,
-  $publish_port,
-  $publish_secure,
   $vlt_dir,
   $aem_id                     = undef,
   $aem_username               = $::aem_username,
@@ -59,7 +53,7 @@ class aem_curator::action_content_sync_vlt (
 
   exec { "${aem_id}: Execute VLT content sync command":
     command => @("CMD"/L),
-      /opt/aws-stack-provisioner/aem-tools/${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+      ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
       http://${aem_username}:${aem_source_stack_password}@${source_ip}:${aem_port}/crx/-/jcr:root${content_sync_path} \
       http://${aem_username}:${aem_password}@localhost:${aem_port}/crx/-/jcr:root${content_sync_path},
     | CMD

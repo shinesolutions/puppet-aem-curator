@@ -22,7 +22,6 @@ component=$(/opt/puppetlabs/bin/facter component)
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
 data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
-
 aem_source_stack_password=$(aws s3 cp s3://${data_bucket_name}/${source_stack_prefix}/system-users-credentials.json - | jq --raw-output .$aem_username)
 # translate puppet exit code to follow convention
 translate_exit_code() {
@@ -59,6 +58,7 @@ FACTER_aem_port="${aem_port}" \
 FACTER_recursive="${recursive}" \
 FACTER_batch_size="${batch_size}" \
 FACTER_update="${update}" \
+FACTER_aem_id="${component}" \
 FACTER_newer_only="${newer_only}" \
 FACTER_exclude_path="${exclude_path}" \
 FACTER_content_sync_path="${content_sync_path}" \

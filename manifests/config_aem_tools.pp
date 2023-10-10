@@ -157,7 +157,7 @@ class aem_curator::config_aem_tools (
     source => $oak_run_source,
     user   => 'root',
     group  => 'root',
-  } -> archive { "${base_dir}/aem-tools/aem-vlt-${aem_vlt_version}-bin.tar.gz":
+  } -> archive { "${base_dir}/aem-tools/vault-cli-${aem_vlt_version}-bin.tar.gz":
     ensure => present,
     source => $aem_vlt_source,
     user   => 'root',
