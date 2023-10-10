@@ -157,11 +157,18 @@ class aem_curator::config_aem_tools (
     source => $oak_run_source,
     user   => 'root',
     group  => 'root',
-  } -> archive { "${base_dir}/aem-tools/aem-vlt-${aem_vlt_version}-bin.tar.gz":
+  } -> archive { "${base_dir}/aem-tools/vault-cli-${aem_vlt_version}-bin.tar.gz":
     ensure => present,
     source => $aem_vlt_source,
+    extract => true,
+    extract_path => "${base_dir}/aem-tools",
+    creates => "${base_dir}/aem-tools/vault-cli-${aem_vlt_version}"
     user   => 'root',
     group  => 'root',
+    cleanup => true,
+  } -> file { "${base_dir}/aem-tools/vault-cli-${aem_vlt_version}/bin":
+    mode => '0755,
+    recurse => true,
   } -> file { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":
     ensure => present,
     mode   => '0755',
