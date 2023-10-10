@@ -2,8 +2,8 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 1 ]; then
-  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <component> <aem_port>'
+if [ "$#" -ne 9 ]; then
+  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <aem_port> <recursive> <batch_size> <update> <newer_only> <exclude_path> <content_sync_path>'
   exit 1
 fi
 
@@ -48,6 +48,12 @@ source_ip=$(aws ec2 describe-instances
   --query Reservations[0].NetworkInterfaces[0].PrivateIpAddresses \
   -- output text
 )
+
+if [[ -z $source_ip ]]; then
+  echo "No source IP found for source stack '${source_stack_prefix}' and component '${component}'."
+  echo "Exiting without performing content sync."
+  exit 1
+fi
 
 FACTER_aem_username="${aem_username}" \
 FACTER_aem_password="${aem_password}" \
