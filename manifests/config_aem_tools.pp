@@ -167,7 +167,7 @@ class aem_curator::config_aem_tools (
     group  => 'root',
     cleanup => true,
   } -> file { "${base_dir}/aem-tools/vault-cli-${aem_vlt_version}/bin":
-    mode => '0755,
+    mode => '0755',
     recurse => true,
   } -> file { "${base_dir}/aem-tools/oak-run-${oak_run_version}.jar":
     ensure => present,
