@@ -6,7 +6,6 @@ class aem_curator::action_content_sync_vlt (
   $aem_password               = $::aem_password,
   $aws_region                 = $::aws_region,
   $source_ip                  = $::source_ip,
-  $aem_port                   = $::aem_port,
   $content_sync_sg            = $::content_sync_sg,
   $deployment_sleep_seconds   = 10,
   $component                  = $::component,
@@ -20,6 +19,9 @@ class aem_curator::action_content_sync_vlt (
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,
+  $author_port                = '4502',
+  $publish_port               = '4503',
+  $preview_publish_port       = '4503',
 ) {
 
   $vlt_rcp_cmd_options = ''
@@ -51,13 +53,55 @@ class aem_curator::action_content_sync_vlt (
     $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -n "
   }
 
-  exec { "${aem_id}: Execute VLT content sync command":
-    command => @("CMD"/L),
-      ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
-      http://${aem_username}:${aem_source_stack_password}@${source_ip}:${aem_port}/crx/-/jcr:root${content_sync_path} \
-      http://${aem_username}:${aem_password}@localhost:${aem_port}/crx/-/jcr:root${content_sync_path},
-    | CMD
-    path    => '/usr/local/bin/:/bin/',
+  if $component == 'author-publish-dispatcher' {
+    exec { "${component}: Execute VLT content sync command":
+      command => @("CMD"/L),
+        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+        http://${aem_username}:${aem_source_stack_password}@${source_ip}:${author_port}/crx/-/jcr:root${content_sync_path} \
+        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path},
+      | CMD
+      path    => '/usr/local/bin/:/bin/',
+    }
+    exec { "${component}: Execute VLT content sync command":
+      command => @("CMD"/L),
+        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+        http://${aem_username}:${aem_source_stack_password}@${source_ip}:${publish_port}/crx/-/jcr:root${content_sync_path} \
+        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path},
+      | CMD
+      path    => '/usr/local/bin/:/bin/',
+    }
   }
+
+  if $component == 'author-primary' {
+    exec { "${component}: Execute VLT content sync command":
+      command => @("CMD"/L),
+        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+        http://${aem_username}:${aem_source_stack_password}@${source_ip}:${author_port}/crx/-/jcr:root${content_sync_path} \
+        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path},
+      | CMD
+      path    => '/usr/local/bin/:/bin/',
+    }
+  }
+  if $component == 'publish' {
+    exec { "${component}: Execute VLT content sync command":
+      command => @("CMD"/L),
+        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+        http://${aem_username}:${aem_source_stack_password}@${source_ip}:${publish_port}/crx/-/jcr:root${content_sync_path} \
+        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path},
+      | CMD
+      path    => '/usr/local/bin/:/bin/',
+    }
+  }
+  if $component == 'preview-publish' {
+    exec { "${component}: Execute VLT content sync command":
+      command => @("CMD"/L),
+        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+        http://${aem_username}:${aem_source_stack_password}@${source_ip}:${preview_publish_port}/crx/-/jcr:root${content_sync_path} \
+        http://${aem_username}:${aem_password}@localhost:${preview_publish_port}/crx/-/jcr:root${content_sync_path},
+      | CMD
+      path    => '/usr/local/bin/:/bin/',
+    }
+  }
+
 }
 
