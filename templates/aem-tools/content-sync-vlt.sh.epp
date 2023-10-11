@@ -2,7 +2,7 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 9 ]; then
+if [ "$#" -ne 8 ]; then
   echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <recursive> <batch_size> <update> <newer_only> <exclude_path> <content_sync_path>'
   exit 1
 fi
@@ -59,7 +59,6 @@ FACTER_aem_password="${aem_password}" \
 FACTER_aem_source_stack_password="${aem_source_stack_password}" \
 FACTER_source_ip="${source_ip}" \
 FACTER_component="${component}" \
-FACTER_aem_port="${aem_port}" \
 FACTER_recursive="${recursive}" \
 FACTER_batch_size="${batch_size}" \
 FACTER_update="${update}" \
