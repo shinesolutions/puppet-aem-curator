@@ -42,9 +42,9 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 # get the IP of AEM instance to sync content from
 aws_region=$(facter aws_region)
 source_ip=$(aws ec2 describe-instances \
-  --filters Name=tag:StackPrefix,Values=${source_stack_prefix} Name=tag:Component,Values=${component} \
-  --region ${aws_region} \
-  --query Reservations[0].NetworkInterfaces[0].PrivateIpAddresses \
+  --region "${aws_region}" \
+  --filters Name=tag:StackPrefix,Values="${source_stack_prefix}" Name=tag:Component,Values="${component}" \
+  --query Reservations[0].Instances[0].NetworkInterfaces[0].PrivateIpAddresses[0].PrivateIpAddress \
   --output text
 )
 
@@ -53,6 +53,8 @@ if [[ -z $source_ip ]]; then
   echo "Exiting without performing content sync."
   exit 1
 fi
+
+echo "source_ip for content sync: $source_ip"
 
 FACTER_aem_username="${aem_username}" \
 FACTER_aem_password="${aem_password}" \
