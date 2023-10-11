@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 -  Content Sync: Usage details updated to match number of params
+- Content Sync: Fixed attach detach sg script with correct params
 
 ## [4.1.2] - 2023-10-11
 ### Changed
