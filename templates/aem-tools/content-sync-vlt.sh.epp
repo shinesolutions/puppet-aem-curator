@@ -11,13 +11,12 @@ PATH=<%= $aem_tools_env_path %>
 
 source_stack_prefix="$1"
 target_stack_prefix="$2"
-aem_port="$3"
-recursive="$4"
-batch_size="$5"
-update="$6"
-newer_only="$7"
-exclude_path="$8"
-content_sync_path="$9"
+recursive="$3"
+batch_size="$4"
+update="$5"
+newer_only="$6"
+exclude_path="$7"
+content_sync_path="$8"
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
