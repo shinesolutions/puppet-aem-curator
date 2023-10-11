@@ -6,7 +6,6 @@ class aem_curator::action_content_sync_vlt (
   $aem_password               = $::aem_password,
   $aws_region                 = $::aws_region,
   $source_ip                  = $::source_ip,
-  $content_sync_sg            = $::content_sync_sg,
   $deployment_sleep_seconds   = 10,
   $component                  = $::component,
   $aem_source_stack_password  = $::aem_source_stack_password,
@@ -24,81 +23,76 @@ class aem_curator::action_content_sync_vlt (
   $preview_publish_port       = '4503',
 ) {
 
-  $vlt_rcp_cmd_options = ''
   if $recursive {
-    if $exclude_path {
-      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
-    }
-    $vlt_rcp_cmd_options = '-r '
+    $recursive_param = '-r '
+  } else {
+    $recursive_param = ''
   }
 
   if $batch_size {
-    if $exclude_path {
-      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
-    }
-    $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -b ${batch_size} "
+    $batch_size_param = "-b ${batch_size}"
+  } else {
+    $batch_size_param = ''
   }
 
   if $update {
-    if $exclude_path {
-      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
-    }
-    $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -u "
+    $update_param = '-u'
+  } else {
+    $update_param = ''
   }
 
   if $newer_only {
-    if $exclude_path {
-      $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -e ${exclude_path} "
+    $newer_only_param = '-n'
+  } else {
+    $newer_only_param = ''
+  }
+
+
+  if ($recursive or $batch_size or $update or $newer_only) {
+    if ($exclude_path and $exclude_path !='') {
+      $vlt_rcp_cmd_options = "-e ${exclude_path} ${recursive_param} ${batch_size_param} ${update_param} ${newer_only_param}"
     }
-    $vlt_rcp_cmd_options = "${vlt_rcp_cmd_options} -n "
+    else {
+      $vlt_rcp_cmd_options = "${recursive_param} ${batch_size_param} ${update_param} ${newer_only_param}"
+    }
   }
 
   if $component == 'author-publish-dispatcher' {
-    exec { "${component}: Execute VLT content sync command":
-      command => @("CMD"/L),
-        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+    exec { "${component}: Execute VLT content sync command on author":
+      command =>  "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${author_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path},
-      | CMD
+        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path}",
       path    => '/usr/local/bin/:/bin/',
     }
-    exec { "${component}: Execute VLT content sync command":
-      command => @("CMD"/L),
-        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+    exec { "${component}: Execute VLT content sync command on publish":
+      command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${publish_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path},
-      | CMD
+        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path}",
       path    => '/usr/local/bin/:/bin/',
     }
   }
 
   if $component == 'author-primary' {
-    exec { "${component}: Execute VLT content sync command":
-      command => @("CMD"/L),
-        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+    exec { "${component}: Execute VLT content sync command on author-primary":
+      command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${author_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path},
-      | CMD
+        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path}",
       path    => '/usr/local/bin/:/bin/',
     }
   }
   if $component == 'publish' {
-    exec { "${component}: Execute VLT content sync command":
-      command => @("CMD"/L),
-        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+    exec { "${component}: Execute VLT content sync command on publish":
+      command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${publish_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path},
-      | CMD
+        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path}",
       path    => '/usr/local/bin/:/bin/',
     }
   }
   if $component == 'preview-publish' {
-    exec { "${component}: Execute VLT content sync command":
-      command => @("CMD"/L),
-        ${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
+    exec { "${component}: Execute VLT content sync command on preview-publish":
+      command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${preview_publish_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${preview_publish_port}/crx/-/jcr:root${content_sync_path},
-      | CMD
+        http://${aem_username}:${aem_password}@localhost:${preview_publish_port}/crx/-/jcr:root${content_sync_path}",
       path    => '/usr/local/bin/:/bin/',
     }
   }

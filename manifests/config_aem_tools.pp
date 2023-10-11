@@ -63,6 +63,29 @@ class aem_curator::config_aem_tools (
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
+  } -> file { "${base_dir}/aem-tools/content-sync-vlt.sh":
+    ensure  => present,
+    content => epp(
+      'aem_curator/aem-tools/content-sync-vlt.sh.epp', {
+        'base_dir'                       => $base_dir,
+        'aem_tools_env_path'             => $aem_tools_env_path,
+        'aem_password_retrieval_command' => $aem_password_retrieval_command
+      }
+    ),
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+  } -> file { "${base_dir}/aem-tools/attach-detach-content-sync-sg.sh":
+    ensure  => present,
+    content => epp(
+      'aem_curator/aem-tools/attach-detach-content-sync-sg.sh.epp', {
+        'base_dir'           => $base_dir,
+        'aem_tools_env_path' => $aem_tools_env_path
+      }
+    ),
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
   } -> file { "${base_dir}/aem-tools/enable-saml.sh":
     ensure  => present,
     content => epp(

@@ -3,7 +3,7 @@ set -o nounset
 set -o errexit
 
 if [ "$#" -ne 9 ]; then
-  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <aem_port> <recursive> <batch_size> <update> <newer_only> <exclude_path> <content_sync_path>'
+  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <recursive> <batch_size> <update> <newer_only> <exclude_path> <content_sync_path>'
   exit 1
 fi
 
@@ -41,11 +41,11 @@ cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 # get the IP of AEM instance to sync content from
 aws_region=$(facter aws_region)
-source_ip=$(aws ec2 describe-instances
+source_ip=$(aws ec2 describe-instances \
   --filters Name=tag:StackPrefix,Values=${source_stack_prefix} Name=tag:Component,Values=${component} \
   --region ${aws_region} \
   --query Reservations[0].NetworkInterfaces[0].PrivateIpAddresses \
-  -- output text
+  --output text
 )
 
 if [[ -z $source_ip ]]; then
