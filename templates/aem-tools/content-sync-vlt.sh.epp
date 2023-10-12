@@ -52,7 +52,7 @@ source_ip=$(aws ec2 describe-instances \
 )
 
 # get publish ip from source stack, if there's no preview instance in source stack
-if [[ ! $source_ip =~ $VALID_IP4 ]] && [ "component" == "preview-publish" ]]; then
+if [[ ! $source_ip =~ $VALID_IP4 ]] && [ "component" == "preview-publish" ]; then
   source_ip=$(aws ec2 describe-instances \
     --region "${aws_region}" \
     --filters Name=tag:StackPrefix,Values="${source_stack_prefix}" Name=tag:Component,Values="publish" \
