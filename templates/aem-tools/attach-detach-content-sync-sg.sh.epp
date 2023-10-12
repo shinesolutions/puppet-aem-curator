@@ -30,6 +30,7 @@ set +o errexit
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
+# get currently attached security groups
 instance_id=$(facter ec2_metadata.instance-id)
 security_group_ids=$(aws ec2 describe-instances \
   --instance-id="${instance_id}" \
@@ -37,18 +38,22 @@ security_group_ids=$(aws ec2 describe-instances \
   --output text
 )
 
+# get security group stack
 stack_prefix=$(facter stack_prefix)
 sg_stack=$(aws cloudformation describe-stacks \
   --query "Stacks[?StackName!=\`null\`]|[?starts_with(StackName, \`${stack_prefix}-aem-prerequisites-stack-SecurityGroupsStack\`) == \`true\`].StackName" \
   --output text
 )
 
+# get content sync security group
 content_sync_sg=$(aws cloudformation describe-stacks \
   --stack-name "$sg_stack" \
   --query "Stacks[*].Outputs[?ExportName == \`${stack_prefix}-${content_sync_sg_name}\`].OutputValue" \
   --output text
 )
 
+# if attach add the content sync SG to the instance
+# if detach remove the content sync SG from the instance
 if [[ $action == 'attach' ]]; then
   security_group_ids="${security_group_ids[@]} $content_sync_sg"
   echo "content_sync_sg: $content_sync_sg"
