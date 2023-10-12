@@ -11,6 +11,7 @@ fi
 PATH=<%= $aem_tools_env_path %>
 
 action="$1"
+content_sync_sg_name='AemContentSyncSecurityGroup'
 
 # translate puppet exit code to follow convention
 translate_exit_code() {
@@ -29,23 +30,45 @@ set +o errexit
 
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
-mac=$(ifconfig | grep ether | awk '{print $2}')
-security_group_ids=($(facter "ec2_metadata.network.interfaces.macs.${mac}.security-group-ids"))
+# get currently attached security groups
+instance_id=$(facter ec2_metadata.instance-id)
+security_group_ids=$(aws ec2 describe-instances \
+  --instance-id="${instance_id}" \
+  --query Reservations[].Instances[].NetworkInterfaces[].Groups[].GroupId \
+  --output text
+)
 
+# get security group stack
 stack_prefix=$(facter stack_prefix)
-sg_stack=$(aws cloudformation describe-stacks --query "Stacks[?StackName!=\`null\`]|[?starts_with(StackName, \`${stack_prefix}-aem-prerequisites-stack-SecurityGroupsStack\`) == \`true\`].StackName" --output text)
+sg_stack=$(aws cloudformation describe-stacks \
+  --query "Stacks[?StackName!=\`null\`]|[?starts_with(StackName, \`${stack_prefix}-aem-prerequisites-stack-SecurityGroupsStack\`) == \`true\`].StackName" \
+  --output text
+)
 
-content_sync_sg=$(aws cloudformation describe-stacks --stack-name "$sg_stack" --query "Stacks[*].Outputs[?ExportName == \`${stack_prefix}-AemContentSyncSecurityGroup\`].OutputValue" --output text)
+# get content sync security group
+content_sync_sg=$(aws cloudformation describe-stacks \
+  --stack-name "$sg_stack" \
+  --query "Stacks[*].Outputs[?ExportName == \`${stack_prefix}-${content_sync_sg_name}\`].OutputValue" \
+  --output text
+)
 
+# if attach add the content sync SG to the instance
+# if detach remove the content sync SG from the instance
 if [[ $action == 'attach' ]]; then
   security_group_ids="${security_group_ids[@]} $content_sync_sg"
   echo "content_sync_sg: $content_sync_sg"
-elif [[ $action != 'detach' ]]; then
+elif [[ $action == 'detach' ]]; then
+  security_group_ids=$(aws ec2 describe-instances \
+    --instance-id="${instance_id}" \
+    --query "Reservations[].Instances[].NetworkInterfaces[].Groups[?contains(GroupName, \`${content_sync_sg_name}\`) != \`true\`].GroupId" \
+    --output text
+  )
+else
   echo "Error: action must be either 'detach' or 'attach', found '$action'"
   exit 1
 fi
 
-FACTER_instance_id=$(facter ec2_metadata.instance-id) \
+FACTER_instance_id="$instance_id" \
 FACTER_action="$action" \
 FACTER_security_group_ids="${security_group_ids}" \
 /opt/puppetlabs/bin/puppet apply \
