@@ -21,6 +21,7 @@ class aem_curator::action_content_sync_vlt (
   $author_port                = '4502',
   $publish_port               = '4503',
   $preview_publish_port       = '4503',
+  $log_dir                    = '/var/log/shinesolutions',
 ) {
 
   if $recursive {
@@ -61,13 +62,13 @@ class aem_curator::action_content_sync_vlt (
     exec { "${component}: Execute VLT content sync command on author":
       command =>  "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${author_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path}",
+        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path} >> ${log_dir}/vault_output.log",
       path    => '/usr/local/bin/:/bin/',
     }
     exec { "${component}: Execute VLT content sync command on publish":
       command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${publish_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path}",
+        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path} >> ${log_dir}/vault_output.log",
       path    => '/usr/local/bin/:/bin/',
     }
   }
@@ -76,7 +77,7 @@ class aem_curator::action_content_sync_vlt (
     exec { "${component}: Execute VLT content sync command on author-primary":
       command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${author_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path}",
+        http://${aem_username}:${aem_password}@localhost:${author_port}/crx/-/jcr:root${content_sync_path} >> ${log_dir}/vault_output.log",
       path    => '/usr/local/bin/:/bin/',
     }
   }
@@ -84,7 +85,7 @@ class aem_curator::action_content_sync_vlt (
     exec { "${component}: Execute VLT content sync command on publish":
       command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${publish_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path}",
+        http://${aem_username}:${aem_password}@localhost:${publish_port}/crx/-/jcr:root${content_sync_path} >> ${log_dir}/vault_output.log",
       path    => '/usr/local/bin/:/bin/',
     }
   }
@@ -92,7 +93,7 @@ class aem_curator::action_content_sync_vlt (
     exec { "${component}: Execute VLT content sync command on preview-publish":
       command => "${vlt_dir}/vlt rcp ${vlt_rcp_cmd_options} \
         http://${aem_username}:${aem_source_stack_password}@${source_ip}:${preview_publish_port}/crx/-/jcr:root${content_sync_path} \
-        http://${aem_username}:${aem_password}@localhost:${preview_publish_port}/crx/-/jcr:root${content_sync_path}",
+        http://${aem_username}:${aem_password}@localhost:${preview_publish_port}/crx/-/jcr:root${content_sync_path} >> ${log_dir}/vault_output.log",
       path    => '/usr/local/bin/:/bin/',
     }
   }
