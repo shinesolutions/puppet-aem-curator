@@ -82,7 +82,6 @@ FACTER_newer_only="${newer_only}" \
 FACTER_exclude_path="${exclude_path}" \
 FACTER_content_sync_path="${content_sync_path}" \
 /opt/puppetlabs/bin/puppet apply \
-  --debug \
   --detailed-exitcodes \
   --modulepath modules \
   --hiera_config conf/hiera.yaml \
