@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [4.1.3] - 2023-10-12
 ### Changed
--  Content Sync: Usage details updated to match number of params
+- Content Sync: Usage details updated to match number of params
 - Content Sync: Fixed attach detach sg script with correct params
 
 ## [4.1.2] - 2023-10-11
@@ -994,7 +996,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.2...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.3...HEAD
+[4.1.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.2...4.1.3
 [4.1.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.1...4.1.2
 [4.1.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.0.1...4.1.0
