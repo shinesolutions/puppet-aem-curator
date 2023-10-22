@@ -8,11 +8,11 @@ if [ "$#" -ne 7 ] && [ "$#" -ne 8 ]; then
 fi
 
 if [ "$#" -eq 7 ]; then
-  content_sync_path="$7
+  content_sync_path="$7"
   exclude_path=''
 else
   exclude_path="$7"
-  content_sync_path="$8""
+  content_sync_path="$8"
 fi
 
 # simple validation for IP4
