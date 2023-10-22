@@ -41,7 +41,7 @@ security_group_ids=$(aws ec2 describe-instances \
 # get security group stack
 stack_prefix=$(facter stack_prefix)
 sg_stack=$(aws cloudformation describe-stacks \
-  --query "Stacks[?StackName!=\`null\`]|[?starts_with(StackName, \`${stack_prefix}-aem-prerequisites-stack-SecurityGroupsStack\`) == \`true\`].StackName" \
+  --query "Stacks[?StackName!=\`null\`]|[?starts_with(StackName, \`${stack_prefix}\`) == \`true\`]|[?contains(StackName, \`SecurityGroupsStack\`) == \`true\`].StackName" \
   --output text
 )
 

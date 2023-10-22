@@ -2,9 +2,17 @@
 set -o nounset
 set -o errexit
 
-if [ "$#" -ne 8 ]; then
-  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <recursive> <batch_size> <update> <newer_only> <exclude_path> <content_sync_path>'
+if [ "$#" -ne 7 ] && [ "$#" -ne 8 ]; then
+  echo 'Usage: ./content-sync-vlt.sh <source_stack_prefix> <target_stack_prefix> <recursive> <batch_size> <update> <newer_only> <exclude_path> [optional] <content_sync_path>'
   exit 1
+fi
+
+if [ "$#" -eq 7 ]; then
+  content_sync_path="$7"
+  exclude_path=''
+else
+  exclude_path="$7"
+  content_sync_path="$8"
 fi
 
 # simple validation for IP4
@@ -18,8 +26,6 @@ recursive="$3"
 batch_size="$4"
 update="$5"
 newer_only="$6"
-exclude_path="$7"
-content_sync_path="$8"
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
