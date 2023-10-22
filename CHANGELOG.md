@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.6] - 2023-10-23
+### Fixed
+- Made exclude_parameter optional for content-sync script
+
 ## [4.1.5] - 2023-10-12
 ### Changed
 - Disabled debug mode in content-sync, write output in a log file
