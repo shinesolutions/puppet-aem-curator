@@ -264,6 +264,12 @@ class aem_curator::config_author_primary (
     jvm_mem_opts     => $jvm_mem_opts,
     jvm_opts         => $_jvm_opts,
     osgi_configs     => $author_primary_osgi_config
+  } -> file { "${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
+    ensure => present,
+    source => 'puppet:///modules/aem_curator/crx-quickstart/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config',
+    mode   => '0775',
+    owner  => "aem-${aem_id}",
+    group  => "aem-${aem_id}",
   } -> archive { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure  => present,
     source  => $aem_password_reset_source,
@@ -273,12 +279,6 @@ class aem_curator::config_author_primary (
   } -> file { "${crx_quickstart_dir}/install/aem-password-reset-content-${aem_password_reset_version}.zip":
     ensure => present,
     mode   => '0640',
-    owner  => "aem-${aem_id}",
-    group  => "aem-${aem_id}",
-  } -> file { "${crx_quickstart_dir}/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config":
-    ensure => present,
-    source => 'puppet:///modules/aem_curator/crx-quickstart/install/org.apache.sling.jcr.base.internal.LoginAdminWhitelist.fragment-passwordreset.config',
-    mode   => '0775',
     owner  => "aem-${aem_id}",
     group  => "aem-${aem_id}",
   } -> aem_resources::set_osgi_config { "${aem_id}: Set AEM OSGI config":
