@@ -5,8 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-
+## [3.42.0] - 2024-06-28
 ### Added
 - Added new AEM profile: aem65_sp18 #RS-193
 
@@ -973,6 +972,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
+[3.42.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.41.0...3.42.0
 [3.41.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.3...3.41.0
 [3.40.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.2...3.40.3
 [3.40.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.2
