@@ -20,4 +20,4 @@ jobs:
           PUPPETFORGE_TOKEN: ${{ secrets.SHINEOPENSOURCE_PUPPETFORGE_TOKEN }}
     steps[0]:
       with:
-        ref: 3.42.0
+        ref: release/6.5.0
