@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+- Added new AEM profile: aem65_sp18 #RS-193
+
 ## [3.41.0] - 2023-07-25
 ### Added
 - Add etc.clientlibs to cache flush dirs list #RS-166
