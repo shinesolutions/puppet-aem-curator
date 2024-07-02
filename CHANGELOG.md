@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added new AEM profile: aem65_sp18 #RS-193
 
+### Fixed
+- Fix intermittent reset password failure #283
+
 ## [4.1.6] - 2023-10-23
 ### Fixed
 - Made exclude_parameter optional for content-sync script #RS-179
