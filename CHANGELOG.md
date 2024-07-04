@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added new AEM profile: aem65_sp18 #RS-193
 
+### Changed
+- Update Github Action Publish Docker image to `shinesolutions/aem-platform-buildenv:4.0.1`
+
 ### Fixed
 - Fix intermittent reset password failure #283
 
