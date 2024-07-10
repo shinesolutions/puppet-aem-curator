@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added new AEM profile: aem65_sp17
 - Added new AEM profile: aem65_sp18 #RS-193
+- Added new AEM profile: aem65_sp19
+- Added new AEM profile: aem65_sp20
+- Added new AEM profile: aem65_sp21
 
 ### Changed
 - Update Github Action Publish Docker image to `shinesolutions/aem-platform-buildenv:4.0.1`
