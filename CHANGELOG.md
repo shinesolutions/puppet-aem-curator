@@ -13,7 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.42.0] - 2024-06-28
 ### Added
+- Added new AEM profile: aem65_sp17
 - Added new AEM profile: aem65_sp18 #RS-193
+- Added new AEM profile: aem65_sp19
+- Added new AEM profile: aem65_sp20
+- Added new AEM profile: aem65_sp21
 
 ## [3.41.0] - 2023-07-25
 ### Added
