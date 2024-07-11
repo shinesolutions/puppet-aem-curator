@@ -41,5 +41,8 @@ For AEM 6.5, the service pack file names used to have the format `AEM-6.5.x.0-6.
 | `aem65_sp13`      | `aem65` artifacts + aem-service-pkg-6.5.13.0.zip                                                                                            |
 | `aem65_sp14`      | `aem65` artifacts + aem-service-pkg-6.5.14.0.zip                                                                                            |
 | `aem65_sp16`      | `aem65` artifacts + aem-service-pkg-6.5.16.0.zip                                                                                            |
-
+| `aem65_sp17`      | `aem65` artifacts + aem-service-pkg-6.5.17.0.zip                                                                                            |
 | `aem65_sp18`      | `aem65` artifacts + aem-service-pkg-6.5.18.0.zip                                                                                            |
+| `aem65_sp19`      | `aem65` artifacts + aem-service-pkg-6.5.19.0.zip                                                                                            |
+| `aem65_sp20`      | `aem65` artifacts + aem-service-pkg-6.5.20.0.zip                                                                                            |
+| `aem65_sp21`      | `aem65` artifacts + aem-service-pkg-6.5.21.0.zip                                                                                            |
