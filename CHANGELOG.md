@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Update Github Action Publish Docker image to `shinesolutions/aem-platform-buildenv:4.0.1`
+- Updated syntax in rtk config
 
 ### Fixed
 - Fix intermittent reset password failure #283
