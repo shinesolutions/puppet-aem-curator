@@ -348,11 +348,11 @@ class aem_curator::config_publish (
     tags                       => 'deep',
     aem_id                     => $aem_id,
   } -> aem_bundle { "${aem_id}: Stop webdav bundle":
-    ensure                     => stopped,
-    name                       => 'org.apache.sling.jcr.webdav',
-    aem_username               => 'admin',
-    aem_password               => $credentials_hash['admin'],
-    aem_id                     => $aem_id,
+    ensure       => stopped,
+    name         => 'org.apache.sling.jcr.webdav',
+    aem_username => 'admin',
+    aem_password => $credentials_hash['admin'],
+    aem_id       => $aem_id,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after stopping webdav bundle":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
@@ -367,11 +367,11 @@ class aem_curator::config_publish (
     tags                       => 'deep',
     aem_id                     => $aem_id,
   } -> aem_bundle { "${aem_id}: Stop davex bundle":
-    ensure                     => stopped,
-    name                       => 'org.apache.sling.jcr.davex',
-    aem_username               => 'admin',
-    aem_password               => $credentials_hash['admin'],
-    aem_id                     => $aem_id,
+    ensure       => stopped,
+    name         => 'org.apache.sling.jcr.davex',
+    aem_username => 'admin',
+    aem_password => $credentials_hash['admin'],
+    aem_id       => $aem_id,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after stopping davex bundle":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
