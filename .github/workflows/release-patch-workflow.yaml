@@ -10,6 +10,8 @@ jobs:
         run: |
           ls -all
           sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
+          git config --local user.email "matthew.dingle@shinesolutions.com"
+          git config --local user.name "mattd-shine"          
           git diff
           git commit -a -m "Updating workflow file"
       - uses: ad-m/github-push-action@master
