@@ -10,7 +10,8 @@ jobs:
         run: |
           ls -all
           sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
-          cat .github/workflows/publish-workflow.yaml
+          git diff
+          git commit -a -m "Updating workflow file"
       - uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.SHINEOPENSOURCE_GITHUB_TOKEN }}
