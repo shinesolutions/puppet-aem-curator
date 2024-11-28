@@ -16,7 +16,12 @@ jobs:
           git status
           git commit -a -m "Updating workflow file"
           git status
-      - uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.MATTD_GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      - shell: bash
+        env: 
+          MATTD_GITHUB_TOKEN: ${{ secrets.MATTD_GITHUB_TOKEN }}
+          GITHUB_USER: matthew.dingle@shinesolutions.com
+          GITHUB_REPO: "github.com/${{ github.repository }}.git"
+          GITHUB_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          git status
+          git push "https://${GITHUB_USER}:${MATTD_GITHUB_TOKEN}@${GITHUB_REPO}" "${GITHUB_BRANCH}"
