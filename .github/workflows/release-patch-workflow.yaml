@@ -27,4 +27,5 @@ jobs:
           echo "GITHUB_REPO: $GITHUB_REPO"
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
           git status
-          git push "https://${GITHUB_REPO}" "${GITHUB_BRANCH}"
+          git remote set-url origin "https://${GITHUB_USER}:${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin "${GITHUB_BRANCH}"
