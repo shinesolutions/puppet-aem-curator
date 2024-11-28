@@ -13,7 +13,9 @@ jobs:
           git config --local user.email "matthew.dingle@shinesolutions.com"
           git config --local user.name "mattd-shine"          
           git diff
+          git status
           git commit -a -m "Updating workflow file"
+          git status
       - uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.MATTD_GITHUB_TOKEN }}
