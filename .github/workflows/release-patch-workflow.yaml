@@ -5,10 +5,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - shell: bash
-        run: |
-          ls -all      
+      - uses: actions/checkout@v1 
       - shell: bash
         env: 
           GITHUB_USER: matthew.dingle@shinesolutions.com
@@ -16,7 +13,7 @@ jobs:
         run: |
           echo "GITHUB_USER: $GITHUB_USER"
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
-          git checkout "${GITHUB_BRANCH}"
+          #git checkout "${GITHUB_BRANCH}"
           sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
           git config --local user.email "matthew.dingle@shinesolutions.com"
           git config --local user.name "mattd-shine"    
