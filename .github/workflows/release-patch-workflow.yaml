@@ -18,13 +18,10 @@ jobs:
           git status
       - shell: bash
         env: 
-          GITHUB_TOKEN: ${{ secrets.MATTD_GITHUB_TOKEN }}
           GITHUB_USER: matthew.dingle@shinesolutions.com
-          GITHUB_REPO: "github.com/${{ github.repository }}.git"
           GITHUB_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
           echo "GITHUB_USER: $GITHUB_USER"
-          echo "GITHUB_REPO: $GITHUB_REPO"
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
           git status
           git remote remove origin
