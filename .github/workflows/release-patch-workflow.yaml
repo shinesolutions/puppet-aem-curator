@@ -28,5 +28,6 @@ jobs:
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
           git status
           git remote remove origin
-          git remote add origin https://x-access-token:${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git remote add origin https://${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git remove -v
           git push origin "${GITHUB_BRANCH}"
