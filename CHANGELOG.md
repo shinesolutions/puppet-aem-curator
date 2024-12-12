@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added new AEM profile: aem65_sp22
 
+### Changed
+- Lock aem-platform-buildenv to 4.0.1
+- Explicitly set ownership of github workspace directory
+
 ## [3.44.0] - 2024-08-11
 ### Added
 - Added new AEM profile: aem65_sp17
