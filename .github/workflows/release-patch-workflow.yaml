@@ -8,10 +8,7 @@ jobs:
       - uses: actions/checkout@v1
       - shell: bash
         run: |
-          ls -all
-          sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
-          git config --local user.email "matthew.dingle@shinesolutions.com"
-          git config --local user.name "mattd-shine"          
+          ls -all      
       - shell: bash
         env: 
           GITHUB_USER: matthew.dingle@shinesolutions.com
@@ -19,6 +16,11 @@ jobs:
         run: |
           echo "GITHUB_USER: $GITHUB_USER"
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
+          git checkout "${GITHUB_BRANCH}"
+          sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
+          git config --local user.email "matthew.dingle@shinesolutions.com"
+          git config --local user.name "mattd-shine"    
+          
           git status
           git remote remove origin
           git remote add origin https://${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
