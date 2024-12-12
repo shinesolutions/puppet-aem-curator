@@ -29,5 +29,5 @@ jobs:
           git status
           git remote remove origin
           git remote add origin https://${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git remove -v
+          git remote -v
           git push origin "${GITHUB_BRANCH}"
