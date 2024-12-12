@@ -12,10 +12,6 @@ jobs:
           sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
           git config --local user.email "matthew.dingle@shinesolutions.com"
           git config --local user.name "mattd-shine"          
-          git diff
-          git status
-          git commit -a -m "Updating workflow file"
-          git status
       - shell: bash
         env: 
           GITHUB_USER: matthew.dingle@shinesolutions.com
@@ -27,4 +23,9 @@ jobs:
           git remote remove origin
           git remote add origin https://${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git remote -v
+          
+          git diff
+          git status
+          git commit -a -m "Updating workflow file"
+          git status
           git push origin "${GITHUB_BRANCH}"
