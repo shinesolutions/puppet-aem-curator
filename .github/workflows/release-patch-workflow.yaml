@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         with:
-          branch: ${{ github.ref }}
+          branch:  ${{ github.head_ref || github.ref_name }}
       - shell: bash
         env: 
           GITHUB_USER: matthew.dingle@shinesolutions.com
@@ -15,7 +15,7 @@ jobs:
         run: |
           echo "GITHUB_USER: $GITHUB_USER"
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
-          echo "GITHUB_REF: ${{ github.ref }}"
+          echo "GITHUB_REF: ${{ github.head_ref }}"
           #git checkout "${GITHUB_BRANCH}"
           sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
           git config --local user.email "matthew.dingle@shinesolutions.com"
