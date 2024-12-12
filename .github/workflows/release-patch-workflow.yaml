@@ -23,12 +23,17 @@ jobs:
           git config --local user.name "mattd-shine"    
           
           git status
-          git remote remove origin
-          git remote add origin https://${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          #git remote remove origin
+          #git remote add origin https://${{ secrets.MATTD_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git remote -v
           
           git diff
           git status
           git commit -a -m "Updating workflow file"
           git status
-          git push origin "${GITHUB_BRANCH}"
+          #git push origin "${GITHUB_BRANCH}"
+      - uses: ad-m/github-push-action@master
+        with:
+          tags: false
+          github_token: ${{ secrets.MATTD_GITHUB_TOKEN }}
+          branch: ${{ github.ref }}          
