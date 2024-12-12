@@ -15,6 +15,7 @@ jobs:
         run: |
           echo "GITHUB_USER: $GITHUB_USER"
           echo "GITHUB_BRANCH: $GITHUB_BRANCH"
+          echo "GITHUB_REF: ${{ github.ref }}"
           #git checkout "${GITHUB_BRANCH}"
           sed -i 's|main|feature/troubleshoot-workflow-permissions|g' .github/workflows/publish-workflow.yaml
           git config --local user.email "matthew.dingle@shinesolutions.com"
