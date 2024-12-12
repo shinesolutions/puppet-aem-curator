@@ -18,6 +18,3 @@ jobs:
       - uses: ./.github/actions/publish-action
         env:
           PUPPETFORGE_TOKEN: ${{ secrets.SHINEOPENSOURCE_PUPPETFORGE_TOKEN }}
-    steps[0]:
-      with:
-        ref: release/6.5.0
