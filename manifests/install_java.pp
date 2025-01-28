@@ -37,8 +37,12 @@ class aem_curator::install_java (
       $jdk_version_splitted = split($jdk_version, 'u')
       $jdk_version_major = $jdk_version_splitted[0]
       $jdk_version_update = $jdk_version_splitted[1]
-      # Support of different JDK8 versions with different binary pathes
-      if Integer($jdk_version_update) >= 371  {
+      # Support of different JDK8 versions with different binary patches
+      if Integer($jdk_version_update) >= 421  {
+        $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}.0_${jdk_version_update}-oracle-x64"
+        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
+        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
+      } elsif Integer($jdk_version_update) >= 371 and Integer($jdk_version_update) < 421 {
         $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}-oracle-x64"
         $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
         $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
@@ -63,9 +67,20 @@ class aem_curator::install_java (
       # to receive JDK version 11.0.9
       $jdk_version_raw = split($jdk_filename_splitted[1], '_')
       $jdk_version = $jdk_version_raw[0]
-      $java_home_path = "/usr/java/jdk-${jdk_version}"
-      $libjvm_content_path = "${java_home_path}/lib/server/\n"
-      $cacert_path = "${java_home_path}/lib/security/cacerts"
+      $jdk_version_splitted = split($jdk_version, '\.')  # 11.0.9
+      $jdk_version_major = $jdk_version_splitted[0]
+      $jdk_version_minor = $jdk_version_splitted[1]
+      $jdk_version_patch = $jdk_version_splitted[2]
+      # Support of different JDK8 versions with different binary patches
+      if Integer($jdk_version_patch) >= 24  {
+        $java_home_path = "/usr/lib/jvm/jdk-${jdk_version}-oracle-x64"
+        $libjvm_content_path= "${java_home_path}/lib/server/\n"
+        $cacert_path = "${java_home_path}/lib/security/cacerts"
+      } else {
+        $java_home_path = "/usr/java/jdk-${jdk_version}"
+        $libjvm_content_path= "${java_home_path}/lib/server/\n"
+        $cacert_path = "${java_home_path}/lib/security/cacerts"
+      }
     }
     default: {
       fail('Error: Unknown Java Version. Supported java versions are : ( 8 | 11 )')
