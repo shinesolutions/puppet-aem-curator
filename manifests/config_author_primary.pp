@@ -346,29 +346,10 @@ class aem_curator::config_author_primary (
     enable_truststore_removal  => $enable_truststore_removal,
     run_mode                   => $run_mode,
     tmp_dir                    => $tmp_dir,
-  } -> aem_curator::config_aem_agents { "${aem_id}: Remove all agents":
-    run_mode                 => 'author',
-    aem_id                   => $aem_id,
-    enable_remove_all_agents => $enable_remove_all_agents,
-  } -> aem_aem { "${aem_id}: Wait until login page is ready after removing all agents":
-    ensure                     => login_page_is_ready,
-    retries_max_tries          => $login_ready_max_tries,
-    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
-    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
-    aem_id                     => $aem_id,
-  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after removing all agents":
-    ensure                     => aem_health_check_is_ok,
-    retries_max_tries          => $login_ready_max_tries,
-    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
-    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
-    tags                       => 'deep',
-    aem_id                     => $aem_id,
   } -> aem_bundle { "${aem_id}: Stop webdav bundle":
-    ensure       => stopped,
-    name         => 'org.apache.sling.jcr.webdav',
-    aem_username => 'admin',
-    aem_password => $credentials_hash['admin'],
-    aem_id       => $aem_id,
+    ensure => stopped,
+    name   => 'org.apache.sling.jcr.webdav',
+    aem_id => $aem_id,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after stopping webdav bundle":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
@@ -383,11 +364,9 @@ class aem_curator::config_author_primary (
     tags                       => 'deep',
     aem_id                     => $aem_id,
   } -> aem_bundle { "${aem_id}: Stop davex bundle":
-    ensure       => stopped,
-    name         => 'org.apache.sling.jcr.davex',
-    aem_username => 'admin',
-    aem_password => $credentials_hash['admin'],
-    aem_id       => $aem_id,
+    ensure => stopped,
+    name   => 'org.apache.sling.jcr.davex',
+    aem_id => $aem_id,
   } -> aem_aem { "${aem_id}: Wait until login page is ready after stopping davex bundle":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
@@ -416,6 +395,23 @@ class aem_curator::config_author_primary (
     retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
     aem_id                     => $aem_id,
   } -> aem_aem { "${aem_id}: Wait until aem health check is ok after configuring CRXDE":
+    ensure                     => aem_health_check_is_ok,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    tags                       => 'deep',
+    aem_id                     => $aem_id,
+  } -> aem_curator::config_aem_agents { "${aem_id}: Remove all agents":
+    run_mode                 => 'author',
+    aem_id                   => $aem_id,
+    enable_remove_all_agents => $enable_remove_all_agents,
+  } -> aem_aem { "${aem_id}: Wait until login page is ready after removing all agents":
+    ensure                     => login_page_is_ready,
+    retries_max_tries          => $login_ready_max_tries,
+    retries_base_sleep_seconds => $login_ready_base_sleep_seconds,
+    retries_max_sleep_seconds  => $login_ready_max_sleep_seconds,
+    aem_id                     => $aem_id,
+  } -> aem_aem { "${aem_id}: Wait until aem health check is ok after removing all agents":
     ensure                     => aem_health_check_is_ok,
     retries_max_tries          => $login_ready_max_tries,
     retries_base_sleep_seconds => $login_ready_base_sleep_seconds,

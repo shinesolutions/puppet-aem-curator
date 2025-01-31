@@ -13,11 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed incorrect syntax in RTK config file
 
-### Changed
-- Moved "Remove all agents" step ahead of healthcheck during provisioning
-- Added authentication to Stop webdav/davex bundle step
-
-
 ## [4.1.7] - 2024-09-11
 ### Added
 - Added new AEM profile: aem65_sp17
