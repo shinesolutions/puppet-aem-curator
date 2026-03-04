@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Fix for using JDK 11.0.30 (and above). This allows us to use IP addresses in our Certs. See JDK-8341496
 
 ## [4.1.8] - 2025-02-03
 ### Added

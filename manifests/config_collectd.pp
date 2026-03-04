@@ -164,4 +164,12 @@ class aem_curator::config_collectd (
     service_ensure => running,
     service_enable => true,
   }
+
+  class { 'collectd::plugin::genericjmx':
+    jvmarg         => [
+      '-Djdk.rmi.ssl.client.enableEndpointIdentification=false',
+    ],
+    manage_package => false,
+  }
+
 }
