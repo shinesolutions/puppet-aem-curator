@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Fix for using JDK 11.0.30 (and above). This allows us to use IP addresses in our Certs. See JDK-8341496
+- Added new AEM profile: aem65_sp22
+- Added new AEM profile: aem65_sp23
+- Added new AEM profile: aem65_sp24
+- Added new AEM profile: aem65_sp25
 
 ## [4.1.8] - 2025-02-03
 ### Added
