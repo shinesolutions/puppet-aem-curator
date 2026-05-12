@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added new AEM profile: aem65_sp25
 - Added new AEM profile: aem65_sp26
 
+### Changed
+- Lock aem-platform-buildenv to 4.0.2
+
 ## [3.45.2] - 2024-12-13
 ### Fixed
 - Disabled pdk metadata validate for now - it was causing CI and publish actions to fail. We need to update pdk asap and re-enable
