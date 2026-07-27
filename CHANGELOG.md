@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Simplify GitHub Actions release workflows to not use custom action
+
+### Fixed
+- Fix release workflows to use SHINEOPENSOURCE_GITHUB_TOKEN instead of SHINEWORKS_GITHUB_TOKEN, matching this repo's original token
+
 ## [4.1.9] - 2026-03-10
 ### Added
 - Added new AEM profile: aem65_sp22
