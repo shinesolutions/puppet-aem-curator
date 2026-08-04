@@ -15,7 +15,7 @@ class aem_curator::action_upgrade_aem_unpack_jar (
   $puppet_binary              = '/opt/puppetlabs/bin/puppet',
 ) {
 
-  validate_bool($enable_backup)
+  assert_type(Boolean, $enable_backup)
 
   aem_curator::upgrade_aem_unpack_jar { "${aem_id}: Unpacking AEM ${upgrade_version}":
     aem_artifacts_base         => $aem_artifacts_base,

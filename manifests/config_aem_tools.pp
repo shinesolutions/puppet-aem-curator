@@ -15,7 +15,7 @@ class aem_curator::config_aem_tools (
   $aem_compaction_jvm_mem_opts                    = '-Xms2048m -Xmx4096m -XX:-UseGCOverheadLimit',
 ) {
 
-  validate_bool($enable_compaction_remove_bak_files)
+  assert_type(Boolean, $enable_compaction_remove_bak_files)
 
   $_aem_instances = pick(
     $aem_instances,

@@ -4,7 +4,7 @@ define aem_curator::config_aem_development_bundles (
   $enable_development_bundles = false,
 ) {
 
-  validate_bool($enable_development_bundles)
+  assert_type(Boolean, $enable_development_bundles)
 
   if $enable_development_bundles == true {
     aem_resources::enable_development_bundles { "${aem_id}: Enable Development bundles":

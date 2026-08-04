@@ -8,8 +8,8 @@ define aem_curator::config_aem_system_users (
   $force                    = true,
 ) {
 
-  validate_bool($enable_default_passwords)
-  validate_bool($force)
+  assert_type(Boolean, $enable_default_passwords)
+  assert_type(Boolean, $force)
 
   if $enable_default_passwords == false {
 

@@ -14,7 +14,7 @@ define aem_curator::config_aem (
   $aem_ssl_method             = undef,
 ) {
 
-  validate_bool($enable_create_system_users)
+  assert_type(Boolean, $enable_create_system_users)
 
   Exec {
     cwd     => $tmp_dir,
