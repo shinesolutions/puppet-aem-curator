@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [3.48.0] - 2026-08-11
 ### Added
 - Add JDK11.0.18+ installation support
@@ -1012,6 +1014,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.48.0...HEAD
 [3.48.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.47.0...3.48.0
 [3.47.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.45.2...3.47.0
 [3.45.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.45.1...3.45.2
