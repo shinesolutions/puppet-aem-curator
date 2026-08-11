@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add JDK11.0.18+ installation support
+
 ## [3.47.0] - 2026-05-12
 ### Added
 - Added new AEM profile: aem65_sp23
