@@ -89,7 +89,7 @@ class aem_curator::install_java (
       require => Java::Download[$jdk_version],
     }
   }
-  
+
   exec { "alternatives --set  java ${java_home_path}/bin/java":
     command => "alternatives --set  java ${java_home_path}/bin/java",
     unless  => "test \$(readlink -f /etc/alternatives/java) = '${java_home_path}/bin/java'",
