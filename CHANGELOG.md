@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add JDK11.0.18+ installation support for AEM Java
+
 ### Fixed
 - Fix minor lint violation
 
 ## [3.48.0] - 2026-08-11
 ### Added
-- Add JDK11.0.18+ installation support
+- Add JDK11.0.18+ installation support for Orchestrator and Chaos Monkey Java
 
 ## [3.47.0] - 2026-05-12
 ### Added

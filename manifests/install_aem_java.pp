@@ -83,8 +83,22 @@ class aem_curator::install_aem_java (
     url     => "${jdk_base_url}/${jdk_filename}",
   }
 
+  # Starting with JDK 11.0.18, Oracle RPMs changed how alternatives are registered.
+  # We must explicitly run `alternatives --install` before `--set` for JDK 11.0.18+.
+  if $jdk_version =~ /^11/ and versioncmp($jdk_version, '11.0.18') >= 0 {
+    exec { "alternatives --install java ${java_home_path}/bin":
+      command => "alternatives --install /usr/bin/java java ${java_home_path}/bin/java 20000",
+      unless  => "alternatives --display java | grep -q ${java_home_path}/bin/java",
+      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+      before  => Exec["alternatives --set  java ${java_home_path}/bin/java"],
+      require => Java::Download[$jdk_version],
+    }
+  }
+
   # Need to set alternative for java here due to oracle_java module's add alternative feature is broken in version 2.9.4
   exec { "alternatives --set  java ${java_home_path}/bin/java":
+    command => "alternatives --set  java ${java_home_path}/bin/java",
+    unless  => "test \$(readlink -f /etc/alternatives/java) = '${java_home_path}/bin/java'",
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
     require => Java::Download[$jdk_version],
   }
