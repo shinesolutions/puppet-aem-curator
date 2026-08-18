@@ -87,6 +87,15 @@ class aem_curator::install_java (
       path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
       before  => Exec["alternatives --set  java ${java_home_path}/bin/java"],
       require => Java::Download[$jdk_version],
+    } -> exec { "alternatives --install keytool /usr/java/jdk-${jdk_version}/bin/keytool":
+      command => "alternatives --install /usr/bin/keytool keytool /usr/java/jdk-${jdk_version}/bin/keytool 20000",
+      unless  => "alternatives --display keytool | grep -q /usr/java/jdk-${jdk_version}/bin/keytool",
+      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+    } -> exec { "alternatives --set keytool /usr/java/jdk-${jdk_version}/bin/keytool":
+      command => "alternatives --set keytool /usr/java/jdk-${jdk_version}/bin/keytool",
+      unless  => "alternatives --display keytool | grep -q /usr/java/jdk-${jdk_version}/bin/keytool",
+      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+      before  => File["${tmp_dir}/java"],
     }
   }
 
@@ -132,7 +141,7 @@ class aem_curator::install_java (
       ensure      => latest,
       certificate => "${tmp_dir}/aem.${part}",
       password    => 'changeit',
-      path        => ['/bin','/usr/bin'],
+      path        => ['/bin','/usr/bin', "/usr/java/jdk-${jdk_version}/bin"],
       require     => Java::Download[$jdk_version],
     }
   }

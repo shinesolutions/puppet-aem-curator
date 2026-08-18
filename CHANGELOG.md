@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add keytool to alternatives
+- Add JDK bin to keytool path
+
 ## [3.49.0] - 2026-08-13
 ### Added
 - Add JDK11.0.18+ installation support for AEM Java
