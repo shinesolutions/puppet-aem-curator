@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [3.50.6] - 2026-08-20
 ### Fixed
 - Fix java_ks keytool by setting java home to /usr/java/jdk-11
@@ -1049,6 +1051,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#238]: https://github.com/shinesolutions/puppet-aem-curator/issues/238
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.50.6...HEAD
 [3.50.6]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.50.5...3.50.6
 [3.50.5]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.50.4...3.50.5
 [3.50.4]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.50.3...3.50.4
