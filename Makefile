@@ -23,7 +23,7 @@ lint:
 	bundle exec rubocop Gemfile
 	mv Gemfile.lock Gemfile.lock.orig && PDK_DISABLE_ANALYTICS=true && mv Gemfile.lock.orig Gemfile.lock
 
-package: deps
+package:
 	PDK_DISABLE_ANALYTICS=true pdk build --force
 
 release-major:

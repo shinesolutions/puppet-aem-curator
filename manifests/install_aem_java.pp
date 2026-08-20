@@ -31,14 +31,6 @@ class aem_curator::install_aem_java (
   $jdk_base_url,
   $jdk_filename = 'jdk-8u221-linux-x64.rpm',
 ) {
-
-  # Pre-link keytool so that java_ks can pre-discover keytool prior to jdk installation
-  file { '/usr/bin/keytool':
-    ensure => 'link',
-    target => "${java_home_path}/bin/keytool",
-    before => Java::Download[$jdk_version],
-  }
-
   # Split JDK filename to determine JDK Major Version
   $jdk_filename_splitted = split($jdk_filename, '-')
   # Case to Setup variables per JDK Version
