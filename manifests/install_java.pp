@@ -94,7 +94,7 @@ class aem_curator::install_java (
       before  => File["${tmp_dir}/java"],
     } -> exec { "alternatives --set keytool /usr/java/jdk-${jdk_version}/bin/keytool":
       command => "alternatives --set keytool /usr/java/jdk-${jdk_version}/bin/keytool",
-      unless  => "alternatives --display keytool | grep -q /usr/java/jdk-${jdk_version}/bin/keytool",
+      unless  => "test \$(readlink -f /etc/alternatives/keytool) = '/usr/java/jdk-${jdk_version}/bin/keytool'",
       path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
       before  => File["${tmp_dir}/java"],
     }

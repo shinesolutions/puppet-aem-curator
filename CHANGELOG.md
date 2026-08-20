@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix keytool set unless condition
+
 ## [3.50.1] - 2026-08-19
 ### Fixed
 - Fix keytool usage prior to alternatives setting
