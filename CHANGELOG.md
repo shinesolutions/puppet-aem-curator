@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix java home path in jdk11 provisioning
+
 ## [3.50.2] - 2026-08-20
 ### Fixed
 - Fix keytool set unless condition
