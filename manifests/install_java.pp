@@ -81,7 +81,7 @@ class aem_curator::install_java (
   # Starting with JDK 11.0.18, Oracle RPMs changed how alternatives are registered.
   # We must explicitly run `alternatives --install` before `--set` for JDK 11.0.18+.
   if $jdk_version =~ /^11/ and versioncmp($jdk_version, '11.0.18') >= 0 {
-    exec { "alternatives --install java ${java_home_path}/bin":
+    exec { "alternatives --install java ${java_home_path}/bin/java":
       command => "alternatives --install /usr/bin/java java ${java_home_path}/bin/java 20000",
       unless  => "alternatives --display java | grep -q ${java_home_path}/bin/java",
       path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
