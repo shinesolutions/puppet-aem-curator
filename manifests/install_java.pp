@@ -142,7 +142,7 @@ class aem_curator::install_java (
       ensure      => latest,
       certificate => "${tmp_dir}/aem.${part}",
       password    => 'changeit',
-      path        => ['/bin','/usr/bin', "${java_home_path}/bin"],
+      path        => ['/usr/java/default/bin','/bin','/usr/bin','/sbin','/usr/sbin',"${java_home_path}/bin"],
       require     => Java::Download[$jdk_version],
     }
   }

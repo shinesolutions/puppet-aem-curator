@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix missing java default and system alternative bins to java_ks path
+
 ## [3.50.3] - 2026-08-20
 ### Fixed
 - Fix java home path in jdk11 provisioning
