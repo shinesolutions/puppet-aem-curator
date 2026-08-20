@@ -63,7 +63,11 @@ class aem_curator::install_java (
       # to receive JDK version 11.0.9
       $jdk_version_raw = split($jdk_filename_splitted[1], '_')
       $jdk_version = $jdk_version_raw[0]
-      $java_home_path = "/usr/java/jdk-${jdk_version}"
+      if versioncmp($jdk_version, '11.0.18') >= 0 {
+        $java_home_path = '/usr/java/jdk-11'
+      } else {
+        $java_home_path = "/usr/java/jdk-${jdk_version}"
+      }
       $libjvm_content_path = "${java_home_path}/lib/server/\n"
       $cacert_path = "${java_home_path}/lib/security/cacerts"
     }
@@ -82,7 +86,6 @@ class aem_curator::install_java (
   # We must explicitly run `alternatives --install` before `--set` for JDK 11.0.18+.
   # RPM stops creating /usr/java/jdk-x.y.z, and instead it only creates /usr/java/jdk-11
   if $jdk_version =~ /^11/ and versioncmp($jdk_version, '11.0.18') >= 0 {
-    $java_home_path = "/usr/java/jdk-11"
     exec { "alternatives --install java ${java_home_path}/bin/java":
       command => "alternatives --install /usr/bin/java java ${java_home_path}/bin/java 20000",
       unless  => "alternatives --display java | grep -q ${java_home_path}/bin/java",
