@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix java_ks failing pre-discovery of keytool
+
 ## [3.50.4] - 2026-08-20
 ### Fixed
 - Fix missing java default and system alternative bins to java_ks path
