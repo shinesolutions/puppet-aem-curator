@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fix java_ks keytool by setting java home to /usr/java/jdk-11
+
 ## [3.50.5] - 2026-08-20
 ### Fixed
 - Fix java_ks failing pre-discovery of keytool

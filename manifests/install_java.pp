@@ -80,23 +80,15 @@ class aem_curator::install_java (
 
   # Starting with JDK 11.0.18, Oracle RPMs changed how alternatives are registered.
   # We must explicitly run `alternatives --install` before `--set` for JDK 11.0.18+.
+  # RPM stops creating /usr/java/jdk-x.y.z, and instead it only creates /usr/java/jdk-11
   if $jdk_version =~ /^11/ and versioncmp($jdk_version, '11.0.18') >= 0 {
+    $java_home_path = "/usr/java/jdk-11"
     exec { "alternatives --install java ${java_home_path}/bin/java":
       command => "alternatives --install /usr/bin/java java ${java_home_path}/bin/java 20000",
       unless  => "alternatives --display java | grep -q ${java_home_path}/bin/java",
       path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
       before  => Exec["alternatives --set  java ${java_home_path}/bin/java"],
       require => Java::Download[$jdk_version],
-    } -> exec { "alternatives --install keytool ${java_home_path}/bin/keytool":
-      command => "alternatives --install /usr/bin/keytool keytool ${java_home_path}/bin/keytool 20000",
-      unless  => "alternatives --display keytool | grep -q ${java_home_path}/bin/keytool",
-      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-      before  => File["${tmp_dir}/java"],
-    } -> exec { "alternatives --set keytool ${java_home_path}/bin/keytool":
-      command => "alternatives --set keytool ${java_home_path}/bin/keytool",
-      unless  => "test \$(readlink -f /etc/alternatives/keytool) = '${java_home_path}/bin/keytool'",
-      path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
-      before  => File["${tmp_dir}/java"],
     }
   }
 
