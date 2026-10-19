@@ -85,7 +85,10 @@ define aem_curator::config_aem_jmx (
 
     # Creating JMX Password file
     file { $jmxremote_password_file_path:
-      content => template('aem_curator/config/jmx.password'),
+      content => epp('aem_curator/config/jmx.password.epp', {
+        'jmxremote_monitoring_username'      => $jmxremote_monitoring_username,
+        'jmxremote_monitoring_user_password' => $jmxremote_monitoring_user_password,
+      }),
       mode    => '0400',
       owner   => "aem-${aem_id}",
       group   => "aem-${aem_id}",
@@ -93,7 +96,9 @@ define aem_curator::config_aem_jmx (
 
     # Creating JMX Access file
     file { $jmxremote_access_file_path:
-      content => template('aem_curator/config/jmx.access'),
+      content => epp('aem_curator/config/jmx.access.epp', {
+        'jmxremote_monitoring_username' => $jmxremote_monitoring_username,
+      }),
       mode    => '0400',
       owner   => "aem-${aem_id}",
       group   => "aem-${aem_id}",
@@ -112,7 +117,11 @@ define aem_curator::config_aem_jmx (
 
   # Creating JMX property file
   file { $jmxremote_configuration_file_path:
-    content => template('aem_curator/config/jmx.properties.erb'),
+    content => epp('aem_curator/config/jmx.properties.epp', {
+      'jmxremote_options'                => $jmxremote_options,
+      'jmxremote_authentication_options' => $jmxremote_authentication_options,
+      'jmxremote_ssl_options'            => $jmxremote_ssl_options,
+    }),
     mode    => '0400',
     owner   => "aem-${aem_id}",
     group   => "aem-${aem_id}",
