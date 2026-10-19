@@ -21,6 +21,8 @@ group :development, :test, :system_tests do
   gem "voxpupuli-release",    "~> 5.5",  require: false
   # Loaded as a plugin in .rubocop.yml, not a dependency of voxpupuli-test
   gem "rubocop-performance",  "~> 1.27", require: false
+  # The shinesolutions/aem_resources types load ruby_aem when the catalog is compiled
+  gem "ruby_aem",             "~> 4.0.2", require: false
 end
 
 puppet_version = ENV['PUPPET_GEM_VERSION']

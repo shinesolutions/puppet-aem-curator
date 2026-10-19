@@ -22,6 +22,9 @@ fixtures:
     concat:
       repo: "puppetlabs/concat"
       ref: "9.1.0"
+    cron_core:
+      repo: "puppetlabs/cron_core"
+      ref: "2.1.0"
     dispatcher:
       repo: "adobeinc/dispatcher"
       ref: "1.0.0"
@@ -43,6 +46,9 @@ fixtures:
     logrotate:
       repo: "puppet/logrotate"
       ref: "9.0.0"
+    mount_core:
+      repo: "puppetlabs/mount_core"
+      ref: "2.1.0"
     python_task_helper:
       repo: "puppetlabs/python_task_helper"
       ref: "0.7.0"
