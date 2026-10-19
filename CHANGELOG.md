@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
 - Migrated ERB templates to EPP
 - Limited OS support to Amazon Linux 2023 and Rocky Linux 10
-- Changed the Puppet requirement to >= 7.0.0 < 10.0.0
+- Changed the Puppet requirement to >= 9.0.0 < 10.0.0 (OpenVox 9 only), as the shinesolutions/aem_resources types need ruby_aem 4, which needs Ruby 4, and only OpenVox 9 agents ship Ruby 4
 - Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java, puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 7.11.0
 - Upgraded the Puppetfile modules to the same versions, and puppet-yum to 8.3.0
 - Replaced validate_bool and validate_string, removed in stdlib 9, with the equivalent assert_type checks

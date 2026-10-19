@@ -79,7 +79,8 @@ Learn more about this module:
 
 Requirements:
 
-* Puppet or OpenVox 7, 8 or 9
+* OpenVox 9 (Puppet >= 9.0.0 < 10.0.0): the shinesolutions/aem_resources types
+  need ruby_aem 4, which needs the Ruby 4 that only OpenVox 9 agents ship
 * Amazon Linux 2023 or Rocky Linux 10
 * The Puppet modules listed in `metadata.json`, installed automatically as dependencies.
   bstopp/aem is no longer required: the parts this module used are ported into
