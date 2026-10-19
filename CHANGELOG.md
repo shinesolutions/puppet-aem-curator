@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added Makefile targets for unit tests, acceptance tests, docs, changelog and publishing to the Puppet Forge with a pre-publish check
+- Added unit and acceptance tests to GitHub CI
+- Added ruby_aem 4.0.2 to the test gems so the aem_resources types load in the unit tests
+
+### Changed
+- Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
+- Migrated ERB templates to EPP
+- Limited OS support to Amazon Linux 2023 and Rocky Linux 10
+- Changed the Puppet requirement to >= 7.0.0 < 10.0.0
+- Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java, puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, bstopp/aem, and shinesolutions/aem_resources to 7.11.0
+- Upgraded the Puppetfile modules to the same versions, and puppet-yum to 8.3.0
+- Replaced validate_bool and validate_string, removed in stdlib 9, with the equivalent assert_type checks
+- Vendored the InSpec AEM profile with curl instead of the InSpec gem, which doesn't support Ruby 4
+- Dropped r10k from the build, the unit test modules are installed from .fixtures.yml
+- Removed the GitHub Actions publishing workflow ref from the RTK config
+- Simplify CI workflow to not use action files anymore
+- Upgraded GitHub workflows to actions/checkout v7, cliffano/command-docker-action v2.1.0, cliffano/release-action v2.1.0 and aem-platform-buildenv 6.4.1
+- Changed the publish workflow to publish with BLACKSMITH_FORGE_API_KEY
+
+### Fixed
+- Fixed the collectd dependency name to puppet/collectd
+- Fixed config_publish and config_author_primary failing on OpenVox 9 when enable_aem_clean_directories is false, as list_clean_directories is then unknown
 
 ### Changed
 - Deprecate validate_bool for puppet module uplift
