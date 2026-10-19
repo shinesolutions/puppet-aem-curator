@@ -10,9 +10,6 @@ fixtures:
     archive:
       repo: "puppet/archive"
       ref: "8.1.0"
-    aem:
-      repo: "bstopp/aem"
-      ref: "3.0.0"
     aem_resources:
       repo: "shinesolutions/aem_resources"
       ref: "7.11.0"
