@@ -47,9 +47,6 @@ Temporary Items
 # Built packages
 pkg/*
 
-# Should run on multiple platforms so don't check in
-Gemfile.lock
-
 # Tests
 spec/fixtures/*
 coverage/*
