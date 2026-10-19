@@ -108,6 +108,14 @@ the comments in each manifest file. HTML documentation can be generated into the
 The parameters available to Dispatcher EPP templates are described in
 [Dispatcher Template Parameters](docs/dispatcher-template-parameters.md).
 
+### Dispatcher and legacy facts
+
+`aem_curator::install_dispatcher` uses adobeinc/dispatcher 1.0.0, which reads the
+legacy fact `$::osfamily`. OpenVox 9 doesn't provide legacy facts by default, so
+run Puppet with `include_legacy_facts = true` in `puppet.conf` or with
+`puppet apply --include_legacy_facts` when it applies `install_dispatcher`, until
+that module is replaced. Otherwise the catalog fails with "Unknown variable".
+
 ### AEM service
 
 `aem_curator::aem_service` (declared by `aem_curator::aem_instance`) manages AEM

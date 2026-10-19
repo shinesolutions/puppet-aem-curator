@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplify CI workflow to not use action files anymore
 - Upgraded GitHub workflows to actions/checkout v7, cliffano/command-docker-action v2.1.0, cliffano/release-action v2.1.0 and aem-platform-buildenv 6.4.1
 - Changed the publish workflow to publish with BLACKSMITH_FORGE_API_KEY
+- Documented that install_dispatcher needs Puppet to run with include_legacy_facts = true, as adobeinc/dispatcher 1.0.0 reads the legacy fact $::osfamily
 
 ### Removed
 - Removed the bstopp/aem dependency, which is unmaintained and incompatible with OpenVox 9 and stdlib 9
