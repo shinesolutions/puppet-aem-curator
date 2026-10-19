@@ -5,6 +5,8 @@ logs/
 modules/
 stage/
 zzz-*.*
+/junit/
+/log/
 # End of AOC gitignore
 
 
