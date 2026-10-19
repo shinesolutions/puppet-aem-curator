@@ -21,7 +21,9 @@ group :development, :test, :system_tests do
   gem "voxpupuli-release",    "~> 5.5",  require: false
   # Loaded as a plugin in .rubocop.yml, not a dependency of voxpupuli-test
   gem "rubocop-performance",  "~> 1.27", require: false
-  # The shinesolutions/aem_resources types load ruby_aem when the catalog is compiled
+  # Test-only: the shinesolutions/aem_resources providers `require 'ruby_aem'` when
+  # rspec-puppet loads them. aem_curator itself never calls ruby_aem, and it is not
+  # a runtime dependency of this module.
   gem "ruby_aem",             "~> 4.0.2", require: false
 end
 
