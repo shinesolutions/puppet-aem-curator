@@ -2,6 +2,8 @@
 --no-140chars-check
 --no-autoloader_layout-check
 --no-documentation-check
+# The checks below come with voxpupuli-puppet-lint-plugins (voxpupuli-test) and flag ~7100
+# existing issues; fixing them would add types/docs or change behaviour, so they stay off for now
 --no-parameter_types-check
 --no-parameter_documentation-check
 --no-strict_indent-check

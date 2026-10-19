@@ -24,7 +24,7 @@ class aem_curator::action_enable_saml (
   $service_ranking                = $::service_ranking,
   $serial                         = $::serial,
   $signature_method               = $::signature_method,
-  $sp_private_key_alias           = $::sp_private_key_alias, # lint:ignore:legacy_facts
+  $sp_private_key_alias           = $::sp_private_key_alias, # lint:ignore:legacy_facts (false positive: sp_* matches a legacy fact name)
   $synchronize_attributes         = $::synchronize_attributes,
   $use_encryption                 = $::use_encryption,
   $user_id_attribute              = $::user_id_attribute,

@@ -236,6 +236,8 @@ class aem_curator::config_publish (
   # remove any aem-healthcheck-content package from the install directory
   # If install dir isn't cleaned up a step before per default
   #
+  # getvar: list_clean_directories is only set when enable_aem_clean_directories is true,
+  # and OpenVox 9's strict_variables fails on an unknown variable (Puppet 7 gave undef)
   if !('install' in getvar('list_clean_directories')) {
   exec { "${aem_id}: remove ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip":
     command => "rm -fr ${crx_quickstart_dir}/install/aem-healthcheck-content-*.zip",

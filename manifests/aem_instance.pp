@@ -130,6 +130,7 @@ define aem_curator::aem_instance (
       home            => $_home,
       user            => $user,
       group           => $group,
+      # undef (the default) uses aem_service's service_options, incl. the 4 minute TimeoutStopSec
       service_options => $service_options,
     }
   }

@@ -1,7 +1,10 @@
 ci: clean deps test acceptance package
 
 # Install the Ruby gems, and vendor the InSpec AEM profile declared in inspec.yml
-# into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`
+# into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`.
+# The profile is downloaded with curl instead of `inspec vendor`, as the InSpec gem
+# doesn't support Ruby 4 (--no-same-owner: root in the buildenv container can't chown
+# on a macOS bind mount). r10k is no longer run: the unit tests use .fixtures.yml
 deps:
 	gem install bundler --version=4.0.22
 	bundle install

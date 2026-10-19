@@ -55,6 +55,8 @@ define aem_curator::config_aem_agents (
   $run_mode                                = undef,
 ) {
   # Validate booleans
+  # validate_bool/validate_string were removed in stdlib 9; the assert_type checks in this
+  # define are the same checks (Optional[String] allows undef, like validate_string)
   assert_type(Boolean, $enable_create_flush_agents)
   assert_type(Boolean, $enable_create_outbox_replication_agents)
   assert_type(Boolean, $enable_remove_all_agents)

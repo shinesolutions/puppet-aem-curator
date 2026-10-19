@@ -84,6 +84,7 @@ define aem_curator::config_aem_jmx (
     $jmxremote_access_file_path = "/etc/jmx-${aem_id}.access"
 
     # Creating JMX Password file
+    # The JMX templates were migrated from ERB to EPP (same output), which takes its variables explicitly
     file { $jmxremote_password_file_path:
       content => epp('aem_curator/config/jmx.password.epp', {
         'jmxremote_monitoring_username'      => $jmxremote_monitoring_username,

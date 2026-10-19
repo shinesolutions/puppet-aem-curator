@@ -4,6 +4,7 @@ define aem_curator::config_aem_crxde (
   $enable_crxde = false,
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $enable_crxde)
 
   if $enable_crxde == true {

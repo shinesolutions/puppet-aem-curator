@@ -1,5 +1,8 @@
+# Not used by this module's build (r10k was dropped; the unit tests install the
+# .fixtures.yml modules); kept in step with metadata.json for consumers
 mod 'puppetlabs/apache', '13.4.0'
 mod 'puppet/archive', '8.1.0'
+# puppet/collectd is the Forge module; puppetlabs/collectd doesn't exist
 mod 'puppet-collectd', '16.0.0'
 mod 'puppetlabs/concat', '9.1.0'
 mod 'puppet-healthcheck', '2.1.0'

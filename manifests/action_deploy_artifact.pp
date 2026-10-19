@@ -16,6 +16,7 @@ class aem_curator::action_deploy_artifact (
   $retries_max_sleep_seconds  = 5,
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $package_replicate)
   assert_type(Boolean, $package_activate)
   assert_type(Boolean, $package_force)

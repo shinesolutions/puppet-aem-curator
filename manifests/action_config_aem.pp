@@ -16,6 +16,7 @@ class aem_curator::action_config_aem (
   $tmp_dir                    = $::tmp_dir
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $force)
   assert_type(Boolean, $enable_create_system_users)
   assert_type(Boolean, $enable_truststore_removal)
