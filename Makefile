@@ -1,30 +1,50 @@
-ci: clean deps lint package
+ci: clean deps test acceptance package
+
+# Install the Ruby gems, and vendor the InSpec AEM profile declared in inspec.yml
+# into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`
+deps:
+	gem install bundler --version=4.0.22
+	bundle install
+	rm -rf vendor/inspec/ && mkdir -p vendor/inspec/
+	curl -sfL "$$(ruby -ryaml -e "puts YAML.load_file('inspec.yml')['depends'][0]['url']")" | tar --no-same-owner -xz -C vendor/inspec/
+	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/
+	mv vendor/inspec/inspec-aem-* files/test/inspec/inspec-aem
 
 clean:
-	rm -rf Gemfile.lock bin/ pkg/ stage/ test/ vendor/ /tmp/shinesolutions/puppet-aem-curator/
+	rm -rf bin/ pkg/ stage/ test/ vendor/ /tmp/shinesolutions/puppet-aem-curator/
 
-deps:
-	gem install bundler --version=2.3.24
-	bundle install --binstubs -j4
-	bundle exec r10k puppetfile install --verbose --moduledir modules
-	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
-	bundle exec inspec vendor --overwrite vendor/inspec
-	cd vendor/inspec/vendor && mv */inspec-aem-*.*.* inspec-aem
-	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/ && cp -R vendor/inspec/vendor/inspec-aem files/test/inspec/
+# lint, validate (syntax, metadata_lint), unit specs and static checks.
+# safe.directory lets the git-based checks run as root in the buildenv container
+test:
+	GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=$(CURDIR) \
+		bundle exec rake test
 
 lint:
-	bundle exec puppet-lint \
-		--fail-on-warnings \
-		--no-140chars-check \
-		--no-autoloader_layout-check \
-		--no-documentation-check \
-		./manifests/*.pp
-	puppet epp validate templates/*/*.epp
-	bundle exec rubocop Gemfile
-	mv Gemfile.lock Gemfile.lock.orig && PDK_DISABLE_ANALYTICS=true pdk validate metadata && mv Gemfile.lock.orig Gemfile.lock
+	bundle exec rake lint syntax metadata_lint rubocop
+	yamllint .markdownlint.yaml .github/workflows/*.yaml
+	markdownlint-cli2 README.md
+	python3 -m json.tool .rtk.json
+
+# Run acceptance tests against every nodeset; beaker only runs one per invocation.
+# The fixture modules are installed on the hosts, see spec/spec_helper_acceptance.rb
+acceptance:
+	bundle exec rake fixtures:prep
+	set -e; for nodeset in spec/acceptance/nodesets/*.yml; do \
+		echo "== $$nodeset"; \
+		BEAKER_SETFILE=$$nodeset bundle exec rake beaker; \
+	done
+
+# Generate the HTML reference into docs/
+docs:
+	bundle exec rake "strings:generate[,,,,,,--output-dir docs]"
+
+# Move the Unreleased CHANGELOG.md entries to a release section, e.g. make changelog VERSION=4.1.10
+# (VERSION defaults to metadata.json's version without its pre-release suffix)
+changelog:
+	bundle exec rake "changelog:release[$(VERSION)]"
 
 package: deps
-	PDK_DISABLE_ANALYTICS=true pdk build --force
+	bundle exec rake module:build
 
 release-major:
 	rtk release --release-increment-type major
@@ -37,7 +57,15 @@ release-patch:
 
 release: release-minor
 
-publish:
-	pdk release publish --force --forge-token=$(forge_token)
+# Check the module is ready to publish to the Puppet Forge; reports what is missing.
+# safe.directory lets the git-based checks run as root in the buildenv container
+publish-check: package
+	GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=$(CURDIR) \
+		tools/publish-check
 
-.PHONY: ci clean deps lint package release release-major release-minor release-patch publish
+# Publish the built package to the Puppet Forge, run by the publish workflow on a pushed tag.
+# Requires BLACKSMITH_FORGE_API_KEY (a Forge API key) and a passing publish-check
+publish: publish-check
+	bundle exec rake module:push
+
+.PHONY: ci deps clean test lint acceptance docs changelog package release release-major release-minor release-patch publish-check publish

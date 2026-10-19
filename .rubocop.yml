@@ -19,6 +19,8 @@ AllCops:
     - "**/Puppetfile"
     - "**/Vagrantfile"
     - "**/Guardfile"
+    # InSpec AEM profile vendored by make deps
+    - files/test/**/*
 
 Layout/LineLength:
   Description: People have wide screens, use them.
