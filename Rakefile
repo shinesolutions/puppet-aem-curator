@@ -11,6 +11,16 @@ require 'voxpupuli/test/rake'
 # Provides: module:build (packages the module into pkg/), module:*, release
 begin
   require 'voxpupuli/release/rake_tasks'
+
+  # puppet-modulebuilder only packages a fixed list of files, which leaves out
+  # NOTICE; it carries the Apache-2.0 attribution for the code ported from bstopp/aem
+  require 'puppet/modulebuilder'
+  module PackageNotice
+    def ignored_files
+      super.add('!/NOTICE')
+    end
+  end
+  Puppet::Modulebuilder::Builder.prepend(PackageNotice)
 rescue LoadError
   # Safe to rescue if the development group is omitted
 end
