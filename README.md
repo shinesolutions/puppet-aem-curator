@@ -81,7 +81,10 @@ Requirements:
 
 * Puppet or OpenVox 7, 8 or 9
 * Amazon Linux 2023 or Rocky Linux 10
-* The Puppet modules listed in `metadata.json`, installed automatically as dependencies
+* The Puppet modules listed in `metadata.json`, installed automatically as dependencies.
+  bstopp/aem is no longer required: the parts this module used are ported into
+  aem_curator (`aem_curator::aem_instance`, `aem_curator::aem_service`) and
+  aem_resources, see [NOTICE](NOTICE)
 
 Install the module using the `puppet` command:
 
@@ -103,6 +106,29 @@ the comments in each manifest file. HTML documentation can be generated into the
 
 The parameters available to Dispatcher EPP templates are described in
 [Dispatcher Template Parameters](docs/dispatcher-template-parameters.md).
+
+### AEM service
+
+`aem_curator::aem_service` (declared by `aem_curator::aem_instance`) manages AEM
+as the systemd service `aem-<aem_id>` with the unit
+`/lib/systemd/system/aem-<aem_id>.service`, on both Amazon Linux 2023 and Rocky
+Linux 10. The SysV init script that bstopp/aem used on Amazon Linux is no longer
+supported. The service name is unchanged, so `systemctl` and
+`puppet resource service aem-<aem_id>` work as before.
+
+**Stop timeout:** the unit sets `TimeoutStopSec=4min`. If a graceful stop takes
+longer than 4 minutes, for example while AEM finishes an offline compaction or a
+backup, systemd kills AEM. The old init script on Amazon Linux waited without a
+limit. To change it, pass `service_options` to `aem_curator::aem_instance` or
+`aem_curator::aem_service` (the default is
+`{ 'TimeoutStopSec' => '4min', 'KillSignal' => 'SIGCONT', 'PrivateTmp' => true }`).
+
+### InSpec AEM profile
+
+`make deps` vendors [inspec-aem](https://github.com/shinesolutions/inspec-aem)
+2.0.0, declared in `inspec.yml`, into `files/test/inspec/inspec-aem`. The
+aem-tools scripts run its controls with `inspec exec` on the AEM hosts, which
+need Ruby 4 with ruby_aem 4.0.2 and Cinc InSpec 7.2.1.
 
 ## Testing
 

@@ -9,16 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added Makefile targets for unit tests, acceptance tests, docs, changelog and publishing to the Puppet Forge with a pre-publish check
 - Added unit and acceptance tests to GitHub CI
-- Added ruby_aem 4.0.2 to the test gems so the aem_resources types load in the unit tests
+- Added ruby_aem 4.0.2 to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
+- Added aem_curator::aem_instance, aem_curator::aem_package, aem_curator::aem_service and the aem_curator_installer type, ported from bstopp/aem 3.0.0 aem::instance, aem::package, aem::service and aem_installer, with a NOTICE for the attribution
 
 ### Changed
 - Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
 - Migrated ERB templates to EPP
 - Limited OS support to Amazon Linux 2023 and Rocky Linux 10
 - Changed the Puppet requirement to >= 7.0.0 < 10.0.0
-- Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java, puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, bstopp/aem, and shinesolutions/aem_resources to 7.11.0
+- Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java, puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 7.11.0
 - Upgraded the Puppetfile modules to the same versions, and puppet-yum to 8.3.0
 - Replaced validate_bool and validate_string, removed in stdlib 9, with the equivalent assert_type checks
+- Changed install_aem62/63/64/65 to use aem_curator::aem_instance instead of bstopp/aem aem::instance, and install_aem_healthcheck to use aem_resources::crx_package_file instead of aem::crx::package
+- Changed the AEM service to systemd only (the init script variant is not ported): on Amazon Linux it now uses the systemd unit /lib/systemd/system/aem-<id>.service instead of /etc/init.d/aem-<id>; the service name aem-<id> is unchanged. systemd stops AEM forcibly when a graceful stop takes longer than TimeoutStopSec (default 4min, set with service_options)
+- Upgraded the InSpec AEM profile to inspec-aem 2.0.0 (Ruby 4, ruby_aem 4.0.2, Cinc InSpec 7.2.1)
+- Aligned the puppet/archive range with aem_resources (>= 6.0.0 < 10.0.0)
 - Vendored the InSpec AEM profile with curl instead of the InSpec gem, which doesn't support Ruby 4
 - Dropped r10k from the build, the unit test modules are installed from .fixtures.yml
 - Removed the GitHub Actions publishing workflow ref from the RTK config
@@ -26,8 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded GitHub workflows to actions/checkout v7, cliffano/command-docker-action v2.1.0, cliffano/release-action v2.1.0 and aem-platform-buildenv 6.4.1
 - Changed the publish workflow to publish with BLACKSMITH_FORGE_API_KEY
 
+### Removed
+- Removed the bstopp/aem dependency, which is unmaintained and incompatible with OpenVox 9 and stdlib 9
+
 ### Fixed
 - Fixed the collectd dependency name to puppet/collectd
+- Fixed the AEM service failing on Rocky Linux, which bstopp/aem's aem::service didn't support
 - Fixed config_publish and config_author_primary failing on OpenVox 9 when enable_aem_clean_directories is false, as list_clean_directories is then unknown
 
 ### Changed
