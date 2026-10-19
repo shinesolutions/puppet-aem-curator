@@ -1,0 +1,60 @@
+---
+fixtures:
+  forge_modules:
+    apache:
+      repo: "puppetlabs/apache"
+      ref: "13.4.0"
+    apt:
+      repo: "puppetlabs/apt"
+      ref: "11.4.0"
+    archive:
+      repo: "puppet/archive"
+      ref: "8.1.0"
+    aem:
+      repo: "bstopp/aem"
+      ref: "3.0.0"
+    aem_resources:
+      repo: "shinesolutions/aem_resources"
+      ref: "7.11.0"
+    collectd:
+      repo: "puppet/collectd"
+      ref: "16.0.0"
+    concat:
+      repo: "puppetlabs/concat"
+      ref: "9.1.0"
+    dispatcher:
+      repo: "adobeinc/dispatcher"
+      ref: "1.0.0"
+    epel:
+      repo: "puppet/epel"
+      ref: "5.0.0"
+    healthcheck:
+      repo: "puppet/healthcheck"
+      ref: "2.1.0"
+    inifile:
+      repo: "puppetlabs/inifile"
+      ref: "6.5.0"
+    java:
+      repo: "puppetlabs/java"
+      ref: "12.1.1"
+    java_ks:
+      repo: "puppetlabs/java_ks"
+      ref: "6.1.0"
+    logrotate:
+      repo: "puppet/logrotate"
+      ref: "9.0.0"
+    python_task_helper:
+      repo: "puppetlabs/python_task_helper"
+      ref: "0.7.0"
+    selinux_core:
+      repo: "puppetlabs/selinux_core"
+      ref: "2.1.0"
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "9.7.0"
+    systemd:
+      repo: "puppet/systemd"
+      ref: "9.4.0"
+    yum:
+      repo: "puppet/yum"
+      ref: "8.3.0"
