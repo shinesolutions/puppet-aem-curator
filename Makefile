@@ -21,7 +21,7 @@ deps:
 	mv vendor/inspec/inspec-aem-* files/test/inspec/inspec-aem
 
 clean:
-	rm -rf bin/ pkg/ stage/ test/ vendor/ /tmp/shinesolutions/puppet-aem-curator/
+	rm -rf bin/ pkg/ stage/ test/ vendor/
 
 # lint, validate (syntax, metadata_lint), unit specs and static checks.
 # safe.directory lets the git-based checks run as root in the buildenv container
