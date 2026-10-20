@@ -1,22 +1,24 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require_relative '../support/install_aem_role'
 
 # Values: what packer-aem (the AMI bake) gives aem_curator::install_author, i.e.
 # ../packer-aem/templates/ansible/hieradata.j2 rendered with
 # conf/ansible/inventory/group_vars/defaults.yaml (aem.profile aem65_sp10, aem.ssl_method jetty,
 # aem.author.*, library.aem_healthcheck_*, aws.rhel7.devicemap_data_b) plus
 # conf/puppet/hieradata/common.yaml and aws.yaml (tmp_dir /tmp/shinesolutions/packer-aem).
-# aem.artifacts_base and the keystore/truststore password parameters ship as the placeholder
-# overwrite-me; the passwords are SSM lookups of that parameter, so the placeholder stands in.
+# aem.artifacts_base is mandatory and ships as overwrite-me, so it is the example from
+# ../packer-aem/docs/configuration.md, s3://somebucket/artifacts/. The keystore and truststore
+# passwords are SSM lookups of the overwrite-me parameter, so the placeholder stands in.
 describe 'aem_curator::install_author' do
-  let(:packer_aem_params) do
+  let(:params) do
     {
       aem_profile: 'aem65_sp10',
       aem_keystore_password: 'overwrite-me',
       aem_truststore_password: 'overwrite-me',
       aem_ssl_method: 'jetty',
-      aem_artifacts_base: 'overwrite-me',
+      aem_artifacts_base: 's3://somebucket/artifacts/',
       aem_jvm_mem_opts: '-Xss4m -Xms4096m -Xmx8192m',
       aem_jvm_opts: [
         '-XX:+PrintGCDetails',
@@ -47,13 +49,8 @@ describe 'aem_curator::install_author' do
     context "on #{os}" do
       let(:facts) { os_facts }
 
-      context 'with packer-aem as shipped' do
-        let(:params) { packer_aem_params }
-
-        # TODO: aem.artifacts_base is mandatory in packer-aem and ships as overwrite-me, which
-        # puppet/archive rejects as a source URL; see Needs decision on the value to test with
-        it { is_expected.to compile.and_raise_error(%r{invalid source url: overwrite-me/AEM_6.5_Quickstart.jar}) }
-      end
+      # aem_id, aem_port and aem_ssl_port are install_author's defaults
+      it_behaves_like 'an AEM install from packer-aem', 'author', '4502', '5432'
     end
   end
 end

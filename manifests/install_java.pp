@@ -87,6 +87,9 @@ class aem_curator::install_java (
     }
   }
 
+  # TODO: java::download also needs version_major/version_minor (e.g. 8u221/b-number), otherwise it
+  # names the download and its creates guard after its default 8u201/b09, so the guard never matches
+  # and the RPM is downloaded and installed again on every run
   java::download { $jdk_version :
     ensure  => 'present',
     java_se => 'jdk',
