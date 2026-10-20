@@ -142,8 +142,9 @@ need Ruby 4 with ruby_aem 4.0.2 and Cinc InSpec 7.2.1.
 ## Testing
 
 Run the commands below in
-[aem-platform-buildenv](https://github.com/shinesolutions/aem-platform-buildenv),
-as CI does. Install the Ruby gems and the InSpec AEM profile first:
+[aem-platform-buildenv](https://github.com/shinesolutions/aem-platform-buildenv)
+(`shinesolutions/aem-platform-buildenv:6.4.1`, the image the CI and publish
+workflows use), as CI does. Install the Ruby gems and the InSpec AEM profile first:
 
     make deps
 
