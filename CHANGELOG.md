@@ -6,11 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 <!-- rtk release rewrites this file in keep-a-changelog's own layout (no blank lines
-around headings and lists, Added/Changed/Fixed headings repeated per release), and
-the history has two 3.40.1 releases, so rtk writes their link reference twice (MD053).
-The directive is indented one space so rtk's parser keeps it as text.
-TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
- <!-- markdownlint-disable-file MD022 MD024 MD032 MD053 -->
+around headings and lists, Added/Changed/Fixed headings repeated per release).
+The directive is indented one space so rtk's parser keeps it as text. -->
+ <!-- markdownlint-disable-file MD022 MD024 MD032 -->
 
 ## [Unreleased]
 ### Added
@@ -118,6 +116,8 @@ TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
 - Updated aem-config-tools to copy content-sync-vlt puppet template
 
 ## [4.1.1] - 2023-10-11
+### Fixed
+- Fixed content sync to use each component's AEM port (author, publish, preview publish) instead of the aem_port parameter #RS-179
 
 ## [4.1.0] - 2023-10-10
 ### Added
@@ -142,8 +142,6 @@ TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
 - Fixing /usr/java directory permissions
 
 ## [3.40.2] - 2023-06-24
-
-## [3.40.1] - 2023-06-23
 ### Fixed
 - Corrects java_home_path for jdk 8_371 #RS-146
 
@@ -562,13 +560,14 @@ TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
 - Fix publish installation default AEM type to 'publish'
 
 ## [2.2.0] - 2019-06-20
+### Fixed
+- Fix AEM type incorrect use of AEM ID [#114]
 
 ## [2.1.0] - 2019-06-19
 ### Added
 - Add new AEM profile: aem62_sp1_cfp20
 
 ### Fixed
-- Fix AEM type incorrect use of AEM ID [#114]
 - Fix author_secure and publish_secure parameters passing on config_author_dispatcher and config_publish_dispatcher
 
 ## [2.0.0] - 2019-06-06
@@ -617,11 +616,10 @@ TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
 - Fixed error in the reconfiguration logic [#109]
 
 ## [1.21.0] - 2019-04-06
-
-## [1.20.0] - 2019-04-02
 ### Added
 - Add owner and group to directories purged by flush dispatcher cache action
 
+## [1.20.0] - 2019-04-02
 ### Changed
 - Upgrade aem_resources to 3.9.0
 - Upgrade inspec-aem to 0.10.1
@@ -1113,7 +1111,6 @@ TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
 [3.41.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.3...3.41.0
 [3.40.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.2...3.40.3
 [3.40.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.2
-[3.40.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.1
 [3.40.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.0...3.40.1
 [3.40.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.39.0...3.40.0
 [3.39.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.38.0...3.39.0
