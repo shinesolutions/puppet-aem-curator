@@ -8,12 +8,15 @@ ci: clean lint-extra deps test acceptance package
 # into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`.
 # The profile is downloaded with curl instead of `inspec vendor`, as the InSpec gem
 # doesn't support Ruby 4 (--no-same-owner: root in the buildenv container can't chown
-# on a macOS bind mount). r10k is no longer run: the unit tests use .fixtures.yml
+# on a macOS bind mount). It is downloaded to a file rather than piped into tar, so a
+# failed download fails the build. r10k is no longer run: the unit tests use .fixtures.yml
 deps:
 	gem install bundler --version=4.0.22
 	bundle install
 	rm -rf vendor/inspec/ && mkdir -p vendor/inspec/
-	curl -sfL "$$(ruby -ryaml -e "puts YAML.load_file('inspec.yml')['depends'][0]['url']")" | tar --no-same-owner -xz -C vendor/inspec/
+	url="$$(ruby -ryaml -e "puts YAML.load_file('inspec.yml')['depends'][0]['url']")" && \
+		curl -fsSL -o vendor/inspec/inspec-aem.tar.gz "$$url"
+	tar --no-same-owner -xzf vendor/inspec/inspec-aem.tar.gz -C vendor/inspec/
 	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/
 	mv vendor/inspec/inspec-aem-* files/test/inspec/inspec-aem
 
