@@ -1,6 +1,7 @@
 # Every hand-written Markdown file (docs/ also gets generated HTML, which isn't linted)
-# and every YAML file, for markdownlint and yamllint
-MARKDOWN_FILES := README.md CHANGELOG.md docs/*.md .github/ISSUE_TEMPLATE/*.md
+# except CHANGELOG.md, which rtk release rewrites in its own layout, and every YAML file,
+# for markdownlint and yamllint
+MARKDOWN_FILES := README.md docs/*.md .github/ISSUE_TEMPLATE/*.md
 YAML_FILES := .fixtures.yml .markdownlint.yaml .rubocop.yml inspec.yml \
 	.github/workflows/*.yaml spec/acceptance/nodesets/*.yml spec/default_facts.yml
 

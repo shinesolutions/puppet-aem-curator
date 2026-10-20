@@ -5,11 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-<!-- rtk release rewrites this file in keep-a-changelog's own layout (no blank lines
-around headings and lists, Added/Changed/Fixed headings repeated per release).
-The directive is indented one space so rtk's parser keeps it as text. -->
- <!-- markdownlint-disable-file MD022 MD024 MD032 -->
-
 ## [Unreleased]
 ### Added
 - Added Makefile targets for unit tests, acceptance tests, docs and publishing to the Puppet Forge with a pre-publish check
@@ -42,7 +37,7 @@ The directive is indented one space so rtk's parser keeps it as text. -->
 - Changed the publish workflow to publish with BLACKSMITH_FORGE_API_KEY
 - Documented that install_dispatcher needs Puppet to run with include_legacy_facts = true, as adobeinc/dispatcher 1.0.0 reads the legacy fact $::osfamily
 - Changed the action_* classes and reconfig_pre_aem to default their top-scope parameters with getvar('::name'), so a FACTER_ variable the caller doesn't set is undef again, as on Puppet 7, instead of failing with "Unknown variable" on OpenVox 9
-- Changed make ci to also run RuboCop, yamllint, markdownlint and the .rtk.json check, and make lint and make ci to lint every hand-written Markdown file and every YAML file
+- Changed make ci to also run RuboCop, yamllint, markdownlint and the .rtk.json check, and make lint and make ci to lint every hand-written Markdown file except CHANGELOG.md (rtk release rewrites it) and every YAML file
 - Changed make deps to fail when the InSpec AEM profile download fails
 - Restructured the README into Installation, Usage, Result Model, Error Handling, Testing and Versions History
 
