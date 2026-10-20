@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added unit and acceptance tests to GitHub CI
 - Added ruby_aem 4.0.2 to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
 - Added aem_curator::aem_instance, aem_curator::aem_package, aem_curator::aem_service and the aem_curator_installer type, ported from bstopp/aem 3.0.0 aem::instance, aem::package, aem::service and aem_installer, with a NOTICE for the attribution
-- Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, and the overwrite-me placeholder failures of install_author, install_publish and install_aem_java
+- Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, install_author, install_publish and install_aem_java (with packer-aem's documented s3://somebucket/artifacts URL form for the mandatory artifact and JDK bases), and the install_java failure
 - Added catalog tests with the values aem-aws-stack-provisioner gives config_aem_tools_dispatcher and the flush, CRXDE and list packages actions
 - Added TODOs for install_java requiring an undeclared tmp_dir file resource and the CRXDE and development bundles actions ignoring their username and password parameters
+- Added TODOs for install_aem_java and install_java calling java::download without version_major/version_minor, so it uses its default 8u201/b09 download name and creates guard
 
 ### Changed
 - Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
