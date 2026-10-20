@@ -19,8 +19,9 @@ fixtures:
     concat:
       repo: "puppetlabs/concat"
       ref: "9.1.0"
-    # cron_core and mount_core provide the cron and mount types for rspec-puppet: the
-    # OpenVox agent vendors them, but the openvox gem doesn't include them
+    # cron_core and mount_core provide the cron and mount types for
+    # rspec-puppet: the OpenVox agent vendors them, but the openvox gem doesn't
+    # include them
     cron_core:
       repo: "puppetlabs/cron_core"
       ref: "2.1.0"

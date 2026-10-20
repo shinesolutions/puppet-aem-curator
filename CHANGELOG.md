@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+<!-- rtk release rewrites this file in keep-a-changelog's own layout (no blank lines
+around headings and lists, Added/Changed/Fixed headings repeated per release), and
+the history has two 3.40.1 releases, so rtk writes their link reference twice (MD053).
+The directive is indented one space so rtk's parser keeps it as text. -->
+ <!-- markdownlint-disable-file MD022 MD024 MD032 MD053 -->
+
 ## [Unreleased]
 ### Added
 - Added Makefile targets for unit tests, acceptance tests, docs, changelog and publishing to the Puppet Forge with a pre-publish check
@@ -17,11 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Migrated ERB templates to EPP
 - Limited OS support to Amazon Linux 2023 and Rocky Linux 10
 - Changed the Puppet requirement to >= 9.0.0 < 10.0.0 (OpenVox 9 only), as the shinesolutions/aem_resources types need ruby_aem 4, which needs Ruby 4, and only OpenVox 9 agents ship Ruby 4
-- Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java, puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 7.11.0
+- Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java
+- Upgraded more dependencies the same way: puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 7.11.0
 - Upgraded the Puppetfile modules to the same versions, and puppet-yum to 8.3.0
 - Replaced validate_bool and validate_string, removed in stdlib 9, with the equivalent assert_type checks
 - Changed install_aem62/63/64/65 to use aem_curator::aem_instance instead of bstopp/aem aem::instance, and install_aem_healthcheck to use aem_resources::crx_package_file instead of aem::crx::package
-- Changed the AEM service to systemd only (the init script variant is not ported): on Amazon Linux it now uses the systemd unit /lib/systemd/system/aem-<id>.service instead of /etc/init.d/aem-<id>; the service name aem-<id> is unchanged. systemd stops AEM forcibly when a graceful stop takes longer than TimeoutStopSec (default 4min, set with service_options)
+- Changed the AEM service to systemd only (the init script variant is not ported): on Amazon Linux it now uses the systemd unit `/lib/systemd/system/aem-<id>.service` instead of `/etc/init.d/aem-<id>`; the service name `aem-<id>` is unchanged
+- systemd stops AEM forcibly when a graceful stop takes longer than TimeoutStopSec (default 4min, set with service_options)
 - Upgraded the InSpec AEM profile to inspec-aem 2.0.0 (Ruby 4, ruby_aem 4.0.2, Cinc InSpec 7.2.1)
 - Aligned the puppet/archive range with aem_resources (>= 6.0.0 < 10.0.0)
 - Vendored the InSpec AEM profile with curl instead of the InSpec gem, which doesn't support Ruby 4

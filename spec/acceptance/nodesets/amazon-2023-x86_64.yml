@@ -12,8 +12,11 @@ HOSTS:
     # baked in, so the agent install in spec_helper_acceptance.rb is a no-op.
     docker_preserve_image: true
     docker_image_commands:
-      # amazonlinux:2023 ships without systemd, so /sbin/init has to be installed
+      # amazonlinux:2023 ships without systemd, so /sbin/init has to be
+      # installed
       - dnf install -y systemd
+      # The release package URL can't be wrapped
+      # yamllint disable-line rule:line-length
       - dnf install -y https://yum.voxpupuli.org/openvox9-release-amazon-2023.noarch.rpm
       - dnf install -y openvox-agent
     docker_cmd: '["/sbin/init"]'

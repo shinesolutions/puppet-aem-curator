@@ -1,3 +1,9 @@
+# Every hand-written Markdown file (docs/ also gets generated HTML, which isn't linted)
+# and every YAML file, for markdownlint and yamllint
+MARKDOWN_FILES := README.md CHANGELOG.md docs/*.md .github/ISSUE_TEMPLATE/*.md
+YAML_FILES := .fixtures.yml .markdownlint.yaml .rubocop.yml inspec.yml \
+	.github/workflows/*.yaml spec/acceptance/nodesets/*.yml spec/default_facts.yml
+
 # Everything CI checks, cheapest first so a failure shows up early: lint-extra (RuboCop,
 # YAML, Markdown and JSON lint), then rake test (Puppet lint, syntax, metadata_lint, unit
 # specs), acceptance tests and the package. lint-extra rather than lint, as rake test
@@ -37,8 +43,8 @@ lint: lint-extra
 # without repeating rake test's lint/syntax/metadata_lint
 lint-extra:
 	bundle exec rake rubocop
-	yamllint .markdownlint.yaml .github/workflows/*.yaml
-	markdownlint-cli2 README.md
+	yamllint $(YAML_FILES)
+	markdownlint-cli2 $(MARKDOWN_FILES)
 	python3 -m json.tool .rtk.json
 
 # Run acceptance tests against every nodeset; beaker only runs one per invocation.
