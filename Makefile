@@ -60,12 +60,6 @@ acceptance:
 docs:
 	bundle exec rake "strings:generate[,,,,,,--output-dir docs]"
 
-# Move the Unreleased CHANGELOG.md entries to a release section, e.g. make changelog VERSION=4.1.10
-# (VERSION defaults to metadata.json's version without its pre-release suffix)
-# TODO: broken, voxpupuli-release has no changelog:release rake task
-changelog:
-	bundle exec rake "changelog:release[$(VERSION)]"
-
 package: deps
 	bundle exec rake module:build
 
@@ -91,4 +85,4 @@ publish-check: package
 publish: publish-check
 	bundle exec rake module:push
 
-.PHONY: ci deps clean test lint lint-extra acceptance docs changelog package release release-major release-minor release-patch publish-check publish
+.PHONY: ci deps clean test lint lint-extra acceptance docs package release release-major release-minor release-patch publish-check publish

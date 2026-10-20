@@ -12,7 +12,7 @@ The directive is indented one space so rtk's parser keeps it as text. -->
 
 ## [Unreleased]
 ### Added
-- Added Makefile targets for unit tests, acceptance tests, docs, changelog and publishing to the Puppet Forge with a pre-publish check
+- Added Makefile targets for unit tests, acceptance tests, docs and publishing to the Puppet Forge with a pre-publish check
 - Added unit and acceptance tests to GitHub CI
 - Added ruby_aem 4.0.2 to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
 - Added aem_curator::aem_instance, aem_curator::aem_package, aem_curator::aem_service and the aem_curator_installer type, ported from bstopp/aem 3.0.0 aem::instance, aem::package, aem::service and aem_installer, with a NOTICE for the attribution
