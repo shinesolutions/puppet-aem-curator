@@ -70,7 +70,8 @@ RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_por
       .with_content(%r{^JVM_MEM_OPTS='-Xss4m -Xms4096m -Xmx8192m'$})
       .with_content(%r{^JVM_OPTS='#{Regexp.escape(jvm_opts)}'$})
     is_expected.to contain_aem_resources__instance_config(aem_id).that_comes_before("Aem_curator_installer[#{aem_id}]")
-    is_expected.to contain_aem_curator_installer(aem_id).with(ensure: 'present', home: home, snooze: 10, timeout: 600)
+    is_expected.to contain_aem_curator_installer(aem_id)
+      .with(ensure: 'present', home: home, snooze: 10, timeout: 600)
       .that_notifies("Aem_curator::Aem_service[#{aem_id}]")
   end
 
@@ -85,7 +86,8 @@ RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_por
   end
 
   it 'waits for AEM and installs the aem65_sp10 service pack' do
-    is_expected.to contain_aem_aem("#{aem_id}: Wait until login page is ready").with(ensure: 'login_page_is_ready', retries_max_tries: 120)
+    is_expected.to contain_aem_aem("#{aem_id}: Wait until login page is ready")
+      .with(ensure: 'login_page_is_ready', retries_max_tries: 120)
       .that_comes_before("Aem_aem[#{aem_id}: Wait until aem health check is ok]")
     is_expected.to contain_archive("#{tmp}/#{aem_id}/aem-service-pkg-6.5.10.zip").with_source('s3://somebucket/artifacts//aem-service-pkg-6.5.10.zip')
     is_expected.to contain_aem_package("#{aem_id}: Install aem-service-pkg").with(
@@ -111,18 +113,22 @@ RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_por
   end
 
   it 'moves the repository onto the data volume after stopping AEM' do
-    is_expected.to contain_exec("#{aem_id}: Prepare device for the AEM repository").with_command('mkfs -t ext4 /dev/xvdb')
+    is_expected.to contain_exec("#{aem_id}: Prepare device for the AEM repository")
+      .with_command('mkfs -t ext4 /dev/xvdb')
       .that_comes_before('File[/mnt/ebs1]')
     is_expected.to contain_mount('/mnt/ebs1').with(ensure: 'mounted', device: '/dev/xvdb', fstype: 'ext4')
-    is_expected.to contain_exec("#{aem_id}: Wait post AEM installation").with_command('sleep 300')
+    is_expected.to contain_exec("#{aem_id}: Wait post AEM installation")
+      .with_command('sleep 300')
       .that_requires("Aem_curator::Config_aem[#{aem_id}: Configure AEM]")
       .that_comes_before("Exec[systemctl stop aem-#{aem_id}]")
-    is_expected.to contain_exec("systemctl stop aem-#{aem_id}").that_requires('Mount[/mnt/ebs1]')
+    is_expected.to contain_exec("systemctl stop aem-#{aem_id}")
+      .that_requires('Mount[/mnt/ebs1]')
       .that_comes_before("Exec[#{aem_id}: Wait post AEM stop]")
     is_expected.to contain_exec("#{aem_id}: Ensure AEM resource is stopped")
       .with_command("/opt/puppetlabs/bin/puppet resource service aem-#{aem_id} ensure=stopped")
       .that_comes_before("Exec[mv #{home} /mnt/ebs1/#{aem_id}]")
-    is_expected.to contain_exec("#{aem_id}: Set link from /mnt/ebs1/#{aem_id} to #{home}").with_command("ln -s /mnt/ebs1/#{aem_id} #{home}")
+    is_expected.to contain_exec("#{aem_id}: Set link from /mnt/ebs1/#{aem_id} to #{home}")
+      .with_command("ln -s /mnt/ebs1/#{aem_id} #{home}")
       .that_comes_before("Exec[#{aem_id}: Fix repository mount permissions]")
     is_expected.to contain_exec("#{aem_id}: Fix repository mount permissions").with_command("chown -R aem-#{aem_id}:aem-#{aem_id} /mnt/ebs1")
   end
