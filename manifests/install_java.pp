@@ -123,6 +123,8 @@ class aem_curator::install_java (
   }
 
   [ 'cert' ].each |$idx, $part| {
+    # TODO: File[$tmp_dir] isn't declared here or by packer-aem's java.pp, so the catalog fails
+    # ("Could not find resource"); install_aem_java downloads into ${tmp_dir}/java instead
     archive { "${tmp_dir}/aem.${part}":
       ensure  => present,
       source  => "${cert_base_url}/aem.${part}",
