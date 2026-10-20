@@ -153,7 +153,7 @@ workflows use), as CI does. Install the Ruby gems and the InSpec AEM profile fir
 | `make test` | Lint, syntax and `metadata.json` checks, unit specs and static checks |
 | `make lint` | Puppet lint, syntax, `metadata.json` lint, RuboCop, yamllint, markdownlint and the `.rtk.json` check only |
 | `make acceptance` | Acceptance tests with Beaker on every nodeset in `spec/acceptance/nodesets` (Amazon Linux 2023 and Rocky Linux 10), in Docker containers |
-| `make ci` | Everything CI runs, cheapest first: yamllint, markdownlint and the `.rtk.json` check, deps, `make test`, acceptance tests and packaging |
+| `make ci` | Everything CI runs, cheapest first: deps, RuboCop, yamllint, markdownlint and the `.rtk.json` check, `make test`, acceptance tests and packaging |
 | `make docs` | Generate the HTML reference into `docs/` |
 
 The unit and acceptance tests only cover the classes and defined types that

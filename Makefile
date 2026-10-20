@@ -1,8 +1,8 @@
-# Everything CI checks, cheapest first so a failure shows up early: the YAML, Markdown
-# and JSON lint (lint-extra), then rake test (Puppet lint, syntax, metadata_lint, unit
-# specs, RuboCop), acceptance tests and the package. lint-extra rather than lint, as
-# rake test already runs the rake lint checks
-ci: clean lint-extra deps test acceptance package
+# Everything CI checks, cheapest first so a failure shows up early: lint-extra (RuboCop,
+# YAML, Markdown and JSON lint), then rake test (Puppet lint, syntax, metadata_lint, unit
+# specs), acceptance tests and the package. lint-extra rather than lint, as rake test
+# already runs the rake lint checks. deps comes first because RuboCop needs the gems
+ci: clean deps lint-extra test acceptance package
 
 # Install the Ruby gems, and vendor the InSpec AEM profile declared in inspec.yml
 # into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`.
@@ -29,13 +29,14 @@ test:
 	GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=$(CURDIR) \
 		bundle exec rake test
 
-# Puppet lint, syntax, metadata.json lint and RuboCop, plus lint-extra
+# All static checks, without the unit specs
 lint: lint-extra
-	bundle exec rake lint syntax metadata_lint rubocop
+	bundle exec rake lint syntax metadata_lint
 
-# The lint checks rake test doesn't run: yamllint, markdownlint and the .rtk.json check.
-# They need no gems, so ci runs them before deps
+# The static checks rake test doesn't run (rake test has no RuboCop), so ci runs them
+# without repeating rake test's lint/syntax/metadata_lint
 lint-extra:
+	bundle exec rake rubocop
 	yamllint .markdownlint.yaml .github/workflows/*.yaml
 	markdownlint-cli2 README.md
 	python3 -m json.tool .rtk.json
