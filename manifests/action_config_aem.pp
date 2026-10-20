@@ -16,9 +16,9 @@ class aem_curator::action_config_aem (
   $tmp_dir                    = $::tmp_dir
 ) {
 
-  validate_bool($force)
-  validate_bool($enable_create_system_users)
-  validate_bool($enable_truststore_removal)
+  assert_type(Boolean, $force)
+  assert_type(Boolean, $enable_create_system_users)
+  assert_type(Boolean, $enable_truststore_removal)
 
   # Action manifest currently does not support changing the existing
   # system user password

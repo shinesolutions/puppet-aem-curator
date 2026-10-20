@@ -16,9 +16,9 @@ class aem_curator::action_deploy_artifact (
   $retries_max_sleep_seconds  = 5,
 ) {
 
-  validate_bool($package_replicate)
-  validate_bool($package_activate)
-  validate_bool($package_force)
+  assert_type(Boolean, $package_replicate)
+  assert_type(Boolean, $package_activate)
+  assert_type(Boolean, $package_force)
 
   Aem_aem {
     retries_max_tries          => $retries_max_tries,

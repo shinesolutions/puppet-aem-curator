@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Deprecate validate_bool for puppet module uplift
+
 ## [4.1.9] - 2026-03-10
 ### Added
 - Added new AEM profile: aem65_sp22

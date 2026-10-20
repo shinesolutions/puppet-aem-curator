@@ -62,7 +62,7 @@ define aem_curator::upgrade_aem_unpack_jar (
   $puppet_binary              = '/opt/puppetlabs/bin/puppet',
 ) {
 
-  validate_bool($enable_backup)
+  assert_type(Boolean, $enable_backup)
 
   file { $tmp_dir:
     ensure => directory,

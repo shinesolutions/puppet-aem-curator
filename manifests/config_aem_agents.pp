@@ -55,14 +55,14 @@ define aem_curator::config_aem_agents (
   $run_mode                                = undef,
 ) {
   # Validate booleans
-  validate_bool($enable_create_flush_agents)
-  validate_bool($enable_create_outbox_replication_agents)
-  validate_bool($enable_remove_all_agents)
+  assert_type(Boolean, $enable_create_flush_agents)
+  assert_type(Boolean, $enable_create_outbox_replication_agents)
+  assert_type(Boolean, $enable_remove_all_agents)
 
   # Validate aem_id
-  validate_string($aem_id)
+  assert_type(String, $aem_id)
   # Validate run mode
-  validate_string($run_mode)
+  assert_type(String, $run_mode)
 
   if $enable_remove_all_agents {
     aem_aem { "${aem_id}: Remove all agents":
@@ -75,9 +75,9 @@ define aem_curator::config_aem_agents (
   if $enable_create_flush_agents {
 
     # Validate Strings
-    validate_string($dispatcher_id)
-    validate_string($dispatcher_host_url)
-    validate_string($log_level)
+    assert_type(String, $dispatcher_id)
+    assert_type(String, $dispatcher_host_url)
+    assert_type(String, $log_level)
 
     aem_flush_agent { "${aem_id}: Create flush agent for ${run_mode}-dispatcher ${dispatcher_id}":
       ensure        => present,
@@ -96,9 +96,9 @@ define aem_curator::config_aem_agents (
   if $enable_create_outbox_replication_agents {
 
     # Validate Strings
-    validate_string($dispatcher_id)
-    validate_string($log_level)
-    validate_string($replication_agent_user_id)
+    assert_type(String, $dispatcher_id)
+    assert_type(String, $log_level)
+    assert_type(String, $replication_agent_user_id)
 
     aem_outbox_replication_agent { "${aem_id}: Create outbox replication agent for ${run_mode}-dispatcher ${dispatcher_id}":
       ensure      => present,
