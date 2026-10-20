@@ -39,9 +39,14 @@ The directive is indented one space so rtk's parser keeps it as text. -->
 - Upgraded GitHub workflows to actions/checkout v7, cliffano/command-docker-action v2.1.0, cliffano/release-action v2.1.0 and aem-platform-buildenv 6.4.1
 - Changed the publish workflow to publish with BLACKSMITH_FORGE_API_KEY
 - Documented that install_dispatcher needs Puppet to run with include_legacy_facts = true, as adobeinc/dispatcher 1.0.0 reads the legacy fact $::osfamily
+- Changed the action_* classes and reconfig_pre_aem to default their top-scope parameters with getvar('::name'), so a FACTER_ variable the caller doesn't set is undef again, as on Puppet 7, instead of failing with "Unknown variable" on OpenVox 9
+- Changed make ci to also run RuboCop, yamllint, markdownlint and the .rtk.json check, and make lint and make ci to lint every hand-written Markdown file and every YAML file
+- Changed make deps to fail when the InSpec AEM profile download fails
+- Restructured the README into Installation, Usage, Result Model, Error Handling, Testing and Versions History
 
 ### Removed
 - Removed the bstopp/aem dependency, which is unmaintained and incompatible with OpenVox 9 and stdlib 9
+- Removed the unused .pdkignore and a stale /tmp path from make clean
 
 ### Fixed
 - Fixed the collectd dependency name to puppet/collectd
