@@ -1,15 +1,17 @@
 
 class aem_curator::action_deploy_artifact (
-  $aem_id                     = $::aem_id,
-  $aem_username               = $::aem_username,
-  $aem_password               = $::aem_password,
-  $package_source             = $::package_source,
-  $package_group              = $::package_group,
-  $package_name               = $::package_name,
-  $package_version            = $::package_version,
-  $package_replicate          = str2bool($::package_replicate),
-  $package_activate           = str2bool($::package_activate),
-  $package_force              = str2bool($::package_force),
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
+  $aem_id                     = getvar('::aem_id'),
+  $aem_username               = getvar('::aem_username'),
+  $aem_password               = getvar('::aem_password'),
+  $package_source             = getvar('::package_source'),
+  $package_group              = getvar('::package_group'),
+  $package_name               = getvar('::package_name'),
+  $package_version            = getvar('::package_version'),
+  $package_replicate          = str2bool(getvar('::package_replicate')),
+  $package_activate           = str2bool(getvar('::package_activate')),
+  $package_force              = str2bool(getvar('::package_force')),
   $path                       = '/tmp/shinesolutions/aem-aws-stack-provisioner',
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,

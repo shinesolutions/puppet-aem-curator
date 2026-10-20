@@ -1,10 +1,12 @@
 
 class aem_curator::action_download_artifacts (
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
   $tmp_dir,
   $base_dir,
   $aem_id          = undef,
-  $descriptor_file = $::descriptor_file,
-  $component       = $::component
+  $descriptor_file = getvar('::descriptor_file'),
+  $component       = getvar('::component')
 ) {
 
   # load descriptor file

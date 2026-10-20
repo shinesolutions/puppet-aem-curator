@@ -1,13 +1,15 @@
 class aem_curator::action_upgrade_aem_unpack_jar (
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
   $tmp_dir,
   $aem_base,
-  $aem_artifacts_base         = $::aem_artifacts_base,
-  $aem_id                     = $::aem_id,
-  $aem_port                   = $::aem_port,
-  $aem_password               = $::aem_password,
-  $aem_username               = $::aem_username,
-  $enable_backup              = str2bool($::enable_backup),
-  $upgrade_version            = $::upgrade_version,
+  $aem_artifacts_base         = getvar('::aem_artifacts_base'),
+  $aem_id                     = getvar('::aem_id'),
+  $aem_port                   = getvar('::aem_port'),
+  $aem_password               = getvar('::aem_password'),
+  $aem_username               = getvar('::aem_username'),
+  $enable_backup              = str2bool(getvar('::enable_backup')),
+  $upgrade_version            = getvar('::upgrade_version'),
   $post_stop_sleep_secs       = 120,
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,

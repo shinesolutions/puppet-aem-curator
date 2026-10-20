@@ -1,5 +1,7 @@
 
 class aem_curator::action_promote_author_standby_to_primary (
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
   $author_port,
   $base_dir,
   $tmp_dir,
@@ -8,10 +10,11 @@ class aem_curator::action_promote_author_standby_to_primary (
   $aem_debug_port                     = undef,
   $aem_home_dir                       = '/opt/aem/author',
   $aem_id                             = 'author',
-  $aem_username                       = $::aem_username,
-  $aem_password                       = $::aem_password,
+  $aem_username                       = getvar('::aem_username'),
+  $aem_password                       = getvar('::aem_password'),
   $aem_runmodes                       = [],
   $aem_version                        = '6.2',
+  # Not getvar: ec2_metadata is Facter's EC2 fact; indexing it fails when it is unset, on Puppet 7 too
   $ec2_id                             = $::ec2_metadata['instance-id'],
   $jmxremote_port                     = '5982',
   $jmxremote_enable_authentication    = false,
@@ -26,7 +29,7 @@ class aem_curator::action_promote_author_standby_to_primary (
   $login_ready_base_sleep_seconds     = 15,
   $login_ready_max_sleep_seconds      = 15,
   $osgi_configs                       = undef,
-  $stack_prefix                       = $::stack_prefix,
+  $stack_prefix                       = getvar('::stack_prefix'),
 ) {
 
 

@@ -1,5 +1,7 @@
 
 class aem_curator::action_deploy_artifacts (
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
   $tmp_dir,
   $apache_conf_dir,
   $author_port,
@@ -13,14 +15,14 @@ class aem_curator::action_deploy_artifacts (
   $ssl_cert,
   $virtual_hosts_dir,
   $aem_id                     = undef,
-  $aem_username               = $::aem_username,
-  $aem_password               = $::aem_password,
-  $author_host                = $::authorhost,
-  $descriptor_file            = $::descriptor_file,
+  $aem_username               = getvar('::aem_username'),
+  $aem_password               = getvar('::aem_password'),
+  $author_host                = getvar('::authorhost'),
+  $descriptor_file            = getvar('::descriptor_file'),
   $deployment_sleep_seconds   = 10,
-  $component                  = $::component,
-  $publish_host               = $::publishhost,
-  $preview_publish_host       = $::previewpublishhost,
+  $component                  = getvar('::component'),
+  $publish_host               = getvar('::publishhost'),
+  $preview_publish_host       = getvar('::previewpublishhost'),
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,

@@ -3,7 +3,9 @@ define aem_curator::reconfig_pre_aem (
   $aem_id                            = undef,
   $enable_aem_reconfiguration        = false,
   $aem_base                          = '/opt',
-  $aws_region                        = $::aws_region,
+  # getvar: the caller's top-scope aws_region, or undef when it is unset, like $::aws_region
+  # on Puppet 7; OpenVox 9's strict_variables fails on an unknown $::aws_region
+  $aws_region                        = getvar('::aws_region'),
   $certificate_arn                   = undef,
   $certificate_key_arn               = undef,
   $crx_quickstart_dir                = undef,
