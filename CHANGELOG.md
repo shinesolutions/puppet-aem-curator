@@ -16,7 +16,8 @@ The directive is indented one space so rtk's parser keeps it as text. -->
 - Added unit and acceptance tests to GitHub CI
 - Added ruby_aem 4.0.2 to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
 - Added aem_curator::aem_instance, aem_curator::aem_package, aem_curator::aem_service and the aem_curator_installer type, ported from bstopp/aem 3.0.0 aem::instance, aem::package, aem::service and aem_installer, with a NOTICE for the attribution
-- Added catalog tests with the values packer-aem gives the install classes (install_dispatcher, and the overwrite-me placeholder failures of install_author, install_publish and install_aem_java) and the values aem-aws-stack-provisioner gives config_aem_tools_dispatcher and the flush, CRXDE and list packages actions
+- Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, and the overwrite-me placeholder failures of install_author, install_publish and install_aem_java
+- Added catalog tests with the values aem-aws-stack-provisioner gives config_aem_tools_dispatcher and the flush, CRXDE and list packages actions
 - Added TODOs for install_java requiring an undeclared tmp_dir file resource and the CRXDE and development bundles actions ignoring their username and password parameters
 
 ### Changed
