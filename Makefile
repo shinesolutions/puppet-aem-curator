@@ -1,4 +1,8 @@
-ci: clean deps test acceptance package
+# Everything CI checks, cheapest first so a failure shows up early: the YAML, Markdown
+# and JSON lint (lint-extra), then rake test (Puppet lint, syntax, metadata_lint, unit
+# specs, RuboCop), acceptance tests and the package. lint-extra rather than lint, as
+# rake test already runs the rake lint checks
+ci: clean lint-extra deps test acceptance package
 
 # Install the Ruby gems, and vendor the InSpec AEM profile declared in inspec.yml
 # into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`.
@@ -22,8 +26,13 @@ test:
 	GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=$(CURDIR) \
 		bundle exec rake test
 
-lint:
+# Puppet lint, syntax, metadata.json lint and RuboCop, plus lint-extra
+lint: lint-extra
 	bundle exec rake lint syntax metadata_lint rubocop
+
+# The lint checks rake test doesn't run: yamllint, markdownlint and the .rtk.json check.
+# They need no gems, so ci runs them before deps
+lint-extra:
 	yamllint .markdownlint.yaml .github/workflows/*.yaml
 	markdownlint-cli2 README.md
 	python3 -m json.tool .rtk.json
@@ -71,4 +80,4 @@ publish-check: package
 publish: publish-check
 	bundle exec rake module:push
 
-.PHONY: ci deps clean test lint acceptance docs changelog package release release-major release-minor release-patch publish-check publish
+.PHONY: ci deps clean test lint lint-extra acceptance docs changelog package release release-major release-minor release-patch publish-check publish
