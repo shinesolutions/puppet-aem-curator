@@ -15,6 +15,7 @@ class aem_curator::action_promote_author_standby_to_primary (
   $aem_runmodes                       = [],
   $aem_version                        = '6.2',
   # Not getvar: ec2_metadata is Facter's EC2 fact; indexing it fails when it is unset, on Puppet 7 too
+  # TODO: fail with a clear message, or take ec2_id from the caller, when ec2_metadata is unset
   $ec2_id                             = $::ec2_metadata['instance-id'],
   $jmxremote_port                     = '5982',
   $jmxremote_enable_authentication    = false,

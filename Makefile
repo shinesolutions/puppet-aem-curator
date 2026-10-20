@@ -62,6 +62,7 @@ docs:
 
 # Move the Unreleased CHANGELOG.md entries to a release section, e.g. make changelog VERSION=4.1.10
 # (VERSION defaults to metadata.json's version without its pre-release suffix)
+# TODO: broken, voxpupuli-release has no changelog:release rake task
 changelog:
 	bundle exec rake "changelog:release[$(VERSION)]"
 

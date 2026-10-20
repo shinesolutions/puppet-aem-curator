@@ -64,6 +64,8 @@ Puppet::Type.type(:aem_curator_installer).provide :default, parent: Puppet::Prov
           hash = found_to_hash(line)
         end
       end
+    # TODO: unreachable when find fails, as its stderr line reaches read_env first,
+    # which raises Errno::ENOENT
     rescue Puppet::ExecutionFailure
       raise Puppet::Error, "Failed to find AEM instance in '#{@resource[:home]}'.", $ERROR_INFO.backtrace
     end

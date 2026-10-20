@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- rtk release rewrites this file in keep-a-changelog's own layout (no blank lines
 around headings and lists, Added/Changed/Fixed headings repeated per release), and
 the history has two 3.40.1 releases, so rtk writes their link reference twice (MD053).
-The directive is indented one space so rtk's parser keeps it as text. -->
+The directive is indented one space so rtk's parser keeps it as text.
+TODO: move the second 3.40.1 entry into the empty 3.40.2, then drop MD053. -->
  <!-- markdownlint-disable-file MD022 MD024 MD032 MD053 -->
 
 ## [Unreleased]
