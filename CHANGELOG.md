@@ -55,9 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the AEM service failing on Rocky Linux, which bstopp/aem's aem::service didn't support
 - Fixed config_publish and config_author_primary failing on OpenVox 9 when enable_aem_clean_directories is false, as list_clean_directories is then unknown
 
-### Changed
-- Deprecate validate_bool for puppet module uplift
-
 ## [4.1.9] - 2026-03-10
 ### Added
 - Added new AEM profile: aem65_sp22
