@@ -24,7 +24,7 @@ group :development, :test, :system_tests do
   # Test-only: the shinesolutions/aem_resources providers `require 'ruby_aem'` when
   # rspec-puppet loads them. aem_curator itself never calls ruby_aem, and it is not
   # a runtime dependency of this module.
-  gem "ruby_aem",             "~> 4.0.2", require: false
+  gem "ruby_aem",             "~> 4.1.0", require: false
 end
 
 puppet_version = ENV['PUPPET_GEM_VERSION']

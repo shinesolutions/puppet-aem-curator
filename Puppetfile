@@ -13,5 +13,4 @@ mod 'puppetlabs/selinux_core', '2.1.0'
 mod 'puppetlabs/stdlib', '9.7.0'
 mod 'puppet-yum', '8.3.0'
 mod 'adobeinc/dispatcher', '1.0.0'
-# TODO: pin the upgraded aem_resources (with instance_config) once it is released
-mod 'shinesolutions/aem_resources', '7.11.0'
+mod 'shinesolutions/aem_resources', '8.0.0'
