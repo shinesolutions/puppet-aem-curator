@@ -109,7 +109,14 @@ RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_por
     is_expected.to contain_archive("#{tmp}/#{aem_id}/aem.cert").with_source('file:///tmp/shinesolutions/packer-aem/certs/aem.cert')
     is_expected.to contain_java_ks("cqse:/etc/ssl/aem-#{aem_id}/#{aem_id}.ks").with(ensure: 'latest', target: "/etc/ssl/aem-#{aem_id}/#{aem_id}.ks")
     is_expected.to contain_file("/etc/ssl/aem-#{aem_id}/#{aem_id}.ks").with(mode: '0640', owner: "aem-#{aem_id}")
-    is_expected.to contain_aem_resources__author_publish_enable_ssl("#{aem_id}: Enable SSL").with(ssl_method: 'jetty', port: ssl_port)
+    # JDK 9+ has no jre/ directory, so the truststore is the JDK's lib/security/cacerts
+    is_expected.to contain_aem_resources__author_publish_enable_ssl("#{aem_id}: Enable SSL").with(
+      ssl_method: 'jetty',
+      port: ssl_port,
+      keystore_key_alias: 'cqse',
+      truststore: '/usr/java/default/lib/security/cacerts',
+      truststore_password: 'changeit',
+    )
   end
 
   it 'moves the repository onto the data volume after stopping AEM' do
