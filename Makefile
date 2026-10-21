@@ -58,9 +58,10 @@ acceptance:
 	done
 
 # Acceptance tests of the JDK dependent manifests with the real Oracle JDK RPMs, which need an Oracle
-# account, so they aren't fetched: JDK_RPM_DIR is a directory with jdk-21.0.13_linux-x64_bin.rpm and
-# jdk-11.0.33.0.1_linux-x64_bin.rpm, e.g. make acceptance-java JDK_RPM_DIR=/path/to/rpms. The RPMs are
-# x86_64; NODESETS selects other nodesets, e.g. ones on linux/amd64 images on an arm64 machine
+# account, so they aren't fetched: JDK_RPM_DIR is a directory with an Oracle JDK 11 and a JDK 21 RPM, any
+# update (the newest of each is used), e.g. jdk-11.0.33.0.1_linux-x64_bin.rpm and jdk-21.0.13_linux-x64_bin.rpm,
+# make acceptance-java JDK_RPM_DIR=/path/to/rpms. The RPMs are x86_64; NODESETS selects other nodesets,
+# e.g. ones on linux/amd64 images on an arm64 machine
 NODESETS ?= spec/acceptance/nodesets/*.yml
 acceptance-java:
 	test -n "$(JDK_RPM_DIR)" || { echo "Set JDK_RPM_DIR to a directory with the Oracle JDK RPMs"; exit 1; }

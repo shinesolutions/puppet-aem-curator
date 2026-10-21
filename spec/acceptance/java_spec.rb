@@ -7,9 +7,12 @@ require 'openssl'
 # install_java (JDK 21), install_aem_java (JDK 11, the one AEM runs on), then the keystore part of
 # config_aem_ssl and the JMX properties of config_aem_jmx against JDK 11.
 #
-# The RPMs need an Oracle account and are too big to commit, so set JDK_RPM_DIR to a directory with
-# jdk-21.0.13_linux-x64_bin.rpm and jdk-11.0.33.0.1_linux-x64_bin.rpm (make acceptance-java); they are
-# copied to the host and installed from file://. They are x86_64 RPMs, so the hosts must be x86_64.
+# The RPMs need an Oracle account and are too big to commit, so set JDK_RPM_DIR to a directory with an
+# Oracle JDK 11 and a JDK 21 RPM, any update (make acceptance-java), e.g. jdk-11.0.33.0.1_linux-x64_bin.rpm
+# and jdk-21.0.13_linux-x64_bin.rpm. The newest of each is used, and its package name, version and install
+# directory are read from the RPM itself (rpm -qp on the machine running the tests), so the tests check
+# that the directory the manifests derive from the file name is the one the RPM really installs into.
+# They are copied to the host and installed from file://. They are x86_64 RPMs, so the hosts must be x86_64.
 #
 # Paths are the ones packer-aem gives the classes (../packer-aem/conf/puppet/hieradata/common.yaml:
 # tmp_dir /tmp/shinesolutions/packer-aem, cert_base_url file://<tmp_dir>/certs, aem_keystore_path
@@ -18,8 +21,23 @@ require 'openssl'
 describe 'JDK dependent manifests' do
   rpm_dir = '/tmp/shinesolutions/jdk-rpms'
   tmp_dir = '/tmp/shinesolutions/packer-aem'
-  jdk21 = '/usr/lib/jvm/jdk-21.0.13-oracle-x64'
-  jdk11 = '/usr/lib/jvm/jdk-11.0.33.0.1-oracle-x64'
+
+  # The newest jdk-<major>*_linux-x64_bin.rpm in JDK_RPM_DIR, with what the RPM says about itself:
+  # file name, package name (e.g. jdk-11), version (e.g. 11.0.33.0.1) and the directory its bin/java is
+  # in (e.g. /usr/lib/jvm/jdk-11.0.33.0.1-oracle-x64). Empty without JDK_RPM_DIR or a matching RPM.
+  def self.oracle_jdk(major)
+    rpms = Dir.glob(File.join(ENV.fetch('JDK_RPM_DIR', ''), "jdk-#{major}.*_linux-x64_bin.rpm"))
+    rpms = rpms.map { |rpm| [rpm, `rpm -qp --qf '%{NAME} %{VERSION}' '#{rpm}' 2>/dev/null`.split] }
+               .select { |_rpm, (name, version)| name && version }
+    return {} if rpms.empty?
+
+    rpm, (package, version) = rpms.max_by { |_rpm, (_name, v)| Gem::Version.new(v) }
+    java = `rpm -qlp '#{rpm}' 2>/dev/null`.lines.map(&:strip).find { |file| file.match?(%r{^/usr/lib/jvm/[^/]+/bin/java$}) }
+    { rpm: File.basename(rpm), package: package, version: version, java_home: java && File.dirname(java, 2) }
+  end
+
+  jdk21 = oracle_jdk(21)
+  jdk11 = oracle_jdk(11)
 
   def self.java_class_manifest(klass, rpm, tmp_dir, rpm_dir)
     <<~PUPPET
@@ -33,7 +51,7 @@ describe 'JDK dependent manifests' do
   end
 
   before(:all) do
-    skip 'Set JDK_RPM_DIR to a directory with the Oracle JDK 11 and 21 RPMs to run these' unless ENV['JDK_RPM_DIR']
+    skip 'Set JDK_RPM_DIR to a directory with an Oracle JDK 11 and a JDK 21 RPM to run these' unless jdk11[:java_home] && jdk21[:java_home]
     skip 'The Oracle JDK RPMs are x86_64 only' unless fact('os.architecture') == 'x86_64'
 
     key = OpenSSL::PKey::RSA.new(2048)
@@ -49,7 +67,7 @@ describe 'JDK dependent manifests' do
     on(default, "mkdir -p #{tmp_dir}/certs #{rpm_dir}")
     create_remote_file(default, "#{tmp_dir}/certs/aem.cert", cert.to_pem)
     create_remote_file(default, "#{tmp_dir}/certs/aem.key", key.to_pem)
-    ['jdk-21.0.13_linux-x64_bin.rpm', 'jdk-11.0.33.0.1_linux-x64_bin.rpm'].each do |rpm|
+    [jdk21[:rpm], jdk11[:rpm]].each do |rpm|
       scp_to(default, File.join(ENV.fetch('JDK_RPM_DIR'), rpm), "#{rpm_dir}/#{rpm}")
     end
   end
@@ -80,34 +98,34 @@ describe 'JDK dependent manifests' do
   end
 
   context 'aem_curator::install_java with Oracle JDK 21' do
-    manifest = java_class_manifest('install_java', 'jdk-21.0.13_linux-x64_bin.rpm', tmp_dir, rpm_dir)
+    manifest = java_class_manifest('install_java', jdk21[:rpm], tmp_dir, rpm_dir)
 
     before(:all) do
       apply_manifest(manifest, catch_failures: true)
       @second_run = apply_manifest(manifest, catch_failures: true).stdout
     end
 
-    it_behaves_like 'an Oracle JDK install', 'jdk-21', '21.0.13', jdk21
+    it_behaves_like 'an Oracle JDK install', jdk21[:package], jdk21[:version], jdk21[:java_home]
 
     # The alternatives --set exec has no guard and runs on every apply, as before
     it 'downloads and installs the RPM and imports the certificate only on the first run' do
-      expect(@second_run).not_to match(%r{Java::Download\[21\.0\.13\]/(Archive|Exec)}) # rubocop:disable RSpec/InstanceVariable
+      expect(@second_run).not_to match(%r{Java::Download\[#{Regexp.escape(jdk21[:version].to_s)}\]/(Archive|Exec)}) # rubocop:disable RSpec/InstanceVariable
       expect(@second_run).not_to match(%r{Java_ks}) # rubocop:disable RSpec/InstanceVariable
     end
   end
 
   context 'aem_curator::install_aem_java with Oracle JDK 11' do
-    manifest = java_class_manifest('install_aem_java', 'jdk-11.0.33.0.1_linux-x64_bin.rpm', tmp_dir, rpm_dir)
+    manifest = java_class_manifest('install_aem_java', jdk11[:rpm], tmp_dir, rpm_dir)
 
     before(:all) do
       apply_manifest(manifest, catch_failures: true)
       @second_run = apply_manifest(manifest, catch_failures: true).stdout
     end
 
-    it_behaves_like 'an Oracle JDK install', 'jdk-11', '11.0.33.0.1', jdk11
+    it_behaves_like 'an Oracle JDK install', jdk11[:package], jdk11[:version], jdk11[:java_home]
 
     it 'downloads and installs the RPM and imports the certificate only on the first run' do
-      expect(@second_run).not_to match(%r{Java::Download\[11\.0\.33\.0\.1\]/(Archive|Exec)}) # rubocop:disable RSpec/InstanceVariable
+      expect(@second_run).not_to match(%r{Java::Download\[#{Regexp.escape(jdk11[:version].to_s)}\]/(Archive|Exec)}) # rubocop:disable RSpec/InstanceVariable
       expect(@second_run).not_to match(%r{Java_ks}) # rubocop:disable RSpec/InstanceVariable
     end
   end
@@ -153,7 +171,7 @@ describe 'JDK dependent manifests' do
     end
 
     it 'writes JMX properties that the JDK accepts' do
-      expect(on(default, 'java -Dcom.sun.management.config.file=/etc/jmx.properties -version 2>&1').stdout).to match(%r{version "11\.0\.33\.0\.1"})
+      expect(on(default, 'java -Dcom.sun.management.config.file=/etc/jmx.properties -version 2>&1').stdout).to match(%r{version "#{Regexp.escape(jdk11[:version].to_s)}"})
     end
   end
 end
