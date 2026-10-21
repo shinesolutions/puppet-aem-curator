@@ -12,6 +12,12 @@
 #   A temporary directory used to store the X.509 certificate and private key
 #   while building the PEM file for Apache.
 #
+# [*jdk_base_url*]
+#   Base URL (supported by the puppet-archive module) to download the JDK RPM from
+#
+# [*jdk_filename*]
+#   Oracle JDK 21 RPM file name with the full version, e.g. jdk-21.0.13_linux-x64_bin.rpm
+#
 # === Authors
 #
 # James Sinclair <james.sinclair@shinesolutions.com>
@@ -24,76 +30,32 @@ class aem_curator::install_java (
   $cert_base_url,
   $tmp_dir,
   $jdk_base_url,
-  $jdk_filename   = 'jdk-8u221-linux-x64.rpm',
+  # Oracle JDK 21 only (Java 8 and 11 are no longer supported)
+  $jdk_filename   = 'jdk-21.0.13_linux-x64_bin.rpm',
 ) {
-  # Split JDK filename to determine JDK Major Version
+  # Oracle JDK 21 RPMs are named jdk-21.0.N_linux-x64_bin.rpm and install into the
+  # version-specific /usr/lib/jvm/jdk-21.0.N-oracle-x64 (the full version is needed to find it)
   $jdk_filename_splitted = split($jdk_filename, '-')
-  # Case to Setup variables per JDK Version
-  case $jdk_filename_splitted[1] {
-    /^8/: {
-      # Automation to determine JDK Version via default filename
-      # Splitting JDK File Name jdk-8u221-linux-x64.rpm to [8, 221]
-      $jdk_version = $jdk_filename_splitted[1]
-      $jdk_version_splitted = split($jdk_version, 'u')
-      $jdk_version_major = $jdk_version_splitted[0]
-      $jdk_version_update = $jdk_version_splitted[1]
-      # Support of different JDK8 versions with different binary patches
-      if Integer($jdk_version_update) >= 421  {
-        $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}.0_${jdk_version_update}-oracle-x64"
-        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-      } elsif Integer($jdk_version_update) >= 371 and Integer($jdk_version_update) < 421 {
-        $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}-oracle-x64"
-        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-      } elsif Integer($jdk_version_update) >= 261 and Integer($jdk_version_update) < 371 {
-        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64"
-        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-      } elsif Integer($jdk_version_update) <= 162 {
-        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}/jre"
-        $libjvm_content_path = "${java_home_path}/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      } else {
-        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
-        $libjvm_content_path = "${java_home_path}/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      }
-    }
-    /^11/:
-    {
-      # Automation to determine JDK Version via default filename
-      # Splitting JDK File Name jdk-11.0.9_linux-x64_bin.rpm
-      # to receive JDK version 11.0.9
-      $jdk_version_raw = split($jdk_filename_splitted[1], '_')
-      $jdk_version = $jdk_version_raw[0]
-      $jdk_version_splitted = split($jdk_version, '\.')  # 11.0.9
-      $jdk_version_major = $jdk_version_splitted[0]
-      $jdk_version_minor = $jdk_version_splitted[1]
-      $jdk_version_patch = $jdk_version_splitted[2]
-      # Support of different JDK8 versions with different binary patches
-      if Integer($jdk_version_patch) >= 24  {
-        $java_home_path = "/usr/lib/jvm/jdk-${jdk_version}-oracle-x64"
-        $libjvm_content_path= "${java_home_path}/lib/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      } else {
-        $java_home_path = "/usr/java/jdk-${jdk_version}"
-        $libjvm_content_path= "${java_home_path}/lib/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      }
-    }
-    default: {
-      fail('Error: Unknown Java Version. Supported java versions are : ( 8 | 11 )')
-    }
+  $jdk_version = split($jdk_filename_splitted[1], '_')[0]
+  if $jdk_version !~ /^21\.\d+\.\d+$/ {
+    fail("Error: Unsupported JDK file name ${jdk_filename}. Supported is Oracle JDK 21 with its full version, e.g. jdk-21.0.13_linux-x64_bin.rpm")
   }
+  $java_home_path = "/usr/lib/jvm/jdk-${jdk_version}-oracle-x64"
+  $libjvm_content_path = "${java_home_path}/lib/server/\n"
+  # JDK 9+ has no jre/ directory; cacerts is a regular file (password-less PKCS12 since JDK 18)
+  $cacert_path = "${java_home_path}/lib/security/cacerts"
 
-  # TODO: java::download also needs version_major/version_minor (e.g. 8u221/b-number), otherwise it
-  # names the download and its creates guard after its default 8u201/b09, so the guard never matches
-  # and the RPM is downloaded and installed again on every run
+  # version_major/version_minor make java::download's creates guard the RPM's install directory
+  # (${basedir}/jdk${version_major}${version_minor}); without them it uses its 8u201/b09 defaults,
+  # so the guard never matched and the RPM was downloaded and installed on every run
   java::download { $jdk_version :
-    ensure  => 'present',
-    java_se => 'jdk',
-    url     => "${jdk_base_url}/${jdk_filename}",
+    ensure        => 'present',
+    java_se       => 'jdk',
+    version       => '21',
+    version_major => "-${jdk_version}",
+    version_minor => '-oracle-x64',
+    basedir       => '/usr/lib/jvm',
+    url           => "${jdk_base_url}/${jdk_filename}",
   } -> exec { "alternatives --set  java ${java_home_path}/bin/java":
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
     require => Java::Download[$jdk_version],
@@ -126,15 +88,15 @@ class aem_curator::install_java (
   }
 
   [ 'cert' ].each |$idx, $part| {
-    # TODO: File[$tmp_dir] isn't declared here or by packer-aem's java.pp, so the catalog fails
-    # ("Could not find resource"); install_aem_java downloads into ${tmp_dir}/java instead
-    archive { "${tmp_dir}/aem.${part}":
+    # Downloaded into ${tmp_dir}/java like install_aem_java: it used to require File[$tmp_dir],
+    # which nothing declares, so the catalog failed
+    archive { "${tmp_dir}/java/aem.${part}":
       ensure  => present,
       source  => "${cert_base_url}/aem.${part}",
-      require => File[$tmp_dir],
+      require => File["${tmp_dir}/java"],
     } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
-      certificate => "${tmp_dir}/aem.${part}",
+      certificate => "${tmp_dir}/java/aem.${part}",
       password    => 'changeit',
       path        => ['/bin','/usr/bin'],
       require     => Java::Download[$jdk_version],

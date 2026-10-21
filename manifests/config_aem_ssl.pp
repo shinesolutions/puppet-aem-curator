@@ -81,7 +81,9 @@ define aem_curator::config_aem_ssl (
         keystore            => $keystore_path,
         keystore_password   => $aem_keystore_password,
         keystore_key_alias  => 'cqse',
-        truststore          => '/usr/java/default/jre/lib/security/cacerts',
+        # JDK 9+ (AEM's JDK 11) has no jre/ directory, so /usr/java/default/jre/lib/security/cacerts
+        # doesn't exist; the JDK's cacerts is lib/security/cacerts (/usr/java/default links to the JDK)
+        truststore          => '/usr/java/default/lib/security/cacerts',
         truststore_password => 'changeit',
         aem_id              => $aem_id,
         ssl_method          => $aem_ssl_method,
