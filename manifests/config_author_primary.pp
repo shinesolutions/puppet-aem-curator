@@ -316,6 +316,17 @@ class aem_curator::config_author_primary (
   } -> service { 'aem-author':
     ensure => 'running',
     enable => true,
+  } -> file { "${tmp_dir}/wait-for-password-reset-${aem_id}.sh":
+    ensure => file,
+    source => 'puppet:///modules/aem_curator/aem-tools/wait-for-password-reset.sh',
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+  } -> exec { "${aem_id}: Wait until AEM password reset has completed":
+    command   => "${tmp_dir}/wait-for-password-reset-${aem_id}.sh aem-author ${crx_quickstart_dir}/logs/error.log 600",
+    path      => ['/bin', '/usr/bin'],
+    timeout   => 1500,
+    logoutput => true,
   } -> aem_aem { "${aem_id}: Wait until login page is ready":
     ensure                     => login_page_is_ready,
     retries_max_tries          => $login_ready_max_tries,
