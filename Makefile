@@ -58,17 +58,17 @@ acceptance:
 	done
 
 # Acceptance tests of the JDK dependent manifests with the real Oracle JDK RPMs, which need an Oracle
-# account, so they aren't fetched: JDK_RPM_DIR is a directory with an Oracle JDK 11 and a JDK 21 RPM, any
-# update (the newest of each is used), e.g. jdk-11.0.33.0.1_linux-x64_bin.rpm and jdk-21.0.13_linux-x64_bin.rpm,
-# make acceptance-java JDK_RPM_DIR=/path/to/rpms. The RPMs are x86_64; NODESETS selects other nodesets,
+# account, so they aren't fetched: JDK_11_RPM and JDK_21_RPM are the Oracle JDK 11 and 21 RPM files to test,
+# any update, e.g. make acceptance-java JDK_11_RPM=/path/to/jdk-11.0.33.0.1_linux-x64_bin.rpm
+# JDK_21_RPM=/path/to/jdk-21.0.13_linux-x64_bin.rpm. The RPMs are x86_64; NODESETS selects other nodesets,
 # e.g. ones on linux/amd64 images on an arm64 machine
 NODESETS ?= spec/acceptance/nodesets/*.yml
 acceptance-java:
-	test -n "$(JDK_RPM_DIR)" || { echo "Set JDK_RPM_DIR to a directory with the Oracle JDK RPMs"; exit 1; }
+	test -f "$(JDK_11_RPM)" -a -f "$(JDK_21_RPM)" || { echo "Set JDK_11_RPM and JDK_21_RPM to the Oracle JDK RPM files"; exit 1; }
 	bundle exec rake fixtures:prep
 	set -e; for nodeset in $(NODESETS); do \
 		echo "== $$nodeset"; \
-		JDK_RPM_DIR=$(JDK_RPM_DIR) BEAKER_SETFILE=$$nodeset bundle exec rspec \
+		JDK_11_RPM=$(JDK_11_RPM) JDK_21_RPM=$(JDK_21_RPM) BEAKER_SETFILE=$$nodeset bundle exec rspec \
 			--pattern spec/acceptance/java_spec.rb spec/acceptance/java_spec.rb; \
 	done
 

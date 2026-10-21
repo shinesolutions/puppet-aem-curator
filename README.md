@@ -250,7 +250,7 @@ workflows use), as CI does. Install the Ruby gems and the InSpec AEM profile fir
 | `make test` | Lint, syntax and `metadata.json` checks, unit specs and static checks |
 | `make lint` | Puppet lint, syntax, `metadata.json` lint, RuboCop, yamllint on every YAML file, markdownlint on every hand-written Markdown file and the `.rtk.json` check only |
 | `make acceptance` | Acceptance tests with Beaker on every nodeset in `spec/acceptance/nodesets` (Amazon Linux 2023 and Rocky Linux 10), in Docker containers |
-| `make acceptance-java JDK_RPM_DIR=<dir>` | Acceptance tests of the JDK dependent manifests with the Oracle JDK 11 and 21 RPMs in `<dir>` (they need an Oracle account, so they aren't downloaded); x86_64 hosts only, `NODESETS` selects the nodesets |
+| `make acceptance-java JDK_11_RPM=<rpm> JDK_21_RPM=<rpm>` | Acceptance tests of the JDK dependent manifests with the given Oracle JDK 11 and 21 RPMs, any update (not downloaded: they need an Oracle account); x86_64 hosts, see `NODESETS` |
 | `make ci` | Everything CI runs, cheapest first: deps, RuboCop, yamllint, markdownlint and the `.rtk.json` check, `make test`, acceptance tests and packaging |
 | `make docs` | Generate the HTML reference into `docs/` |
 

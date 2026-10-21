@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, install_author, install_publish and install_aem_java (with packer-aem's documented s3://somebucket/artifacts URL form for the mandatory artifact and JDK bases)
 - Added catalog tests with the values aem-aws-stack-provisioner gives config_aem_tools_dispatcher and the flush, CRXDE and list packages actions
 - Added TODOs for the CRXDE and development bundles actions ignoring their username and password parameters
-- Added acceptance tests of install_java, install_aem_java, the config_aem_ssl keystore and config_aem_jmx with the Oracle JDK 11 and 21 RPMs, run with make acceptance-java JDK_RPM_DIR=<dir>
+- Added acceptance tests of install_java, install_aem_java, the config_aem_ssl keystore and config_aem_jmx with the Oracle JDK 11 and 21 RPMs, run with make acceptance-java JDK_11_RPM=<rpm> JDK_21_RPM=<rpm>
 
 ### Changed
 - Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK

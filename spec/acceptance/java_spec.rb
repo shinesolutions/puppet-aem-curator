@@ -7,12 +7,13 @@ require 'openssl'
 # install_java (JDK 21), install_aem_java (JDK 11, the one AEM runs on), then the keystore part of
 # config_aem_ssl and the JMX properties of config_aem_jmx against JDK 11.
 #
-# The RPMs need an Oracle account and are too big to commit, so set JDK_RPM_DIR to a directory with an
-# Oracle JDK 11 and a JDK 21 RPM, any update (make acceptance-java), e.g. jdk-11.0.33.0.1_linux-x64_bin.rpm
-# and jdk-21.0.13_linux-x64_bin.rpm. The newest of each is used, and its package name, version and install
-# directory are read from the RPM itself (rpm -qp on the machine running the tests), so the tests check
-# that the directory the manifests derive from the file name is the one the RPM really installs into.
-# They are copied to the host and installed from file://. They are x86_64 RPMs, so the hosts must be x86_64.
+# The RPMs need an Oracle account and are too big to commit, so set JDK_11_RPM and JDK_21_RPM to the Oracle
+# JDK 11 and JDK 21 RPM files to test, any update (make acceptance-java), e.g.
+# JDK_11_RPM=/path/to/jdk-11.0.33.0.1_linux-x64_bin.rpm JDK_21_RPM=/path/to/jdk-21.0.13_linux-x64_bin.rpm.
+# Each RPM's package name, version and install directory are read from the RPM itself (rpm -qp on the
+# machine running the tests), so the tests check that the directory the manifests derive from the file name
+# is the one the RPM really installs into. They are copied to the host and installed from file://.
+# They are x86_64 RPMs, so the hosts must be x86_64.
 #
 # Paths are the ones packer-aem gives the classes (../packer-aem/conf/puppet/hieradata/common.yaml:
 # tmp_dir /tmp/shinesolutions/packer-aem, cert_base_url file://<tmp_dir>/certs, aem_keystore_path
@@ -22,18 +23,19 @@ describe 'JDK dependent manifests' do
   rpm_dir = '/tmp/shinesolutions/jdk-rpms'
   tmp_dir = '/tmp/shinesolutions/packer-aem'
 
-  # The newest jdk-<major>*_linux-x64_bin.rpm in JDK_RPM_DIR, with what the RPM says about itself:
-  # file name, package name (e.g. jdk-11), version (e.g. 11.0.33.0.1) and the directory its bin/java is
-  # in (e.g. /usr/lib/jvm/jdk-11.0.33.0.1-oracle-x64). Empty without JDK_RPM_DIR or a matching RPM.
+  # The RPM file in JDK_<major>_RPM, with what the RPM says about itself: path, file name, package name
+  # (e.g. jdk-11), version (e.g. 11.0.33.0.1) and the directory its bin/java is in
+  # (e.g. /usr/lib/jvm/jdk-11.0.33.0.1-oracle-x64). Empty when the variable isn't set; it fails when the
+  # file isn't an Oracle JDK <major> RPM, so a wrong file can't silently test the wrong JDK.
   def self.oracle_jdk(major)
-    rpms = Dir.glob(File.join(ENV.fetch('JDK_RPM_DIR', ''), "jdk-#{major}.*_linux-x64_bin.rpm"))
-    rpms = rpms.map { |rpm| [rpm, `rpm -qp --qf '%{NAME} %{VERSION}' '#{rpm}' 2>/dev/null`.split] }
-               .select { |_rpm, (name, version)| name && version }
-    return {} if rpms.empty?
+    path = ENV.fetch("JDK_#{major}_RPM", '')
+    return {} if path.empty?
 
-    rpm, (package, version) = rpms.max_by { |_rpm, (_name, v)| Gem::Version.new(v) }
-    java = `rpm -qlp '#{rpm}' 2>/dev/null`.lines.map(&:strip).find { |file| file.match?(%r{^/usr/lib/jvm/[^/]+/bin/java$}) }
-    { rpm: File.basename(rpm), package: package, version: version, java_home: java && File.dirname(java, 2) }
+    package, version = `rpm -qp --qf '%{NAME} %{VERSION}' '#{path}' 2>/dev/null`.split
+    raise "JDK_#{major}_RPM=#{path} isn't an Oracle JDK #{major} RPM (#{package} #{version})" unless package == "jdk-#{major}" && version&.start_with?("#{major}.")
+
+    java = `rpm -qlp '#{path}' 2>/dev/null`.lines.map(&:strip).find { |file| file.match?(%r{^/usr/lib/jvm/[^/]+/bin/java$}) }
+    { path: path, rpm: File.basename(path), package: package, version: version, java_home: java && File.dirname(java, 2) }
   end
 
   jdk21 = oracle_jdk(21)
@@ -51,7 +53,7 @@ describe 'JDK dependent manifests' do
   end
 
   before(:all) do
-    skip 'Set JDK_RPM_DIR to a directory with an Oracle JDK 11 and a JDK 21 RPM to run these' unless jdk11[:java_home] && jdk21[:java_home]
+    skip 'Set JDK_11_RPM and JDK_21_RPM to the Oracle JDK RPM files to run these' unless jdk11[:java_home] && jdk21[:java_home]
     skip 'The Oracle JDK RPMs are x86_64 only' unless fact('os.architecture') == 'x86_64'
 
     key = OpenSSL::PKey::RSA.new(2048)
@@ -67,8 +69,8 @@ describe 'JDK dependent manifests' do
     on(default, "mkdir -p #{tmp_dir}/certs #{rpm_dir}")
     create_remote_file(default, "#{tmp_dir}/certs/aem.cert", cert.to_pem)
     create_remote_file(default, "#{tmp_dir}/certs/aem.key", key.to_pem)
-    [jdk21[:rpm], jdk11[:rpm]].each do |rpm|
-      scp_to(default, File.join(ENV.fetch('JDK_RPM_DIR'), rpm), "#{rpm_dir}/#{rpm}")
+    [jdk21, jdk11].each do |jdk|
+      scp_to(default, jdk[:path], "#{rpm_dir}/#{jdk[:rpm]}")
     end
   end
 
