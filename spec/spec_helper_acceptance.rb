@@ -24,9 +24,8 @@ configure_beaker(modules: :fixtures)
 # system libcurl then binds to that OpenSSL and fails ("undefined symbol: EVP_camellia_256_cbc"), so
 # build curl against OpenVox's OpenSSL into /opt/puppetlabs/puppet once per host, as
 # the-works-buildenv's provisioners/shell/init.sh does ("Fix missing libcurl for OpenVox Puppet 9
-# bundled Ruby"), and install ruby_aem into the agent's Ruby (the AEM AMIs provide both). The nodesets
-# build curl into the image, so it is only built here on a host image that lacks it. ruby_aem is the
-# version in Gemfile.lock (the test gem the aem_resources fixture's providers need), not a pinned one.
+# bundled Ruby"), and install ruby_aem into the agent's Ruby (the AEM AMIs provide both). ruby_aem is
+# the version in Gemfile.lock (the test gem the aem_resources fixture's providers need), not a pinned one.
 def install_aem_resources_dependencies(host, curl_version: '8.12.1')
   unless host.file_exist?('/opt/puppetlabs/puppet/lib/libcurl.so')
     on(host, 'dnf -y install gcc make perl tar gzip')
