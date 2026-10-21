@@ -1,8 +1,8 @@
 class aem_curator::action_list_packages (
   $aem_instances,
   $package_groups             = [],
-  $aem_username               = $::aem_username,
-  $aem_password               = $::aem_password,
+  $aem_username               = $facts['aem_username'],
+  $aem_password               = $facts['aem_password'],
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,

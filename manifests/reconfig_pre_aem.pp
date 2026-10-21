@@ -3,7 +3,7 @@ define aem_curator::reconfig_pre_aem (
   $aem_id                            = undef,
   $enable_aem_reconfiguration        = false,
   $aem_base                          = '/opt',
-  $aws_region                        = $::aws_region,
+  $aws_region                        = $facts['aws_region'],
   $certificate_arn                   = undef,
   $certificate_key_arn               = undef,
   $crx_quickstart_dir                = undef,

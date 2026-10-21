@@ -157,11 +157,31 @@ class aem_curator::install_dispatcher (
       ensure  => present,
       source  => "${cert_base_url}/aem.${part}",
       require => File["${tmp_dir}/${aem_id}"],
-    } -> concat::fragment { "${cert_filename}:${part}":
-      target => $cert_filename,
-      source => "${tmp_dir}/${aem_id}/aem.${part}",
-      order  => $idx,
     }
+  }
+
+  # mod_ssl reads the unified file as PEM, but the key can be supplied as DER,
+  # which OpenSSL 3 rejects ("no start line"), so convert it to PEM first.
+  # Falls back to -inform DER for OpenSSL 1.x, which doesn't detect DER input.
+  $key_file = "${tmp_dir}/${aem_id}/aem.key"
+  $pem_key_file = "${tmp_dir}/${aem_id}/aem.key.pem"
+  exec { "Convert ${key_file} to PEM":
+    command  => "openssl pkey -in ${key_file} -out ${pem_key_file} 2>/dev/null || openssl pkey -inform DER -in ${key_file} -out ${pem_key_file}",
+    creates  => $pem_key_file,
+    path     => ['/bin', '/usr/bin'],
+    provider => shell,
+    require  => Archive[$key_file],
+  } -> concat::fragment { "${cert_filename}:key":
+    target => $cert_filename,
+    source => $pem_key_file,
+    order  => 0,
+  }
+
+  concat::fragment { "${cert_filename}:cert":
+    target  => $cert_filename,
+    source  => "${tmp_dir}/${aem_id}/aem.cert",
+    order   => 1,
+    require => Archive["${tmp_dir}/${aem_id}/aem.cert"],
   }
 
   apache::listen { $apache_http_port: }

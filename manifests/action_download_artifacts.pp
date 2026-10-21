@@ -3,8 +3,8 @@ class aem_curator::action_download_artifacts (
   $tmp_dir,
   $base_dir,
   $aem_id          = undef,
-  $descriptor_file = $::descriptor_file,
-  $component       = $::component
+  $descriptor_file = $facts['descriptor_file'],
+  $component       = $facts['component']
 ) {
 
   # load descriptor file

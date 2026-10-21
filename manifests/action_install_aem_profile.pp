@@ -1,14 +1,14 @@
 class aem_curator::action_install_aem_profile (
-  $aem_artifacts_base         = $::aem_artifacts_base,
-  $aem_license_base           = $::aem_license_base,
-  $aem_base                   = $::aem_base,
-  $aem_healthcheck_version    = $::aem_healthcheck_version,
-  $aem_id                     = $::aem_id,
-  $aem_port                   = $::aem_port,
-  $aem_debug_port             = $::aem_debug_port,
-  $aem_profile                = $::aem_profile,
-  $aem_ssl_port               = $::aem_ssl_port,
-  $tmp_dir                    = $::tmp_dir,
+  $aem_artifacts_base         = $facts['aem_artifacts_base'],
+  $aem_license_base           = $facts['aem_license_base'],
+  $aem_base                   = $facts['aem_base'],
+  $aem_healthcheck_version    = $facts['aem_healthcheck_version'],
+  $aem_id                     = $facts['aem_id'],
+  $aem_port                   = $facts['aem_port'],
+  $aem_debug_port             = $facts['aem_debug_port'],
+  $aem_profile                = $facts['aem_profile'],
+  $aem_ssl_port               = $facts['aem_ssl_port'],
+  $tmp_dir                    = $facts['tmp_dir'],
 ) {
 
   Exec {

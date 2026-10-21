@@ -1,9 +1,9 @@
 
 class aem_curator::action_download_descriptor (
   $tmp_dir,
-  $descriptor_file  = $::descriptor_file,
-  $stack_prefix     = $::stack_prefix,
-  $data_bucket_name = $::data_bucket_name,
+  $descriptor_file  = $facts['descriptor_file'],
+  $stack_prefix     = $facts['stack_prefix'],
+  $data_bucket_name = $facts['data_bucket_name'],
 ) {
 
   file { "${tmp_dir}/${descriptor_file}":

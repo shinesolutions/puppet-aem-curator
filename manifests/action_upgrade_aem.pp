@@ -2,10 +2,10 @@ class aem_curator::action_upgrade_aem (
   $aem_base,
   $base_dir,
   $tmp_dir,
-  $aem_id                  = $::aem_id,
-  $aem_port                = $::aem_port,
-  $aem_upgrade_version     = $::aem_upgrade_version,
-  $post_upgrade_sleep_secs = $::post_upgrade_sleep_secs,
+  $aem_id                  = $facts['aem_id'],
+  $aem_port                = $facts['aem_port'],
+  $aem_upgrade_version     = $facts['aem_upgrade_version'],
+  $post_upgrade_sleep_secs = $facts['post_upgrade_sleep_secs'],
 ) {
   aem_curator::upgrade_aem { "${aem_id}: Upgrading AEM to version ${aem_upgrade_version}":
     aem_base                => $aem_base,

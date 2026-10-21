@@ -1,12 +1,12 @@
 class aem_curator::action_upgrade_repo_migration (
   $tmp_dir,
   $aem_base,
-  $aem_id                     = $::aem_id,
-  $aem_port                   = $::aem_port,
+  $aem_id                     = $facts['aem_id'],
+  $aem_port                   = $facts['aem_port'],
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,
-  $source_crx2oak             = $::source_crx2oak,
+  $source_crx2oak             = $facts['source_crx2oak'],
 ) {
 
   if $source_crx2oak == '' {

@@ -1,8 +1,8 @@
 
 class aem_curator::action_attach_detach_content_sync_sg (
-  $instance_id                = $::instance_id,
-  $action                     = $::action,
-  $security_group_ids         = $::security_group_ids,
+  $instance_id                = $facts['instance_id'],
+  $action                     = $facts['action'],
+  $security_group_ids         = $facts['security_group_ids'],
 ) {
 
   exec { "${action} security group to allow access to target stack from source stack for content sync":
