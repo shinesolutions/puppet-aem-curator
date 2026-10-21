@@ -32,6 +32,9 @@ class aem_curator::install_aem_java (
   # Oracle JDK 11 RPMs since 11.0.24 install into the version-specific
   # /usr/lib/jvm/jdk-<version>-oracle-x64, so the full version (which can have four parts,
   # e.g. 11.0.33.0.1) is taken from the file name jdk-<version>_linux-x64_bin.rpm
+  # (11.0.18-11.0.23 used /usr/lib/jvm/jdk-11-oracle-x64 and earlier ones /usr/java/jdk-<version>, which
+  # the old patch-number thresholds got wrong for 11.0.18-11.0.23). The java alternative is registered
+  # with the real directory, so /usr/java/jdk-11 (the RPM's link) can't be used for alternatives --set
   $jdk_filename_splitted = split($jdk_filename, '-')
   $jdk_version = split($jdk_filename_splitted[1], '_')[0]
   if $jdk_version !~ /^11\.\d+\.\d+(\.\d+)*$/ {
@@ -45,6 +48,9 @@ class aem_curator::install_aem_java (
   # version_major/version_minor make java::download's creates guard the RPM's install directory
   # (${basedir}/jdk${version_major}${version_minor}); without them it uses its 8u201/b09 defaults,
   # so the guard never matched and the RPM was downloaded and installed on every run
+  # java::download installs with `rpm --force -iv`, not an upgrade: the RPM is named jdk-11 for every
+  # update, so a newer file name installs a second jdk-11 package beside the old one, whose directory
+  # stays; the alternatives, /usr/java/default and ld.so.conf entries below then point at the new one
   java::download { $jdk_version :
     ensure        => 'present',
     java_se       => 'jdk',
@@ -97,6 +103,7 @@ class aem_curator::install_aem_java (
     } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
       certificate => "${tmp_dir}/java/aem.${part}",
+      # keytool takes changeit for JDK 11's JKS cacerts and JDK 21's password-less PKCS12 cacerts (acceptance)
       password    => 'changeit',
       path        => ['/bin','/usr/bin'],
       require     => Java::Download[$jdk_version],

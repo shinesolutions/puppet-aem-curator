@@ -19,6 +19,18 @@ HOSTS:
       # yamllint disable-line rule:line-length
       - dnf install -y https://yum.voxpupuli.org/openvox9-release-amazon-2023.noarch.rpm
       - dnf install -y openvox-agent
+      # Build curl against OpenVox's OpenSSL into the image (as the AEM AMIs and
+      # the-works-buildenv do, see install_aem_resources_dependencies), so it is
+      # cached with the image instead of compiled per run
+      - >-
+        dnf install -y gcc make perl tar gzip && cd /tmp &&
+        curl -fsSLO https://curl.se/download/curl-8.12.1.tar.gz &&
+        tar xzf curl-8.12.1.tar.gz && cd curl-8.12.1 &&
+        ./configure --prefix=/opt/puppetlabs/puppet
+        --with-openssl=/opt/puppetlabs/puppet --without-gssapi
+        --without-libpsl --disable-ldap --disable-ntlm
+        LDFLAGS=-Wl,-rpath,/opt/puppetlabs/puppet/lib &&
+        make && make install && cd /tmp && rm -rf curl-8.12.1*
     docker_cmd: '["/sbin/init"]'
     image_outer_ports:
       - 22

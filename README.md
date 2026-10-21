@@ -137,6 +137,36 @@ limit. To change it, pass `service_options` to `aem_curator::aem_instance` or
 `aem_curator::aem_service` (the default is
 `{ 'TimeoutStopSec' => '4min', 'KillSignal' => 'SIGCONT', 'PrivateTmp' => true }`).
 
+### Java
+
+`aem_curator::install_aem_java` installs the Oracle JDK 11 that AEM runs on, and
+`aem_curator::install_java` installs Oracle JDK 21, which only the AEM
+Orchestrator uses (packer-aem applies it to the orchestrator AMI). Each supports only that
+version, from an Oracle RPM whose file name has the full version (the defaults
+are `jdk-11.0.33.0.1_linux-x64_bin.rpm` and `jdk-21.0.13_linux-x64_bin.rpm`),
+downloaded from `jdk_base_url`. The RPMs install into
+`/usr/lib/jvm/jdk-<version>-oracle-x64`; the classes make that JDK the `java`
+alternative and `/usr/java/default`, add its `lib/server` to the dynamic linker
+path (for collectd's GenericJMX plugin) and import the AEM certificate into its
+`lib/security/cacerts` (with password `changeit`). JDK 11's cacerts is a JKS
+keystore; JDK 21's is a password-less PKCS12 keystore, into which the import also
+works, so the AEM Orchestrator trusts AEM's SSL certificate. The RPM is only
+downloaded and installed when that directory doesn't exist yet.
+
+JDK 9 and later have no `jre/` directory, so the truststore AEM is given for
+jetty SSL is `/usr/java/default/lib/security/cacerts`.
+
+The Oracle RPMs are named `jdk-11` and `jdk-21` for every update and are
+installed with `rpm --force -i`, so a newer file name installs a second package
+beside the old one (whose directory stays) rather than upgrading it.
+
+Runtime defaults of Oracle JDK 11.0.33 and 21.0.13 (`conf/security/java.security`)
+that affect AEM, not the manifests: new keystores are PKCS12; TLSv1, TLSv1.1,
+3DES, ECDH and the `TLS_RSA_*` cipher suites are disabled (check AEM's SSL and
+its clients); JARs signed with SHA-1 after 2019-01-01 are treated as unsigned
+(check signed AEM packages); and TLS certificates from the Symantec, Entrust,
+Camerfirma and Chunghwa roots are distrusted.
+
 ### InSpec AEM profile
 
 `make deps` vendors [inspec-aem](https://github.com/shinesolutions/inspec-aem)
@@ -220,6 +250,7 @@ workflows use), as CI does. Install the Ruby gems and the InSpec AEM profile fir
 | `make test` | Lint, syntax and `metadata.json` checks, unit specs and static checks |
 | `make lint` | Puppet lint, syntax, `metadata.json` lint, RuboCop, yamllint on every YAML file, markdownlint on every hand-written Markdown file and the `.rtk.json` check only |
 | `make acceptance` | Acceptance tests with Beaker on every nodeset in `spec/acceptance/nodesets` (Amazon Linux 2023 and Rocky Linux 10), in Docker containers |
+| `make acceptance-java JDK_RPM_DIR=<dir>` | Acceptance tests of the JDK dependent manifests with the Oracle JDK 11 and 21 RPMs in `<dir>` (they need an Oracle account, so they aren't downloaded); x86_64 hosts only, `NODESETS` selects the nodesets |
 | `make ci` | Everything CI runs, cheapest first: deps, RuboCop, yamllint, markdownlint and the `.rtk.json` check, `make test`, acceptance tests and packaging |
 | `make docs` | Generate the HTML reference into `docs/` |
 

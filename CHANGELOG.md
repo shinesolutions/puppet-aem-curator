@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added Makefile targets for unit tests, acceptance tests, docs and publishing to the Puppet Forge with a pre-publish check
 - Added unit and acceptance tests to GitHub CI
-- Added ruby_aem 4.0.2 to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
+- Added ruby_aem 4.1.0 (the version aem_resources 8.0.0 uses) to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
 - Added aem_curator::aem_instance, aem_curator::aem_package, aem_curator::aem_service and the aem_curator_installer type, ported from bstopp/aem 3.0.0 aem::instance, aem::package, aem::service and aem_installer, with a NOTICE for the attribution
-- Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, install_author, install_publish and install_aem_java (with packer-aem's documented s3://somebucket/artifacts URL form for the mandatory artifact and JDK bases), and the install_java failure
+- Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, install_author, install_publish and install_aem_java (with packer-aem's documented s3://somebucket/artifacts URL form for the mandatory artifact and JDK bases)
 - Added catalog tests with the values aem-aws-stack-provisioner gives config_aem_tools_dispatcher and the flush, CRXDE and list packages actions
-- Added TODOs for install_java requiring an undeclared tmp_dir file resource and the CRXDE and development bundles actions ignoring their username and password parameters
-- Added TODOs for install_aem_java and install_java calling java::download without version_major/version_minor, so it uses its default 8u201/b09 download name and creates guard
+- Added TODOs for the CRXDE and development bundles actions ignoring their username and password parameters
+- Added acceptance tests of install_java, install_aem_java, the config_aem_ssl keystore and config_aem_jmx with the Oracle JDK 11 and 21 RPMs, run with make acceptance-java JDK_RPM_DIR=<dir>
 
 ### Changed
 - Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Limited OS support to Amazon Linux 2023 and Rocky Linux 10
 - Changed the Puppet requirement to >= 9.0.0 < 10.0.0 (OpenVox 9 only), as the shinesolutions/aem_resources types need ruby_aem 4, which needs Ruby 4, and only OpenVox 9 agents ship Ruby 4
 - Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java
-- Upgraded more dependencies the same way: puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 7.11.0
+- Upgraded more dependencies the same way: puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 8.0.0 (which replaces the bstopp/aem defines this module used)
 - Upgraded the Puppetfile modules to the same versions, and puppet-yum to 8.3.0
 - Replaced validate_bool and validate_string, removed in stdlib 9, with the equivalent assert_type checks
 - Changed install_aem62/63/64/65 to use aem_curator::aem_instance instead of bstopp/aem aem::instance, and install_aem_healthcheck to use aem_resources::crx_package_file instead of aem::crx::package
@@ -41,12 +41,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed make ci to also run RuboCop, yamllint, markdownlint and the .rtk.json check, and make lint and make ci to lint every hand-written Markdown file except CHANGELOG.md (rtk release rewrites it) and every YAML file
 - Changed make deps to fail when the InSpec AEM profile download fails
 - Restructured the README into Installation, Usage, Result Model, Error Handling, Testing and Versions History
+- Changed install_aem_java to support only the latest Oracle JDK 11 (default jdk-11.0.33.0.1_linux-x64_bin.rpm) and install_java only Oracle JDK 21 (default jdk-21.0.13_linux-x64_bin.rpm); Java 8 and older JDK 11 layouts are no longer supported
 
 ### Removed
 - Removed the bstopp/aem dependency, which is unmaintained and incompatible with OpenVox 9 and stdlib 9
 - Removed the unused .pdkignore and a stale /tmp path from make clean
 
 ### Fixed
+- Fixed config_aem_ssl's jetty truststore, /usr/java/default/jre/lib/security/cacerts, which doesn't exist on JDK 9 and later; it is now /usr/java/default/lib/security/cacerts
+- Fixed install_aem_java and install_java downloading and installing the JDK RPM on every run, as java::download's creates guard didn't match the install directory
+- Fixed install_java failing to compile because it required an undeclared File[<tmp_dir>]
 - Fixed the collectd dependency name to puppet/collectd
 - Fixed the AEM service failing on Rocky Linux, which bstopp/aem's aem::service didn't support
 - Fixed config_publish and config_author_primary failing on OpenVox 9 when enable_aem_clean_directories is false, as list_clean_directories is then unknown

@@ -48,6 +48,9 @@ class aem_curator::install_java (
   # version_major/version_minor make java::download's creates guard the RPM's install directory
   # (${basedir}/jdk${version_major}${version_minor}); without them it uses its 8u201/b09 defaults,
   # so the guard never matched and the RPM was downloaded and installed on every run
+  # java::download installs with `rpm --force -iv`, not an upgrade: the RPM is named jdk-21 for every
+  # update, so a newer file name installs a second jdk-21 package beside the old one, whose directory
+  # stays; the alternatives, /usr/java/default and ld.so.conf entries below then point at the new one
   java::download { $jdk_version :
     ensure        => 'present',
     java_se       => 'jdk',
@@ -97,6 +100,7 @@ class aem_curator::install_java (
     } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
       certificate => "${tmp_dir}/java/aem.${part}",
+      # keytool takes changeit for JDK 11's JKS cacerts and JDK 21's password-less PKCS12 cacerts (acceptance)
       password    => 'changeit',
       path        => ['/bin','/usr/bin'],
       require     => Java::Download[$jdk_version],

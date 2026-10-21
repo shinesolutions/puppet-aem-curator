@@ -57,6 +57,20 @@ acceptance:
 		BEAKER_SETFILE=$$nodeset bundle exec rake beaker; \
 	done
 
+# Acceptance tests of the JDK dependent manifests with the real Oracle JDK RPMs, which need an Oracle
+# account, so they aren't fetched: JDK_RPM_DIR is a directory with jdk-21.0.13_linux-x64_bin.rpm and
+# jdk-11.0.33.0.1_linux-x64_bin.rpm, e.g. make acceptance-java JDK_RPM_DIR=/path/to/rpms. The RPMs are
+# x86_64; NODESETS selects other nodesets, e.g. ones on linux/amd64 images on an arm64 machine
+NODESETS ?= spec/acceptance/nodesets/*.yml
+acceptance-java:
+	test -n "$(JDK_RPM_DIR)" || { echo "Set JDK_RPM_DIR to a directory with the Oracle JDK RPMs"; exit 1; }
+	bundle exec rake fixtures:prep
+	set -e; for nodeset in $(NODESETS); do \
+		echo "== $$nodeset"; \
+		JDK_RPM_DIR=$(JDK_RPM_DIR) BEAKER_SETFILE=$$nodeset bundle exec rspec \
+			--pattern spec/acceptance/java_spec.rb spec/acceptance/java_spec.rb; \
+	done
+
 # Generate the HTML reference into docs/
 docs:
 	bundle exec rake "strings:generate[,,,,,,--output-dir docs]"
@@ -86,4 +100,4 @@ publish-check: package
 publish: publish-check
 	bundle exec rake module:push
 
-.PHONY: ci deps clean test lint lint-extra acceptance docs package release release-major release-minor release-patch publish-check publish
+.PHONY: ci deps clean test lint lint-extra acceptance acceptance-java docs package release release-major release-minor release-patch publish-check publish
