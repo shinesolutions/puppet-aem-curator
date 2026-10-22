@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed install_aem_java to support only the latest Oracle JDK 11 (default jdk-11.0.33.0.1_linux-x64_bin.rpm) and install_java only Oracle JDK 21 (default jdk-21.0.13_linux-x64_bin.rpm); Java 8 and older JDK 11 layouts are no longer supported
 
 ### Removed
+- Removed the Puppetfile, which nothing used since r10k was dropped (the tests install the modules from .fixtures.yml, and metadata.json declares the dependencies)
 - Removed the bstopp/aem dependency, which is unmaintained and incompatible with OpenVox 9 and stdlib 9
 - Removed the unused .pdkignore and a stale /tmp path from make clean
 
