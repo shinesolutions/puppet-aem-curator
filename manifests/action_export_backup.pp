@@ -1,16 +1,18 @@
 
 class aem_curator::action_export_backup (
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
   $tmp_dir,
-  $aem_id                     = $::aem_id,
-  $aem_username               = $::aem_username,
-  $aem_password               = $::aem_password,
-  $backup_path                = $::backup_path,
-  $package_group              = $::package_group,
-  $package_name               = $::package_name,
-  $package_version            = $::package_version,
-  $package_filter             = $::package_filter,
-  $stack_prefix               = $::stack_prefix,
-  $data_bucket_name           = $::data_bucket_name,
+  $aem_id                     = getvar('::aem_id'),
+  $aem_username               = getvar('::aem_username'),
+  $aem_password               = getvar('::aem_password'),
+  $backup_path                = getvar('::backup_path'),
+  $package_group              = getvar('::package_group'),
+  $package_name               = getvar('::package_name'),
+  $package_version            = getvar('::package_version'),
+  $package_filter             = getvar('::package_filter'),
+  $stack_prefix               = getvar('::stack_prefix'),
+  $data_bucket_name           = getvar('::data_bucket_name'),
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,

@@ -15,6 +15,7 @@ class aem_curator::config_aem_tools (
   $aem_compaction_jvm_mem_opts                    = '-Xms2048m -Xmx4096m -XX:-UseGCOverheadLimit',
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $enable_compaction_remove_bak_files)
 
   $_aem_instances = pick(

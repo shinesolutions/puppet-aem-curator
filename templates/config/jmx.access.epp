@@ -1,0 +1,4 @@
+<%- |
+  $jmxremote_monitoring_username = undef,
+| -%>
+<%= $jmxremote_monitoring_username %> readonly

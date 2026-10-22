@@ -6,9 +6,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added Makefile targets for unit tests, acceptance tests, docs and publishing to the Puppet Forge with a pre-publish check
+- Added unit and acceptance tests to GitHub CI
+- Added ruby_aem 4.1.0 (the version aem_resources 8.0.0 uses) to the test gems so the aem_resources providers load in the unit tests (test-only, not a runtime dependency)
+- Added aem_curator::aem_instance, aem_curator::aem_package, aem_curator::aem_service and the aem_curator_installer type, ported from bstopp/aem 3.0.0 aem::instance, aem::package, aem::service and aem_installer, with a NOTICE for the attribution
+- Added catalog tests with the values packer-aem gives the install classes: install_dispatcher, install_author, install_publish and install_aem_java (with packer-aem's documented s3://somebucket/artifacts URL form for the mandatory artifact and JDK bases)
+- Added catalog tests with the values aem-aws-stack-provisioner gives config_aem_tools_dispatcher and the flush, CRXDE and list packages actions
+- Added TODOs for the CRXDE and development bundles actions ignoring their username and password parameters
+- Added acceptance tests of install_java, install_aem_java, the config_aem_ssl keystore and config_aem_jmx with the Oracle JDK 11 and 21 RPMs, run with make acceptance-java JDK_11_RPM=<rpm> JDK_21_RPM=<rpm>
 
 ### Changed
-- Deprecate validate_bool for puppet module uplift
+- Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
+- Migrated ERB templates to EPP
+- Limited OS support to Amazon Linux 2023 and Rocky Linux 10
+- Changed the Puppet requirement to >= 9.0.0 < 10.0.0 (OpenVox 9 only), as the shinesolutions/aem_resources types need ruby_aem 4, which needs Ruby 4, and only OpenVox 9 agents ship Ruby 4
+- Upgraded dependencies to version ranges up to the latest releases compatible with OpenVox 9: puppetlabs/apache, puppet/archive, puppet/collectd, puppetlabs/concat, puppet-healthcheck, puppetlabs/java
+- Upgraded more dependencies the same way: puppetlabs/java_ks, puppet-logrotate, puppetlabs/selinux_core, puppetlabs/stdlib, adobeinc/dispatcher, and shinesolutions/aem_resources to 8.0.0 (which replaces the bstopp/aem defines this module used)
+- Upgraded the Puppetfile modules to the same versions, and puppet-yum to 8.3.0
+- Replaced validate_bool and validate_string, removed in stdlib 9, with the equivalent assert_type checks
+- Changed install_aem62/63/64/65 to use aem_curator::aem_instance instead of bstopp/aem aem::instance, and install_aem_healthcheck to use aem_resources::crx_package_file instead of aem::crx::package
+- Changed the AEM service to systemd only (the init script variant is not ported): on Amazon Linux it now uses the systemd unit `/lib/systemd/system/aem-<id>.service` instead of `/etc/init.d/aem-<id>`; the service name `aem-<id>` is unchanged
+- systemd stops AEM forcibly when a graceful stop takes longer than TimeoutStopSec (default 4min, set with service_options)
+- Upgraded the InSpec AEM profile to inspec-aem 2.0.0 (Ruby 4, ruby_aem 4.0.2, Cinc InSpec 7.2.1)
+- Aligned the puppet/archive range with aem_resources (>= 6.0.0 < 10.0.0)
+- Vendored the InSpec AEM profile with curl instead of the InSpec gem, which doesn't support Ruby 4
+- Dropped r10k from the build, the unit test modules are installed from .fixtures.yml
+- Removed the GitHub Actions publishing workflow ref from the RTK config
+- Simplify CI workflow to not use action files anymore
+- Upgraded GitHub workflows to actions/checkout v7, cliffano/command-docker-action v2.1.0, cliffano/release-action v2.1.0 and aem-platform-buildenv 6.4.1
+- Changed the publish workflow to publish with BLACKSMITH_FORGE_API_KEY
+- Documented that install_dispatcher needs Puppet to run with include_legacy_facts = true, as adobeinc/dispatcher 1.0.0 reads the legacy fact $::osfamily
+- Changed the action_* classes and reconfig_pre_aem to default their top-scope parameters with getvar('::name'), so a FACTER_ variable the caller doesn't set is undef again, as on Puppet 7, instead of failing with "Unknown variable" on OpenVox 9
+- Changed make ci to also run RuboCop, yamllint, markdownlint and the .rtk.json check, and make lint and make ci to lint every hand-written Markdown file except CHANGELOG.md (rtk release rewrites it) and every YAML file
+- Changed make deps to fail when the InSpec AEM profile download fails
+- Restructured the README into Installation, Usage, Result Model, Error Handling, Testing and Versions History
+- Changed install_aem_java to support only the latest Oracle JDK 11 (default jdk-11.0.33.0.1_linux-x64_bin.rpm) and install_java only Oracle JDK 21 (default jdk-21.0.13_linux-x64_bin.rpm); Java 8 and older JDK 11 layouts are no longer supported
+
+### Removed
+- Removed the bstopp/aem dependency, which is unmaintained and incompatible with OpenVox 9 and stdlib 9
+- Removed the unused .pdkignore and a stale /tmp path from make clean
+
+### Fixed
+- Fixed config_aem_ssl's jetty truststore, /usr/java/default/jre/lib/security/cacerts, which doesn't exist on JDK 9 and later; it is now /usr/java/default/lib/security/cacerts
+- Fixed install_aem_java and install_java downloading and installing the JDK RPM on every run, as java::download's creates guard didn't match the install directory
+- Fixed install_java failing to compile because it required an undeclared File[<tmp_dir>]
+- Fixed the collectd dependency name to puppet/collectd
+- Fixed the AEM service failing on Rocky Linux, which bstopp/aem's aem::service didn't support
+- Fixed config_publish and config_author_primary failing on OpenVox 9 when enable_aem_clean_directories is false, as list_clean_directories is then unknown
 
 ## [4.1.9] - 2026-03-10
 ### Added
@@ -71,6 +116,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated aem-config-tools to copy content-sync-vlt puppet template
 
 ## [4.1.1] - 2023-10-11
+### Fixed
+- Fixed content sync to use each component's AEM port (author, publish, preview publish) instead of the aem_port parameter #RS-179
 
 ## [4.1.0] - 2023-10-10
 ### Added
@@ -95,8 +142,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixing /usr/java directory permissions
 
 ## [3.40.2] - 2023-06-24
-
-## [3.40.1] - 2023-06-23
 ### Fixed
 - Corrects java_home_path for jdk 8_371 #RS-146
 
@@ -515,13 +560,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix publish installation default AEM type to 'publish'
 
 ## [2.2.0] - 2019-06-20
+### Fixed
+- Fix AEM type incorrect use of AEM ID [#114]
 
 ## [2.1.0] - 2019-06-19
 ### Added
 - Add new AEM profile: aem62_sp1_cfp20
 
 ### Fixed
-- Fix AEM type incorrect use of AEM ID [#114]
 - Fix author_secure and publish_secure parameters passing on config_author_dispatcher and config_publish_dispatcher
 
 ## [2.0.0] - 2019-06-06
@@ -570,11 +616,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed error in the reconfiguration logic [#109]
 
 ## [1.21.0] - 2019-04-06
-
-## [1.20.0] - 2019-04-02
 ### Added
 - Add owner and group to directories purged by flush dispatcher cache action
 
+## [1.20.0] - 2019-04-02
 ### Changed
 - Upgrade aem_resources to 3.9.0
 - Upgrade inspec-aem to 0.10.1
@@ -1066,7 +1111,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [3.41.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.3...3.41.0
 [3.40.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.2...3.40.3
 [3.40.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.2
-[3.40.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.1...3.40.1
 [3.40.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.40.0...3.40.1
 [3.40.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.39.0...3.40.0
 [3.39.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/3.38.0...3.39.0

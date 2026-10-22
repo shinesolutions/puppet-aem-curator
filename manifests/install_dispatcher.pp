@@ -190,6 +190,9 @@ class aem_curator::install_dispatcher (
     before       => Class['dispatcher']
   }
 
+  # adobeinc/dispatcher 1.0.0 reads the legacy fact $::osfamily, which OpenVox 9 only
+  # provides with include_legacy_facts = true; puppet must run with it until the
+  # module is replaced (a manifest can't enable it itself)
   class { 'dispatcher':
     module_file => "${apache_module_temp_dir}/${apache_module_filename}",
     require     => Archive[$apache_module_tarball]

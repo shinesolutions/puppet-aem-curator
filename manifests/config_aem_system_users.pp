@@ -8,6 +8,7 @@ define aem_curator::config_aem_system_users (
   $force                    = true,
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $enable_default_passwords)
   assert_type(Boolean, $force)
 

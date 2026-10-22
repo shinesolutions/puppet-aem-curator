@@ -59,7 +59,8 @@ define aem_curator::install_aem63(
     tmp_dir                 => $tmp_dir,
   }
 
-  aem::instance { $aem_id:
+  # aem_curator::aem_instance replaces bstopp/aem aem::instance (ported, same behaviour)
+  aem_curator::aem_instance { $aem_id:
     source         => "${aem_base}/aem/${aem_id}/aem-${aem_id}-${aem_port}.jar",
     home           => "${aem_base}/aem/${aem_id}",
     user           => "aem-${aem_id}",

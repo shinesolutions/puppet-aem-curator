@@ -1,0 +1,31 @@
+shinesolutions-aem_curator
+Copyright (C) Shine Solutions Group, unless otherwise noted.
+
+This module includes code ported from the Puppet AEM Module (bstopp/aem 3.0.0,
+https://github.com/bstopp/puppet-aem), because that module is unmaintained and
+incompatible with OpenVox 9:
+
+  manifests/aem_instance.pp                       (aem::instance)
+  manifests/aem_package.pp                        (aem::package)
+  manifests/aem_service.pp                        (aem::service, aem::service::systemd)
+  templates/systemd/aem.service.epp               (templates/etc/init.d/systemd.erb)
+  lib/puppet/type/aem_curator_installer.rb        (aem_installer type)
+  lib/puppet/provider/aem_curator_installer/default.rb (aem_installer provider)
+
+Its NOTICE reads:
+
+  Puppet AEM Module - Manage your AEM Instances.
+
+  Copyright (C) 2015-2016 Bryan Stopp (bryan.stopp@gmail.com)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.

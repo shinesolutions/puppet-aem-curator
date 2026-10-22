@@ -14,6 +14,7 @@ define aem_curator::config_aem (
   $aem_ssl_method             = undef,
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $enable_create_system_users)
 
   Exec {

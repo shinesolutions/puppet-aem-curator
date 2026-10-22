@@ -1,0 +1,11 @@
+<%- |
+  $jmxremote_options,
+  $jmxremote_authentication_options,
+  $jmxremote_ssl_options,
+| -%>
+<% $jmxremote_options.each |$jmxremote_option| { %>
+<%= $jmxremote_option %><% } %>
+<% $jmxremote_authentication_options.each |$jmxremote_authentication_option| { %>
+<%= $jmxremote_authentication_option %><% } %>
+<% $jmxremote_ssl_options.each |$jmxremote_ssl_option| { %>
+<%= $jmxremote_ssl_option %><% } %>

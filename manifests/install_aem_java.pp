@@ -12,10 +12,7 @@
 #   Base URL (supported by the puppet-archive module) to download the Java JDK from
 #
 # [*jdk_filename*]
-#   java jdk Filename to download from the jdk_base_url
-##
-# [*jdk_version*]
-#   java jdk Version to install
+#   Oracle JDK 11 RPM file name with the full version, e.g. jdk-11.0.33.0.1_linux-x64_bin.rpm
 #
 # [*tmp_dir*]
 #   A temporary directory used to store the X.509 certificate and private key
@@ -29,73 +26,39 @@ class aem_curator::install_aem_java (
   $cert_base_url,
   $tmp_dir,
   $jdk_base_url,
-  $jdk_filename = 'jdk-8u221-linux-x64.rpm',
+  # The latest Oracle JDK 11 only (Java 8 and older JDK 11 layouts are no longer supported)
+  $jdk_filename = 'jdk-11.0.33.0.1_linux-x64_bin.rpm',
 ) {
-  # Split JDK filename to determine JDK Major Version
+  # Oracle JDK 11 RPMs since 11.0.24 install into the version-specific
+  # /usr/lib/jvm/jdk-<version>-oracle-x64, so the full version (which can have four parts,
+  # e.g. 11.0.33.0.1) is taken from the file name jdk-<version>_linux-x64_bin.rpm
+  # (11.0.18-11.0.23 used /usr/lib/jvm/jdk-11-oracle-x64 and earlier ones /usr/java/jdk-<version>, which
+  # the old patch-number thresholds got wrong for 11.0.18-11.0.23). The java alternative is registered
+  # with the real directory, so /usr/java/jdk-11 (the RPM's link) can't be used for alternatives --set
   $jdk_filename_splitted = split($jdk_filename, '-')
-  # Case to Setup variables per JDK Version
-  case $jdk_filename_splitted[1] {
-    /^8/: {
-      # Automation to determine JDK Version via default filename
-      # Splitting JDK File Name jdk-8u221-linux-x64.rpm to [8, 221]
-      $jdk_version = $jdk_filename_splitted[1]
-      $jdk_version_splitted = split($jdk_version, 'u')
-      $jdk_version_major = $jdk_version_splitted[0]
-      $jdk_version_update = $jdk_version_splitted[1]
-      # Support of different JDK8 versions with different binary patches
-      if Integer($jdk_version_update) >= 421  {
-        $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}.0_${jdk_version_update}-oracle-x64"
-        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-      } elsif Integer($jdk_version_update) >= 371 and Integer($jdk_version_update) < 421 {
-        $java_home_path = "/usr/lib/jvm/jdk-1.${jdk_version_major}-oracle-x64"
-        $libjvm_content_path = "${java_home_path}/jre/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-      } elsif Integer($jdk_version_update) >= 261 and Integer($jdk_version_update) < 371 {
-        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64"
-        $libjvm_content_path= "${java_home_path}/jre/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/jre/lib/security/cacerts"
-      } elsif Integer($jdk_version_update) <= 162 {
-        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}/jre"
-        $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      } else {
-        $java_home_path = "/usr/java/jdk1.${jdk_version_major}.0_${jdk_version_update}-amd64/jre"
-        $libjvm_content_path= "${java_home_path}/lib/amd64/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      }
-    }
-    /^11/:
-    {
-      # Automation to determine JDK Version via default filename
-      # Splitting JDK File Name jdk-11.0.7_linux-x64_bin.rpm
-      # to receive JDK version 11.0.7
-      $jdk_version_raw = split($jdk_filename_splitted[1], '_')
-      $jdk_version = $jdk_version_raw[0]
-      $jdk_version_splitted = split($jdk_version, '\.')  # 11.0.7
-      $jdk_version_major = $jdk_version_splitted[0]
-      $jdk_version_minor = $jdk_version_splitted[1]
-      $jdk_version_patch = $jdk_version_splitted[2]
-      # Support of different JDK8 versions with different binary patches
-      if Integer($jdk_version_patch) >= 24  {
-        $java_home_path = "/usr/lib/jvm/jdk-${jdk_version}-oracle-x64"
-        $libjvm_content_path= "${java_home_path}/lib/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      } else {
-        $java_home_path = "/usr/java/jdk-${jdk_version}"
-        $libjvm_content_path= "${java_home_path}/lib/server/\n"
-        $cacert_path = "${java_home_path}/lib/security/cacerts"
-      }
-    }
-    default: {
-      fail('Error: Unknown Java Version. Supported java versions are : ( 8 | 11 )')
-      }
+  $jdk_version = split($jdk_filename_splitted[1], '_')[0]
+  if $jdk_version !~ /^11\.\d+\.\d+(\.\d+)*$/ {
+    fail("Error: Unsupported JDK file name ${jdk_filename}. Supported is Oracle JDK 11 with its full version, e.g. jdk-11.0.33.0.1_linux-x64_bin.rpm")
   }
+  $java_home_path = "/usr/lib/jvm/jdk-${jdk_version}-oracle-x64"
+  # JDK 9+ has no jre/ directory: libjvm and cacerts (a regular JKS file in JDK 11) are under lib/
+  $libjvm_content_path = "${java_home_path}/lib/server/\n"
+  $cacert_path = "${java_home_path}/lib/security/cacerts"
 
+  # version_major/version_minor make java::download's creates guard the RPM's install directory
+  # (${basedir}/jdk${version_major}${version_minor}); without them it uses its 8u201/b09 defaults,
+  # so the guard never matched and the RPM was downloaded and installed on every run
+  # java::download installs with `rpm --force -iv`, not an upgrade: the RPM is named jdk-11 for every
+  # update, so a newer file name installs a second jdk-11 package beside the old one, whose directory
+  # stays; the alternatives, /usr/java/default and ld.so.conf entries below then point at the new one
   java::download { $jdk_version :
-    ensure  => 'present',
-    java_se => 'jdk',
-    url     => "${jdk_base_url}/${jdk_filename}",
+    ensure        => 'present',
+    java_se       => 'jdk',
+    version       => '11',
+    version_major => "-${jdk_version}",
+    version_minor => '-oracle-x64',
+    basedir       => '/usr/lib/jvm',
+    url           => "${jdk_base_url}/${jdk_filename}",
   }
 
   # Need to set alternative for java here due to oracle_java module's add alternative feature is broken in version 2.9.4
@@ -140,6 +103,7 @@ class aem_curator::install_aem_java (
     } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
       certificate => "${tmp_dir}/java/aem.${part}",
+      # keytool takes changeit for JDK 11's JKS cacerts and JDK 21's password-less PKCS12 cacerts (acceptance)
       password    => 'changeit',
       path        => ['/bin','/usr/bin'],
       require     => Java::Download[$jdk_version],

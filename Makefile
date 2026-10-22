@@ -1,30 +1,83 @@
-ci: clean deps lint package
+# Every hand-written Markdown file (docs/ also gets generated HTML, which isn't linted)
+# except CHANGELOG.md, which rtk release rewrites in its own layout, and every YAML file,
+# for markdownlint and yamllint
+MARKDOWN_FILES := README.md docs/*.md .github/ISSUE_TEMPLATE/*.md
+YAML_FILES := .yamllint.yaml .fixtures.yml .markdownlint.yaml .rubocop.yml inspec.yml \
+	.github/workflows/*.yaml spec/acceptance/nodesets/*.yml spec/default_facts.yml
+
+# Everything CI checks, cheapest first so a failure shows up early: lint-extra (RuboCop,
+# YAML, Markdown and JSON lint), then rake test (Puppet lint, syntax, metadata_lint, unit
+# specs), acceptance tests and the package. lint-extra rather than lint, as rake test
+# already runs the rake lint checks. deps comes first because RuboCop needs the gems
+ci: clean deps lint-extra test acceptance package
+
+# Install the Ruby gems, and vendor the InSpec AEM profile declared in inspec.yml
+# into files/test/inspec/inspec-aem, which the aem-tools scripts run with `inspec exec`.
+# The profile is downloaded with curl instead of `inspec vendor`, as the InSpec gem
+# doesn't support Ruby 4 (--no-same-owner: root in the buildenv container can't chown
+# on a macOS bind mount). It is downloaded to a file rather than piped into tar, so a
+# failed download fails the build. r10k is no longer run: the unit tests use .fixtures.yml
+deps:
+	gem install bundler --version=4.0.22
+	bundle install
+	rm -rf vendor/inspec/ && mkdir -p vendor/inspec/
+	url="$$(ruby -ryaml -e "puts YAML.load_file('inspec.yml')['depends'][0]['url']")" && \
+		curl -fsSL -o vendor/inspec/inspec-aem.tar.gz "$$url"
+	tar --no-same-owner -xzf vendor/inspec/inspec-aem.tar.gz -C vendor/inspec/
+	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/
+	mv vendor/inspec/inspec-aem-* files/test/inspec/inspec-aem
 
 clean:
-	rm -rf Gemfile.lock bin/ pkg/ stage/ test/ vendor/ /tmp/shinesolutions/puppet-aem-curator/
+	rm -rf bin/ pkg/ stage/ test/ vendor/
 
-deps:
-	gem install bundler --version=2.3.24
-	bundle install --binstubs -j4
-	bundle exec r10k puppetfile install --verbose --moduledir modules
-	mkdir -p vendor/inspec && cp inspec.yml vendor/inspec/
-	bundle exec inspec vendor --overwrite vendor/inspec
-	cd vendor/inspec/vendor && mv */inspec-aem-*.*.* inspec-aem
-	rm -rf files/test/inspec/ && mkdir -p files/test/inspec/ && cp -R vendor/inspec/vendor/inspec-aem files/test/inspec/
+# lint, validate (syntax, metadata_lint), unit specs and static checks.
+# safe.directory lets the git-based checks run as root in the buildenv container
+test:
+	GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=$(CURDIR) \
+		bundle exec rake test
 
-lint:
-	bundle exec puppet-lint \
-		--fail-on-warnings \
-		--no-140chars-check \
-		--no-autoloader_layout-check \
-		--no-documentation-check \
-		./manifests/*.pp
-	puppet epp validate templates/*/*.epp
-	bundle exec rubocop Gemfile
-	mv Gemfile.lock Gemfile.lock.orig && PDK_DISABLE_ANALYTICS=true pdk validate metadata && mv Gemfile.lock.orig Gemfile.lock
+# All static checks, without the unit specs
+lint: lint-extra
+	bundle exec rake lint syntax metadata_lint
+
+# The static checks rake test doesn't run (rake test has no RuboCop), so ci runs them
+# without repeating rake test's lint/syntax/metadata_lint
+lint-extra:
+	bundle exec rake rubocop
+	yamllint $(YAML_FILES)
+	markdownlint-cli2 $(MARKDOWN_FILES)
+	python3 -m json.tool .rtk.json
+
+# Run acceptance tests against every nodeset; beaker only runs one per invocation.
+# The fixture modules are installed on the hosts, see spec/spec_helper_acceptance.rb
+acceptance:
+	bundle exec rake fixtures:prep
+	set -e; for nodeset in spec/acceptance/nodesets/*.yml; do \
+		echo "== $$nodeset"; \
+		BEAKER_SETFILE=$$nodeset bundle exec rake beaker; \
+	done
+
+# Acceptance tests of the JDK dependent manifests with the real Oracle JDK RPMs, which need an Oracle
+# account, so they aren't fetched: JDK_11_RPM and JDK_21_RPM are the Oracle JDK 11 and 21 RPM files to test,
+# any update, e.g. make acceptance-java JDK_11_RPM=/path/to/jdk-11.0.33.0.1_linux-x64_bin.rpm
+# JDK_21_RPM=/path/to/jdk-21.0.13_linux-x64_bin.rpm. The RPMs are x86_64; NODESETS selects other nodesets,
+# e.g. ones on linux/amd64 images on an arm64 machine
+NODESETS ?= spec/acceptance/nodesets/*.yml
+acceptance-java:
+	test -f "$(JDK_11_RPM)" -a -f "$(JDK_21_RPM)" || { echo "Set JDK_11_RPM and JDK_21_RPM to the Oracle JDK RPM files"; exit 1; }
+	bundle exec rake fixtures:prep
+	set -e; for nodeset in $(NODESETS); do \
+		echo "== $$nodeset"; \
+		JDK_11_RPM=$(JDK_11_RPM) JDK_21_RPM=$(JDK_21_RPM) BEAKER_SETFILE=$$nodeset bundle exec rspec \
+			--pattern spec/acceptance/java_spec.rb spec/acceptance/java_spec.rb; \
+	done
+
+# Generate the HTML reference into docs/
+docs:
+	bundle exec rake "strings:generate[,,,,,,--output-dir docs]"
 
 package: deps
-	PDK_DISABLE_ANALYTICS=true pdk build --force
+	bundle exec rake module:build
 
 release-major:
 	rtk release --release-increment-type major
@@ -37,7 +90,15 @@ release-patch:
 
 release: release-minor
 
-publish:
-	pdk release publish --force --forge-token=$(forge_token)
+# Check the module is ready to publish to the Puppet Forge; reports what is missing.
+# safe.directory lets the git-based checks run as root in the buildenv container
+publish-check: package
+	GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.directory GIT_CONFIG_VALUE_0=$(CURDIR) \
+		tools/publish-check
 
-.PHONY: ci clean deps lint package release release-major release-minor release-patch publish
+# Publish the built package to the Puppet Forge, run by the publish workflow on a pushed tag.
+# Requires BLACKSMITH_FORGE_API_KEY (a Forge API key) and a passing publish-check
+publish: publish-check
+	bundle exec rake module:push
+
+.PHONY: ci deps clean test lint lint-extra acceptance acceptance-java docs package release release-major release-minor release-patch publish-check publish

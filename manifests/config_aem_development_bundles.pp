@@ -4,6 +4,7 @@ define aem_curator::config_aem_development_bundles (
   $enable_development_bundles = false,
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $enable_development_bundles)
 
   if $enable_development_bundles == true {
