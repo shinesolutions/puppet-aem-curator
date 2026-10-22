@@ -1,11 +1,10 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [5.0.0] - 2026-10-22
 ### Added
 - Added Makefile targets for unit tests, acceptance tests, docs and publishing to the Puppet Forge with a pre-publish check
 - Added unit and acceptance tests to GitHub CI
@@ -1027,7 +1026,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add dependencies to metadata
 
-## 0.9.0 - 2017-11-08
+## [0.9.0] - 2017-11-08
 ### Added
 - Initial version
 - Add multi AEM instances support at manifests level by replacing classes with definitions and by introducing aem_id attributes
@@ -1096,7 +1095,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 [#283]: https://github.com/shinesolutions/puppet-aem-curator/issues/283
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.9...HEAD
+[5.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.9...5.0.0
 [4.1.9]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.8...4.1.9
 [4.1.8]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.7...4.1.8
 [4.1.7]: https://github.com/shinesolutions/puppet-aem-curator/compare/4.1.6...4.1.7
@@ -1245,3 +1244,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.9.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/0.9.2...0.9.3
 [0.9.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/0.9.1...0.9.2
 [0.9.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/0.9.0...0.9.1
+[0.9.0]: https://github.com/shinesolutions/puppet-aem-curator/releases/tag/0.9.0
