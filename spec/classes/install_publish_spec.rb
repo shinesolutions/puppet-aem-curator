@@ -5,7 +5,7 @@ require_relative '../support/install_aem_role'
 
 # Values: what packer-aem (the AMI bake) gives aem_curator::install_publish, i.e.
 # ../packer-aem/templates/ansible/hieradata.j2 rendered with
-# conf/ansible/inventory/group_vars/defaults.yaml (aem.profile aem65_sp10, aem.ssl_method jetty,
+# conf/ansible/inventory/group_vars/defaults.yaml (aem.profile aem65_sp10,
 # aem.publish.*, library.aem_healthcheck_*, aws.rhel7.devicemap_data_b) plus
 # conf/puppet/hieradata/common.yaml and aws.yaml (tmp_dir /tmp/shinesolutions/packer-aem).
 # aem.artifacts_base is mandatory and ships as overwrite-me, so it is the example from
@@ -17,7 +17,9 @@ describe 'aem_curator::install_publish' do
       aem_profile: 'aem65_sp10',
       aem_keystore_password: 'overwrite-me',
       aem_truststore_password: 'overwrite-me',
-      aem_ssl_method: 'jetty',
+      # packer-aem's defaults.yaml still has aem.ssl_method jetty, but its docs say AEM 6.5 on JDK 11
+      # only supports granite, which is what aem_curator uses by default
+      aem_ssl_method: 'granite',
       aem_artifacts_base: 's3://somebucket/artifacts/',
       aem_jvm_mem_opts: '-Xss4m -Xms4096m -Xmx8192m',
       aem_jvm_opts: [

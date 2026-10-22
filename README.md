@@ -153,6 +153,9 @@ keystore; JDK 21's is a password-less PKCS12 keystore, into which the import als
 works, so the AEM Orchestrator trusts AEM's SSL certificate. The RPM is only
 downloaded and installed when that directory doesn't exist yet.
 
+AEM's SSL is enabled with the granite method by default (`aem_ssl_method`), as AEM 6.5
+on JDK 11 only supports granite: AEM gets the PEM key and certificate directly, and no
+Java keystore is built. jetty is still available by passing `aem_ssl_method => 'jetty'`.
 JDK 9 and later have no `jre/` directory, so the truststore AEM is given for
 jetty SSL is `/usr/java/default/lib/security/cacerts`.
 

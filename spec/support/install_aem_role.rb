@@ -2,7 +2,7 @@
 
 # Shared catalog checks for aem_curator::install_author and install_publish with the values
 # packer-aem gives them (see the header comment in each spec): AEM profile aem65_sp10 installed
-# into /opt/aem/<aem_id> from aem.artifacts_base s3://somebucket/artifacts/, jetty SSL, and the
+# into /opt/aem/<aem_id> from aem.artifacts_base s3://somebucket/artifacts/, granite SSL, and the
 # repository moved onto the /dev/xvdb data volume mounted at /mnt/ebs1.
 RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_port|
   home = "/opt/aem/#{aem_id}"
@@ -104,19 +104,20 @@ RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_por
       .with_content(%r{^:port: #{port}$})
   end
 
-  it 'enables jetty SSL with the AEM keystore' do
+  # granite SSL gives AEM the PEM key and certificate; no Java keystore is built (that is jetty's)
+  it 'enables granite SSL with the AEM key and certificate' do
     is_expected.to contain_archive("#{tmp}/#{aem_id}/aem.key").with_source('file:///tmp/shinesolutions/packer-aem/certs/aem.key')
     is_expected.to contain_archive("#{tmp}/#{aem_id}/aem.cert").with_source('file:///tmp/shinesolutions/packer-aem/certs/aem.cert')
-    is_expected.to contain_java_ks("cqse:/etc/ssl/aem-#{aem_id}/#{aem_id}.ks").with(ensure: 'latest', target: "/etc/ssl/aem-#{aem_id}/#{aem_id}.ks")
-    is_expected.to contain_file("/etc/ssl/aem-#{aem_id}/#{aem_id}.ks").with(mode: '0640', owner: "aem-#{aem_id}")
-    # JDK 9+ has no jre/ directory, so the truststore is the JDK's lib/security/cacerts
     is_expected.to contain_aem_resources__author_publish_enable_ssl("#{aem_id}: Enable SSL").with(
-      ssl_method: 'jetty',
+      ssl_method: 'granite',
       port: ssl_port,
-      keystore_key_alias: 'cqse',
-      truststore: '/usr/java/default/lib/security/cacerts',
-      truststore_password: 'changeit',
-    )
+      https_hostname: 'localhost',
+      keystore: "#{tmp}/#{aem_id}/aem.key",
+      keystore_password: 'overwrite-me',
+      truststore: "#{tmp}/#{aem_id}/aem.cert",
+      truststore_password: 'overwrite-me',
+    ).that_requires(["Archive[#{tmp}/#{aem_id}/aem.key]", "Archive[#{tmp}/#{aem_id}/aem.cert]"])
+    is_expected.not_to contain_java_ks("cqse:/etc/ssl/aem-#{aem_id}/#{aem_id}.ks")
   end
 
   it 'moves the repository onto the data volume after stopping AEM' do
