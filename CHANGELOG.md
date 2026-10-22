@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added acceptance tests of install_java, install_aem_java, the config_aem_ssl keystore and config_aem_jmx with the Oracle JDK 11 and 21 RPMs, run with make acceptance-java JDK_11_RPM=<rpm> JDK_21_RPM=<rpm>
 
 ### Changed
-- Changed config_aem_ssl's default SSL method from jetty to granite, as AEM 6.5 on JDK 11 only supports granite (jetty is still available with aem_ssl_method => 'jetty')
 - Upgraded to Ruby 4.0.7 and OpenVox 9 with Vox Pupuli tooling, replacing PDK
 - Migrated ERB templates to EPP
 - Limited OS support to Amazon Linux 2023 and Rocky Linux 10

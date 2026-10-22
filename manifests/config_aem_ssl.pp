@@ -7,13 +7,14 @@ define aem_curator::config_aem_ssl (
   $cert_base_url           = undef,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
-  # granite by default: AEM 6.5 on JDK 11, the only JDK AEM runs on now, only supports the granite SSL
-  # method (packer-aem's docs/configuration.md); jetty is still available by passing 'jetty'.
-  # TODO: verify AEM's TLS on the rebaked AMIs: the latest JDK 11 disables TLSv1/1.1, 3DES, ECDH,
-  # TLS_RSA_* and SHA-1 handshake signatures, and distrusts Symantec/Entrust/Camerfirma/Chunghwa TLS
-  # roots (openssl s_client -tls1_2/-tls1_3 to the SSL port, author to publish replication over HTTPS,
+  # TODO: AEM 6.5 on JDK 11 only supports the granite SSL method (packer-aem's docs), and AEM now
+  # runs only on JDK 11, so callers should pass 'granite'. Changing this 'jetty' default (and
+  # packer-aem's ssl_method) is a behaviour change, left for a decision. Also verify AEM's TLS on
+  # the rebaked AMIs: the latest JDK 11 disables TLSv1/1.1, 3DES, ECDH, TLS_RSA_* and SHA-1
+  # handshake signatures, and distrusts Symantec/Entrust/Camerfirma/Chunghwa TLS roots
+  # (openssl s_client -tls1_2/-tls1_3 to the SSL port, author to publish replication over HTTPS,
   # dispatcher, orchestrator and ELB health checks)
-  $aem_ssl_method          = 'granite',
+  $aem_ssl_method          = 'jetty',
   $aem_truststore_password = 'changeit',
   $https_hostname          = 'localhost',
 ) {
