@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added config_cloudwatch_agent to give the unified CloudWatch agent's log groups, log streams and metrics the stack prefix and component names, as awslogs and collectd have on other OSes
+
+### Fixed
+- Converted the dispatcher's private key to PEM before building the unified certificate, as OpenSSL 3 rejects a DER key in it
+- Waited for the AEM Password Reset bundle to reset the system users' passwords in config_publish and config_author_primary, restarting AEM once if it hasn't, as the bundle can miss its install folder when the repository is restored from a snapshot
 
 ## [5.0.0] - 2026-10-22
 ### Added
