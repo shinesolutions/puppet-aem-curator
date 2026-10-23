@@ -1,0 +1,36 @@
+<%- |
+  String $name,
+  String $home,
+  String $user,
+  String $group,
+  Hash $service_options,
+| -%>
+<%# Ported from bstopp/aem 3.0.0 templates/etc/init.d/systemd.erb (Apache-2.0, Copyright (C) 2015-2016 Bryan Stopp, see NOTICE); renders the same unit -%>
+# ************************************
+# Managed by Puppet AEM Module
+# ************************************
+
+[Unit]
+Description=Adobe Experience Manager (<%= $name %>)
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=<%= $home %>/crx-quickstart/conf/cq.pid
+User=<%= $user %>
+Group=<%= $group %>
+ExecStart=<%= $home %>/crx-quickstart/bin/start
+ExecStop=<%= $home %>/crx-quickstart/bin/stop
+# We want systemd to give aem some time to finish gracefully, but still want
+# it to kill aem after TimeoutStopSec if something went wrong during the
+# graceful stop. Normally, Systemd sends SIGTERM signal right after the
+# ExecStop, which would kill aem. We are sending useless SIGCONT here to give
+# aem time to finish.
+
+<% $service_options.each |$key, $value| { -%>
+<%= $key %>=<%= $value %>
+<% } -%>
+
+
+[Install]
+WantedBy=multi-user.target

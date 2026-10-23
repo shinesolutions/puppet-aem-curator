@@ -5,6 +5,8 @@ logs/
 modules/
 stage/
 zzz-*.*
+/junit/
+/log/
 # End of AOC gitignore
 
 
@@ -46,9 +48,6 @@ Temporary Items
 
 # Built packages
 pkg/*
-
-# Should run on multiple platforms so don't check in
-Gemfile.lock
 
 # Tests
 spec/fixtures/*

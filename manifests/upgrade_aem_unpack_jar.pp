@@ -62,6 +62,7 @@ define aem_curator::upgrade_aem_unpack_jar (
   $puppet_binary              = '/opt/puppetlabs/bin/puppet',
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $enable_backup)
 
   file { $tmp_dir:

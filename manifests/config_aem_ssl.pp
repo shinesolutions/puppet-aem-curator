@@ -7,6 +7,13 @@ define aem_curator::config_aem_ssl (
   $cert_base_url           = undef,
   $aem_base                = '/opt',
   $aem_id                  = 'aem',
+  # TODO: AEM 6.5 on JDK 11 only supports the granite SSL method (packer-aem's docs), and AEM now
+  # runs only on JDK 11, so callers should pass 'granite'. Changing this 'jetty' default (and
+  # packer-aem's ssl_method) is a behaviour change, left for a decision. Also verify AEM's TLS on
+  # the rebaked AMIs: the latest JDK 11 disables TLSv1/1.1, 3DES, ECDH, TLS_RSA_* and SHA-1
+  # handshake signatures, and distrusts Symantec/Entrust/Camerfirma/Chunghwa TLS roots
+  # (openssl s_client -tls1_2/-tls1_3 to the SSL port, author to publish replication over HTTPS,
+  # dispatcher, orchestrator and ELB health checks)
   $aem_ssl_method          = 'jetty',
   $aem_truststore_password = 'changeit',
   $https_hostname          = 'localhost',
@@ -81,7 +88,9 @@ define aem_curator::config_aem_ssl (
         keystore            => $keystore_path,
         keystore_password   => $aem_keystore_password,
         keystore_key_alias  => 'cqse',
-        truststore          => '/usr/java/default/jre/lib/security/cacerts',
+        # JDK 9+ (AEM's JDK 11) has no jre/ directory, so /usr/java/default/jre/lib/security/cacerts
+        # doesn't exist; the JDK's cacerts is lib/security/cacerts (/usr/java/default links to the JDK)
+        truststore          => '/usr/java/default/lib/security/cacerts',
         truststore_password => 'changeit',
         aem_id              => $aem_id,
         ssl_method          => $aem_ssl_method,

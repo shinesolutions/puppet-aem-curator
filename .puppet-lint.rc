@@ -1,0 +1,26 @@
+--fail-on-warnings
+--no-140chars-check
+--no-autoloader_layout-check
+--no-documentation-check
+# The checks below come with voxpupuli-puppet-lint-plugins (voxpupuli-test) and flag ~7100
+# existing issues; fixing them would add types/docs or change behaviour, so they stay off for now
+--no-parameter_types-check
+--no-parameter_documentation-check
+--no-strict_indent-check
+--no-top_scope_facts-check
+--no-trailing_comma-check
+--no-exec_idempotency-check
+--no-file_ensure-check
+--no-space_before_arrow-check
+--no-resource_reference_with_unquoted_title-check
+--no-manifest_whitespace_opening_brace_after-check
+--no-manifest_whitespace_opening_brace_before-check
+--no-manifest_whitespace_closing_brace_before-check
+--no-manifest_whitespace_opening_bracket_after-check
+--no-manifest_whitespace_closing_bracket_before-check
+--no-manifest_whitespace_class_name_single_space_after-check
+--no-manifest_whitespace_newline_beginning_of_file-check
+--no-manifest_whitespace_two_empty_lines-check
+--no-manifest_whitespace_double_newline_end_of_file-check
+--no-manifest_whitespace_arrows_single_space_after-check
+--ignore-paths=spec/**/*.pp,pkg/**/*.pp

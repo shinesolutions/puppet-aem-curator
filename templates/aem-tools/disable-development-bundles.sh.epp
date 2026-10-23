@@ -1,3 +1,6 @@
+<%#- TODO: unused: config_aem_tools doesn't install this script (unlike enable-crxde.sh and
+    disable-crxde.sh) and nothing else references it, although the action_disable_development_bundles
+    class it runs exists (added in 5332dd4). Install it from config_aem_tools or remove it. -%>
 #!/usr/bin/env bash
 set -o nounset
 set -o errexit

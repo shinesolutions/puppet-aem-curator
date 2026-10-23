@@ -1,21 +1,24 @@
 
 class aem_curator::action_deploy_artifact (
-  $aem_id                     = $facts['aem_id'],
-  $aem_username               = $facts['aem_username'],
-  $aem_password               = $facts['aem_password'],
-  $package_source             = $facts['package_source'],
-  $package_group              = $facts['package_group'],
-  $package_name               = $facts['package_name'],
-  $package_version            = $facts['package_version'],
-  $package_replicate          = str2bool($facts['package_replicate']),
-  $package_activate           = str2bool($facts['package_activate']),
-  $package_force              = str2bool($facts['package_force']),
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
+  $aem_id                     = getvar('::aem_id'),
+  $aem_username               = getvar('::aem_username'),
+  $aem_password               = getvar('::aem_password'),
+  $package_source             = getvar('::package_source'),
+  $package_group              = getvar('::package_group'),
+  $package_name               = getvar('::package_name'),
+  $package_version            = getvar('::package_version'),
+  $package_replicate          = str2bool(getvar('::package_replicate')),
+  $package_activate           = str2bool(getvar('::package_activate')),
+  $package_force              = str2bool(getvar('::package_force')),
   $path                       = '/tmp/shinesolutions/aem-aws-stack-provisioner',
   $retries_max_tries          = 60,
   $retries_base_sleep_seconds = 5,
   $retries_max_sleep_seconds  = 5,
 ) {
 
+  # validate_bool was removed in stdlib 9; assert_type(Boolean) is the same check
   assert_type(Boolean, $package_replicate)
   assert_type(Boolean, $package_activate)
   assert_type(Boolean, $package_force)

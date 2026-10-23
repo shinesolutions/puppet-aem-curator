@@ -1,14 +1,16 @@
 class aem_curator::action_install_aem_profile (
-  $aem_artifacts_base         = $facts['aem_artifacts_base'],
-  $aem_license_base           = $facts['aem_license_base'],
-  $aem_base                   = $facts['aem_base'],
-  $aem_healthcheck_version    = $facts['aem_healthcheck_version'],
-  $aem_id                     = $facts['aem_id'],
-  $aem_port                   = $facts['aem_port'],
-  $aem_debug_port             = $facts['aem_debug_port'],
-  $aem_profile                = $facts['aem_profile'],
-  $aem_ssl_port               = $facts['aem_ssl_port'],
-  $tmp_dir                    = $facts['tmp_dir'],
+  # getvar('::name') reads the caller's top-scope variable (e.g. FACTER_name) and gives undef
+  # when it is unset, like $::name on Puppet 7; OpenVox 9's strict_variables fails on it
+  $aem_artifacts_base         = getvar('::aem_artifacts_base'),
+  $aem_license_base           = getvar('::aem_license_base'),
+  $aem_base                   = getvar('::aem_base'),
+  $aem_healthcheck_version    = getvar('::aem_healthcheck_version'),
+  $aem_id                     = getvar('::aem_id'),
+  $aem_port                   = getvar('::aem_port'),
+  $aem_debug_port             = getvar('::aem_debug_port'),
+  $aem_profile                = getvar('::aem_profile'),
+  $aem_ssl_port               = getvar('::aem_ssl_port'),
+  $tmp_dir                    = getvar('::tmp_dir'),
 ) {
 
   Exec {

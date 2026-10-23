@@ -1,3 +1,4 @@
+---
 depends:
   - name: aem
-    url: https://github.com/shinesolutions/inspec-aem/archive/1.4.0.tar.gz
+    url: https://github.com/shinesolutions/inspec-aem/archive/2.0.0.tar.gz
