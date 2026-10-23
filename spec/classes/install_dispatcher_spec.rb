@@ -48,7 +48,12 @@ describe 'aem_curator::install_dispatcher' do
         is_expected.to contain_concat('/etc/ssl/aem.unified-dispatcher.cert').with(mode: '0600', order: 'numeric')
         is_expected.to contain_archive('/tmp/shinesolutions/packer-aem/dispatcher/aem.key').with_source('file:///tmp/shinesolutions/packer-aem/certs/aem.key')
         is_expected.to contain_archive('/tmp/shinesolutions/packer-aem/dispatcher/aem.cert').with_source('file:///tmp/shinesolutions/packer-aem/certs/aem.cert')
-        is_expected.to contain_concat__fragment('/etc/ssl/aem.unified-dispatcher.cert:key').with(source: '/tmp/shinesolutions/packer-aem/dispatcher/aem.key', order: 0)
+        is_expected.to contain_exec('Convert /tmp/shinesolutions/packer-aem/dispatcher/aem.key to PEM')
+          .with_creates('/tmp/shinesolutions/packer-aem/dispatcher/aem.key.pem')
+          .that_requires('Archive[/tmp/shinesolutions/packer-aem/dispatcher/aem.key]')
+        is_expected.to contain_concat__fragment('/etc/ssl/aem.unified-dispatcher.cert:key')
+          .with(source: '/tmp/shinesolutions/packer-aem/dispatcher/aem.key.pem', order: 0)
+          .that_requires('Exec[Convert /tmp/shinesolutions/packer-aem/dispatcher/aem.key to PEM]')
         is_expected.to contain_concat__fragment('/etc/ssl/aem.unified-dispatcher.cert:cert').with(source: '/tmp/shinesolutions/packer-aem/dispatcher/aem.cert', order: 1)
       end
 
