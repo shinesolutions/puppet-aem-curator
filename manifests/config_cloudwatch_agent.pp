@@ -20,6 +20,14 @@
 # Re-applying the class doesn't prefix a log group twice, and a log group
 # whose name doesn't start with / is left as it is.
 #
+# The agent creates a log group and log stream only when it sends a file's
+# first new line, and it resumes each file from the read position it saved
+# under the baked configuration. So before applying the stack configuration,
+# the class stops the agent and clears those positions: the agent then sends
+# each file from the start, and a quiet log such as /var/log/secure still gets
+# its prefixed log group and stream. A later change of the stack configuration
+# sends the files again too.
+#
 # The class does nothing when none of those files exists, e.g. on an AMI
 # without the unified CloudWatch agent.
 #
@@ -48,6 +56,9 @@
 # [*agent_ctl_path*]
 #   Path to the amazon-cloudwatch-agent-ctl command.
 #
+# [*agent_state_dir*]
+#   Directory where the agent saves the read position of each log file.
+#
 # === Copyright
 #
 # Copyright © 2026 Shine Solutions Group, unless otherwise noted.
@@ -63,6 +74,7 @@ class aem_curator::config_cloudwatch_agent (
     '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json',
   ],
   $agent_ctl_path     = '/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl',
+  $agent_state_dir    = '/opt/aws/amazon-cloudwatch-agent/logs/state',
 ) {
 
   $source_config_path = find_file($baked_config_paths + [$config_file_path])
@@ -117,9 +129,16 @@ class aem_curator::config_cloudwatch_agent (
       content => to_json_pretty($stack_config),
     }
 
-    # fetch-config with -s restarts the agent so it picks up the new configuration.
+    # The agent is stopped before its saved read positions are cleared, so it
+    # can't save them again, and fetch-config with -s starts it with the new
+    # configuration.
     exec { 'Apply CloudWatch agent stack configuration':
-      command     => "${agent_ctl_path} -a fetch-config -m ec2 -s -c file:${config_file_path}",
+      command     => join([
+        "${agent_ctl_path} -a stop -m ec2",
+        "rm -f ${agent_state_dir}/*",
+        "${agent_ctl_path} -a fetch-config -m ec2 -s -c file:${config_file_path}",
+      ], ' && '),
+      provider    => shell,
       path        => ['/usr/bin', '/usr/sbin', '/bin'],
       subscribe   => File[$config_file_path],
       refreshonly => true,
