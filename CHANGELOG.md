@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Read the unified CloudWatch agent's configuration in config_cloudwatch_agent from the copy the agent keeps in amazon-cloudwatch-agent.d, and wrote the stack configuration to a separate file, as fetch-config deletes the file it was given when the AMI is baked
+- Made config_cloudwatch_agent do nothing when the AMI has no unified CloudWatch agent configuration
+- Cleared the unified CloudWatch agent's saved read positions in config_cloudwatch_agent before applying the stack configuration, so a quiet log such as /var/log/secure, which gets no new line after it, still gets its prefixed log group and stream
 
 ## [5.1.0] - 2026-10-23
 ### Added
