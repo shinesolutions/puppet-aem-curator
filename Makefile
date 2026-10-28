@@ -49,12 +49,14 @@ lint-extra:
 	python3 -m json.tool .rtk.json
 
 # Run acceptance tests against every nodeset; beaker only runs one per invocation.
+# BEAKER_PUPPET_COLLECTION=preinstalled because the nodesets' images already have the
+# OpenVox 9 agent; otherwise configure_beaker installs the release repo and agent again
 # The fixture modules are installed on the hosts, see spec/spec_helper_acceptance.rb
 acceptance:
 	bundle exec rake fixtures:prep
 	set -e; for nodeset in spec/acceptance/nodesets/*.yml; do \
 		echo "== $$nodeset"; \
-		BEAKER_SETFILE=$$nodeset bundle exec rake beaker; \
+		BEAKER_PUPPET_COLLECTION=preinstalled BEAKER_SETFILE=$$nodeset bundle exec rake beaker; \
 	done
 
 # Acceptance tests of the JDK dependent manifests with the real Oracle JDK RPMs, which need an Oracle
@@ -68,7 +70,7 @@ acceptance-java:
 	bundle exec rake fixtures:prep
 	set -e; for nodeset in $(NODESETS); do \
 		echo "== $$nodeset"; \
-		JDK_11_RPM=$(JDK_11_RPM) JDK_21_RPM=$(JDK_21_RPM) BEAKER_SETFILE=$$nodeset bundle exec rspec \
+		JDK_11_RPM=$(JDK_11_RPM) JDK_21_RPM=$(JDK_21_RPM) BEAKER_PUPPET_COLLECTION=preinstalled BEAKER_SETFILE=$$nodeset bundle exec rspec \
 			--pattern spec/acceptance/java_spec.rb spec/acceptance/java_spec.rb; \
 	done
 
