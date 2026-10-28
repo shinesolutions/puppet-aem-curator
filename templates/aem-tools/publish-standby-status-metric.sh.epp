@@ -1,0 +1,48 @@
+<%- |
+  String $java_path,
+  String $program_path,
+  String $jmx_service_url,
+  Optional[String] $truststore_path,
+  Optional[String] $truststore_password,
+  Optional[String] $jmx_user,
+  Optional[String] $jmx_user_password,
+  String $aws_region,
+  String $namespace,
+  String $metric_name,
+  String $dimensions,
+  Boolean $proxy_enabled,
+  Optional[String] $proxy_url,
+  String $no_proxy,
+| -%>
+#!/usr/bin/env bash
+# Reads AEM's Oak standby SecondsSinceLastSuccess over JMX and publishes it to
+# CloudWatch, the same metric collectd's GenericJMX plugin published on OSes
+# that have collectd.
+set -o nounset
+set -o errexit
+set -o pipefail
+
+<% if $proxy_enabled { -%>
+export http_proxy='<%= $proxy_url %>'
+export https_proxy='<%= $proxy_url %>'
+export no_proxy='<%= $no_proxy %>'
+<% } -%>
+<% if $jmx_user { -%>
+export JMX_USER='<%= $jmx_user %>'
+export JMX_PASSWORD='<%= $jmx_user_password %>'
+<% } -%>
+
+java_opts=(-Djdk.rmi.ssl.client.enableEndpointIdentification=false)
+<% if $truststore_path { -%>
+java_opts+=(-Djavax.net.ssl.trustStore='<%= $truststore_path %>' -Djavax.net.ssl.trustStorePassword='<%= $truststore_password %>')
+<% } -%>
+
+value=$('<%= $java_path %>' "${java_opts[@]}" '<%= $program_path %>' '<%= $jmx_service_url %>')
+
+aws cloudwatch put-metric-data \
+  --region '<%= $aws_region %>' \
+  --namespace '<%= $namespace %>' \
+  --metric-name '<%= $metric_name %>' \
+  --unit Seconds \
+  --value "$value" \
+  --dimensions '<%= $dimensions %>'

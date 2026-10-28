@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added config_standby_status_metric to publish AEM Author Standby's sync delay, collectd/GenericJMX.delay.seconds_since_last_success, from a systemd timer on OSes without collectd such as Amazon Linux 2023, with the same dimensions collectd's GenericJMX plugin gave it
+
 ### Changed
 - Run acceptance tests with the OpenVox 9 agent preinstalled in the nodeset images, instead of installing the release repo and agent again
 - Updated the AEM Health Check package in the install specs to the latest release, 2.0.0
