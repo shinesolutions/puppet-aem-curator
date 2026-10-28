@@ -27,17 +27,17 @@ RSpec.shared_examples 'an AEM install from packer-aem' do |aem_id, port, ssl_por
   end
 
   it 'downloads the AEM Health Check package into the crx-quickstart install folder' do
-    is_expected.to contain_archive("#{tmp}/#{aem_id}/aem-healthcheck-content-1.3.3.zip")
-      .with_source('https://repo.maven.apache.org/maven2/com/shinesolutions/aem-healthcheck-content/1.3.3/aem-healthcheck-content-1.3.3.zip')
+    is_expected.to contain_archive("#{tmp}/#{aem_id}/aem-healthcheck-content-2.0.0.zip")
+      .with_source('https://repo.maven.apache.org/maven2/com/shinesolutions/aem-healthcheck-content/2.0.0/aem-healthcheck-content-2.0.0.zip')
       .that_comes_before("Aem_resources::Crx_package_file[#{aem_id}: aem-healthcheck]")
     is_expected.to contain_aem_resources__crx_package_file("#{aem_id}: aem-healthcheck").with(
       ensure: 'present',
       home: home,
-      source: "#{tmp}/#{aem_id}/aem-healthcheck-content-1.3.3.zip",
+      source: "#{tmp}/#{aem_id}/aem-healthcheck-content-2.0.0.zip",
       user: "aem-#{aem_id}",
       group: "aem-#{aem_id}",
     )
-    is_expected.to contain_file("#{home}/crx-quickstart/install/aem-healthcheck-content-1.3.3.zip").with(mode: '0664', owner: "aem-#{aem_id}")
+    is_expected.to contain_file("#{home}/crx-quickstart/install/aem-healthcheck-content-2.0.0.zip").with(mode: '0664', owner: "aem-#{aem_id}")
   end
 
   it 'declares the AEM instance with the packer-aem JVM and run mode settings' do

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Run acceptance tests with the OpenVox 9 agent preinstalled in the nodeset images, instead of installing the release repo and agent again
+- Updated the AEM Health Check package in the install specs to the latest release, 2.0.0
 
 ## [5.1.1] - 2026-10-28
 ### Fixed
