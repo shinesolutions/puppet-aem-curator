@@ -58,12 +58,16 @@ class aem_curator::action_promote_author_standby_to_primary (
     $_jvm_opts = $jvm_opts
   }
 
-  class { 'aem_curator::config_collectd':
-    component         => 'author-primary',
-    collectd_prefix   => "${stack_prefix}-author-primary",
-    ec2_id            => $ec2_id,
-    jmx_user          => $jmxremote_monitoring_username,
-    jmx_user_password => $jmxremote_monitoring_user_password,
+  # collectd is not installed on every AMI (e.g. Amazon Linux 2023), so only
+  # configure it when its configuration file exists
+  if find_file('/etc/collectd.conf') {
+    class { 'aem_curator::config_collectd':
+      component         => 'author-primary',
+      collectd_prefix   => "${stack_prefix}-author-primary",
+      ec2_id            => $ec2_id,
+      jmx_user          => $jmxremote_monitoring_username,
+      jmx_user_password => $jmxremote_monitoring_user_password,
+    }
   }
 
   exec { 'systemctl stop aem-author':
