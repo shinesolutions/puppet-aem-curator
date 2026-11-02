@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added jmx_truststore_path and jmx_truststore_password to config_collectd, for the GenericJMX plugin's JVM to trust AEM's JMX SSL certificate
+
+### Changed
+- Made config_collectd set up the collectd-cloudwatch plugin only on AMIs that have it, so it also works on AMIs where collectd sends its metrics to the unified CloudWatch agent, e.g. Amazon Linux 2023. There it sends the agent only the author standby sync delay, the one GenericJMX metric collectd-cloudwatch publishes, as the agent publishes every metric it receives
 
 ## [5.1.2] - 2026-11-01
 ### Changed
