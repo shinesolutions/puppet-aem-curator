@@ -240,7 +240,7 @@ What isn't checked:
 
 Run the commands below in
 [aem-platform-buildenv](https://github.com/shinesolutions/aem-platform-buildenv)
-(`shinesolutions/aem-platform-buildenv:6.4.1`, the image the CI and publish
+(`shinesolutions/aem-platform-buildenv:6.5.0`, the image the CI and publish
 workflows use), as CI does. Install the Ruby gems and the InSpec AEM profile first:
 
     make deps
