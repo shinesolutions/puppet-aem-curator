@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Made config_collectd set up the collectd-cloudwatch plugin only on AMIs that have it, so it also works on AMIs where collectd sends its metrics to the unified CloudWatch agent, e.g. Amazon Linux 2023. There it sends the agent only the author standby sync delay, the one GenericJMX metric collectd-cloudwatch publishes, as the agent publishes every metric it receives
+### Changed
+- Upgrade aem-platform-buildenv to 6.5.0, which has RTK 4.4.0
+- Upgrade release-action to 2.2.0
 
 ## [5.1.2] - 2026-11-01
 ### Changed
