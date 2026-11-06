@@ -6,7 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Upgrade the shinesolutions/aem_resources test fixture to 8.1.0 and the test-only ruby_aem to 4.2.0, which uses swagger_aem 4.1.0 and swagger_aem_osgi 2.1.0
 - content-sync-vlt.sh reads the source stack's system users credentials from AWS Secrets Manager secret `aem-opencloud/<source_stack_prefix>/system-users-credentials` instead of the data bucket's `system-users-credentials.json`
+
+## [5.1.3] - 2026-11-05
+### Added
+- Added jmx_truststore_path and jmx_truststore_password to config_collectd, for the GenericJMX plugin's JVM to trust AEM's JMX SSL certificate
+
+### Changed
+- Made config_collectd set up the collectd-cloudwatch plugin only on AMIs that have it, so it also works on AMIs where collectd sends its metrics to the unified CloudWatch agent, e.g. Amazon Linux 2023. There it sends the agent only the author standby sync delay, the one GenericJMX metric collectd-cloudwatch publishes, as the agent publishes every metric it receives
+- Upgrade aem-platform-buildenv to 6.5.0, which has RTK 4.4.0
+- Upgrade release-action to 2.2.0
 
 ## [5.1.2] - 2026-11-01
 ### Changed
@@ -1120,7 +1130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 [#283]: https://github.com/shinesolutions/puppet-aem-curator/issues/283
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.2...HEAD
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.3...HEAD
+[5.1.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.2...5.1.3
 [5.1.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.1...5.1.2
 [5.1.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.0...5.1.1
 [5.1.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.0.0...5.1.0

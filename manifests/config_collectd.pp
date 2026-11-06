@@ -10,6 +10,26 @@
 #  JMX User password of the monitoring user
 #  default: undef
 #
+# [*jmx_truststore_path*]
+#  Trust store the GenericJMX plugin's JVM verifies AEM's JMX SSL certificate
+#  with, usually AEM's JMX keystore. Leave it undef to use the JVM's default
+#  cacerts, which only works when the JMX certificate was imported into the
+#  cacerts of the JVM collectd's java plugin loads.
+#  default: undef
+#
+# [*jmx_truststore_password*]
+#  Password of the trust store.
+#  default: changeit
+#
+# [*collectd_cloudwatch*]
+#  Whether the AMI publishes collectd's metrics with the awslabs
+#  collectd-cloudwatch plugin, whose plugin.conf and whitelist.conf this class
+#  then sets up. AMIs where collectd sends its metrics to the unified
+#  CloudWatch agent instead (e.g. Amazon Linux 2023) don't have the plugin;
+#  there only the standby sync delay is sent to the agent, which adds the
+#  stack's dimensions (see config_cloudwatch_agent).
+#  default: true when /opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf exists
+#
 # === Authors
 #
 # James Sinclair <james.sinclair@shinesolutions.com>
@@ -27,11 +47,14 @@ class aem_curator::config_collectd (
   $aem_instances,
   $collectd_prefix,
   $ec2_id,
-  $jmx_user          = undef,
-  $jmx_user_password = undef,
+  $jmx_user                    = undef,
+  $jmx_user_password           = undef,
+  $jmx_truststore_path         = undef,
+  $jmx_truststore_password     = 'changeit',
+  Boolean $collectd_cloudwatch = find_file('/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf') =~ NotUndef,
 ) {
 
-  if $proxy_enabled == true {
+  if $collectd_cloudwatch and $proxy_enabled == true {
     file_line { 'Set the collectd cloudwatch proxy_server_name':
       path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
       line   => "proxy_server_name = \"${proxy_protocol}://${proxy_host}\"",
@@ -107,11 +130,44 @@ class aem_curator::config_collectd (
     }
   }
 
-  file_line {
-    'seconds_since_last_success standby status':
-      ensure => present,
-      line   => 'GenericJMX-standby-status-delay-seconds_since_last_success',
-      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/whitelist.conf',
+  if $collectd_cloudwatch {
+    file_line {
+      'seconds_since_last_success standby status':
+        ensure => present,
+        line   => 'GenericJMX-standby-status-delay-seconds_since_last_success',
+        path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/whitelist.conf',
+    }
+  }
+
+  # collectd-cloudwatch publishes only the metrics in its whitelist.conf, but
+  # the unified CloudWatch agent publishes every metric collectd sends it. So
+  # without collectd-cloudwatch, write only the standby sync delay (the
+  # GenericJMX metric whitelisted above) to the network plugin, which sends it
+  # to the agent, and drop everything else.
+  unless $collectd_cloudwatch {
+    collectd::plugin::filter::chain { 'PostChain':
+      target => 'stop',
+    }
+    collectd::plugin::filter::rule { 'standby-status':
+      chain => 'PostChain',
+    }
+    collectd::plugin::filter::match { 'standby-status':
+      chain   => 'PostChain',
+      rule    => 'standby-status',
+      plugin  => 'regex',
+      options => {
+        'Plugin'         => '^GenericJMX$',
+        'PluginInstance' => '^standby-status$',
+      },
+    }
+    collectd::plugin::filter::target { 'standby-status-network':
+      chain   => 'PostChain',
+      rule    => 'standby-status',
+      plugin  => 'write',
+      options => {
+        'Plugin' => 'network',
+      },
+    }
   }
 
   if $component == 'author-standby' {
@@ -130,28 +186,30 @@ class aem_curator::config_collectd (
     }
   }
 
-  file_line { 'Set Hostname for CW':
-      ensure => present,
-      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "host = \"${$ec2_id}\"",
-      match  => '^#host',
-      notify => Service['collectd'],
-  }
+  if $collectd_cloudwatch {
+    file_line { 'Set Hostname for CW':
+        ensure => present,
+        path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+        line   => "host = \"${$ec2_id}\"",
+        match  => '^#host',
+        notify => Service['collectd'],
+    }
 
-  file_line { 'Push constant value to CW as a metric':
-      ensure => present,
-      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => 'push_constant = True',
-      match  => '^push_constant',
-      notify => Service['collectd'],
-  }
+    file_line { 'Push constant value to CW as a metric':
+        ensure => present,
+        path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+        line   => 'push_constant = True',
+        match  => '^push_constant',
+        notify => Service['collectd'],
+    }
 
-  file_line { 'Push constant dimension value':
-      ensure => present,
-      path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
-      line   => "constant_dimension_value = \"${$collectd_prefix}\"",
-      match  => '^constant_dimension_value',
-      notify => Service['collectd'],
+    file_line { 'Push constant dimension value':
+        ensure => present,
+        path   => '/opt/collectd-cloudwatch/src/cloudwatch/config/plugin.conf',
+        line   => "constant_dimension_value = \"${$collectd_prefix}\"",
+        match  => '^constant_dimension_value',
+        notify => Service['collectd'],
+    }
   }
 
   # collectd class is used here to process the genericjmx plugin
@@ -165,10 +223,18 @@ class aem_curator::config_collectd (
     service_enable => true,
   }
 
+  $truststore_jvmargs = $jmx_truststore_path ? {
+    undef   => [],
+    default => [
+      "-Djavax.net.ssl.trustStore=${jmx_truststore_path}",
+      "-Djavax.net.ssl.trustStorePassword=${jmx_truststore_password}",
+    ],
+  }
+
   class { 'collectd::plugin::genericjmx':
     jvmarg         => [
       '-Djdk.rmi.ssl.client.enableEndpointIdentification=false',
-    ],
+    ] + $truststore_jvmargs,
     manage_package => false,
   }
 
