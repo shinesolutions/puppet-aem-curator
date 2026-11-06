@@ -29,8 +29,14 @@ newer_only="$6"
 component=$(/opt/puppetlabs/bin/facter component)
 aem_username=admin
 aem_password=$(<%= $aem_password_retrieval_command %>)
-data_bucket_name=$(/opt/puppetlabs/bin/facter data_bucket_name)
-aem_source_stack_password=$(aws s3 cp s3://${data_bucket_name}/${source_stack_prefix}/system-users-credentials.json - | jq --raw-output .$aem_username)
+aws_region=$(/opt/puppetlabs/bin/facter aws_region)
+# The source stack's credentials are in AWS Secrets Manager (previously the system-users-credentials.json file in the
+# data bucket), under the name aem-aws-stack-builder gives every stack's secret
+aem_source_stack_password=$(aws secretsmanager get-secret-value \
+  --region "${aws_region}" \
+  --secret-id "aem-opencloud/${source_stack_prefix}/system-users-credentials" \
+  --query SecretString \
+  --output text | jq --raw-output .$aem_username)
 # translate puppet exit code to follow convention
 translate_exit_code() {
 
@@ -49,7 +55,6 @@ set +o errexit
 cd <%= $base_dir %>/aem-aws-stack-provisioner/
 
 # get the IP of AEM instance to sync content from
-aws_region=$(facter aws_region)
 source_ip=$(aws ec2 describe-instances \
   --region "${aws_region}" \
   --filters Name=tag:StackPrefix,Values="${source_stack_prefix}" Name=tag:Component,Values="${component}" \
