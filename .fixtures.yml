@@ -12,7 +12,7 @@ fixtures:
       ref: "8.1.0"
     aem_resources:
       repo: "shinesolutions/aem_resources"
-      ref: "8.0.0"
+      ref: "8.1.0"
     collectd:
       repo: "puppet/collectd"
       ref: "16.0.0"
