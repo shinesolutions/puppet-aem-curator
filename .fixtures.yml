@@ -10,9 +10,9 @@ fixtures:
     archive:
       repo: "puppet/archive"
       ref: "8.1.0"
+    # No ref: the latest Forge release of our own module, so it doesn't need bumping on every release
     aem_resources:
       repo: "shinesolutions/aem_resources"
-      ref: "8.1.0"
     collectd:
       repo: "puppet/collectd"
       ref: "16.0.0"
