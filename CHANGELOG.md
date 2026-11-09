@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-### Fixed
-- Made action_export_backup_packages pass each package filter to aem_package as JSON, as Ruby 4 (OpenVox 9) changed the implicit string form of the descriptor's filter array to one AEM can't parse, failing export-backups
-
+## [5.1.4] - 2026-11-09
 ### Changed
 - Require puppetlabs/stdlib 9.0.0 or later, for stdlib::to_json
 - Upgrade the shinesolutions/aem_resources test fixture to 8.1.0 and the test-only ruby_aem to 4.2.0, which uses swagger_aem 4.1.0 and swagger_aem_osgi 2.1.0
+
+### Fixed
+- Made action_export_backup_packages pass each package filter to aem_package as JSON, as Ruby 4 (OpenVox 9) changed the implicit string form of the descriptor's filter array to one AEM can't parse, failing export-backups
 
 ## [5.1.3] - 2026-11-05
 ### Added
@@ -1133,7 +1133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 [#283]: https://github.com/shinesolutions/puppet-aem-curator/issues/283
 
-[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.3...HEAD
+[5.1.4]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.3...5.1.4
 [5.1.3]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.2...5.1.3
 [5.1.2]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.1...5.1.2
 [5.1.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.0...5.1.1
