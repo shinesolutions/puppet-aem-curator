@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Made action_export_backup_packages pass each package filter to aem_package as JSON, as Ruby 4 (OpenVox 9) changed the implicit string form of the descriptor's filter array to one AEM can't parse, failing export-backups
+
 ### Changed
+- Require puppetlabs/stdlib 9.0.0 or later, for stdlib::to_json
 - Upgrade the shinesolutions/aem_resources test fixture to 8.1.0 and the test-only ruby_aem to 4.2.0, which uses swagger_aem 4.1.0 and swagger_aem_osgi 2.1.0
 
 ## [5.1.3] - 2026-11-05
