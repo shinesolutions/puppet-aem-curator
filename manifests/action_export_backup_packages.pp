@@ -22,6 +22,15 @@ class aem_curator::action_export_backup_packages (
       'author'
       )
 
+    # aem_package passes filter to ruby_aem, which expects a JSON string. The
+    # export-backups descriptor gives it as an array of hashes, so convert it,
+    # rather than rely on Ruby's implicit string form: Ruby 3.4 (OpenVox 9 ships
+    # Ruby 4) changed that form to `"root" => "..."`, which AEM can't parse.
+    $_filter = $package[filter] ? {
+      Variant[Array, Hash] => stdlib::to_json($package[filter]),
+      default              => $package[filter],
+    }
+
     if !defined(File["${tmp_dir}/${_aem_id}/${package[group]}"]) {
 
       exec { "Create ${tmp_dir}/${_aem_id}/${package[group]}":
@@ -50,7 +59,7 @@ class aem_curator::action_export_backup_packages (
       version      => $package_version,
       group        => $package[group],
       path         => "${tmp_dir}/${_aem_id}/${package['group']}",
-      filter       => $package[filter],
+      filter       => $_filter,
       aem_id       => $_aem_id,
       aem_username => $aem_username,
       aem_password => $aem_password,
