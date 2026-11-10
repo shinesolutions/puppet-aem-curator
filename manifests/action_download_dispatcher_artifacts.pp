@@ -24,13 +24,13 @@ class aem_curator::action_download_dispatcher_artifacts (
       extract_path => "${path}/${artifact[name]}",
       source       => $artifact[source],
       require      => File["${path}/${artifact[name]}"],
-      before       => Exec["/usr/bin/python ${base_dir}/aem-tools/generate-artifacts-descriptor.py"],
+      before       => Exec["/usr/bin/python3.12 ${base_dir}/aem-tools/generate-artifacts-descriptor.py"],
     }
 
   }
 
   #Execute Python script to generate artifacts content json file for deployment.
-  exec { "/usr/bin/python ${base_dir}/aem-tools/generate-artifacts-descriptor.py":
+  exec { "/usr/bin/python3.12 ${base_dir}/aem-tools/generate-artifacts-descriptor.py":
     path => '/usr/bin',
   }
 

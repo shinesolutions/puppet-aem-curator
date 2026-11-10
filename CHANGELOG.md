@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Run aem-tools/generate-artifacts-descriptor.py with `/usr/bin/python3.12` instead of `/usr/bin/python`, which doesn't exist on Amazon Linux 2023, so dispatcher artifacts deploy again
 
 ## [5.1.4] - 2026-11-09
 ### Changed
