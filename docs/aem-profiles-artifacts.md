@@ -51,3 +51,4 @@ However, the naming convention has been changed to `aem-service-pkg-6.5.x.zip` w
 | `aem65_sp23`      | `aem65` artifacts + aem-service-pkg-6.5.23.0.zip                                                                                            |
 | `aem65_sp24`      | `aem65` artifacts + aem-service-pkg-6.5.24.0.zip                                                                                            |
 | `aem65_sp25`      | `aem65` artifacts + aem-service-pkg-6.5.25.0.zip                                                                                            |
+| `aem65_sp26`      | `aem65` artifacts + aem-service-pkg-6.5.26.0.zip                                                                                            |
