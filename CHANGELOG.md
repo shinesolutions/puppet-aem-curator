@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.0.0] - 2026-11-12
 ### Changed
+- content-sync-vlt.sh reads the source stack's system users credentials from AWS Secrets Manager secret `aem-opencloud/<source_stack_prefix>/system-users-credentials` instead of the data bucket's `system-users-credentials.json`
+- Make the GitHub Actions workflows' GITHUB_TOKEN read-only
 - Update the other development and test gems in Gemfile.lock to the latest versions the Gemfile allows, including OpenVox 9.3.0 and beaker 7.8.4 (json stays on 2.x, as OpenVox 9 doesn't work with json 3)
 
 ### Fixed
@@ -25,8 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Require puppetlabs/stdlib 9.0.0 or later, for stdlib::to_json
 - Upgrade the shinesolutions/aem_resources test fixture to 8.1.0 and the test-only ruby_aem to 4.2.0, which uses swagger_aem 4.1.0 and swagger_aem_osgi 2.1.0
-- content-sync-vlt.sh reads the source stack's system users credentials from AWS Secrets Manager secret `aem-opencloud/<source_stack_prefix>/system-users-credentials` instead of the data bucket's `system-users-credentials.json`
-- Make the GitHub Actions workflows' GITHUB_TOKEN read-only
 
 ### Fixed
 - Made action_export_backup_packages pass each package filter to aem_package as JSON, as Ruby 4 (OpenVox 9) changed the implicit string form of the descriptor's filter array to one AEM can't parse, failing export-backups
