@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Upgrade ruby_aem to 4.2.1, which reports AEM's response when the Granite SSL setup fails, and waits for SSL to be enabled when AEM's SSL setup can't yet connect to the starting HTTPS connector (intermittent since AEM 6.5 SP26)
 - Speed up CI: skip CI for release tags, same-repo pull requests and version bump commits, cancel superseded branch runs, and add job timeouts
 
 ## [6.0.1] - 2026-11-13
