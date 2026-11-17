@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Fix CI for Dependabot pull requests, which get no Actions secrets: check out with the workflow's read-only GITHUB_TOKEN instead of a secret token
+
 ### Changed
 - Upgrade AEM Platform BuildEnv to 6.6.0
 - Upgrade ruby_aem to 4.2.1, which reports AEM's response when the Granite SSL setup fails, and waits for SSL to be enabled when AEM's SSL setup can't yet connect to the starting HTTPS connector (intermittent since AEM 6.5 SP26)
