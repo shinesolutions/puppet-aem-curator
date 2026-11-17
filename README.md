@@ -172,7 +172,7 @@ Camerfirma and Chunghwa roots are distrusted.
 `make deps` vendors [inspec-aem](https://github.com/shinesolutions/inspec-aem)
 2.0.0, declared in `inspec.yml`, into `files/test/inspec/inspec-aem`. The
 aem-tools scripts run its controls with `inspec exec` on the AEM hosts, which
-need Ruby 4 with ruby_aem 4.0.2 and Cinc InSpec 7.2.1.
+need Ruby 4 with ruby_aem 4.2.1 and Cinc InSpec 7.2.1.
 
 ## Result Model
 
