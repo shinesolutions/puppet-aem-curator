@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
 ## [7.0.0] - 2026-11-18
 ### Changed
 - install_java installs Amazon Corretto 21 instead of Oracle JDK 21, whose updates from 21.0.13 need a commercial license: the `java-21-amazon-corretto-devel` package at the new `corretto_version` parameter (default `21.0.13.1.2`, the first Corretto 21 with the Java4Shell fix, CVE-2026-114938), from Amazon Linux 2023's own repo or, on other OSes, Amazon's Corretto repo, which the class adds. The version is locked with dnf versionlock. The `jdk_base_url` and `jdk_filename` parameters are removed
@@ -1157,6 +1159,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#239]: https://github.com/shinesolutions/puppet-aem-curator/issues/239
 [#283]: https://github.com/shinesolutions/puppet-aem-curator/issues/283
 
+[Unreleased]: https://github.com/shinesolutions/puppet-aem-curator/compare/7.0.0...HEAD
 [7.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/6.0.1...7.0.0
 [6.0.1]: https://github.com/shinesolutions/puppet-aem-curator/compare/6.0.0...6.0.1
 [6.0.0]: https://github.com/shinesolutions/puppet-aem-curator/compare/5.1.5...6.0.0
