@@ -140,27 +140,47 @@ limit. To change it, pass `service_options` to `aem_curator::aem_instance` or
 ### Java
 
 `aem_curator::install_aem_java` installs the Oracle JDK 11 that AEM runs on, and
-`aem_curator::install_java` installs Oracle JDK 21, which only the AEM
-Orchestrator uses (packer-aem applies it to the orchestrator AMI). Each supports only that
-version, from an Oracle RPM whose file name has the full version (the defaults
-are `jdk-11.0.33.0.1_linux-x64_bin.rpm` and `jdk-21.0.13_linux-x64_bin.rpm`),
-downloaded from `jdk_base_url`. The RPMs install into
-`/usr/lib/jvm/jdk-<version>-oracle-x64`; the classes make that JDK the `java`
-alternative and `/usr/java/default`, add its `lib/server` to the dynamic linker
-path (for collectd's GenericJMX plugin) and import the AEM certificate into its
-`lib/security/cacerts` (with password `changeit`). JDK 11's cacerts is a JKS
-keystore; JDK 21's is a password-less PKCS12 keystore, into which the import also
-works, so the AEM Orchestrator trusts AEM's SSL certificate. The RPM is only
-downloaded and installed when that directory doesn't exist yet.
+`aem_curator::install_java` installs Amazon Corretto 21, which only the AEM
+Orchestrator uses (packer-aem applies it to the orchestrator AMI). Both classes
+make their JDK the `java` alternative and `/usr/java/default`, add its
+`lib/server` to the dynamic linker path (for collectd's GenericJMX plugin) and
+import the AEM certificate into its `lib/security/cacerts` (with password
+`changeit`), so the AEM Orchestrator trusts AEM's SSL certificate.
+
+`install_aem_java` supports only Oracle JDK 11, from an Oracle RPM whose file
+name has the full version (the default is `jdk-11.0.33.0.1_linux-x64_bin.rpm`),
+downloaded from `jdk_base_url`. The RPM installs into
+`/usr/lib/jvm/jdk-<version>-oracle-x64`, and is only downloaded and installed
+when that directory doesn't exist yet. Its cacerts is a JKS keystore. The Oracle
+RPM is named `jdk-11` for every update and is installed with `rpm --force -i`,
+so a newer file name installs a second package beside the old one (whose
+directory stays) rather than upgrading it.
+
+`install_java` installs the `java-21-amazon-corretto-devel` package at
+`corretto_version` (the default is `21.0.13.1.2`, the first Corretto 21 with the
+Java4Shell fix, CVE-2026-114938). It's Corretto rather than Oracle JDK 21, as
+Oracle JDK 21 updates from 21.0.13 need a commercial license.
+
+* On Amazon Linux 2023 it comes from the OS's own repo and installs into
+  `/usr/lib/jvm/java-21-amazon-corretto.<architecture>`. Amazon Linux 2023 locks
+  each AMI to its release's repo, so the AMI must be a release that has the
+  version (`dnf list --showduplicates java-21-amazon-corretto-devel` lists them):
+  21.0.13.1.2 came out on 2026-11-17. Its cacerts is a link to
+  the system truststore `/etc/pki/java/cacerts`, which `update-ca-trust`
+  regenerates, dropping the imported AEM certificate.
+* On other OSes, such as Rocky Linux 10, the class adds Amazon's Corretto repo
+  (`https://yum.corretto.aws`), whose RPM installs into
+  `/usr/lib/jvm/java-21-amazon-corretto` with its own cacerts.
+
+The Corretto packages are locked at that version with dnf versionlock (the
+class installs `python3-dnf-plugin-versionlock`), so a `dnf upgrade` on the host
+can't change it. To upgrade, change `corretto_version`: the class removes the
+lock on the other version before installing the new one.
 
 JDK 9 and later have no `jre/` directory, so the truststore AEM is given for
 jetty SSL is `/usr/java/default/lib/security/cacerts`.
 
-The Oracle RPMs are named `jdk-11` and `jdk-21` for every update and are
-installed with `rpm --force -i`, so a newer file name installs a second package
-beside the old one (whose directory stays) rather than upgrading it.
-
-Runtime defaults of Oracle JDK 11.0.33 and 21.0.13 (`conf/security/java.security`)
+Runtime defaults of Oracle JDK 11.0.33 (`conf/security/java.security`)
 that affect AEM, not the manifests: new keystores are PKCS12; TLSv1, TLSv1.1,
 3DES, ECDH and the `TLS_RSA_*` cipher suites are disabled (check AEM's SSL and
 its clients); JARs signed with SHA-1 after 2019-01-01 are treated as unsigned
@@ -250,7 +270,7 @@ workflows use), as CI does. Install the Ruby gems and the InSpec AEM profile fir
 | `make test` | Lint, syntax and `metadata.json` checks, unit specs and static checks |
 | `make lint` | Puppet lint, syntax, `metadata.json` lint, RuboCop, yamllint on every YAML file, markdownlint on every hand-written Markdown file and the `.rtk.json` check only |
 | `make acceptance` | Acceptance tests with Beaker on every nodeset in `spec/acceptance/nodesets` (Amazon Linux 2023 and Rocky Linux 10), in Docker containers |
-| `make acceptance-java JDK_11_RPM=<rpm> JDK_21_RPM=<rpm>` | Acceptance tests of the JDK dependent manifests with the given Oracle JDK 11 and 21 RPMs, any update (not downloaded: they need an Oracle account); x86_64 hosts, see `NODESETS` |
+| `make acceptance-java JDK_11_RPM=<rpm>` | Acceptance tests of the JDK dependent manifests with the given Oracle JDK 11 RPM, any update (not downloaded: it needs an Oracle account), and Amazon Corretto 21 from its repo; x86_64 hosts, see `NODESETS` |
 | `make ci` | Everything CI runs, cheapest first: deps, RuboCop, yamllint, markdownlint and the `.rtk.json` check, `make test`, acceptance tests and packaging |
 | `make docs` | Generate the HTML reference into `docs/` |
 

@@ -59,18 +59,18 @@ acceptance:
 		BEAKER_PUPPET_COLLECTION=preinstalled BEAKER_SETFILE=$$nodeset bundle exec rake beaker; \
 	done
 
-# Acceptance tests of the JDK dependent manifests with the real Oracle JDK RPMs, which need an Oracle
-# account, so they aren't fetched: JDK_11_RPM and JDK_21_RPM are the Oracle JDK 11 and 21 RPM files to test,
-# any update, e.g. make acceptance-java JDK_11_RPM=/path/to/jdk-11.0.33.0.1_linux-x64_bin.rpm
-# JDK_21_RPM=/path/to/jdk-21.0.13_linux-x64_bin.rpm. The RPMs are x86_64; NODESETS selects other nodesets,
-# e.g. ones on linux/amd64 images on an arm64 machine
+# Acceptance tests of the JDK dependent manifests with the real Oracle JDK 11 RPM, which needs an Oracle
+# account, so it isn't fetched: JDK_11_RPM is the Oracle JDK 11 RPM file to test, any update, e.g.
+# make acceptance-java JDK_11_RPM=/path/to/jdk-11.0.33.0.1_linux-x64_bin.rpm. install_java's Amazon Corretto 21
+# comes from its repo (and is also tested by make acceptance). The RPM is x86_64; NODESETS selects other
+# nodesets, e.g. ones on linux/amd64 images on an arm64 machine
 NODESETS ?= spec/acceptance/nodesets/*.yml
 acceptance-java:
-	test -f "$(JDK_11_RPM)" -a -f "$(JDK_21_RPM)" || { echo "Set JDK_11_RPM and JDK_21_RPM to the Oracle JDK RPM files"; exit 1; }
+	test -f "$(JDK_11_RPM)" || { echo "Set JDK_11_RPM to the Oracle JDK 11 RPM file"; exit 1; }
 	bundle exec rake fixtures:prep
 	set -e; for nodeset in $(NODESETS); do \
 		echo "== $$nodeset"; \
-		JDK_11_RPM=$(JDK_11_RPM) JDK_21_RPM=$(JDK_21_RPM) BEAKER_PUPPET_COLLECTION=preinstalled BEAKER_SETFILE=$$nodeset bundle exec rspec \
+		JDK_11_RPM=$(JDK_11_RPM) BEAKER_PUPPET_COLLECTION=preinstalled BEAKER_SETFILE=$$nodeset bundle exec rspec \
 			--pattern spec/acceptance/java_spec.rb spec/acceptance/java_spec.rb; \
 	done
 
