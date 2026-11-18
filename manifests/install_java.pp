@@ -12,11 +12,8 @@
 #   A temporary directory used to store the X.509 certificate and private key
 #   while building the PEM file for Apache.
 #
-# [*jdk_base_url*]
-#   Base URL (supported by the puppet-archive module) to download the JDK RPM from
-#
-# [*jdk_filename*]
-#   Oracle JDK 21 RPM file name with the full version, e.g. jdk-21.0.13_linux-x64_bin.rpm
+# [*corretto_version*]
+#   Amazon Corretto 21 version to install and lock, e.g. 21.0.13.1.2
 #
 # === Authors
 #
@@ -29,39 +26,63 @@
 class aem_curator::install_java (
   $cert_base_url,
   $tmp_dir,
-  $jdk_base_url,
-  # Oracle JDK 21 only (Java 8 and 11 are no longer supported)
-  $jdk_filename   = 'jdk-21.0.13_linux-x64_bin.rpm',
+  # Amazon Corretto rather than Oracle JDK 21, as Oracle JDK 21 updates from 21.0.13 need a commercial
+  # license; 21.0.13.1.2 is the first Corretto 21 with the Java4Shell fix (CVE-2026-114938)
+  $corretto_version = '21.0.13.1.2',
 ) {
-  # Oracle JDK 21 RPMs are named jdk-21.0.N_linux-x64_bin.rpm and install into the
-  # version-specific /usr/lib/jvm/jdk-21.0.N-oracle-x64 (the full version is needed to find it)
-  $jdk_filename_splitted = split($jdk_filename, '-')
-  $jdk_version = split($jdk_filename_splitted[1], '_')[0]
-  if $jdk_version !~ /^21\.\d+\.\d+$/ {
-    fail("Error: Unsupported JDK file name ${jdk_filename}. Supported is Oracle JDK 21 with its full version, e.g. jdk-21.0.13_linux-x64_bin.rpm")
+  if $corretto_version !~ /^21(\.\d+)+$/ {
+    fail("Error: Unsupported Corretto version ${corretto_version}. Supported is Amazon Corretto 21 with its full version, e.g. 21.0.13.1.2")
   }
-  $java_home_path = "/usr/lib/jvm/jdk-${jdk_version}-oracle-x64"
+
+  $corretto_package = 'java-21-amazon-corretto-devel'
+
+  # Amazon Linux packages Corretto in its own repo, installed into an architecture-specific directory
+  # (/usr/lib/jvm/java-21-amazon-corretto is a link to it, which alternatives --set doesn't take). Other
+  # OSes don't package it, so Amazon's Corretto repo is added, whose RPM installs into the plain directory
+  if $facts['os']['name'] == 'Amazon' {
+    $java_home_path = "/usr/lib/jvm/java-21-amazon-corretto.${facts['os']['architecture']}"
+    $corretto_repo = []
+  } else {
+    $java_home_path = '/usr/lib/jvm/java-21-amazon-corretto'
+    yumrepo { 'AmazonCorretto':
+      descr    => 'Amazon Corretto',
+      baseurl  => 'https://yum.corretto.aws/$basearch',
+      gpgkey   => 'https://yum.corretto.aws/corretto.key',
+      gpgcheck => '1',
+      enabled  => '1',
+    }
+    $corretto_repo = [Yumrepo['AmazonCorretto']]
+  }
   $libjvm_content_path = "${java_home_path}/lib/server/\n"
-  # JDK 9+ has no jre/ directory; cacerts is a regular file (password-less PKCS12 since JDK 18)
+  # On Amazon Linux this is a link to the system truststore /etc/pki/java/cacerts, which update-ca-trust
+  # regenerates; Amazon's Corretto repo RPM ships its own file
   $cacert_path = "${java_home_path}/lib/security/cacerts"
 
-  # version_major/version_minor make java::download's creates guard the RPM's install directory
-  # (${basedir}/jdk${version_major}${version_minor}); without them it uses its 8u201/b09 defaults,
-  # so the guard never matched and the RPM was downloaded and installed on every run
-  # java::download installs with `rpm --force -iv`, not an upgrade: the RPM is named jdk-21 for every
-  # update, so a newer file name installs a second jdk-21 package beside the old one, whose directory
-  # stays; the alternatives, /usr/java/default and ld.so.conf entries below then point at the new one
-  java::download { $jdk_version :
-    ensure        => 'present',
-    java_se       => 'jdk',
-    version       => '21',
-    version_major => "-${jdk_version}",
-    version_minor => '-oracle-x64',
-    basedir       => '/usr/lib/jvm',
-    url           => "${jdk_base_url}/${jdk_filename}",
-  } -> exec { "alternatives --set  java ${java_home_path}/bin/java":
+  # Lock the Corretto packages (on Amazon Linux the JDK is split into -devel and -headless) with dnf
+  # versionlock, so a later dnf upgrade on the host can't change the pinned version, as it couldn't
+  # with the Oracle RPM, which was installed from a file rather than a repo. Locks are listed as
+  # <name>-<epoch>:<version>-<release>.*
+  package { 'python3-dnf-plugin-versionlock':
+    ensure => 'present',
+  } -> exec { 'Unlock other Amazon Corretto 21 versions':
+    # A lock on another version would stop the pinned version from installing
+    command  => "dnf versionlock delete 'java-21-amazon-corretto*'",
+    onlyif   => "dnf -q versionlock list | grep '^java-21-amazon-corretto-' | grep -qvF ':${corretto_version}-'",
+    path     => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    provider => 'shell',
+  } -> package { $corretto_package:
+    ensure  => $corretto_version,
+    require => $corretto_repo,
+  } -> exec { "Lock Amazon Corretto ${corretto_version}":
+    command  => "dnf versionlock add 'java-21-amazon-corretto*'",
+    unless   => "dnf -q versionlock list | grep '^java-21-amazon-corretto-devel-' | grep -qF ':${corretto_version}-'",
+    path     => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
+    provider => 'shell',
+  }
+
+  exec { "alternatives --set  java ${java_home_path}/bin/java":
     path    => [ '/bin', '/sbin', '/usr/bin', '/usr/sbin' ],
-    require => Java::Download[$jdk_version],
+    require => Package[$corretto_package],
   }
 
   file { '/usr/java':
@@ -100,10 +121,11 @@ class aem_curator::install_java (
     } -> java_ks { "cqse-${idx}:${cacert_path}":
       ensure      => latest,
       certificate => "${tmp_dir}/java/aem.${part}",
-      # keytool takes changeit for JDK 11's JKS cacerts and JDK 21's password-less PKCS12 cacerts (acceptance)
+      # keytool takes changeit for Amazon Linux's JKS system truststore and the Corretto repo RPM's
+      # own cacerts (acceptance)
       password    => 'changeit',
       path        => ['/bin','/usr/bin'],
-      require     => Java::Download[$jdk_version],
+      require     => Package[$corretto_package],
     }
   }
 }
